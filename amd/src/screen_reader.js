@@ -1,0 +1,184 @@
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Screen reader (text-to-speech) overlay: hover highlights readable text in
+ * the page content, click reads it aloud via SpeechSynthesis. Ported from
+ * ScreenReaderLayer in _design-reference/a11y-features.jsx.
+ *
+ * @module     local_a11y/screen_reader
+ * @copyright  2026 A11y for Moodle project
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+import {getString} from 'core/str';
+
+const READABLE_SELECTOR = 'h1,h2,h3,h4,h5,h6,p,a,button,li,td,th,span,label,figcaption,[data-a11y-readable]';
+
+let pill = null;
+let hovered = null;
+let onOver = null;
+let onClick = null;
+
+/**
+ * @return {HTMLElement}
+ */
+const buildPill = () => {
+    const container = document.createElement('div');
+    container.className = 'local-a11y-root local-a11y-sr-pill';
+    container.innerHTML = '<span class="local-a11y-sr-pill__icon">'
+        + '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" '
+        + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+        + '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>'
+        + '<path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></span>'
+        + '<span data-region="body"></span>';
+    document.body.appendChild(container);
+    return container;
+};
+
+/**
+ * Render the idle ("hover text to hear it") state.
+ */
+const renderIdle = async() => {
+    const body = pill.querySelector('[data-region="body"]');
+    body.innerHTML = '';
+    const hint = document.createElement('span');
+    hint.className = 'local-a11y-sr-pill__hint';
+    hint.textContent = await getString('sr_hint', 'local_a11y');
+    body.appendChild(hint);
+};
+
+/**
+ * Render the "reading…" state with a Stop button.
+ *
+ * @param {String} text
+ */
+const renderSpeaking = async(text) => {
+    const body = pill.querySelector('[data-region="body"]');
+    body.innerHTML = '';
+
+    const title = document.createElement('div');
+    title.className = 'local-a11y-sr-pill__title';
+    title.textContent = await getString('sr_reading', 'local_a11y');
+
+    const textEl = document.createElement('div');
+    textEl.className = 'local-a11y-sr-pill__text';
+    textEl.textContent = text;
+
+    const stopBtn = document.createElement('button');
+    stopBtn.type = 'button';
+    stopBtn.className = 'local-a11y-sr-pill__stop';
+    stopBtn.textContent = await getString('sr_stop', 'local_a11y');
+    stopBtn.addEventListener('click', () => {
+        window.speechSynthesis.cancel();
+        renderIdle();
+    });
+
+    body.appendChild(title);
+    body.appendChild(textEl);
+    body.appendChild(stopBtn);
+};
+
+/**
+ * @param {Event} e
+ * @return {HTMLElement|null}
+ */
+const findTarget = (e) => {
+    const el = e.target.closest(READABLE_SELECTOR);
+    if (!el || el.closest('.local-a11y-root')) {
+        return null;
+    }
+    if (!el.closest('#page')) {
+        return null;
+    }
+    return el;
+};
+
+/**
+ * @param {HTMLElement|null} el
+ */
+const setHoverOutline = (el) => {
+    if (hovered && hovered !== el) {
+        hovered.style.outline = '';
+        hovered.style.outlineOffset = '';
+        hovered.style.cursor = '';
+    }
+    if (el) {
+        el.style.outline = '2px solid var(--local-a11y-accent, #3b82f6)';
+        el.style.outlineOffset = '2px';
+        el.style.cursor = 'pointer';
+    }
+    hovered = el;
+};
+
+/**
+ * Start listening for hover/click on readable page content. Idempotent.
+ */
+export const start = async() => {
+    if (pill) {
+        return;
+    }
+    pill = buildPill();
+    await renderIdle();
+
+    onOver = (e) => setHoverOutline(findTarget(e));
+
+    onClick = (e) => {
+        const el = findTarget(e);
+        if (!el) {
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        const text = (el.innerText || el.textContent || '').trim();
+        if (!text || !window.speechSynthesis) {
+            return;
+        }
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = document.documentElement.lang || 'en';
+        utterance.onstart = () => renderSpeaking(text);
+        utterance.onend = () => renderIdle();
+        utterance.onerror = () => renderIdle();
+        window.speechSynthesis.speak(utterance);
+    };
+
+    document.addEventListener('mouseover', onOver, true);
+    document.addEventListener('click', onClick, true);
+};
+
+/**
+ * Stop listening and remove the overlay. Idempotent.
+ */
+export const stop = () => {
+    if (!pill) {
+        return;
+    }
+    document.removeEventListener('mouseover', onOver, true);
+    document.removeEventListener('click', onClick, true);
+    setHoverOutline(null);
+    if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+    }
+    pill.remove();
+    pill = null;
+};
+
+/**
+ * @param {Boolean} active
+ */
+export const sync = (active) => (active ? start() : stop());
+
+export default {start, stop, sync};

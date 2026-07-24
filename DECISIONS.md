@@ -42,6 +42,10 @@ O briefing pedia `user_preference_allow_ajax_update()` + `core_user/repository::
 
 O restante da segunda parte do pedido (`core_user/repository::setUserPreference` via AMD) foi seguido à risca — `amd/src/storage.js` usa exatamente esse módulo.
 
+## D11 — `templates/virtual_keyboard.mustache` não foi criado
+
+A seção 4 do briefing lista `templates/virtual_keyboard.mustache` entre os templates a criar. Decidi **não** criá-lo: ao contrário do FAB/painel (que precisam ser renderizados no servidor para o no-FOUC e para SEO/acessibilidade sem JS), o teclado virtual só existe quando o usuário ativa a opção correspondente — é inteiramente client-side, criado/destruído por `amd/src/virtual_keyboard.js` via DOM puro. Um template Mustache exigiria buscá-lo de forma assíncrona via `core/templates` (`Templates.renderForPromise`) toda vez que a opção é ligada, sem nenhum ganho real (a estrutura muda de qualquer forma a cada toggle de Shift, o que já é regenerado em JS). Optei por manter a paridade de estrutura HTML/CSS (classes `local-a11y-vk__*` já definidas em `styles.css`) sem o round-trip assíncrono desnecessário.
+
 ## D9 — Subconjunto de `ICON_PATHS` portado
 
 `classes/icons.php` porta todos os ícones usados pelo FAB, painel, perfis, categorias e recursos avançados (teclado virtual, leitor de tela) — 1:1 com o protótipo. Os ícones que só existiam em `ICON_PATHS` para desenhar o **mockup** do Moodle (`moodleLogo`, `menu`, `home`, `calendar`, `fileText`, `video`, `edit`, `clipboard`, `messageSquare`, `folder`, `award`, `users`, `graduationCap`, `settings`, `logOut`, `download`, `upload`, `globe`) foram omitidos, consistente com D3 (moodle-page.jsx não é implementado — o Moodle real já tem seus próprios ícones/tema). Nenhum ícone usado por OPTIONS, PROFILES ou pela chrome do painel foi omitido ou renomeado.

@@ -28,6 +28,11 @@ import Panel from 'local_a11y/panel';
 import Effects from 'local_a11y/effects';
 import Storage from 'local_a11y/storage';
 import Profiles from 'local_a11y/profiles';
+import ReadingGuide from 'local_a11y/reading_guide';
+import ReadingMask from 'local_a11y/reading_mask';
+import ScreenReader from 'local_a11y/screen_reader';
+import VirtualKeyboard from 'local_a11y/virtual_keyboard';
+import VoiceCommands from 'local_a11y/voice_commands';
 
 let settings = {...Storage.DEFAULT_SETTINGS};
 let isLoggedIn = false;
@@ -68,6 +73,25 @@ const renderHeaderCount = () => {
 };
 
 /**
+ * Voice command action -> settings mutation, passed to VoiceCommands.start().
+ * Defined once init() has bound onToggle/onReset (see below).
+ */
+let voiceCallbacks = {};
+
+/**
+ * Start/stop the 5 "advanced" features (the booleans that drive a live JS
+ * overlay/listener instead of a body CSS class, see classes/manager.php's
+ * get_boolean_class_map() docblock) to match the current settings.
+ */
+const syncAdvancedFeatures = () => {
+    ReadingGuide.sync(Boolean(settings.readingGuide));
+    ReadingMask.sync(Boolean(settings.readingMask));
+    ScreenReader.sync(Boolean(settings.screenReader));
+    VirtualKeyboard.sync(Boolean(settings.virtualKeyboard));
+    VoiceCommands.sync(Boolean(settings.voiceCommands), voiceCallbacks);
+};
+
+/**
  * Apply the in-memory `settings` object everywhere: page effects, DOM
  * (single option, or all of them), counts, and persist it.
  *
@@ -75,6 +99,7 @@ const renderHeaderCount = () => {
  */
 const commit = async(onlyId = null) => {
     Effects.apply(settings);
+    syncAdvancedFeatures();
     if (onlyId) {
         await Panel.renderOption(onlyId, settings[onlyId], defaultOf(onlyId));
     } else {
@@ -102,6 +127,23 @@ const onToggle = (id, value) => {
 };
 
 /**
+ * Set a stepper option to a specific (clamped) value.
+ *
+ * @param {String} id
+ * @param {Number} value
+ */
+const setStepperValue = (id, value) => {
+    const meta = optionMeta[id];
+    if (!meta) {
+        return;
+    }
+    settings = {...settings, [id]: Math.max(0, Math.min(meta.max, value))};
+    activeProfileId = null;
+    Panel.renderActiveProfile(null);
+    commit(id);
+};
+
+/**
  * @param {String} id
  */
 const onStepperCycle = (id) => {
@@ -110,11 +152,7 @@ const onStepperCycle = (id) => {
         return;
     }
     const current = Number(settings[id]) || 0;
-    const next = (current + 1) % (meta.max + 1);
-    settings = {...settings, [id]: next};
-    activeProfileId = null;
-    Panel.renderActiveProfile(null);
-    commit(id);
+    setStepperValue(id, (current + 1) % (meta.max + 1));
 };
 
 /**
@@ -146,6 +184,18 @@ const onProfileSelect = (id) => {
     activeProfileId = id;
     Panel.renderActiveProfile(id);
     commit();
+};
+
+voiceCallbacks = {
+    openPanel: () => Panel.open(),
+    closePanel: () => Panel.close(),
+    increaseTextSize: () => setStepperValue('textSize', (Number(settings.textSize) || 0) + 1),
+    decreaseTextSize: () => setStepperValue('textSize', (Number(settings.textSize) || 0) - 1),
+    highContrast: () => setStepperValue('contrast', 3),
+    darkMode: () => setStepperValue('contrast', 1),
+    reset: () => onReset(),
+    toggleScreenReader: () => onToggle('screenReader', !settings.screenReader),
+    toggleVirtualKeyboard: () => onToggle('virtualKeyboard', !settings.virtualKeyboard),
 };
 
 /**
@@ -198,6 +248,7 @@ export const init = async(loggedIn) => {
     // this is the authoritative value (e.g. after a guest->login migration)
     // and keeps the option rows' own state in sync with it.
     Effects.apply(settings);
+    syncAdvancedFeatures();
     await Promise.all(Object.keys(optionMeta).map(
         (id) => Panel.renderOption(id, settings[id], defaultOf(id))
     ));
