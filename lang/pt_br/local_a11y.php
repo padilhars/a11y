@@ -51,8 +51,7 @@ $string['searchclear'] = 'Limpar busca';
 $string['activeprofile'] = 'Perfil ativo';
 $string['on'] = 'Ativo';
 $string['off'] = 'Inativo';
-$string['savetitle'] = 'Preferências salvas';
-$string['savesubtitle'] = 'Suas configurações são lembradas em todas as páginas do Moodle.';
+$string['savetitle'] = 'Desenvolvido com ❤️ pela <strong>CPTED</strong> para você.';
 $string['keyboardhint'] = 'Atalho: Alt + A';
 
 // Categories.

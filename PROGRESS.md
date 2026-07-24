@@ -143,4 +143,8 @@ A pedido do usuário, o ícone padrão do botão flutuante agora é o "Accessibi
 
 `.local-a11y-panel__badge` deixou de mostrar sempre o ícone Lucide `accessibility` e passou a espelhar o ícone configurado em `local_a11y/fabicon` (o mesmo do FAB), via novo helper compartilhado `icons::fabicon_svg()`. Caso especial para o logo da ONU (asset branco sólido): badge ganha fundo `accent` sólido em vez do pastel padrão, para permanecer legível — ver DECISIONS.md D18. Verificado via Playwright (badge e FAB sempre mostram o mesmo ícone, nos 4 valores possíveis) e PHPUnit (16/16 verde).
 
+## Rodapé do painel: mensagem de crédito CPTED (concluído)
+
+"Preferências salvas" / "Suas configurações são lembradas..." no rodapé do painel foi substituído por "Desenvolvido com ❤️ pela **CPTED** para você." (com "CPTED" em negrito), atalho `Alt+A` mantido — ver DECISIONS.md D19. Verificado via Playwright e PHPUnit (16/16 verde).
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

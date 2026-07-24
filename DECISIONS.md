@@ -2,6 +2,14 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D19 — Rodapé do painel: mensagem de crédito no lugar de "Preferências salvas"
+
+A pedido do usuário, o texto do rodapé do painel (`savetitle`/`savesubtitle`, antes "Preferências salvas" / "Suas configurações são lembradas em todas as páginas do Moodle.") foi substituído por uma única mensagem de crédito: "Desenvolvido com ❤️ pela **CPTED** para você." (pt_br) / "Made with ❤️ by **CPTED**, for you." (en, tradução equivalente já que `en` é canônico — ver CLAUDE.md), com "CPTED" em negrito. O atalho `Alt+A` (`<kbd>` fixo no template, não vem de lang string) foi mantido intacto, conforme pedido.
+
+Como a mensagem virou uma frase única, a string `savesubtitle` (e o `<span class="local-a11y-panel__footer-subtitle">` que a exibia) foi removida — não fazia sentido manter um segundo parágrafo vazio. `savetitle` passou a conter `<strong>CPTED</strong>` deliberadamente; `templates/panel.mustache` foi ajustado de `{{savetitle}}` (escapado) para `{{{savetitle}}}` (raw) para não exibir a tag literalmente como texto, com um comentário Mustache explicando o motivo (mesmo padrão de qualquer outro `{{{...}}}` do template, que já é reservado a SVGs confiavelmente estáticos — aqui a "confiança" é a mesma: a string vem de `get_string()`, não de entrada de usuário).
+
+Verificado via Playwright: `<strong>CPTED</strong>` renderiza em negrito (font-weight computado maior que o resto do título), `Alt+A` continua visível, PHPUnit 16/16 verde.
+
 ## D18 — Badge do cabeçalho do painel passa a usar o mesmo ícone do FAB
 
 A pedido do usuário, `.local-a11y-panel__badge` (o quadrado colorido no cabeçalho do painel) deixou de ser hardcoded para o ícone Lucide `accessibility` e passou a refletir o mesmo ícone configurado em `local_a11y/fabicon` — o mesmo que o FAB mostra.

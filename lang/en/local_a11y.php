@@ -51,8 +51,7 @@ $string['searchclear'] = 'Clear search';
 $string['activeprofile'] = 'Active profile';
 $string['on'] = 'On';
 $string['off'] = 'Off';
-$string['savetitle'] = 'Preferences saved';
-$string['savesubtitle'] = 'Your settings are remembered across all Moodle pages.';
+$string['savetitle'] = 'Made with ❤️ by <strong>CPTED</strong>, for you.';
 $string['keyboardhint'] = 'Shortcut: Alt + A';
 
 // Categories.

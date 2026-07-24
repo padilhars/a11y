@@ -45,8 +45,7 @@
         "checkiconsvg": "<svg></svg>",
         "profiles": [],
         "categories": [],
-        "savetitle": "Preferences saved",
-        "savesubtitle": "Your settings are remembered across all Moodle pages.",
+        "savetitle": "Made with ❤️ by <strong>CPTED<\/strong>, for you.",
         "saveiconsvg": "<svg></svg>",
         "panelformatclass": "local-a11y-panel--popover",
         "positionclass": "local-a11y-panel--bottom-right",
@@ -146,8 +145,8 @@
     <div class="local-a11y-panel__footer">
         <span class="local-a11y-panel__footer-icon">{{{saveiconsvg}}}</span>
         <span class="local-a11y-panel__footer-text">
-            <span class="local-a11y-panel__footer-title">{{savetitle}}</span>
-            <span class="local-a11y-panel__footer-subtitle">{{savesubtitle}}</span>
+            {{! savetitle intentionally contains a <strong> tag (see lang string) - raw output, not escaped. }}
+            <span class="local-a11y-panel__footer-title">{{{savetitle}}}</span>
         </span>
         <kbd class="local-a11y-panel__footer-kbd">Alt+A</kbd>
     </div>
