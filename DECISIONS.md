@@ -2,6 +2,18 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D16 — Correção pós-entrega #2: cor/contraste ainda não alcançava toda a página (`#page` → `#page-wrapper`)
+
+Após D14, o usuário reportou que Contraste/Inverter Cores/Mudar Cores/Saturação ainda não se aplicavam a "todos os elementos da página". O usuário sugeriu, com base no CSS do protótipo (que usa `.moodle-shell` como alvo do `filter`), trocar o seletor-alvo pelo elemento real equivalente do Moodle — apontando `#page-wrapper` em vez de `#page`.
+
+Investigação no DOM real (não só no protótipo) confirmou a causa exata: `#page-wrapper` > (`nav.navbar` do topo, o *drawer* do índice do curso `#theme_boost-drawers-courseindex`, o menu do usuário) **e** `#page` são todos irmãos dentro de `#page-wrapper` — ou seja, a navbar principal, o drawer do índice e o menu do usuário ficam **fora** de `#page`. Como D14 tinha escopado o `filter` combinado (Inverter/Mudar Cores/Saturação) e os overrides de cor de link de contraste a `#page`, esses três elementos de chrome nunca eram atingidos, exatamente o sintoma relatado.
+
+Corrigido trocando o alvo de `#page` para `#page-wrapper` em `styles.css`: a pilha de variáveis `--a11y-filter-invert/saturate/color` e a regra `filter:` combinada (antes em `#page`), e os overrides `#page a:not(.btn)` de cor de link nos 3 níveis de contraste. Também adicionado `.navbar` à lista de fundo com cor "hardcoded" do Contraste nível 2 (só nível 1 e 3 tinham; inconsistência encontrada durante a correção).
+
+`#local-a11y-fab`/`#local-a11y-panel` continuam dentro de `#page-wrapper` (na verdade sempre estiveram dentro de `#page` também — o hook `before_footer_html_generation` injeta o HTML deles dentro de `#region-main`, não como irmão de `#page-wrapper` como o nome do hook sugeriria) e continuam **imunes** aos filtros: verificado empiricamente com Playwright comparando a cor real (pixel, não `getComputedStyle`, que não reflete o resultado de `filter`) do FAB antes/depois de ativar Inverter Cores — permanece azul idêntico nos dois casos. Isso confirma que `.local-a11y-root { filter: none !important; }` de fato exclui o elemento do filtro do ancestral no Chromium (cada elemento com `filter` próprio é compositado como camada independente, não como parte de um único raster do subtree do ancestral).
+
+Verificado via Playwright: navbar e drawer do índice do curso agora escurecem/inverte/mudam de cor junto com o resto da página nos 3 modos afetados; nível 3 de contraste agora deixa a navbar preta com links amarelos (antes ficava branca); FAB permanece imune em todos os casos. Limitação residual da `.moremenu` (D14) permanece — cosmética, texto legível, não revisitada aqui.
+
 ## D15 — Auditoria de segurança pós-entrega
 
 A pedido do usuário ("verificar se nosso código não expõe nenhuma brecha de segurança"), foi feita uma auditoria cobrindo (a) exposição HTTP indevida do servidor web e (b) padrões de código inseguros no próprio plugin. Dois achados, ambos corrigidos:
