@@ -2,6 +2,24 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D23 — Banner "perfil ativo" removido; reset consolidado num botão fixo no cabeçalho
+
+A pedido do usuário, dois elementos do cabeçalho do painel foram substituídos por um único botão fixo:
+
+1. `.local-a11y-panel__active-profile` — o banner (ícone + "Perfil ativo" + nome + botão de limpar) que aparecia/desaparecia (`hidden`) logo abaixo da primeira linha do cabeçalho quando um perfil estava ativo.
+2. `.local-a11y-panel__reset` — o botão "↺ Restaurar padrões" (também condicional, `hidden` quando `!hasactive`) que ficava depois do banner.
+
+Ambos foram removidos e substituídos por **um** botão (ícone de refresh) dentro de `.local-a11y-panel__header-row`, ao lado do botão de fechar (X):
+
+- **Sempre presente no DOM** (nunca `hidden`) — por isso o cabeçalho passou a ter altura constante (antes, o banner e o botão apareciam/desapareciam, mudando a altura do cabeçalho conforme o estado). Verificado: 74.5px em ambos os estados (com e sem opção ativa).
+- **`disabled` (não só visualmente apagado)** quando não há opções ativas — `.local-a11y-panel__reset-icon:disabled { opacity: 0.4; cursor: not-allowed; }`.
+- **Colorido** quando há algo ativo: por padrão no `accent` configurado (azul), OU no tom (`--local-a11y-tone-*`) do perfil ativo especificamente, via a mesma cadeia de fallback de variáveis CSS já usada nos cards de perfil (`color: var(--local-a11y-tone-icon, var(--local-a11y-accent, var(--a11y-accent)))`). `amd/src/panel.js::renderActiveProfile()` foi reescrita para copiar as variáveis de tom do card do perfil ativo diretamente para este botão (em vez de para o banner removido), e limpá-las (`removeProperty`) quando nenhum perfil está ativo — deixando a cor cair de volta para o `accent` puro.
+- **Tooltip**: `title` + `aria-label` com a string `resetlabel` ("Restaurar padrões"/"Reset all"), mesmo padrão já usado em `profile_card.mustache`.
+
+`amd/src/panel.js::renderHeader()` passou a alternar `resetButton.disabled`/a classe `--active` em vez de `resetButton.hidden`. A string `activeprofile` ("Perfil ativo"), usada só pelo banner removido, foi apagada de `lang/{en,pt_br}/local_a11y.php`. O cenário Behat que verificava o banner (`tests/behat/local_a11y.feature`) foi reescrito para checar `.local-a11y-profile-card--active` no card e `.local-a11y-panel__reset-icon--active`/`[disabled]` no botão em vez do banner inexistente.
+
+Verificado via Playwright: botão desabilitado+apagado sem opções ativas; azul (`rgb(59,130,246)`) com uma opção avulsa ativa; roxo (`#8b5cf6`, tom exato do card) com o perfil Dislexia ativo; volta a desabilitado ao desativar o perfil; altura do cabeçalho idêntica nos três estados. PHPUnit 16/16 verde; ESLint/build AMD limpos.
+
 ## D22 — Ícone do rodapé do painel removido
 
 A pedido do usuário, `.local-a11y-panel__footer-icon` (o quadrado com o ícone de check ao lado da mensagem de crédito) foi removido do rodapé do painel — sobra apenas o texto ("Desenvolvido com ❤️ pela **CPTED** para você.") e o atalho `Alt+A`. Removido de ponta a ponta: `<span class="local-a11y-panel__footer-icon">` de `templates/panel.mustache`, o campo `saveiconsvg` de `classes/output/panel.php` (só existia para alimentar esse span) e a regra `.local-a11y-panel__footer-icon` de `styles.css`.

@@ -250,34 +250,27 @@
 }
 .local-a11y-iconbutton:hover { background: #f4f4f5; color: var(--a11y-text); }
 
-.local-a11y-panel__active-profile {
-  margin-top: 12px; padding: 8px 12px; border-radius: 8px;
+/* Single fixed reset button in the header row (see DECISIONS.md D23) -
+   always rendered, never hidden/shown, so the header has a constant
+   height. Disabled+dimmed by default; when something is active, coloured
+   with the configured accent, or with the active profile's own tone
+   colours specifically (set as inline custom properties by
+   amd/src/panel.js::renderActiveProfile() straight onto this button,
+   falling back to the plain accent below when no profile - just an
+   individual option - is active). */
+.local-a11y-panel__reset-icon:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.local-a11y-panel__reset-icon--active {
   background: var(--local-a11y-tone-bg, var(--a11y-accent-soft));
-  border: 1px solid var(--local-a11y-tone-border, var(--a11y-border));
-  display: flex; align-items: center; gap: 10px;
+  border-color: var(--local-a11y-tone-border, var(--local-a11y-accent, var(--a11y-accent)));
+  color: var(--local-a11y-tone-icon, var(--local-a11y-accent, var(--a11y-accent)));
 }
-.local-a11y-panel__active-profile[hidden] { display: none; }
-.local-a11y-panel__active-profile-icon { color: var(--local-a11y-tone-icon, var(--a11y-accent)); display: flex; }
-.local-a11y-panel__active-profile-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.local-a11y-panel__active-profile-kicker {
-  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
-  color: var(--local-a11y-tone-text, var(--a11y-text));
+.local-a11y-panel__reset-icon--active:hover {
+  background: var(--local-a11y-tone-bg, var(--a11y-accent-soft));
+  color: var(--local-a11y-tone-icon, var(--local-a11y-accent, var(--a11y-accent)));
 }
-.local-a11y-panel__active-profile-name { font-size: 13px; font-weight: 600; color: var(--local-a11y-tone-text, var(--a11y-text)); margin-top: 2px; }
-.local-a11y-panel__active-profile-clear {
-  border: 0; background: transparent; color: var(--local-a11y-tone-text, var(--a11y-text));
-  cursor: pointer; padding: 6px 10px; border-radius: 6px; min-width: 24px; min-height: 24px;
-}
-
-.local-a11y-panel__reset {
-  margin-top: 12px; width: 100%; padding: 9px 12px; border-radius: 8px;
-  border: 1px dashed var(--a11y-border); background: transparent;
-  color: #52525b; font-size: 12.5px; font-weight: 500; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  transition: all 150ms ease; min-height: 24px;
-}
-.local-a11y-panel__reset[hidden] { display: none; }
-.local-a11y-panel__reset:hover { background: #f4f4f5; border-color: var(--a11y-border-strong); }
 
 /* ===========================================================================
    PANEL — body / search

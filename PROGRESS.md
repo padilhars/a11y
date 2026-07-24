@@ -159,4 +159,8 @@ A pedido do usuário, o badge do painel com o logo da ONU voltou a ter exatament
 
 `.local-a11y-panel__footer-icon` removido do rodapé do painel (template, PHP e CSS) — sobra só o texto de crédito e o atalho `Alt+A`. De passagem, removida também `.local-a11y-panel__footer-subtitle`, CSS morto desde a mudança de D19. Ver DECISIONS.md D22.
 
+## Reset consolidado num botão fixo no cabeçalho (concluído)
+
+O banner "perfil ativo" e o botão separado "Restaurar padrões" (ambos condicionalmente escondidos, mudando a altura do cabeçalho) foram substituídos por um único botão de reset fixo ao lado do X — sempre presente, desabilitado+apagado sem opções ativas, colorido no accent (ou no tom do perfil ativo) caso contrário, com tooltip. Cabeçalho agora tem altura constante. Ver DECISIONS.md D23. Verificado via Playwright, PHPUnit 16/16 verde.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

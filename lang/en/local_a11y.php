@@ -48,7 +48,6 @@ $string['reset'] = 'Reset all';
 $string['close'] = 'Close';
 $string['search'] = 'Search option…';
 $string['searchclear'] = 'Clear search';
-$string['activeprofile'] = 'Active profile';
 $string['on'] = 'On';
 $string['off'] = 'Off';
 $string['savetitle'] = 'Made with ❤️ by <strong>CPTED</strong>, for you.';

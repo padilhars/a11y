@@ -24,13 +24,15 @@ Feature: Accessibility panel
     Then I should see "Médio" in the "#local-a11y-panel [data-option-id='textSize']" "css_element"
     And "body.a11y-text-size-2" "css_element" should exist
 
-  Scenario: Applying the Dyslexia profile shows the active profile banner and body classes
+  Scenario: Applying the Dyslexia profile marks the card active, colours the reset button and sets body classes
     Given I click on "#local-a11y-fab" "css_element"
     When I click on "#local-a11y-panel [data-profile-id='dyslexia']" "css_element"
-    Then I should see "Dislexia" in the "[data-region='active-profile']" "css_element"
+    Then "#local-a11y-panel [data-profile-id='dyslexia'].local-a11y-profile-card--active" "css_element" should exist
+    And "#local-a11y-panel [data-region='reset-button'].local-a11y-panel__reset-icon--active" "css_element" should exist
     And "body.a11y-dyslexic-font" "css_element" should exist
     And "body.a11y-line-height-2" "css_element" should exist
     And "body.a11y-text-spacing-2" "css_element" should exist
     When I click on "#local-a11y-panel [data-profile-id='dyslexia']" "css_element"
-    Then "[data-region='active-profile']" "css_element" should not be visible
+    Then "#local-a11y-panel [data-profile-id='dyslexia'].local-a11y-profile-card--active" "css_element" should not exist
+    And "#local-a11y-panel [data-region='reset-button'][disabled]" "css_element" should exist
     And "body.a11y-dyslexic-font" "css_element" should not exist

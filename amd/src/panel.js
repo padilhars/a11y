@@ -137,7 +137,9 @@ const renderOption = async(id, value, defaultValue) => {
 
 /**
  * Update the header status text, reset button and FAB badge to match the
- * current active-option count.
+ * current active-option count. The reset button is always present (never
+ * hidden - see DECISIONS.md D23) - only its disabled state and colouring
+ * change.
  *
  * @param {Number} count
  */
@@ -153,7 +155,8 @@ const renderHeader = async(count) => {
             : await getString('noneactive', 'local_a11y');
     }
     if (resetButton) {
-        resetButton.hidden = count === 0;
+        resetButton.disabled = count === 0;
+        resetButton.classList.toggle('local-a11y-panel__reset-icon--active', count > 0);
     }
     if (badge) {
         badge.hidden = count === 0;
@@ -180,14 +183,19 @@ const renderCategoryCount = (categoryId, count) => {
 };
 
 /**
- * Mark the given profile card as active (or none, if id is null) and update
- * the header's "active profile" banner from that same card's own
- * server-rendered content (icon markup, label text, tone CSS variables) -
- * no need to duplicate that data a second time in JS.
+ * Mark the given profile card as active (or none, if id is null) and, when
+ * one is, copy its tone CSS variables onto the header reset button (see
+ * DECISIONS.md D23) so it reads in the active profile's own colour instead
+ * of the plain accent - cleared when no profile is active, so the button's
+ * CSS falls back to the accent again.
  *
  * @param {String|null} id
  */
-const renderActiveProfile = async(id) => {
+const renderActiveProfile = (id) => {
+    const toneprops = ['--local-a11y-tone-bg', '--local-a11y-tone-text', '--local-a11y-tone-icon', '--local-a11y-tone-border'];
+    const resetButton = panel.querySelector('[data-region="reset-button"]');
+    let activeCard = null;
+
     panel.querySelectorAll('[data-region="profile-card"]').forEach((card) => {
         const isActive = card.dataset.profileId === id;
         card.classList.toggle('local-a11y-profile-card--active', isActive);
@@ -196,40 +204,21 @@ const renderActiveProfile = async(id) => {
         if (check) {
             check.hidden = !isActive;
         }
+        if (isActive) {
+            activeCard = card;
+        }
     });
 
-    const banner = panel.querySelector('[data-region="active-profile"]');
-    if (!banner) {
+    if (!resetButton) {
         return;
     }
-    if (!id) {
-        banner.hidden = true;
-        return;
-    }
-    const card = panel.querySelector(`[data-region="profile-card"][data-profile-id="${id}"]`);
-    if (!card) {
-        banner.hidden = true;
-        return;
-    }
-    banner.hidden = false;
-    banner.style.setProperty('--local-a11y-tone-bg', card.style.getPropertyValue('--local-a11y-tone-bg'));
-    banner.style.setProperty('--local-a11y-tone-text', card.style.getPropertyValue('--local-a11y-tone-text'));
-    banner.style.setProperty('--local-a11y-tone-icon', card.style.getPropertyValue('--local-a11y-tone-icon'));
-    banner.style.setProperty('--local-a11y-tone-border', card.style.getPropertyValue('--local-a11y-tone-border'));
-    const icon = banner.querySelector('[data-region="active-profile-icon"]');
-    const cardIcon = card.querySelector('.local-a11y-profile-card__icon');
-    if (icon && cardIcon) {
-        icon.innerHTML = cardIcon.innerHTML;
-    }
-    const kicker = banner.querySelector('[data-region="active-profile-kicker"]');
-    if (kicker) {
-        kicker.textContent = await getString('activeprofile', 'local_a11y');
-    }
-    const name = banner.querySelector('[data-region="active-profile-name"]');
-    const cardLabel = card.querySelector('.local-a11y-profile-card__label');
-    if (name && cardLabel) {
-        name.textContent = cardLabel.textContent;
-    }
+    toneprops.forEach((prop) => {
+        if (activeCard) {
+            resetButton.style.setProperty(prop, activeCard.style.getPropertyValue(prop));
+        } else {
+            resetButton.style.removeProperty(prop);
+        }
+    });
 };
 
 /**
