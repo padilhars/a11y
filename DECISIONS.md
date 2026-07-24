@@ -42,6 +42,10 @@ O briefing pedia `user_preference_allow_ajax_update()` + `core_user/repository::
 
 O restante da segunda parte do pedido (`core_user/repository::setUserPreference` via AMD) foi seguido à risca — `amd/src/storage.js` usa exatamente esse módulo.
 
+## D13 — Empacotamento: `zip` não inclui dotfiles recursivamente por padrão
+
+Ao gerar `local_a11y.zip`, um `rsync --exclude='.eslintrc'` (sem barra inicial) removeu **todas** as ocorrências de `.eslintrc` na árvore, inclusive `amd/src/.eslintrc` (que é funcional, não é o `.eslintrc` de conveniência da raiz — ver M2). Corrigido ancorando os padrões de exclusão à raiz (`--exclude='/.eslintrc'`). Isso só afetou o artefato do ZIP de distribuição, nunca o repositório git (que sempre teve o arquivo correto) nem a instalação em disco durante o desenvolvimento. Validado publicando o ZIP corrigido e comparando `git status` após reinstalar por cima — sem diffs inesperados.
+
 ## D12 — Behat com cenários `@javascript` escrito mas não executado
 
 `tests/behat/local_a11y.feature` foi escrito (steps genéricos documentados do `behat_general.php`, sem *step definitions* customizadas), e o ambiente Behat foi inicializado com sucesso (`admin/tool/behat/cli/init.php`, incluindo build de CSS de Boost e Classic). A **execução** dos cenários `@javascript` exige um WebDriver clássico (Selenium + chromedriver na mesma major version do navegador), que este host não tinha; a tentativa de montar isso rapidamente (Java + `npm i chromedriver`) esbarrou em descasamento de versão com o Chromium do Playwright e problema de permissão de cache entre os usuários `padilha`/`www-data`. Decisão: não persegui uma instalação completa de Selenium (custo desproporcional nesta sessão) e, em vez disso, verifiquei os mesmos dois cenários do `.feature` (mudar Tamanho do Texto + reload persiste; aplicar/desfazer perfil Dislexia) de ponta a ponta com Playwright real contra o Moodle rodando, com captura de tela — ver `_verification/m3/`, `_verification/m4/` e ENVIRONMENT.md para os detalhes e o caminho para terminar a configuração do Selenium depois.

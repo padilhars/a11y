@@ -87,4 +87,30 @@
 - **Matriz de tema/viewport**: Boost desktop (já coberto extensivamente M2-M6), Boost mobile 390px, Classic desktop 1440px, Classic mobile 390px — FAB e painel renderizam corretamente nos 4 casos (capturas em `_verification/m7/`); tema revertido para Boost ao final.
 - Próximo: M8 — empacotamento (`local_a11y.zip`), README com screenshots, CHANGELOG.
 
+## M8 — Empacotamento final (concluído)
+
+- `README.md` (visão geral, requisitos, instalação, as 22 opções/9 perfis, persistência, configuração de admin, privacidade, comandos de desenvolvimento) e `CHANGELOG.md` (entrada `0.1.0`).
+- `pix/icon.svg` criado (estava faltando desde o M1 — mesmo ícone "accessibility" do FAB).
+- **`local_a11y.zip` gerado e testado via upload real na interface do Moodle**, com o site ao vivo:
+  1. Plugin desinstalado via `admin/cli/uninstall_plugins.php --plugins=local_a11y --run` e a pasta movida para fora de `local/` (backup preservando o `.git`), confirmando que o FAB desaparece.
+  2. Upload do ZIP em **Administração do site → Plugins → Instalar plugins** via automação de navegador real (Playwright): seletor de arquivos do Moodle → "Enviar um arquivo" → escolher `local_a11y.zip` → "Enviar este arquivo" → "Instalar plugin do arquivo ZIP". Moodle reconheceu corretamente o componente (`installzipcomponent=local_a11y`) e validou: *"Validando local_a11y ... OK — Validação bem sucedida, a instalação pode continuar"*.
+  3. Fluxo de confirmação padrão do Moodle (verificação de plugins → nível de maturidade ALPHA avisado, como esperado, já que `$plugin->maturity = MATURITY_ALPHA`) até `admin/cli/upgrade.php` concluir o registro das settings.
+  4. Confirmado que os arquivos extraídos batem exatamente com o repositório (`git status` sem diffs após restaurar o histórico `.git` por cima do diretório extraído) e que o FAB volta a funcionar normalmente.
+  5. **Bug encontrado e corrigido durante esse processo** (DECISIONS.md D13): o `zip`/`rsync` usados para montar o pacote excluíam `amd/src/.eslintrc` sem querer (padrão de exclusão sem âncora de raiz combinando com qualquer `.eslintrc` na árvore, não só o da raiz do plugin). Corrigido e o ZIP final republicado com os 82 arquivos esperados.
+  - Capturas do fluxo completo em `_verification/m8/`.
+- `local_a11y.zip` fica em `local/a11y/local_a11y.zip` (fora do git — `.gitignore`; reproduzível via o mesmo `rsync`+`zip` documentado em DECISIONS.md D13/CLAUDE.md).
+
+## Resumo final — Definição de Pronto
+
+- [x] Plugin instala num Moodle 5.0+ (5.2.1 neste ambiente) sem erros; nenhum aviso de depreciação **originado pelo plugin** (os avisos de depreciação vistos em `admin/cli/checks.php`/PHPUnit são todos do **core** do Moodle rodando em PHP 8.5, fora do escopo).
+- [x] FAB e painel visualmente equivalentes ao protótipo (capturas em `_verification/m2` a `_verification/m8`).
+- [x] As 22 opções e os 9 perfis funcionam em páginas reais (dashboard, curso, atividade, configurações de admin) — verificado nos temas Boost e Classic, desktop e mobile.
+- [x] Preferências persistem entre páginas e sessões (preferência de usuário via nova rota REST `core_user`, `localStorage` + migração automática para visitantes); sem FOUC (bootstrap síncrono no topo do `<body>`).
+- [x] Painel e FAB imunes aos próprios efeitos (`.local-a11y-root` com `filter: none !important` e `cursor` resetado).
+- [x] `pt_br` e `en` completos; nenhuma string hardcoded (tudo via `get_string()`/`core/str`).
+- [x] Privacy provider implementado; capabilities definidas; settings de admin funcionais.
+- [~] `moodle-plugin-ci`/Code checker: **não instalado** (sem acesso para instalar globalmente da forma padrão neste host) — mitigado com `admin/cli/checks.php` limpo, `php -l` em 100% dos arquivos PHP do plugin, e ESLint real (via `grunt amd`, config copiada do core) limpo em cada build. PHPUnit 16/16 verde. Behat **escrito mas não executado** (falta WebDriver clássico no host — ver DECISIONS.md D12); cenários equivalentes validados via Playwright real. axe-core: **zero violações críticas/sérias**.
+- [x] `local_a11y.zip` gerado **e testado por instalação via interface real do Moodle** (não simulado).
+- [x] Este arquivo descreve o entregue e como validar cada marco.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_
