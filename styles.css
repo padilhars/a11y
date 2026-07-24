@@ -490,10 +490,10 @@
    regions so the FAB/panel (outside those regions) are never affected.
    Verbatim behaviour port of _design-reference/a11y-effects.css.
    =========================================================================== */
-body.a11y-active #page,
-body.a11y-active #page-content,
-body.a11y-active .navbar,
-body.a11y-active footer#page-footer {
+#page,
+#page-content,
+.navbar,
+footer#page-footer {
   transition: filter 200ms ease, background-color 200ms ease, color 200ms ease;
 }
 
@@ -584,25 +584,116 @@ body.a11y-pause-animations #page *::before, body.a11y-pause-animations #page *::
   transition-delay: 0s !important;
 }
 
-/* Contrast variants */
-body.a11y-contrast-1 #page, body.a11y-contrast-1 .navbar, body.a11y-contrast-1 footer#page-footer {
-  background-color: #1f1f1f !important; color: #f3f4f6 !important; border-color: #3f3f46 !important;
+/* ===========================================================================
+   Contrast variants — Boost/Bootstrap 5.3 themes almost every component
+   (.card, .dropdown-menu, .list-group-item, form controls, links...) off a
+   handful of CSS custom properties (--bs-body-bg, --bs-body-color,
+   --bs-link-color, --bs-border-color, and their -rgb twins used by
+   rgba(var(--bs-*-rgb), ...) utility classes like .bg-body). Overriding
+   those on <body> re-themes the whole page - including elements this
+   plugin doesn't know the class names of - instead of enumerating every
+   Bootstrap component selector by hand.
+   =========================================================================== */
+/* Shared list of regions Moodle/Boost paint with a *hardcoded* background
+   colour rather than var(--bs-body-bg) (#region-main, .main-inner, .drawer
+   are all literally "background-color:#fff" in the compiled theme CSS) -
+   the --bs-* variable overrides below don't reach these, so they need an
+   explicit (!important) override too. .card/.dropdown-menu/.popover/
+   .modal-content genuinely do use the variables (confirmed against the
+   compiled Boost CSS) but are included here too, defensively. */
+body.a11y-contrast-1 #region-main,
+body.a11y-contrast-1 .main-inner,
+body.a11y-contrast-1 .moremenu,
+body.a11y-contrast-1 .drawer,
+body.a11y-contrast-1 .card,
+body.a11y-contrast-1 .bg-white,
+body.a11y-contrast-1 .dropdown-menu,
+body.a11y-contrast-1 .popover,
+body.a11y-contrast-1 .modal-content,
+body.a11y-contrast-1 footer#page-footer {
+  background-color: #1f1f1f !important;
+  color: #f3f4f6 !important;
+  border-color: #3f3f46 !important;
 }
-body.a11y-contrast-1 #page h1, body.a11y-contrast-1 #page h2, body.a11y-contrast-1 #page h3 { color: #f3f4f6 !important; }
+body.a11y-contrast-1 {
+  --bs-body-bg: #1f1f1f;
+  --bs-body-bg-rgb: 31, 31, 31;
+  --bs-body-color: #f3f4f6;
+  --bs-body-color-rgb: 243, 244, 246;
+  --bs-emphasis-color: #ffffff;
+  --bs-secondary-bg: #27272a;
+  --bs-tertiary-bg: #18181b;
+  --bs-border-color: #3f3f46;
+  --bs-border-color-translucent: #3f3f46;
+  --bs-link-color: #93c5fd;
+  --bs-link-hover-color: #bfdbfe;
+}
 body.a11y-contrast-1 .navbar { background-color: #0a0a0a !important; }
+/* Belt-and-braces: some Moodle links set their own colour instead of
+   inheriting --bs-link-color (e.g. activity/section title links), so the
+   variable override above doesn't reach them - force it explicitly too. */
+body.a11y-contrast-1 #page a:not(.btn) { color: #93c5fd !important; }
 
-body.a11y-contrast-2 #page, body.a11y-contrast-2 .navbar, body.a11y-contrast-2 footer#page-footer {
-  background-color: #fffbeb !important; color: #1c1917 !important; border-color: #d6d3d1 !important;
+body.a11y-contrast-2 #region-main,
+body.a11y-contrast-2 .main-inner,
+body.a11y-contrast-2 .moremenu,
+body.a11y-contrast-2 .drawer,
+body.a11y-contrast-2 .card,
+body.a11y-contrast-2 .bg-white,
+body.a11y-contrast-2 .dropdown-menu,
+body.a11y-contrast-2 .popover,
+body.a11y-contrast-2 .modal-content,
+body.a11y-contrast-2 footer#page-footer {
+  background-color: #fffbeb !important;
+  color: #1c1917 !important;
+  border-color: #d6d3d1 !important;
+}
+body.a11y-contrast-2 {
+  --bs-body-bg: #fffbeb;
+  --bs-body-bg-rgb: 255, 251, 235;
+  --bs-body-color: #1c1917;
+  --bs-body-color-rgb: 28, 25, 23;
+  --bs-secondary-bg: #fef3c7;
+  --bs-tertiary-bg: #fef9ec;
+  --bs-border-color: #d6d3d1;
+  --bs-border-color-translucent: #d6d3d1;
 }
 
-body.a11y-contrast-3 #page, body.a11y-contrast-3 .navbar, body.a11y-contrast-3 footer#page-footer {
-  background-color: #000 !important; color: #fff !important; border-color: #fff !important; border-width: 2px !important;
+body.a11y-contrast-3 #region-main,
+body.a11y-contrast-3 .main-inner,
+body.a11y-contrast-3 .moremenu,
+body.a11y-contrast-3 .drawer,
+body.a11y-contrast-3 .card,
+body.a11y-contrast-3 .bg-white,
+body.a11y-contrast-3 .dropdown-menu,
+body.a11y-contrast-3 .popover,
+body.a11y-contrast-3 .modal-content,
+body.a11y-contrast-3 .navbar,
+body.a11y-contrast-3 footer#page-footer {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+  border-width: 2px !important;
 }
-body.a11y-contrast-3 #page *, body.a11y-contrast-3 .navbar * { color: #fff !important; }
-body.a11y-contrast-3 #page a { color: #ffff00 !important; text-decoration: underline !important; }
-body.a11y-contrast-3 #page .btn-primary { background: #ffff00 !important; color: #000 !important; font-weight: 700 !important; }
+body.a11y-contrast-3 {
+  --bs-body-bg: #000000;
+  --bs-body-bg-rgb: 0, 0, 0;
+  --bs-body-color: #ffffff;
+  --bs-body-color-rgb: 255, 255, 255;
+  --bs-emphasis-color: #ffffff;
+  --bs-secondary-bg: #000000;
+  --bs-tertiary-bg: #000000;
+  --bs-border-color: #ffffff;
+  --bs-border-color-translucent: #ffffff;
+  --bs-link-color: #ffff00;
+  --bs-link-hover-color: #ffff66;
+}
+body.a11y-contrast-3 #page a:not(.btn) { color: #ffff00 !important; }
+body.a11y-contrast-3 a { text-decoration: underline !important; }
+body.a11y-contrast-3 .btn-primary { background: #ffff00 !important; border-color: #ffff00 !important; color: #000 !important; font-weight: 700 !important; }
 
-/* Invert / saturation / colour-blind filters — combined via CSS filter on #page */
+/* Invert / saturation / colour-blind filters — combined via CSS filter on
+   #page so independent options stack (unset variables resolve to empty). */
 body.a11y-invert #page { --a11y-filter-invert: invert(1) hue-rotate(180deg); }
 body.a11y-saturation-1 #page { --a11y-filter-saturate: saturate(1.8); }
 body.a11y-saturation-2 #page { --a11y-filter-saturate: saturate(0.4); }
@@ -610,7 +701,7 @@ body.a11y-saturation-3 #page { --a11y-filter-saturate: grayscale(1); }
 body.a11y-color-1 #page { --a11y-filter-color: url(#local-a11y-protanopia); }
 body.a11y-color-2 #page { --a11y-filter-color: url(#local-a11y-deuteranopia); }
 body.a11y-color-3 #page { --a11y-filter-color: url(#local-a11y-tritanopia); }
-body.a11y-active #page {
+#page {
   filter:
     var(--a11y-filter-invert, )
     var(--a11y-filter-saturate, )
@@ -625,13 +716,23 @@ body.a11y-cursor-2 #page, body.a11y-cursor-2 #page * {
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23fff' stroke='%23000' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
 }
 
-/* Focus mode — hide non-essential Moodle chrome */
-body.a11y-focus-mode #page-content [data-region="blocks-column"],
-body.a11y-focus-mode .navbar .nav-item:not(:first-child),
-body.a11y-focus-mode #page-content .breadcrumb {
+/* Focus mode — hide non-essential Moodle chrome (Boost theme structure:
+   left course-index drawer, right blocks drawer, secondary course tabs,
+   drawer toggle buttons, breadcrumb), centring the remaining content. */
+body.a11y-focus-mode #theme_boost-drawers-courseindex,
+body.a11y-focus-mode #theme_boost-drawers-primary,
+body.a11y-focus-mode .secondary-navigation,
+body.a11y-focus-mode .drawertoggle,
+body.a11y-focus-mode [data-region="blocks-column"],
+body.a11y-focus-mode #page-content .breadcrumb,
+body.a11y-focus-mode .navbar .nav-item:not(:first-child) {
   display: none !important;
 }
-body.a11y-focus-mode #region-main { max-width: 900px !important; margin: 0 auto !important; }
+body.a11y-focus-mode #region-main,
+body.a11y-focus-mode #region-main-box {
+  max-width: 900px !important;
+  margin: 0 auto !important;
+}
 
 /* Tooltip helper */
 body.a11y-tooltips #page a[title]:hover::after,

@@ -113,4 +113,13 @@
 - [x] `local_a11y.zip` gerado **e testado por instalação via interface real do Moodle** (não simulado).
 - [x] Este arquivo descreve o entregue e como validar cada marco.
 
+## Correção pós-entrega — efeitos de cor/contraste/foco não funcionavam (concluído)
+
+Usuário reportou, após o M8, que Contraste/Inverter Cores/Mudar Cores/Saturação/Modo Foco não funcionavam corretamente em uso real (fora dos screenshots controlados da verificação anterior, que por coincidência sempre testaram esses efeitos em combinação com outra opção que mascarava o problema, ou não os testaram em profundidade suficiente). Dois bugs reais encontrados e corrigidos em `styles.css` — detalhes completos em DECISIONS.md D14:
+
+1. Um gate `body.a11y-active` nunca satisfeito deixava o `filter` combinado (Inverter/Mudar Cores/Saturação) sempre em `none`, apesar das variáveis CSS corretas serem calculadas. Corrigido tornando a aplicação do filtro incondicional.
+2. Contraste e Modo Foco usavam seletores baseados no mock do protótipo (`.m-*`) ou genéricos demais para o Moodle real, deixando a maior parte da página (região principal, cards de seção, drawers, barra de abas) fora do alcance. Corrigido combinando overrides das variáveis `--bs-*` do Bootstrap 5.3 (recolore componentes genéricos automaticamente) com overrides explícitos `!important` nas regiões do Moodle que têm cor "hardcoded" no CSS compilado do tema (`#region-main`, `.main-inner`, `.drawer`, `.moremenu`).
+
+Reverificado extensivamente via Playwright com `getComputedStyle` (não só captura de tela — uma automação anterior mostrou que consultas ingênuas como `document.querySelector('.card')` podem casar com elementos fora de tela/pré-hidratação, não com o conteúdo visível real) em `#region-main`, `.main-inner`, `.moremenu`, `.navbar`, drawer do índice do curso e cards de seção, para os 3 níveis de contraste, mais capturas de tela confirmando visualmente Inverter Cores, Mudar Cores (daltonismo), Saturação (mono) e Modo Foco (esconde índice do curso, abas secundárias e itens de navbar, centraliza o conteúdo). Capturas em `_verification/bugfix-effects/`.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_
