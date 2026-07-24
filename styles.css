@@ -340,8 +340,22 @@
   font-size: 10px; font-weight: 700; color: var(--local-a11y-accent, var(--a11y-accent));
   background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent);
   padding: 2px 7px; border-radius: 999px; font-variant-numeric: tabular-nums;
+  display: inline-flex; align-items: center;
 }
-.local-a11y-category__count[hidden] { display: none; }
+/* Its box (15px line-height + 4px padding = 19px) is taller than the rest
+   of the header row, so a plain [hidden] (display:none) would let the
+   category header grow the moment a category's first option becomes
+   active - pushing every row below it down by that difference, which
+   reads as a "jump" (this is the actual mechanism behind the option-row
+   displacement this was meant to fix; .local-a11y-option's own border was
+   already always reserved at a constant 1px, see its rule below).
+   Overriding [hidden]'s default display:none keeps the box (and the
+   header's height) constant regardless of state; visibility:hidden hides
+   it visually and from the accessibility tree same as display:none would.
+   !important needed: Bootstrap's own reboot sets a blanket
+   `[hidden] { display: none !important; }`, which would otherwise beat
+   this rule regardless of our higher selector specificity. */
+.local-a11y-category__count[hidden] { display: inline-flex !important; visibility: hidden; }
 .local-a11y-category__chevron { color: var(--a11y-text-hint); display: flex; transition: transform 200ms ease; }
 .local-a11y-category__header[aria-expanded="true"] .local-a11y-category__chevron { transform: rotate(0deg); }
 .local-a11y-category__header[aria-expanded="false"] .local-a11y-category__chevron { transform: rotate(-90deg); }
@@ -350,6 +364,13 @@
 
 .local-a11y-option {
   display: flex; align-items: center; gap: 12px; border-radius: 10px; cursor: pointer;
+  /* Border is always 1px, even inactive (transparent) - --active below only
+     ever changes border-color, never border-width, so toggling an option
+     never resizes its own row. The row-jump this was meant to fix actually
+     came from .local-a11y-category__count above (its box is taller than
+     the rest of the header, so it grew the header when a category's first
+     option went active) and, separately, from the readable/dyslexic-font
+     effects reaching into the panel's own text further down - see both. */
   border: 1px solid transparent; transition: all 150ms ease;
 }
 .local-a11y-option:hover { background: #fafafa; }
@@ -503,6 +524,23 @@ body.a11y-dyslexic-font footer#page-footer, body.a11y-dyslexic-font footer#page-
   font-family: 'Lexend', 'Comic Sans MS', system-ui, sans-serif !important;
   font-weight: 500 !important;
   letter-spacing: 0.02em !important;
+}
+/* The FAB/panel live inside #page (the before_footer_html_generation hook
+   renders them into #region-main, despite the name), so the two rules
+   above also reach into our own chrome and swap its font - different
+   metrics (line height, glyph width) then reflow panel text, nudging
+   option rows up/down by a pixel or two right when they're clicked
+   active/inactive, which reads as a layout "jump" caused by the border
+   that changes colour at the same time (it isn't - .local-a11y-option's
+   border is already always 1px, only its colour changes, see below).
+   #local-a11y-panel/#local-a11y-fab need an ID in the selector to match
+   the specificity of the #page-based rules above and win the cascade tie
+   (same specificity + !important + later in the file = wins). */
+body.a11y-readable-font #local-a11y-panel, body.a11y-readable-font #local-a11y-panel *,
+body.a11y-readable-font #local-a11y-fab, body.a11y-readable-font #local-a11y-fab *,
+body.a11y-dyslexic-font #local-a11y-panel, body.a11y-dyslexic-font #local-a11y-panel *,
+body.a11y-dyslexic-font #local-a11y-fab, body.a11y-dyslexic-font #local-a11y-fab * {
+  font-family: var(--a11y-font) !important;
 }
 
 body.a11y-highlight-titles #page h1,

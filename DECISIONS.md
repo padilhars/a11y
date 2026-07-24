@@ -2,6 +2,19 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D24 — Correção do "deslocamento" das opções ao ativar (não era a borda)
+
+O usuário reportou que as opções dentro das categorias "ganham uma borda quando clicadas e isso faz com que as opções tenham um leve deslocamento", sugerindo reservar uma borda transparente em `.local-a11y-option` quando inativa como correção. Investigação (Playwright, medindo `getBoundingClientRect()` antes/depois de ativar várias opções em categorias diferentes) mostrou que:
+
+1. **A borda nunca foi a causa.** `.local-a11y-option` já tinha `border: 1px solid transparent` na regra base desde sempre — `--active` só troca `border-color`, nunca `border-width`, então a borda por si só não move nada (confirmado: altura/posição do próprio row idênticas antes/depois em opções isoladas de deslocamento por outra causa).
+2. **Causa raiz real: `.local-a11y-category__count`** (a bolha "1", "2" etc. de opções ativas ao lado do nome da categoria). Sua caixa (15px de line-height + 4px de padding = 19px) é mais alta do que o resto do cabeçalho da categoria (~15-17px de conteúdo). Como ela usava `[hidden]` puro (`display:none` quando a contagem é zero), o cabeçalho da categoria crescia ~1.75px assim que a categoria ganhava sua *primeira* opção ativa (a bolha aparecendo, antes ausente do fluxo) — empurrando todas as opções abaixo dela para baixo nesse exato instante, que é precisamente o momento em que o usuário clica numa opção e vê "algo se mexer".
+3. Corrigido com a mesma técnica que o usuário sugeriu (reservar o espaço sempre), só que aplicada ao elemento certo: `.local-a11y-category__count[hidden] { display: inline-flex; visibility: hidden; }` — a caixa de 19px passa a existir sempre (mesmo com contagem zero), só ficando visualmente invisível via `visibility:hidden` (que também a remove da árvore de acessibilidade, como `display:none` fazia).
+4. **Pegadinha à parte**: essa correção não bastou sozinha — o Bootstrap do tema tem uma regra global `[hidden] { display: none !important; }` (parte do reboot), que batia a minha regra mesmo com maior especificidade, porque `!important` decide antes de especificidade. Precisei marcar `display: inline-flex !important` também.
+
+De passagem, ao investigar, encontrei e corrigi um problema real e separado: como `#local-a11y-panel`/`#local-a11y-fab` vivem dentro de `#page` (o hook `before_footer_html_generation` injeta no `#region-main`, apesar do nome), as regras `body.a11y-readable-font #page *`/`body.a11y-dyslexic-font #page *` (que trocam a fonte da página) também alcançavam o texto do próprio painel — mudando métricas de fonte e potencialmente contribuindo para pequenos desalinhamentos de texto. Corrigido com um par de regras `body.a11y-readable-font #local-a11y-panel, body.a11y-readable-font #local-a11y-panel *, ...` fixando `font-family: var(--a11y-font) !important` de volta — precisou usar seletores por `id` (não `.local-a11y-root`) para igualar a especificidade das regras originais (que usam `#page`) e vencer o empate por ordem no arquivo (mesma especificidade + `!important` = last-one-wins).
+
+Verificado via Playwright, testando em duas categorias diferentes (Tipografia/`readableFont`, Mídia/`hideImages`) com estado limpo (preferência resetada via CLI antes de cada teste): delta de posição = 0px em ambos os casos após a correção (antes: 1.75px). Confirmado também que o texto do painel permanece na fonte `Inter` mesmo com `dyslexicFont`/`readableFont` ativos. PHPUnit 16/16 verde.
+
 ## D23 — Banner "perfil ativo" removido; reset consolidado num botão fixo no cabeçalho
 
 A pedido do usuário, dois elementos do cabeçalho do painel foram substituídos por um único botão fixo:

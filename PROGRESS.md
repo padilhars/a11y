@@ -163,4 +163,8 @@ A pedido do usuário, o badge do painel com o logo da ONU voltou a ter exatament
 
 O banner "perfil ativo" e o botão separado "Restaurar padrões" (ambos condicionalmente escondidos, mudando a altura do cabeçalho) foram substituídos por um único botão de reset fixo ao lado do X — sempre presente, desabilitado+apagado sem opções ativas, colorido no accent (ou no tom do perfil ativo) caso contrário, com tooltip. Cabeçalho agora tem altura constante. Ver DECISIONS.md D23. Verificado via Playwright, PHPUnit 16/16 verde.
 
+## Correção do "deslocamento" das opções ao ativar (concluído)
+
+A causa real não era a borda de `.local-a11y-option` (já reservada, 1px sempre) — era `.local-a11y-category__count` (bolha de contagem da categoria), cuja caixa é mais alta que o resto do cabeçalho e usava `[hidden]` puro, crescendo o cabeçalho da categoria ~1.75px na primeira opção ativada. Corrigido reservando o espaço sempre (`visibility:hidden` em vez de `display:none`, precisou de `!important` para vencer o `[hidden]{display:none!important}` global do Bootstrap). De passagem, corrigido também: o painel herdava a troca de fonte de `readableFont`/`dyslexicFont` por estar dentro de `#page`. Ver DECISIONS.md D24. Verificado via Playwright em duas categorias, PHPUnit 16/16 verde.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_
