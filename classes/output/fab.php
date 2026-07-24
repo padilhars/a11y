@@ -18,6 +18,7 @@ namespace local_a11y\output;
 
 use local_a11y\config;
 use local_a11y\icons;
+use local_a11y\manager;
 use renderable;
 use templatable;
 use renderer_base;
@@ -44,6 +45,7 @@ class fab implements renderable, templatable {
             'user' => 'user',
         ];
         $iconname = $iconnames[$appearance['fabicon']] ?? 'accessibility';
+        $activecount = manager::count_active(manager::get_current_user_settings());
 
         return [
             'position' => $appearance['fabposition'],
@@ -52,6 +54,8 @@ class fab implements renderable, templatable {
             'iconsvg' => icons::svg($iconname, 26, 2),
             'ariaopenlabel' => get_string('fabopen', 'local_a11y'),
             'accent' => $appearance['accent'],
+            'activecount' => $activecount,
+            'hasactive' => $activecount > 0,
         ];
     }
 }

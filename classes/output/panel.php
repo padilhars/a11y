@@ -48,6 +48,8 @@ class panel implements renderable, templatable {
         $appearance = config::get_appearance();
         $enabled = config::enabled_features();
         $defaults = manager::get_default_settings();
+        $settings = manager::get_current_user_settings();
+        $activecount = manager::count_active($settings);
 
         $categorylabels = [
             'typography' => get_string('cat_typography', 'local_a11y'),
@@ -79,15 +81,22 @@ class panel implements renderable, templatable {
                 continue;
             }
             $rows = [];
+            $catactivecount = 0;
             foreach ($bycategory[$catid] as $option) {
-                $rows[] = $this->export_option($option, $defaults[$option['id']]);
+                $row = $this->export_option($option, $settings[$option['id']], $defaults[$option['id']]);
+                if ($row['isactive']) {
+                    $catactivecount++;
+                }
+                $rows[] = $row;
             }
             $categories[] = [
                 'id' => $catid,
                 'label' => $categorylabels[$catid],
                 'iconsvg' => icons::svg($categoryicons[$catid], 15),
-                'isopen' => !empty($defaultopen[$catid]),
+                'isopen' => !empty($defaultopen[$catid]) || $catactivecount > 0,
                 'options' => $rows,
+                'activecount' => $catactivecount,
+                'hasactivecount' => $catactivecount > 0,
             ];
         }
 
@@ -113,6 +122,11 @@ class panel implements renderable, templatable {
             'paneltitle' => get_string('paneltitle', 'local_a11y'),
             'panelsubtitle' => get_string('panelsubtitle', 'local_a11y'),
             'noneactive' => get_string('noneactive', 'local_a11y'),
+            'statustext' => $activecount > 0
+                ? get_string($activecount === 1 ? 'activecountone' : 'activecount', 'local_a11y', $activecount)
+                : get_string('noneactive', 'local_a11y'),
+            'hasactive' => $activecount > 0,
+            'activecount' => $activecount,
             'resetlabel' => get_string('reset', 'local_a11y'),
             'closelabel' => get_string('close', 'local_a11y'),
             'closeiconsvg' => icons::svg('close', 16),
@@ -141,10 +155,12 @@ class panel implements renderable, templatable {
 
     /**
      * @param array<string, mixed> $option
+     * @param bool|int $value Current value for this option (already sanitized).
      * @param bool|int $defaultvalue
      * @return array<string, mixed>
      */
-    private function export_option(array $option, $defaultvalue): array {
+    private function export_option(array $option, $value, $defaultvalue): array {
+        $isactive = $value !== $defaultvalue;
         $row = [
             'id' => $option['id'],
             'datakey' => $option['id'],
@@ -153,17 +169,20 @@ class panel implements renderable, templatable {
             'desc' => $option['desckey'] ? get_string($option['desckey'], 'local_a11y') : null,
             'istoggle' => $option['kind'] === 'toggle',
             'isstepper' => $option['kind'] === 'stepper',
+            'isactive' => $isactive,
+            'pressed' => $option['kind'] === 'toggle' && $value ? 'true' : 'false',
         ];
 
         if ($option['kind'] === 'stepper') {
             $levels = [];
             for ($i = 0; $i <= $option['max']; $i++) {
-                $levels[] = ['index' => $i, 'active' => $i === (int) $defaultvalue];
+                $levels[] = ['index' => $i, 'active' => $i === (int) $value];
             }
             $row['max'] = $option['max'];
             $row['levelprefix'] = $option['levelprefix'];
-            $row['currentlabel'] = get_string($option['levelprefix'] . (int) $defaultvalue, 'local_a11y');
+            $row['currentlabel'] = get_string($option['levelprefix'] . (int) $value, 'local_a11y');
             $row['levels'] = $levels;
+            $row['currentvalue'] = (int) $value;
         }
 
         return $row;

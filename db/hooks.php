@@ -34,6 +34,14 @@ $callbacks = [
         'priority' => 0,
     ],
     [
+        // Fires right after <body> opens, before any page content paints -
+        // the only place a synchronous no-FOUC bootstrap script can run and
+        // still have `document.body` available. See DECISIONS.md.
+        'hook' => \core\hook\output\before_standard_top_of_body_html_generation::class,
+        'callback' => \local_a11y\hook_callbacks::class . '::before_standard_top_of_body_html_generation',
+        'priority' => 0,
+    ],
+    [
         'hook' => \core\hook\output\before_footer_html_generation::class,
         'callback' => \local_a11y\hook_callbacks::class . '::before_footer_html_generation',
         'priority' => 0,

@@ -14,18 +14,23 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Panel open/close, category collapse. State application (M3), search /
- * profile selection / focus trap (M4) are layered on top in later modules.
+ * Panel DOM ownership: open/close, category collapse, option row rendering
+ * and click delegation. Holds no state of its own - local_a11y/main owns the
+ * settings object and passes render updates in, and receives user
+ * interactions back out via the `callbacks` passed to init().
  *
  * @module     local_a11y/panel
  * @copyright  2026 A11y for Moodle project
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+import {getString} from 'core/str';
+
 let fab = null;
 let panel = null;
 let overlay = null;
 let lastFocused = null;
+let cb = {};
 
 /**
  * @return {boolean}
@@ -97,6 +102,84 @@ const toggleCategory = (header) => {
 };
 
 /**
+ * Re-render a single option row (toggle switch or stepper) to match `value`.
+ *
+ * @param {String} id
+ * @param {Boolean|Number} value
+ * @param {Boolean|Number} defaultValue
+ */
+const renderOption = async(id, value, defaultValue) => {
+    const row = panel.querySelector(`[data-region="option"][data-option-id="${id}"]`);
+    if (!row) {
+        return;
+    }
+    const isActive = value !== defaultValue;
+    row.classList.toggle('local-a11y-option--active', isActive);
+
+    if (row.dataset.kind === 'toggle') {
+        const switchEl = row.querySelector('[data-region="switch"]');
+        if (switchEl) {
+            switchEl.setAttribute('aria-pressed', value ? 'true' : 'false');
+        }
+        return;
+    }
+
+    // Stepper.
+    row.dataset.value = String(value);
+    const labelEl = row.querySelector('[data-region="stepper-label"]');
+    if (labelEl) {
+        labelEl.textContent = await getString(`${row.dataset.levelprefix}${value}`, 'local_a11y');
+    }
+    row.querySelectorAll('[data-region="stepper-dots"] > span').forEach((dot, index) => {
+        dot.classList.toggle('local-a11y-stepper__dot--active', index === Number(value) && index > 0);
+    });
+};
+
+/**
+ * Update the header status text, reset button and FAB badge to match the
+ * current active-option count.
+ *
+ * @param {Number} count
+ */
+const renderHeader = async(count) => {
+    const status = panel.querySelector('[data-region="status"]');
+    const resetButton = panel.querySelector('[data-region="reset-button"]');
+    const badge = fab.querySelector('[data-region="badge"]');
+
+    if (status) {
+        status.classList.toggle('local-a11y-panel__subtitle--active', count > 0);
+        status.textContent = count > 0
+            ? await getString(count === 1 ? 'activecountone' : 'activecount', 'local_a11y', count)
+            : await getString('noneactive', 'local_a11y');
+    }
+    if (resetButton) {
+        resetButton.hidden = count === 0;
+    }
+    if (badge) {
+        badge.hidden = count === 0;
+        badge.textContent = String(count);
+    }
+};
+
+/**
+ * Update a category's active-option badge.
+ *
+ * @param {String} categoryId
+ * @param {Number} count
+ */
+const renderCategoryCount = (categoryId, count) => {
+    const category = panel.querySelector(`[data-region="category"][data-category-id="${categoryId}"]`);
+    if (!category) {
+        return;
+    }
+    const countEl = category.querySelector('[data-region="category-count"]');
+    if (countEl) {
+        countEl.hidden = count === 0;
+        countEl.textContent = String(count);
+    }
+};
+
+/**
  * Wire up all panel-level DOM event listeners.
  */
 const registerEventListeners = () => {
@@ -106,6 +189,13 @@ const registerEventListeners = () => {
         const closeTrigger = e.target.closest('[data-action="close"]');
         if (closeTrigger) {
             close();
+            return;
+        }
+        const resetTrigger = e.target.closest('[data-action="reset"]');
+        if (resetTrigger) {
+            if (cb.onReset) {
+                cb.onReset();
+            }
             return;
         }
         const categoryHeader = e.target.closest('[data-action="toggle-category"]');
@@ -121,8 +211,53 @@ const registerEventListeners = () => {
                 input.dispatchEvent(new Event('input'));
                 input.focus();
             }
+            return;
+        }
+        const profileCard = e.target.closest('[data-region="profile-card"]');
+        if (profileCard) {
+            if (cb.onProfileSelect) {
+                cb.onProfileSelect(profileCard.dataset.profileId);
+            }
+            return;
+        }
+        const option = e.target.closest('[data-region="option"]');
+        if (option) {
+            const id = option.dataset.optionId;
+            if (option.dataset.kind === 'toggle') {
+                const switchEl = option.querySelector('[data-region="switch"]');
+                const pressed = switchEl && switchEl.getAttribute('aria-pressed') === 'true';
+                if (cb.onToggle) {
+                    cb.onToggle(id, !pressed);
+                }
+            } else if (cb.onStepperCycle) {
+                cb.onStepperCycle(id);
+            }
         }
     });
+
+    panel.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') {
+            return;
+        }
+        const option = e.target.closest('[data-region="option"]');
+        if (option) {
+            e.preventDefault();
+            option.click();
+        }
+    });
+
+    const searchInput = panel.querySelector('[data-region="search-input"]');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            if (cb.onSearch) {
+                cb.onSearch(e.target.value);
+            }
+            const clearBtn = panel.querySelector('[data-action="clear-search"]');
+            if (clearBtn) {
+                clearBtn.hidden = e.target.value === '';
+            }
+        });
+    }
 
     if (overlay) {
         overlay.addEventListener('click', close);
@@ -139,11 +274,13 @@ const registerEventListeners = () => {
  * @param {HTMLElement} fabEl
  * @param {HTMLElement} panelEl
  * @param {HTMLElement|null} overlayEl
+ * @param {Object} callbacks {onToggle, onStepperCycle, onReset, onProfileSelect, onSearch}
  */
-export const init = (fabEl, panelEl, overlayEl) => {
+export const init = (fabEl, panelEl, overlayEl, callbacks = {}) => {
     fab = fabEl;
     panel = panelEl;
     overlay = overlayEl;
+    cb = callbacks;
     registerEventListeners();
 };
 
@@ -152,4 +289,7 @@ export default {
     open,
     close,
     toggle,
+    renderOption,
+    renderHeader,
+    renderCategoryCount,
 };

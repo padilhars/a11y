@@ -43,6 +43,22 @@ class hook_callbacks {
     }
 
     /**
+     * Injects the synchronous no-FOUC bootstrap script right after <body> opens.
+     *
+     * @param \core\hook\output\before_standard_top_of_body_html_generation $hook
+     */
+    public static function before_standard_top_of_body_html_generation(
+        \core\hook\output\before_standard_top_of_body_html_generation $hook
+    ): void {
+        if (!manager::is_active_on_current_page()) {
+            return;
+        }
+        global $PAGE;
+        $renderer = $PAGE->get_renderer('local_a11y');
+        $hook->add_html($renderer->render_nofouc_script());
+    }
+
+    /**
      * Injects the FAB + panel HTML and the AMD bootstrap call into the footer.
      *
      * @param \core\hook\output\before_footer_html_generation $hook
@@ -56,6 +72,6 @@ class hook_callbacks {
         global $PAGE;
         $renderer = $PAGE->get_renderer('local_a11y');
         $hook->add_html($renderer->render_footer_html());
-        $PAGE->requires->js_call_amd('local_a11y/main', 'init');
+        $PAGE->requires->js_call_amd('local_a11y/main', 'init', [isloggedin() && !isguestuser()]);
     }
 }

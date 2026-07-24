@@ -44,8 +44,8 @@
         ]
     }
 }}
-<div class="local-a11y-option" data-region="option" data-option-id="{{id}}" data-kind="stepper"
-    data-max="{{max}}" data-levelprefix="{{levelprefix}}" role="button" tabindex="0">
+<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}" data-region="option" data-option-id="{{id}}" data-kind="stepper"
+    data-max="{{max}}" data-levelprefix="{{levelprefix}}" data-value="{{currentvalue}}" role="button" tabindex="0">
     <span class="local-a11y-option__icon">{{{iconsvg}}}</span>
     <span class="local-a11y-option__text">
         <span class="local-a11y-option__label">{{label}}</span>

@@ -28,31 +28,78 @@ use local_a11y\manager;
 class renderer extends \plugin_renderer_base {
 
     /**
-     * HTML injected into <head>: the colour-blindness SVG filter defs and a
-     * tiny inline no-FOUC bootstrap that reads the preference already
-     * rendered server-side (data attribute on <html>) and applies the body
-     * classes before first paint.
-     *
-     * The bulk of the state logic (reading storage, applying classes) lives
-     * in amd/src/effects.js; this only needs to run synchronously before
-     * paint, so it stays a small inline <script>, not an AMD module (AMD
-     * modules load async after the page has already rendered).
+     * HTML injected into <head>: just the colour-blindness SVG filter defs.
+     * The no-FOUC bootstrap itself has to run from the *top of body* (see
+     * render_nofouc_script()) because `document.body` does not exist yet
+     * while <head> is being parsed.
      *
      * @return string
      */
     public function render_head_html(): string {
-        global $PAGE;
+        return $this->render_colourblind_filters();
+    }
 
-        $svgfilters = $this->render_colourblind_filters();
+    /**
+     * Synchronous inline bootstrap script: reads the settings already known
+     * server-side (logged-in users, embedded as JSON) or falls back to
+     * reading localStorage (guests), computes the same `a11y-*` body classes
+     * amd/src/effects.js would, and applies them immediately - before any
+     * page content below this point paints - eliminating FOUC.
+     *
+     * This duplicates a small slice of the class-name logic in
+     * amd/src/effects.js by necessity: this has to run synchronously before
+     * the AMD loader is even available, so it cannot import that module.
+     * Keep the two in sync (see CLAUDE.md).
+     *
+     * @return string
+     */
+    public function render_nofouc_script(): string {
+        $settings = manager::get_current_user_settings();
+        $isloggedin = isloggedin() && !isguestuser();
 
-        // NO-FOUC bootstrap: apply the body.a11y-* classes synchronously,
-        // before first paint, using whatever preference value the PHP
-        // request already resolved (M3 wires the actual value in via
-        // manager::get_current_user_settings(); until then this is a no-op
-        // safe default so M2 has no behaviour to verify yet).
-        $bootstrap = '';
+        // Only trust the server-rendered value when we actually know it
+        // (logged-in user); otherwise emit null so the script reads
+        // localStorage itself, matching amd/src/storage.js's own fallback.
+        $serversettings = $isloggedin ? json_encode($settings) : 'null';
+        $preferencename = json_encode(manager::PREFERENCE_NAME);
+        $boolmap = json_encode(manager::get_boolean_class_map());
+        $steppermap = json_encode(manager::get_stepper_class_prefix_map());
 
-        return $svgfilters . $bootstrap;
+        $js = <<<JS
+(function() {
+    try {
+        var settings = {$serversettings};
+        if (!settings) {
+            var raw = window.localStorage ? window.localStorage.getItem({$preferencename}) : null;
+            settings = raw ? JSON.parse(raw) : null;
+        }
+        if (!settings) {
+            return;
+        }
+        var boolMap = {$boolmap};
+        var stepperMap = {$steppermap};
+        var classes = [];
+        Object.keys(boolMap).forEach(function(key) {
+            if (settings[key]) {
+                classes.push(boolMap[key]);
+            }
+        });
+        Object.keys(stepperMap).forEach(function(key) {
+            var value = parseInt(settings[key], 10) || 0;
+            if (value > 0) {
+                classes.push(stepperMap[key] + value);
+            }
+        });
+        if (classes.length) {
+            document.body.className += ' ' + classes.join(' ');
+        }
+    } catch (e) {
+        // Never let a storage/JSON error break the page.
+    }
+})();
+JS;
+
+        return '<script>' . $js . '</script>';
     }
 
     /**

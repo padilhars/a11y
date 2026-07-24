@@ -46,5 +46,5 @@
     style="--local-a11y-accent: {{accent}};"
 >
     <span class="local-a11y-fab__icon">{{{iconsvg}}}</span>
-    <span class="local-a11y-fab__badge" data-region="badge" hidden>0</span>
+    <span class="local-a11y-fab__badge" data-region="badge"{{^hasactive}} hidden{{/hasactive}}>{{activecount}}</span>
 </button>

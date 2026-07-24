@@ -36,6 +36,12 @@ Especificado no briefing: comportamento visual (hue-rotate/sepia via CSS `filter
 
 O FAB deve aparecer mesmo para visitantes não autenticados (`showforguests` setting, default ligado) — capability `local/a11y:view` com `CAP_ALLOW` para `guest`, `user`, `frontpage` nos `archetypes` de `db/access.php`, e fallback de persistência via `localStorage` para quem não está logado, migrando para `user_preference` no primeiro login (conforme briefing seção 3).
 
+## D10 — Persistência via `core_user/repository`, sem `user_preference_allow_ajax_update()`
+
+O briefing pedia `user_preference_allow_ajax_update()` + `core_user/repository::setUserPreference` (AMD). A primeira parte **não existe mais** nesta versão do Moodle: `user_preference_allow_ajax_update()`, `M.util.set_user_preference` e `lib/ajax/setuserpref.php` foram **removidos** (ver `public/user/UPGRADING.md`, MDL-79124), substituídos por uma rota REST (`/api/rest/v2/user/{user}/preferences/{preference}`, `public/user/classes/route/api/preferences.php`) que exige a preferência **registrada** via um *callback* de plugin `{component}_user_preferences()` em `lib.php` (descoberto via `get_plugins_with_function('user_preferences')`), retornando `['null' => NULL_ALLOWED, 'default' => null, 'type' => PARAM_RAW]` — o mesmo padrão usado por `mod_forum`, `theme_boost` etc. Implementado em `lib.php::local_a11y_user_preferences()`. Sem esse registro, `POST` na rota falha com HTTP 400 "Valor inválido de parâmetro detectado" (`invalid_parameter_exception` em `core_user\route\api\preferences::set_single_preference()`), pois `core\user::get_preference_definition()` não reconhece a chave.
+
+O restante da segunda parte do pedido (`core_user/repository::setUserPreference` via AMD) foi seguido à risca — `amd/src/storage.js` usa exatamente esse módulo.
+
 ## D9 — Subconjunto de `ICON_PATHS` portado
 
 `classes/icons.php` porta todos os ícones usados pelo FAB, painel, perfis, categorias e recursos avançados (teclado virtual, leitor de tela) — 1:1 com o protótipo. Os ícones que só existiam em `ICON_PATHS` para desenhar o **mockup** do Moodle (`moodleLogo`, `menu`, `home`, `calendar`, `fileText`, `video`, `edit`, `clipboard`, `messageSquare`, `folder`, `award`, `users`, `graduationCap`, `settings`, `logOut`, `download`, `upload`, `globe`) foram omitidos, consistente com D3 (moodle-page.jsx não é implementado — o Moodle real já tem seus próprios ícones/tema). Nenhum ícone usado por OPTIONS, PROFILES ou pela chrome do painel foi omitido ou renomeado.

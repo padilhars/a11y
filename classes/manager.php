@@ -80,6 +80,52 @@ class manager {
     }
 
     /**
+     * Boolean settings key -> body CSS class name, a verbatim port of the
+     * `if (settings.x) body.classList.add('a11y-y')` lines in
+     * _design-reference/app.jsx. Note this intentionally excludes
+     * readingGuide, readingMask, screenReader, virtualKeyboard and
+     * voiceCommands: those 5 booleans do NOT drive a body class in the
+     * prototype, they gate always-mounted JS overlay components instead
+     * (see amd/src/reading_guide.js etc., M5).
+     *
+     * @return array<string, string>
+     */
+    public static function get_boolean_class_map(): array {
+        return [
+            'readableFont' => 'a11y-readable-font',
+            'dyslexicFont' => 'a11y-dyslexic-font',
+            'highlightTitles' => 'a11y-highlight-titles',
+            'highlightLinks' => 'a11y-highlight-links',
+            'highlightButtons' => 'a11y-highlight-buttons',
+            'hideImages' => 'a11y-hide-images',
+            'pauseAnimations' => 'a11y-pause-animations',
+            'tooltips' => 'a11y-tooltips',
+            'invertColors' => 'a11y-invert',
+            'focusMode' => 'a11y-focus-mode',
+        ];
+    }
+
+    /**
+     * Stepper settings key -> body CSS class prefix (the level number is
+     * appended, e.g. 'textSize' level 2 -> "a11y-text-size-2"), a verbatim
+     * port of the equivalent lines in _design-reference/app.jsx. Note
+     * colorChange maps to the "a11y-color-" prefix, not "a11y-color-change-".
+     *
+     * @return array<string, string>
+     */
+    public static function get_stepper_class_prefix_map(): array {
+        return [
+            'textSize' => 'a11y-text-size-',
+            'lineHeight' => 'a11y-line-height-',
+            'textSpacing' => 'a11y-text-spacing-',
+            'contrast' => 'a11y-contrast-',
+            'saturation' => 'a11y-saturation-',
+            'colorChange' => 'a11y-color-',
+            'cursor' => 'a11y-cursor-',
+        ];
+    }
+
+    /**
      * Whether the plugin should render on the current request.
      *
      * Checks: plugin enabled, guest visibility, excluded page patterns.
@@ -101,5 +147,91 @@ class manager {
         }
 
         return config::is_enabled() && config::allowed_for_current_user() && !config::current_page_excluded();
+    }
+
+    /**
+     * Merge, validate and sanitize a raw (client-supplied or stored) settings
+     * payload against the default shape: unknown keys are dropped, booleans
+     * are coerced, stepper values are clamped to their valid range, and any
+     * option disabled by the site admin (settings.php enabledfeatures) is
+     * forced back to its default value.
+     *
+     * @param mixed $raw Decoded JSON (assoc array) or already-an-array settings payload.
+     * @return array<string, bool|int> A complete, safe settings array.
+     */
+    public static function sanitize_settings($raw): array {
+        $defaults = self::get_default_settings();
+        $steppermax = self::get_stepper_max();
+        $enabled = config::enabled_features();
+
+        $result = $defaults;
+        if (!is_array($raw)) {
+            return $result;
+        }
+
+        foreach ($defaults as $key => $defaultvalue) {
+            if (!array_key_exists($key, $raw)) {
+                continue;
+            }
+            if (!in_array($key, $enabled, true)) {
+                // Site admin disabled this option: keep it at default.
+                continue;
+            }
+            if (isset($steppermax[$key])) {
+                $value = (int) $raw[$key];
+                $result[$key] = max(0, min($steppermax[$key], $value));
+            } else {
+                // Accept real booleans as well as the "true"/"false" strings
+                // a naive JSON round-trip through form params could produce.
+                $value = $raw[$key];
+                if (is_string($value)) {
+                    $value = $value === 'true' || $value === '1';
+                }
+                $result[$key] = (bool) $value;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array<string, bool|int> $settings
+     * @return int Count of options that differ from their default value.
+     */
+    public static function count_active(array $settings): int {
+        $defaults = self::get_default_settings();
+        $count = 0;
+        foreach ($defaults as $key => $defaultvalue) {
+            if (($settings[$key] ?? $defaultvalue) !== $defaultvalue) {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+    /**
+     * Server-side known settings for the *current* user, used only for the
+     * no-FOUC bootstrap (classes/output/renderer.php::render_nofouc_script()).
+     * Guests/not-logged-in users have no server-side preference (their
+     * settings live in localStorage only) so this returns defaults for them;
+     * the client-side bootstrap script falls back to reading localStorage
+     * itself in that case.
+     *
+     * @return array<string, bool|int>
+     */
+    public static function get_current_user_settings(): array {
+        global $USER;
+
+        if (!isloggedin() || isguestuser()) {
+            return self::get_default_settings();
+        }
+
+        $raw = get_user_preferences(self::PREFERENCE_NAME, null, $USER);
+        if ($raw === null) {
+            return self::get_default_settings();
+        }
+
+        $decoded = json_decode($raw, true);
+        return self::sanitize_settings($decoded);
     }
 }

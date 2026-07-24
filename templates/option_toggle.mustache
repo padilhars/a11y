@@ -33,13 +33,13 @@
         "desc": "Applies Atkinson Hyperlegible"
     }
 }}
-<div class="local-a11y-option" data-region="option" data-option-id="{{id}}" data-kind="toggle" role="button" tabindex="0">
+<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}" data-region="option" data-option-id="{{id}}" data-kind="toggle" role="button" tabindex="0">
     <span class="local-a11y-option__icon">{{{iconsvg}}}</span>
     <span class="local-a11y-option__text">
         <span class="local-a11y-option__label">{{label}}</span>
         {{#desc}}<span class="local-a11y-option__desc">{{desc}}</span>{{/desc}}
     </span>
-    <button type="button" class="local-a11y-switch" data-region="switch" aria-pressed="false" aria-label="{{label}}">
+    <button type="button" class="local-a11y-switch" data-region="switch" aria-pressed="{{pressed}}" aria-label="{{label}}">
         <span class="local-a11y-switch__thumb"></span>
     </button>
 </div>
