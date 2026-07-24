@@ -155,4 +155,8 @@ A pedido do usuário, o ícone padrão do botão flutuante agora é o "Accessibi
 
 A pedido do usuário, o badge do painel com o logo da ONU voltou a ter exatamente o mesmo tamanho (36px/20px) e fundo (pastel do `accent`) dos outros 3 ícones — revertendo os tratamentos especiais de D18/D20. Corrigido na raiz: `pix/accessibility-un.svg` passou a usar `currentColor` em vez de `#fff` fixo, então agora tema junto com o badge normalmente (no FAB continua branco, sem mudança, já que lá `color` já era branco). CSS/PHP/mustache do tratamento especial removidos. Ver DECISIONS.md D21.
 
+## Ícone do rodapé do painel removido (concluído)
+
+`.local-a11y-panel__footer-icon` removido do rodapé do painel (template, PHP e CSS) — sobra só o texto de crédito e o atalho `Alt+A`. De passagem, removida também `.local-a11y-panel__footer-subtitle`, CSS morto desde a mudança de D19. Ver DECISIONS.md D22.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

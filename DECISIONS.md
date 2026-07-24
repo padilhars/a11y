@@ -2,6 +2,14 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D22 — Ícone do rodapé do painel removido
+
+A pedido do usuário, `.local-a11y-panel__footer-icon` (o quadrado com o ícone de check ao lado da mensagem de crédito) foi removido do rodapé do painel — sobra apenas o texto ("Desenvolvido com ❤️ pela **CPTED** para você.") e o atalho `Alt+A`. Removido de ponta a ponta: `<span class="local-a11y-panel__footer-icon">` de `templates/panel.mustache`, o campo `saveiconsvg` de `classes/output/panel.php` (só existia para alimentar esse span) e a regra `.local-a11y-panel__footer-icon` de `styles.css`.
+
+De passagem, também foi removida `.local-a11y-panel__footer-subtitle` de `styles.css` — CSS morto desde D19 (removeu o `<span>`/lang string correspondentes, mas deixou a regra para trás).
+
+Verificado via Playwright (ícone não existe mais no DOM, texto e `Alt+A` continuam intactos) e PHPUnit (16/16 verde).
+
 ## D21 — Badge do logo da ONU volta a ser idêntico aos outros ícones (reverte D20)
 
 A pedido do usuário, `.local-a11y-panel__badge` com o logo da ONU deixou de ter tratamento especial: mesmo tamanho (36px/20px, revertendo o aumento de D20 para 41px/28px) e mesma cor de fundo (o tom pastel do `accent`, revertendo o fundo sólido introduzido em D18) dos outros 3 ícones.

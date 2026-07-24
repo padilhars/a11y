@@ -403,15 +403,8 @@
   padding: 12px 20px; border-top: 1px solid #f4f4f5; background: #fafafa;
   display: flex; align-items: center; gap: 10px;
 }
-.local-a11y-panel__footer-icon {
-  width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0;
-  background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent);
-  color: var(--local-a11y-accent, var(--a11y-accent));
-  display: flex; align-items: center; justify-content: center;
-}
 .local-a11y-panel__footer-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .local-a11y-panel__footer-title { font-size: 12px; font-weight: 600; color: var(--a11y-text); line-height: 1.2; }
-.local-a11y-panel__footer-subtitle { font-size: 11px; color: var(--a11y-text-muted); line-height: 1.4; margin-top: 1px; }
 .local-a11y-panel__footer-kbd {
   font-size: 10px; font-family: inherit; color: var(--a11y-text-muted); background: #fff;
   border: 1px solid var(--a11y-border); border-radius: 4px; padding: 2px 5px; white-space: nowrap;
