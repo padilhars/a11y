@@ -114,12 +114,12 @@ class icons {
 
     /**
      * Render an inline <svg> for the "Accessibility logo (UN)" — a fixed
-     * two-colour (black outline + #53C2EE) logo, not a themable currentColor
-     * stroke icon like svg() above, so it gets its own method instead of an
-     * entry in PATHS/svg(): its own viewBox (0 0 1000 1000) and inner markup
-     * come straight from pix/accessibility-un.svg (see that file for the
-     * source/licence — CC BY-SA 4.0, attribution in README.md), read once
-     * and cached rather than re-parsed on every FAB render.
+     * solid-white logo (not a themable currentColor stroke icon like svg()
+     * above), so it gets its own method instead of an entry in PATHS/svg():
+     * its own viewBox (0 0 1000 1000) and inner markup come straight from
+     * pix/accessibility-un.svg (see that file for the source/licence — CC
+     * BY-SA 4.0, attribution in README.md), read once and cached rather
+     * than re-parsed on every render.
      *
      * @param int $size
      * @param string $class extra CSS class(es)
@@ -140,5 +140,27 @@ class icons {
         $classattr = $class !== '' ? ' class="' . s($class) . '"' : '';
         return '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 1000 1000" '
             . 'aria-hidden="true" focusable="false"' . $classattr . '>' . self::$unaccessibilityinner . '</svg>';
+    }
+
+    /**
+     * Resolve the admin-configured `local_a11y/fabicon` setting to actual
+     * rendered markup — shared by the FAB (classes/output/fab.php) and the
+     * panel header badge (classes/output/panel.php) so both always show the
+     * *same* icon, per the setting.
+     *
+     * @param string $fabicon raw `appearance['fabicon']` value (untrusted -
+     *        falls back to 'un' for anything unrecognised).
+     * @param int $size
+     * @return array{svg: string, isun: bool} `isun` lets callers apply their
+     *         own un-specific modifier class, since the logo is a fixed
+     *         solid-white asset rather than a themable currentColor icon.
+     */
+    public static function fabicon_svg(string $fabicon, int $size): array {
+        $known = ['un', 'accessibility', 'sparkles', 'user'];
+        $iconname = in_array($fabicon, $known, true) ? $fabicon : 'un';
+        if ($iconname === 'un') {
+            return ['svg' => self::un_accessibility_svg($size), 'isun' => true];
+        }
+        return ['svg' => self::svg($iconname, $size, 2), 'isun' => false];
     }
 }

@@ -66,6 +66,7 @@ class panel implements renderable, templatable {
             'advanced' => 'tools',
         ];
         $defaultopen = options::category_default_open();
+        $badgeicon = icons::fabicon_svg($appearance['fabicon'], 20);
 
         $bycategory = [];
         foreach (options::all() as $option) {
@@ -131,7 +132,8 @@ class panel implements renderable, templatable {
             'closelabel' => get_string('close', 'local_a11y'),
             'closeiconsvg' => icons::svg('close', 16),
             'refreshiconsvg' => icons::svg('refresh', 13),
-            'accessibilityiconsvg' => icons::svg('accessibility', 20),
+            'accessibilityiconsvg' => $badgeicon['svg'],
+            'badgeclass' => $badgeicon['isun'] ? 'local-a11y-panel__badge--un' : '',
             'searchplaceholder' => get_string('search', 'local_a11y'),
             'searchiconsvg' => icons::svg('search', 15),
             'searchclearlabel' => get_string('searchclear', 'local_a11y'),

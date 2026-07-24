@@ -139,4 +139,8 @@ Usuário apontou (com o CSS de referência do protótipo, `.moodle-shell`) que C
 
 A pedido do usuário, o ícone padrão do botão flutuante agora é o "Accessibility logo (UN)" (Wikimedia Commons, CC BY-SA 4.0) em vez do ícone Lucide `accessibility`. Empacotado localmente em `pix/accessibility-un.svg` (nunca carregado de terceiros), renderizado via novo método `icons::un_accessibility_svg()` (asset de 2 cores fixas, diferente do resto dos ícones do plugin que são traços `currentColor`). Novo valor `un` no seletor `local_a11y/fabicon`, agora o default; os ícones anteriores continuam disponíveis. Atribuição CC BY-SA documentada em README.md — ver DECISIONS.md D17. Verificado via Playwright (ícone renderiza corretamente por padrão, troca entre os 4 ícones no admin funciona, PHPUnit 16/16 verde).
 
+## Badge do painel sincronizado com o ícone do FAB (concluído)
+
+`.local-a11y-panel__badge` deixou de mostrar sempre o ícone Lucide `accessibility` e passou a espelhar o ícone configurado em `local_a11y/fabicon` (o mesmo do FAB), via novo helper compartilhado `icons::fabicon_svg()`. Caso especial para o logo da ONU (asset branco sólido): badge ganha fundo `accent` sólido em vez do pastel padrão, para permanecer legível — ver DECISIONS.md D18. Verificado via Playwright (badge e FAB sempre mostram o mesmo ícone, nos 4 valores possíveis) e PHPUnit (16/16 verde).
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

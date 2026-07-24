@@ -127,12 +127,11 @@
 }
 .local-a11y-fab__icon { display: flex; }
 /* The UN accessibility logo (icons::un_accessibility_svg()) is a fixed
-   black+#53C2EE asset, not a currentColor stroke icon - give it a small
-   white backing circle so it stays legible against any configured accent
-   colour (including dark ones, where the black outline alone would nearly
-   disappear against the FAB's own dark background). */
+   solid-white asset, not a currentColor stroke icon - it already reads
+   fine directly on the FAB's coloured background (like the other icons,
+   which render white via .local-a11y-fab's own `color: #fff`), it just
+   gets a touch of breathing room so it isn't flush against the button. */
 .local-a11y-fab__icon--un {
-  background: #fff;
   border-radius: 50%;
   padding: 3px;
 }
@@ -236,6 +235,13 @@
   background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent);
   color: var(--local-a11y-accent, var(--a11y-accent));
   display: flex; align-items: center; justify-content: center;
+}
+/* The UN accessibility logo (see .local-a11y-fab__icon--un) is solid white,
+   not currentColor - the badge's default pale accent-tinted background
+   would leave it almost invisible, so give this variant a solid accent
+   background instead, matching the FAB's own treatment of the same icon. */
+.local-a11y-panel__badge--un {
+  background: var(--local-a11y-accent, var(--a11y-accent));
 }
 .local-a11y-panel__titles { flex: 1; min-width: 0; }
 .local-a11y-panel__title { display: block; font-size: 15px; font-weight: 600; color: var(--a11y-text); letter-spacing: -0.01em; }

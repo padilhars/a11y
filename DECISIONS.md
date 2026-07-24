@@ -2,6 +2,18 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D18 — Badge do cabeçalho do painel passa a usar o mesmo ícone do FAB
+
+A pedido do usuário, `.local-a11y-panel__badge` (o quadrado colorido no cabeçalho do painel) deixou de ser hardcoded para o ícone Lucide `accessibility` e passou a refletir o mesmo ícone configurado em `local_a11y/fabicon` — o mesmo que o FAB mostra.
+
+A lógica de resolução do ícone (antes só em `fab.php`) foi extraída para `icons::fabicon_svg(string $fabicon, int $size): array`, retornando `['svg' => ..., 'isun' => bool]`; `fab.php` e `panel.php` agora chamam o mesmo método, então os dois nunca podem ficar dessincronizados.
+
+Como o logo da ONU é um asset branco sólido (não um ícone `currentColor`), ele não fica legível no fundo padrão do badge (um tom pastel do `accent`, ~14% de opacidade) — precisaria de um branco sobre quase-branco. Corrigido com uma classe modificadora (`local-a11y-panel__badge--un`, aplicada só quando `isun`) que troca o fundo do badge para o `accent` sólido nesse caso — mesmo tratamento visual que o próprio FAB já dá a esse ícone. Os demais 3 ícones (`accessibility`/`sparkles`/`user`) continuam no fundo pastel de sempre.
+
+Nota à parte: em algum momento após D17 o arquivo `pix/accessibility-un.svg` foi re-exportado (variante monocromática branca, sem mais o azul `#53C2EE`) usando um `<defs><style>.st0{...}.st1{...}</style></defs>` gerado pelo Illustrator — reintroduzindo o mesmo risco que D17 tinha evitado (classes CSS genéricas que vazam para a página inteira quando o SVG é inserido inline via `{{{iconsvg}}}`). Normalizado da mesma forma que da primeira vez: `<style>`/`class` trocados por atributos de apresentação (`fill`/`stroke`) diretamente nos `<g>`, geometria/cores idênticas, verificado visualmente lado a lado antes/depois.
+
+Verificado via Playwright: com `fabicon=un` (padrão), badge mostra o logo da ONU em fundo `accent` sólido; trocando para `sparkles` no admin, badge e FAB mudam juntos para o ícone Lucide no fundo pastel de sempre. PHPUnit 16/16 verde.
+
 ## D17 — Ícone padrão do FAB trocado para o logo de acessibilidade da ONU
 
 A pedido do usuário, o ícone padrão do botão flutuante passou a ser o

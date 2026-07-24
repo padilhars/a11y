@@ -34,6 +34,7 @@
         "closeiconsvg": "<svg></svg>",
         "refreshiconsvg": "<svg></svg>",
         "accessibilityiconsvg": "<svg></svg>",
+        "badgeclass": "",
         "searchplaceholder": "Search option…",
         "searchiconsvg": "<svg></svg>",
         "searchclearlabel": "Clear search",
@@ -69,7 +70,7 @@
         landmark inside it fails axe's landmark-*-is-top-level rules. }}
     <div class="local-a11y-panel__header">
         <div class="local-a11y-panel__header-row">
-            <span class="local-a11y-panel__badge">{{{accessibilityiconsvg}}}</span>
+            <span class="local-a11y-panel__badge {{badgeclass}}">{{{accessibilityiconsvg}}}</span>
             <div class="local-a11y-panel__titles">
                 <span id="local-a11y-panel-title" class="local-a11y-panel__title">{{paneltitle}}</span>
                 <span class="local-a11y-panel__subtitle{{#hasactive}} local-a11y-panel__subtitle--active{{/hasactive}}" data-region="status" aria-live="polite">{{statustext}}</span>
