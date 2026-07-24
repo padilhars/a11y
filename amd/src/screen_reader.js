@@ -38,6 +38,10 @@ let onClick = null;
 const buildPill = () => {
     const container = document.createElement('div');
     container.className = 'local-a11y-root local-a11y-sr-pill';
+    // role="status": a live status overlay outside any page landmark is
+    // exempt from axe's "region" rule when it has an explicit live-region
+    // role, and it is one - Moodle uses the same pattern for its own toasts.
+    container.setAttribute('role', 'status');
     container.innerHTML = '<span class="local-a11y-sr-pill__icon">'
         + '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" '
         + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'

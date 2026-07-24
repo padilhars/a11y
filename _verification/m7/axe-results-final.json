@@ -1,0 +1,50 @@
+[
+  {
+    "id": "landmark-unique",
+    "impact": "moderate",
+    "tags": [
+      "cat.semantics",
+      "best-practice"
+    ],
+    "description": "Ensure landmarks are unique",
+    "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.12/landmark-unique?application=axeAPI",
+    "nodes": [
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "navigation",
+              "accessibleText": null
+            },
+            "relatedNodes": [
+              {
+                "html": "<nav id=\"courseindex\" class=\"courseindex\">",
+                "target": [
+                  "#courseindex"
+                ]
+              },
+              {
+                "html": "<nav class=\"moremenu navigation observed\">",
+                "target": [
+                  ".secondary-navigation > .moremenu.navigation.observed"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<nav class=\"moremenu navigation observed\">",
+        "target": [
+          ".primary-navigation > .moremenu.navigation.observed"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      }
+    ]
+  }
+]

@@ -45,6 +45,7 @@ const getSpeechRecognitionCtor = () => window.SpeechRecognition || window.webkit
 const buildPill = (listeningLabel) => {
     const el = document.createElement('div');
     el.className = 'local-a11y-root local-a11y-sr-pill';
+    el.setAttribute('role', 'status');
     el.innerHTML = '<span class="local-a11y-sr-pill__icon">'
         + '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" '
         + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'

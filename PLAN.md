@@ -7,7 +7,7 @@
 - [x] M4 — Perfis, busca, contador, reset, atalho Alt+A, focus trap
 - [x] M5 — Recursos avançados: leitor de tela, teclado virtual, comandos de voz, guia/máscara de leitura
 - [x] M6 — Settings de admin + capabilities + privacy provider
-- [ ] M7 — Testes (PHPUnit, Behat, axe, screenshots) e correções
+- [x] M7 — Testes (PHPUnit, Behat, axe, screenshots) e correções
 - [ ] M8 — Empacotamento: local_a11y.zip, README, CHANGELOG
 
 Detalhamento de cada marco em PROGRESS.md conforme concluído. Ver `_design-reference/` para especificação normativa e `DECISIONS.md` para decisões de ambiguidade.

@@ -33,7 +33,11 @@
         "desc": "Applies Atkinson Hyperlegible"
     }
 }}
-<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}" data-region="option" data-option-id="{{id}}" data-kind="toggle" role="button" tabindex="0">
+{{! No role/tabindex here: the nested <button> below is the sole focusable
+    control (WCAG/axe "nested-interactive" forbids a div[role=button]
+    wrapping a real <button>). Clicking anywhere on the row still works via
+    event delegation in amd/src/panel.js. }}
+<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}" data-region="option" data-option-id="{{id}}" data-kind="toggle">
     <span class="local-a11y-option__icon">{{{iconsvg}}}</span>
     <span class="local-a11y-option__text">
         <span class="local-a11y-option__label">{{label}}</span>

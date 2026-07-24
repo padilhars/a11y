@@ -64,7 +64,10 @@
     hidden
     style="--local-a11y-accent: {{accent}};"
 >
-    <header class="local-a11y-panel__header">
+    {{! Plain <div>, not <header>/<footer>: those are landmark elements and
+        this popover already has role="dialog" - nesting a banner/contentinfo
+        landmark inside it fails axe's landmark-*-is-top-level rules. }}
+    <div class="local-a11y-panel__header">
         <div class="local-a11y-panel__header-row">
             <span class="local-a11y-panel__badge">{{{accessibilityiconsvg}}}</span>
             <div class="local-a11y-panel__titles">
@@ -88,7 +91,7 @@
         <button type="button" class="local-a11y-panel__reset" data-action="reset" data-region="reset-button"{{^hasactive}} hidden{{/hasactive}}>
             {{{refreshiconsvg}}} {{resetlabel}}
         </button>
-    </header>
+    </div>
 
     <div class="local-a11y-panel__body">
         <div class="local-a11y-panel__search">
@@ -139,12 +142,12 @@
         </div>
     </div>
 
-    <footer class="local-a11y-panel__footer">
+    <div class="local-a11y-panel__footer">
         <span class="local-a11y-panel__footer-icon">{{{saveiconsvg}}}</span>
         <span class="local-a11y-panel__footer-text">
             <span class="local-a11y-panel__footer-title">{{savetitle}}</span>
             <span class="local-a11y-panel__footer-subtitle">{{savesubtitle}}</span>
         </span>
         <kbd class="local-a11y-panel__footer-kbd">Alt+A</kbd>
-    </footer>
+    </div>
 </div>

@@ -42,6 +42,12 @@ O briefing pedia `user_preference_allow_ajax_update()` + `core_user/repository::
 
 O restante da segunda parte do pedido (`core_user/repository::setUserPreference` via AMD) foi seguido à risca — `amd/src/storage.js` usa exatamente esse módulo.
 
+## D12 — Behat com cenários `@javascript` escrito mas não executado
+
+`tests/behat/local_a11y.feature` foi escrito (steps genéricos documentados do `behat_general.php`, sem *step definitions* customizadas), e o ambiente Behat foi inicializado com sucesso (`admin/tool/behat/cli/init.php`, incluindo build de CSS de Boost e Classic). A **execução** dos cenários `@javascript` exige um WebDriver clássico (Selenium + chromedriver na mesma major version do navegador), que este host não tinha; a tentativa de montar isso rapidamente (Java + `npm i chromedriver`) esbarrou em descasamento de versão com o Chromium do Playwright e problema de permissão de cache entre os usuários `padilha`/`www-data`. Decisão: não persegui uma instalação completa de Selenium (custo desproporcional nesta sessão) e, em vez disso, verifiquei os mesmos dois cenários do `.feature` (mudar Tamanho do Texto + reload persiste; aplicar/desfazer perfil Dislexia) de ponta a ponta com Playwright real contra o Moodle rodando, com captura de tela — ver `_verification/m3/`, `_verification/m4/` e ENVIRONMENT.md para os detalhes e o caminho para terminar a configuração do Selenium depois.
+
+O **axe-core** (também amarrado ao mesmo WebDriver na integração `--axe` do Behat) foi rodado com sucesso de forma independente, via Playwright + `axe-core` injetado na página real — ver M7 em PROGRESS.md e `_verification/m7/`.
+
 ## D11 — `templates/virtual_keyboard.mustache` não foi criado
 
 A seção 4 do briefing lista `templates/virtual_keyboard.mustache` entre os templates a criar. Decidi **não** criá-lo: ao contrário do FAB/painel (que precisam ser renderizados no servidor para o no-FOUC e para SEO/acessibilidade sem JS), o teclado virtual só existe quando o usuário ativa a opção correspondente — é inteiramente client-side, criado/destruído por `amd/src/virtual_keyboard.js` via DOM puro. Um template Mustache exigiria buscá-lo de forma assíncrona via `core/templates` (`Templates.renderForPromise`) toda vez que a opção é ligada, sem nenhum ganho real (a estrutura muda de qualquer forma a cada toggle de Shift, o que já é regenerado em JS). Optei por manter a paridade de estrutura HTML/CSS (classes `local-a11y-vk__*` já definidas em `styles.css`) sem o round-trip assíncrono desnecessário.

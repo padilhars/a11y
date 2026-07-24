@@ -50,6 +50,30 @@ sudo -u www-data php /var/www/moodle/admin/tool/phpunit/cli/init.php
 
 Sempre execute como `www-data` (`sudo -u www-data ...`) para preservar o dono correto de caches/moodledata gerados.
 
+## Ambiente de testes (PHPUnit / Behat / axe)
+
+Nada disso vinha configurado; adicionado nesta sessão para rodar M7:
+
+- `php composer.phar install --ignore-platform-reqs` na raiz do Moodle (o `composer.lock` do core ainda não declara suporte ao PHP 8.5 deste host para `ezyang/htmlpurifier`/`openspout/openspout`; `--ignore-platform-reqs` ignora só a checagem de versão, não muda os pacotes instalados). Persistido via `composer config platform.php 8.4.99` no `composer.json` do core para que chamadas subsequentes (`init.php` do PHPUnit/Behat) também não travem.
+- `default-jre-headless` (Java, via apt) — necessário só se for rodar o Selenium standalone para Behat com JS (ver observação abaixo).
+- `locale-gen en_AU.UTF-8` — o `admin/tool/phpunit/cli/init.php` exige esse locale instalado.
+- `config.php`: adicionadas `$CFG->phpunit_prefix = 'phpu_'`, `$CFG->phpunit_dataroot = '/var/moodledata_phpunit'`, `$CFG->behat_prefix = 'behat_'`, `$CFG->behat_wwwroot = 'http://192.168.8.108:8080'`, `$CFG->behat_dataroot = '/var/behatdata'` (mesmo banco Postgres, prefixos de tabela diferentes — padrão do Moodle). Backup do arquivo original em `config.php.bak`.
+- Segundo vhost Apache `/etc/apache2/sites-available/moodle-behat.conf`, `Listen 8080`, mesmo `DocumentRoot`, necessário porque o Behat precisa de um `wwwroot` próprio isolado do site de desenvolvimento.
+- Inicialização (uma vez):
+  ```bash
+  sudo -u www-data php /var/www/moodle/public/admin/tool/phpunit/cli/init.php --disable-composer
+  sudo -u www-data php /var/www/moodle/public/admin/tool/behat/cli/init.php --disable-composer
+  ```
+- Rodar os testes PHPUnit do plugin:
+  ```bash
+  cd /var/www/moodle && sudo -u www-data vendor/bin/phpunit --configuration public/local/a11y/phpunit.xml
+  ```
+
+**Behat**: o ambiente foi inicializado com sucesso (inclusive build de CSS dos temas Boost e Classic, usado para a matriz de tema do M7), mas os cenários `@javascript` do Behat usam o protocolo WebDriver clássico via Selenium (`wd_host: http://localhost:4444/wd/hub` em `behat.yml`), e este host não tinha nem Selenium nem um `chromedriver` compatível com a versão do Chromium instalada. Foi feita uma tentativa (Java instalado, `npm i chromedriver` baixou a versão 151.x contra um Chromium 149.x do Playwright — descasamento de major version, mais um problema de permissão do cache do Playwright para o usuário `www-data`) e abandonada por custo/benefício: `tests/behat/local_a11y.feature` foi escrito e usa apenas *steps* genéricos documentados do `behat_general.php` (`should exist`/`should not exist`/`should be visible`/`I click on`/`I should see ... in the ...`), mas **não foi executado**. Os mesmos cenários (mudar Tamanho do Texto e recarregar, aplicar/desfazer o perfil Dislexia) foram verificados de ponta a ponta com Playwright real contra o site rodando — ver `_verification/m3/` e `_verification/m4/`.
+- Para completar a execução do Behat no futuro: instalar Selenium standalone (`selenium-server-<versão>.jar`, requer Java — já instalado) + um `chromedriver` com major version igual ao Chrome/Chromium efetivamente usado, subir `java -jar selenium-server.jar standalone` e então `vendor/bin/behat --config /var/behatdata/behatrun/behat/behat.yml --tags @local_a11y`.
+
+**axe-core**: em vez de depender da integração automática do Behat (`--axe`, habilitada por padrão em `admin/tool/behat/cli/init.php` mas presa ao mesmo bloqueio de WebDriver acima), rodei o axe-core diretamente via Playwright (`npm i axe-core`, injetado com `page.addScriptTag` + `window.axe.run()`) contra o site real logado, com o painel aberto e todas as categorias expandidas. Script e resultado em `_verification/m7/`.
+
 ## Build do AMD do plugin
 
 ```bash

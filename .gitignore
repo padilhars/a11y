@@ -1,2 +1,4 @@
 node_modules/
 *.log
+.phpunit.cache/
+behat_*.json

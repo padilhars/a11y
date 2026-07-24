@@ -296,7 +296,7 @@
 .local-a11y-panel__section-heading-icon { color: #52525b; display: flex; }
 .local-a11y-panel__section-heading-text { flex: 1; min-width: 0; }
 .local-a11y-panel__section-heading-label { display: block; font-size: 11.5px; font-weight: 600; color: #52525b; text-transform: uppercase; letter-spacing: 0.06em; }
-.local-a11y-panel__section-heading-sublabel { display: block; font-size: 11.5px; color: var(--a11y-text-hint); margin-top: 1px; }
+.local-a11y-panel__section-heading-sublabel { display: block; font-size: 11.5px; color: var(--a11y-text-muted); margin-top: 1px; }
 
 .local-a11y-profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
 .local-a11y-profile-card {
@@ -364,7 +364,9 @@
 .local-a11y-option--active .local-a11y-option__icon { background: var(--local-a11y-accent, var(--a11y-accent)); color: #fff; }
 .local-a11y-option__text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .local-a11y-option__label { font-size: 13.5px; font-weight: 500; color: var(--a11y-text); letter-spacing: -0.005em; }
-.local-a11y-option__desc { font-size: 11.5px; color: var(--a11y-text-hint); margin-top: 1px; line-height: 1.3; }
+/* --a11y-text-hint (#9ca3af) fails WCAG AA contrast at this font size (axe:
+   color-contrast) - use --a11y-text-muted (#6b7280, ~4.8:1 on white) instead. */
+.local-a11y-option__desc { font-size: 11.5px; color: var(--a11y-text-muted); margin-top: 1px; line-height: 1.3; }
 
 .local-a11y-switch {
   width: 36px; height: 20px; border-radius: 999px; border: 0; cursor: pointer; padding: 0;
@@ -379,7 +381,7 @@
 .local-a11y-switch[aria-pressed="true"] .local-a11y-switch__thumb { left: 18px; }
 
 .local-a11y-stepper { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-right: 12px; }
-.local-a11y-stepper__label { font-size: 11.5px; font-weight: 600; color: var(--a11y-text-hint); min-width: 56px; text-align: right; font-variant-numeric: tabular-nums; }
+.local-a11y-stepper__label { font-size: 11.5px; font-weight: 600; color: var(--a11y-text-muted); min-width: 56px; text-align: right; font-variant-numeric: tabular-nums; }
 .local-a11y-option--active .local-a11y-stepper__label { color: var(--local-a11y-accent, var(--a11y-accent)); }
 .local-a11y-stepper__dots { display: flex; align-items: center; gap: 3px; }
 .local-a11y-stepper__dot { width: 6px; height: 6px; border-radius: 999px; background: var(--a11y-border); transition: all 200ms ease; }
@@ -403,7 +405,7 @@
 .local-a11y-panel__footer-title { font-size: 12px; font-weight: 600; color: var(--a11y-text); line-height: 1.2; }
 .local-a11y-panel__footer-subtitle { font-size: 11px; color: var(--a11y-text-muted); line-height: 1.4; margin-top: 1px; }
 .local-a11y-panel__footer-kbd {
-  font-size: 10px; font-family: inherit; color: var(--a11y-text-hint); background: #fff;
+  font-size: 10px; font-family: inherit; color: var(--a11y-text-muted); background: #fff;
   border: 1px solid var(--a11y-border); border-radius: 4px; padding: 2px 5px; white-space: nowrap;
 }
 
