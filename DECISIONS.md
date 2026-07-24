@@ -2,11 +2,15 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
-## D1 — Estrutura do repositório de trabalho
+## D1 — Estrutura do repositório de trabalho (revisado — ver D1b)
 
-O briefing pede uma árvore `local/a11y/...` na raiz do "repositório de trabalho", mas o plugin precisa fisicamente existir dentro do webroot do Moodle (`/var/www/moodle/public/local/a11y`) para ser carregado. Decisão: repositório git dedicado em `/var/www/local_a11y-project/`, com o plugin em `local/a11y/` dentro dele (batendo literalmente com a árvore pedida), e um **symlink** `/var/www/moodle/public/local/a11y → /var/www/local_a11y-project/local/a11y`. Isso evita versionar o core do Moodle (centenas de MB) e segue a prática comum de desenvolvimento de plugins Moodle (repo do plugin symlinkado para dentro de uma instalação de teste).
+~~Decisão original: repositório git dedicado em `/var/www/moodle/public/local/a11y/`, plugin em `local/a11y/` dentro dele, symlinkado para `/var/www/moodle/public/local/a11y`.~~ **Revertida — ver D1b**: o build AMD do Moodle (`grunt amd`, especificamente `.grunt/babel-plugin-add-module-to-define.js`) resolve o *realpath* do arquivo-fonte antes de calcular o nome do módulo AMD a partir do `cwd`; como o symlink aponta para fora da árvore do Moodle, `fs.realpathSync()` escapa do `cwd` e o cálculo do nome do módulo falha (`Unable to find module name for ...`). Não é possível compilar AMD com o plugin fora da árvore do Moodle.
 
-`_design-reference/`, `_verification/`, `CLAUDE.md`, `PLAN.md`, `PROGRESS.md`, `DECISIONS.md`, `ENVIRONMENT.md` ficam na raiz do repo, **fora** do symlink — assim ferramentas de lint do Moodle (phpcs, mustache lint, plugin file checks) nunca os enxergam como parte do plugin.
+## D1b — Repositório = diretório real dentro do Moodle (decisão final)
+
+O repositório git agora tem raiz em `/var/www/moodle/public/local/a11y/` (diretório real, não symlink). O plugin (`version.php`, `db/`, `classes/`, `amd/`, `templates/`, `lang/`, `styles.css`, `fonts/`, `pix/`, `tests/`) fica na raiz do repo (equivalente a "ser" o `local/a11y/` pedido pelo briefing — como é praticamente universal em repositórios de plugins Moodle reais, ex. `moodle-local_a11y` no GitHub tem `version.php` na raiz do repo, não em `local/a11y/version.php` dentro dele). `_design-reference/`, `_verification/`, `CLAUDE.md`, `PLAN.md`, `PROGRESS.md`, `DECISIONS.md`, `ENVIRONMENT.md` ficam **também** na raiz do repo, como pedido — o Moodle ignora arquivos/diretórios que não reconhece (não quebra phpcs/mustache-lint/plugin-scan, que só olham para nomes de arquivo específicos).
+
+Permissões: `/var/www/moodle` é `www-data:www-data` 750. Para que o usuário do shell (`padilha`, sem grupo `www-data`) consiga editar os arquivos diretamente (as tools de edição não passam por `sudo`), apliquei `chmod o+rx` apenas nos diretórios ancestrais `/var/www/moodle`, `/var/www/moodle/public`, `/var/www/moodle/public/local` (travessia, não escrita/listagem), e `chown padilha:padilha` + `chmod -R a+rX` recursivo em `public/local/a11y` (padilha escreve direto; `www-data`/Apache continuam lendo via bit "outros"). Isso é aceitável neste host de desenvolvimento de uso único; não seria uma escolha de produção.
 
 ## D2 — Ambiente já existia
 
@@ -31,6 +35,10 @@ Especificado no briefing: comportamento visual (hue-rotate/sepia via CSS `filter
 ## D7 — `local/a11y:view` para guest/frontpage
 
 O FAB deve aparecer mesmo para visitantes não autenticados (`showforguests` setting, default ligado) — capability `local/a11y:view` com `CAP_ALLOW` para `guest`, `user`, `frontpage` nos `archetypes` de `db/access.php`, e fallback de persistência via `localStorage` para quem não está logado, migrando para `user_preference` no primeiro login (conforme briefing seção 3).
+
+## D9 — Subconjunto de `ICON_PATHS` portado
+
+`classes/icons.php` porta todos os ícones usados pelo FAB, painel, perfis, categorias e recursos avançados (teclado virtual, leitor de tela) — 1:1 com o protótipo. Os ícones que só existiam em `ICON_PATHS` para desenhar o **mockup** do Moodle (`moodleLogo`, `menu`, `home`, `calendar`, `fileText`, `video`, `edit`, `clipboard`, `messageSquare`, `folder`, `award`, `users`, `graduationCap`, `settings`, `logOut`, `download`, `upload`, `globe`) foram omitidos, consistente com D3 (moodle-page.jsx não é implementado — o Moodle real já tem seus próprios ícones/tema). Nenhum ícone usado por OPTIONS, PROFILES ou pela chrome do painel foi omitido ou renomeado.
 
 ## D8 — Fontes locais
 

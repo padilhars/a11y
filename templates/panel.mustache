@@ -1,0 +1,150 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_a11y/panel
+
+    The accessibility panel: header, search, profile presets, collapsible
+    option categories and footer. Rendered hidden (closed); amd/src/panel.js
+    handles open/close, search filtering, category collapse and applying
+    the user's saved settings.
+
+    Context variables required for this template: see classes/output/panel.php.
+
+    Example context (json):
+    {
+        "paneltitle": "Accessibility",
+        "panelsubtitle": "Customize your experience",
+        "noneactive": "No options active",
+        "resetlabel": "Reset all",
+        "closelabel": "Close",
+        "closeiconsvg": "<svg></svg>",
+        "refreshiconsvg": "<svg></svg>",
+        "accessibilityiconsvg": "<svg></svg>",
+        "searchplaceholder": "Search option…",
+        "searchiconsvg": "<svg></svg>",
+        "searchclearlabel": "Clear search",
+        "showprofiles": true,
+        "profilestitle": "Accessibility Profiles",
+        "profilessubtitle": "Enable optimized settings with one click",
+        "sparklesiconsvg": "<svg></svg>",
+        "checkiconsvg": "<svg></svg>",
+        "profiles": [],
+        "categories": [],
+        "savetitle": "Preferences saved",
+        "savesubtitle": "Your settings are remembered across all Moodle pages.",
+        "saveiconsvg": "<svg></svg>",
+        "panelformatclass": "local-a11y-panel--popover",
+        "positionclass": "local-a11y-panel--bottom-right",
+        "densityclass": "local-a11y-panel--density-regular",
+        "accent": "#3b82f6"
+    }
+}}
+<div class="local-a11y-root local-a11y-panel-overlay" data-region="overlay" hidden></div>
+<div
+    id="local-a11y-panel"
+    class="local-a11y-root local-a11y-panel {{panelformatclass}} {{positionclass}} {{densityclass}}"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="local-a11y-panel-title"
+    aria-hidden="true"
+    hidden
+    style="--local-a11y-accent: {{accent}};"
+>
+    <header class="local-a11y-panel__header">
+        <div class="local-a11y-panel__header-row">
+            <span class="local-a11y-panel__badge">{{{accessibilityiconsvg}}}</span>
+            <div class="local-a11y-panel__titles">
+                <span id="local-a11y-panel-title" class="local-a11y-panel__title">{{paneltitle}}</span>
+                <span class="local-a11y-panel__subtitle" data-region="status" aria-live="polite">{{noneactive}}</span>
+            </div>
+            <button type="button" class="local-a11y-iconbutton" data-action="close" aria-label="{{closelabel}}">
+                {{{closeiconsvg}}}
+            </button>
+        </div>
+        <div class="local-a11y-panel__active-profile" data-region="active-profile" hidden>
+            <span class="local-a11y-panel__active-profile-icon" data-region="active-profile-icon"></span>
+            <span class="local-a11y-panel__active-profile-text">
+                <span class="local-a11y-panel__active-profile-kicker" data-region="active-profile-kicker"></span>
+                <span class="local-a11y-panel__active-profile-name" data-region="active-profile-name"></span>
+            </span>
+            <button type="button" class="local-a11y-panel__active-profile-clear" data-action="reset" aria-label="{{resetlabel}}">
+                {{{closeiconsvg}}}
+            </button>
+        </div>
+        <button type="button" class="local-a11y-panel__reset" data-action="reset" data-region="reset-button" hidden>
+            {{{refreshiconsvg}}} {{resetlabel}}
+        </button>
+    </header>
+
+    <div class="local-a11y-panel__body">
+        <div class="local-a11y-panel__search">
+            <span class="local-a11y-panel__search-icon">{{{searchiconsvg}}}</span>
+            <input type="text" class="local-a11y-panel__search-input" data-region="search-input"
+                placeholder="{{searchplaceholder}}" aria-label="{{searchplaceholder}}">
+            <button type="button" class="local-a11y-panel__search-clear" data-action="clear-search"
+                aria-label="{{searchclearlabel}}" hidden>{{{closeiconsvg}}}</button>
+        </div>
+
+        {{#showprofiles}}
+        <section class="local-a11y-panel__section" data-region="profiles-section">
+            <div class="local-a11y-panel__section-heading">
+                <span class="local-a11y-panel__section-heading-icon">{{{sparklesiconsvg}}}</span>
+                <span class="local-a11y-panel__section-heading-text">
+                    <span class="local-a11y-panel__section-heading-label">{{profilestitle}}</span>
+                    <span class="local-a11y-panel__section-heading-sublabel">{{profilessubtitle}}</span>
+                </span>
+            </div>
+            <div class="local-a11y-profile-grid">
+                {{#profiles}}
+                {{> local_a11y/profile_card}}
+                {{/profiles}}
+            </div>
+        </section>
+        {{/showprofiles}}
+
+        <div class="local-a11y-panel__categories" data-region="categories">
+            {{#categories}}
+            <div class="local-a11y-category" data-region="category" data-category-id="{{id}}">
+                <button type="button" class="local-a11y-category__header" data-action="toggle-category"
+                    aria-expanded="{{#isopen}}true{{/isopen}}{{^isopen}}false{{/isopen}}">
+                    <span class="local-a11y-category__icon">{{{iconsvg}}}</span>
+                    <span class="local-a11y-category__label">{{label}}</span>
+                    <span class="local-a11y-category__count" data-region="category-count" hidden>0</span>
+                    <span class="local-a11y-category__chevron" data-region="category-chevron">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                    </span>
+                </button>
+                <div class="local-a11y-category__body" data-region="category-body"{{^isopen}} hidden{{/isopen}}>
+                    {{#options}}
+                    {{#istoggle}}{{> local_a11y/option_toggle}}{{/istoggle}}
+                    {{#isstepper}}{{> local_a11y/option_stepper}}{{/isstepper}}
+                    {{/options}}
+                </div>
+            </div>
+            {{/categories}}
+        </div>
+    </div>
+
+    <footer class="local-a11y-panel__footer">
+        <span class="local-a11y-panel__footer-icon">{{{saveiconsvg}}}</span>
+        <span class="local-a11y-panel__footer-text">
+            <span class="local-a11y-panel__footer-title">{{savetitle}}</span>
+            <span class="local-a11y-panel__footer-subtitle">{{savesubtitle}}</span>
+        </span>
+        <kbd class="local-a11y-panel__footer-kbd">Alt+A</kbd>
+    </footer>
+</div>

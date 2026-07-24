@@ -1,0 +1,49 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_a11y/profile_card
+
+    A single accessibility profile preset card.
+
+    Context variables required for this template:
+    * id - profile id, e.g. "lowVision"
+    * iconsvg - raw inline <svg> markup
+    * label - profile label text
+    * desc - profile description text (used as title attribute)
+    * bg, text, iconcolor, border - tone hex colours
+
+    Example context (json):
+    {
+        "id": "lowVision",
+        "iconsvg": "<svg></svg>",
+        "label": "Low Vision",
+        "desc": "Larger text, high contrast, big cursor",
+        "bg": "#eff6ff",
+        "text": "#1d4ed8",
+        "iconcolor": "#3b82f6",
+        "border": "#dbeafe"
+    }
+}}
+<button type="button" class="local-a11y-profile-card" data-region="profile-card" data-profile-id="{{id}}"
+    title="{{desc}}" aria-pressed="false"
+    style="--local-a11y-tone-bg: {{bg}}; --local-a11y-tone-text: {{text}}; --local-a11y-tone-icon: {{iconcolor}}; --local-a11y-tone-border: {{border}};">
+    <span class="local-a11y-profile-card__icon">{{{iconsvg}}}</span>
+    <span class="local-a11y-profile-card__label">{{label}}</span>
+    <span class="local-a11y-profile-card__check" data-region="profile-check" hidden>
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg>
+    </span>
+</button>

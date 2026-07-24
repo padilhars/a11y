@@ -1,0 +1,50 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_a11y/fab
+
+    The floating accessibility button.
+
+    Context variables required for this template:
+    * positionclass - CSS modifier class for FAB position
+    * shapeclass - CSS modifier class for circle/square
+    * iconsvg - raw inline <svg> markup
+    * ariaopenlabel - accessible label when closed
+    * accent - hex accent colour
+
+    Example context (json):
+    {
+        "positionclass": "local-a11y-fab--bottom-right",
+        "shapeclass": "local-a11y-fab--circle",
+        "iconsvg": "<svg></svg>",
+        "ariaopenlabel": "Open accessibility panel",
+        "accent": "#3b82f6"
+    }
+}}
+<button
+    type="button"
+    id="local-a11y-fab"
+    class="local-a11y-root local-a11y-fab {{positionclass}} {{shapeclass}}"
+    aria-haspopup="dialog"
+    aria-expanded="false"
+    aria-controls="local-a11y-panel"
+    aria-label="{{ariaopenlabel}}"
+    style="--local-a11y-accent: {{accent}};"
+>
+    <span class="local-a11y-fab__icon">{{{iconsvg}}}</span>
+    <span class="local-a11y-fab__badge" data-region="badge" hidden>0</span>
+</button>

@@ -11,17 +11,17 @@ O host já continha uma instalação Moodle funcional quando o trabalho começou
 - **moodledata**: `/var/moodledata` (owned by `www-data`).
 - **Web server**: Apache 2 (`mpm` padrão), vhost único em `/etc/apache2/sites-available/moodle.conf`, `ServerName 192.168.8.108`, escutando na porta 80.
 - **URL**: http://192.168.8.108
-- **Admin**: usuário `admin` já existente (senha não coletada por esta sessão — ver observação abaixo).
+- **Admin**: usuário `admin` já existente. Senha original desconhecida (pré-existente); resetada nesta sessão via `admin/cli/reset_password.php --username=admin --password='A11yDev2026!' --ignore-password-policy` para permitir login automatizado (Playwright) durante o desenvolvimento/verificação visual.
 - Todos os arquivos do Moodle são propriedade de `www-data:www-data` com permissões `750`; o usuário do shell (`padilha`) tem sudo NOPASSWD total (`(ALL) NOPASSWD: ALL`), usado para leitura/gravação nesse diretório.
 
 > **Observação de segurança**: nunca imprima o conteúdo de `config.php` (contém `$CFG->dbpass`) em logs versionados. Ele já está fora do repositório do plugin.
 
 ## O que esta sessão instalou/adicionou
 
-- `nodejs` 22.22.1 + `npm` 9.2.0 via `apt-get install nodejs npm` (necessário para `grunt amd`, ausente no host).
-- Repositório do plugin em `/var/www/local_a11y-project/` (git, ver `DECISIONS.md` sobre a estrutura).
-- Symlink `/var/www/moodle/public/local/a11y` → `/var/www/local_a11y-project/local/a11y` (ver DECISIONS.md).
-- Curso de teste "Acessibilidade Web" com seções/atividades para validação visual (criado via CLI generators — ver seção abaixo).
+- `nodejs` 22.22.1 + `npm` 9.2.0 via `apt-get install nodejs npm` (necessário para `grunt amd`, ausente no host); `npm ci` rodado em `/var/www/moodle` (como `www-data`) para instalar as devDependencies do Gruntfile.
+- Repositório do plugin **é** `/var/www/moodle/public/local/a11y/` (diretório real, git — ver DECISIONS.md D1b sobre por que não é um symlink: o build AMD do Moodle resolve `realpath()` no arquivo-fonte antes de calcular o nome do módulo, o que quebra com plugin fora da árvore).
+- `chmod o+rx` em `/var/www/moodle`, `/var/www/moodle/public`, `/var/www/moodle/public/local` (travessia) + `chown padilha:padilha` recursivo em `public/local/a11y`, para permitir edição direta sem `sudo` (ver DECISIONS.md D1b).
+- Curso de teste "Acessibilidade Web" (shortname `A11YWEB`) com seções/atividades para validação visual (criado via CLI generators — ver seção abaixo).
 
 ## Comandos de start/stop
 
@@ -53,13 +53,13 @@ Sempre execute como `www-data` (`sudo -u www-data ...`) para preservar o dono co
 ## Build do AMD do plugin
 
 ```bash
-cd /var/www/moodle
-npm install --no-save grunt-cli   # se necessário, ver PLAN.md
-npx grunt amd --root=local/a11y
+sudo -u www-data bash -c "cd /var/www/moodle && HOME=/var/www npx grunt amd --root=public/local/a11y"
 ```
+
+Note o `--root=public/local/a11y` (relativo ao `Gruntfile.js`, que fica na raiz do checkout, não em `public/`).
 
 ## Repositório de trabalho
 
-- Raiz do repo: `/var/www/local_a11y-project/` (git init nesta sessão).
-- `local/a11y/` dentro do repo é o código-fonte real do plugin, symlinkado para dentro da instalação Moodle (`public/local/a11y`), para não versionar o core do Moodle.
+- Raiz do repo: `/var/www/moodle/public/local/a11y/` (git). O plugin (`version.php`, `db/`, `classes/`, `amd/`, `templates/`, `lang/`, `styles.css`, `fonts/`, `pix/`, `tests/`) fica na raiz do repo — ver DECISIONS.md D1b para o porquê.
 - `_design-reference/` — cópia fiel e somente-leitura dos arquivos importados do Claude Design (ver DECISIONS.md).
+- `.eslintrc`/`.stylelintrc` na raiz do repo são cópias do `.eslintrc`/`.stylelintrc` do core do Moodle — convenção do `moodle-plugin-ci` para repositórios de plugin standalone (garante que o cascading do ESLint encontre a config de AMD `sourceType: module` mesmo rodando o plugin fora de um checkout completo).

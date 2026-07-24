@@ -10,7 +10,7 @@ Plugin de acessibilidade `local_a11y` para Moodle 5.0+, replicando o protótipo 
 
 ## Caminhos importantes
 
-- Plugin (fonte real, versionado): `/var/www/local_a11y-project/local/a11y/`
+- Plugin (fonte real, versionado): `/var/www/moodle/public/local/a11y/`
 - Symlink ativo no Moodle: `/var/www/moodle/public/local/a11y` → aponta para o caminho acima
 - Moodle core: `/var/www/moodle/` (webroot em `public/`)
 - moodledata: `/var/moodledata`

@@ -1,4 +1,3 @@
-<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -14,35 +13,39 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_a11y\output;
-
 /**
- * Renderer for local_a11y.
+ * local_a11y bootstrap. Called once per page via $PAGE->requires->js_call_amd()
+ * from classes/hook_callbacks.php.
  *
- * M1: stub methods (return empty strings) so the hook callbacks are safe to
- * fire before the FAB/panel templates exist. Populated in M2.
- *
- * @package    local_a11y
+ * @module     local_a11y/main
  * @copyright  2026 A11y for Moodle project
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class renderer extends \plugin_renderer_base {
 
-    /**
-     * HTML to inject into <head>: CSS link, fonts preload, no-FOUC snippet.
-     *
-     * @return string
-     */
-    public function render_head_html(): string {
-        return '';
-    }
+import Panel from 'local_a11y/panel';
 
-    /**
-     * HTML to inject before </body>: FAB + panel markup, AMD bootstrap.
-     *
-     * @return string
-     */
-    public function render_footer_html(): string {
-        return '';
+/**
+ * Entry point.
+ */
+export const init = () => {
+    const fab = document.getElementById('local-a11y-fab');
+    const panel = document.getElementById('local-a11y-panel');
+    if (!fab || !panel) {
+        return;
     }
-}
+    const overlay = document.querySelector('.local-a11y-panel-overlay');
+
+    Panel.init(fab, panel, overlay);
+
+    // Alt+A global shortcut (documented in the panel footer).
+    document.addEventListener('keydown', (e) => {
+        if (e.altKey && (e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            Panel.toggle();
+        }
+    });
+};
+
+export default {
+    init,
+};

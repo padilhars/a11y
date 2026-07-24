@@ -32,32 +32,31 @@ class config {
      * @return bool
      */
     public static function is_enabled(): bool {
-        return (bool) (get_config('local_a11y', 'enabled') ?? 1);
+        $value = get_config('local_a11y', 'enabled');
+        return $value === false ? true : (bool) $value;
     }
 
     /**
      * @return bool
      */
     public static function show_for_guests(): bool {
-        return (bool) (get_config('local_a11y', 'showforguests') ?? 1);
+        $value = get_config('local_a11y', 'showforguests');
+        return $value === false ? true : (bool) $value;
     }
 
     /**
      * @return bool True if the current user (guest or logged in) is allowed to see the plugin.
      */
     public static function allowed_for_current_user(): bool {
-        global $USER;
-
-        $context = \context_system::instance();
-        if (!has_capability('local/a11y:view', $context)) {
-            return false;
-        }
-
-        if (isguestuser() || !isloggedin()) {
+        // Anonymous (not-logged-in) visitors have no role assignment to check
+        // a capability against on sites with forced login, so the admin's
+        // "show for guests" boolean is the control here, not the capability.
+        if (!isloggedin() || isguestuser()) {
             return self::show_for_guests();
         }
 
-        return true;
+        $context = \context_system::instance();
+        return has_capability('local/a11y:view', $context);
     }
 
     /**
@@ -104,7 +103,10 @@ class config {
             'panelformat' => (string) (get_config('local_a11y', 'panelformat') ?: 'popover'),
             'density' => (string) (get_config('local_a11y', 'density') ?: 'regular'),
             'accent' => (string) (get_config('local_a11y', 'accent') ?: '#3b82f6'),
-            'showprofiles' => (bool) (get_config('local_a11y', 'showprofiles') ?? 1),
+            'showprofiles' => (function() {
+                $value = get_config('local_a11y', 'showprofiles');
+                return $value === false ? true : (bool) $value;
+            })(),
         ];
     }
 
