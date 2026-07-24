@@ -22,6 +22,7 @@
     Context variables required for this template:
     * positionclass - CSS modifier class for FAB position
     * shapeclass - CSS modifier class for circle/square
+    * iconclass - optional extra CSS modifier class for the icon wrapper (empty string if none)
     * iconsvg - raw inline <svg> markup
     * ariaopenlabel - accessible label when closed
     * accent - hex accent colour
@@ -30,6 +31,7 @@
     {
         "positionclass": "local-a11y-fab--bottom-right",
         "shapeclass": "local-a11y-fab--circle",
+        "iconclass": "",
         "iconsvg": "<svg></svg>",
         "ariaopenlabel": "Open accessibility panel",
         "accent": "#3b82f6"
@@ -45,6 +47,6 @@
     aria-label="{{ariaopenlabel}}"
     style="--local-a11y-accent: {{accent}};"
 >
-    <span class="local-a11y-fab__icon">{{{iconsvg}}}</span>
+    <span class="local-a11y-fab__icon {{iconclass}}">{{{iconsvg}}}</span>
     <span class="local-a11y-fab__badge" data-region="badge"{{^hasactive}} hidden{{/hasactive}}>{{activecount}}</span>
 </button>

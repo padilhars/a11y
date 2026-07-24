@@ -98,7 +98,7 @@ class config {
     public static function get_appearance(): array {
         return [
             'fabposition' => (string) (get_config('local_a11y', 'fabposition') ?: 'bottom-right'),
-            'fabicon' => (string) (get_config('local_a11y', 'fabicon') ?: 'accessibility'),
+            'fabicon' => (string) (get_config('local_a11y', 'fabicon') ?: 'un'),
             'fabshape' => (string) (get_config('local_a11y', 'fabshape') ?: 'circle'),
             'panelformat' => (string) (get_config('local_a11y', 'panelformat') ?: 'popover'),
             'density' => (string) (get_config('local_a11y', 'density') ?: 'regular'),

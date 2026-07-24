@@ -108,4 +108,37 @@ class icons {
             . 'stroke="currentColor" stroke-width="' . $stroke . '" stroke-linecap="round" '
             . 'stroke-linejoin="round" aria-hidden="true" focusable="false"' . $classattr . '>' . $inner . '</svg>';
     }
+
+    /** @var string|null Cached inner markup of pix/accessibility-un.svg (null until first read). */
+    private static $unaccessibilityinner = null;
+
+    /**
+     * Render an inline <svg> for the "Accessibility logo (UN)" — a fixed
+     * two-colour (black outline + #53C2EE) logo, not a themable currentColor
+     * stroke icon like svg() above, so it gets its own method instead of an
+     * entry in PATHS/svg(): its own viewBox (0 0 1000 1000) and inner markup
+     * come straight from pix/accessibility-un.svg (see that file for the
+     * source/licence — CC BY-SA 4.0, attribution in README.md), read once
+     * and cached rather than re-parsed on every FAB render.
+     *
+     * @param int $size
+     * @param string $class extra CSS class(es)
+     * @return string
+     */
+    public static function un_accessibility_svg(int $size = 26, string $class = ''): string {
+        if (self::$unaccessibilityinner === null) {
+            $path = __DIR__ . '/../pix/accessibility-un.svg';
+            $raw = is_readable($path) ? file_get_contents($path) : '';
+            self::$unaccessibilityinner = '';
+            if ($raw !== '' && preg_match('#<svg[^>]*>(.*)</svg>#s', $raw, $matches)) {
+                self::$unaccessibilityinner = $matches[1];
+            }
+        }
+        if (self::$unaccessibilityinner === '') {
+            return '';
+        }
+        $classattr = $class !== '' ? ' class="' . s($class) . '"' : '';
+        return '<svg width="' . $size . '" height="' . $size . '" viewBox="0 0 1000 1000" '
+            . 'aria-hidden="true" focusable="false"' . $classattr . '>' . self::$unaccessibilityinner . '</svg>';
+    }
 }

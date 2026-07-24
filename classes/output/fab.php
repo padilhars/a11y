@@ -40,18 +40,27 @@ class fab implements renderable, templatable {
         $appearance = config::get_appearance();
 
         $iconnames = [
+            'un' => 'un',
             'accessibility' => 'accessibility',
             'sparkles' => 'sparkles',
             'user' => 'user',
         ];
-        $iconname = $iconnames[$appearance['fabicon']] ?? 'accessibility';
+        $iconname = $iconnames[$appearance['fabicon']] ?? 'un';
         $activecount = manager::count_active(manager::get_current_user_settings());
+
+        // The UN accessibility logo is a fixed two-colour asset (see
+        // icons::un_accessibility_svg()), not a themable currentColor stroke
+        // icon like the rest of icons::PATHS, so it needs its own branch and
+        // its own modifier class (styles.css gives it a white circular
+        // backing for legibility against any configured accent colour).
+        $isunicon = $iconname === 'un';
 
         return [
             'position' => $appearance['fabposition'],
             'positionclass' => 'local-a11y-fab--' . preg_replace('/[^a-z-]/', '', $appearance['fabposition']),
             'shapeclass' => $appearance['fabshape'] === 'square' ? 'local-a11y-fab--square' : 'local-a11y-fab--circle',
-            'iconsvg' => icons::svg($iconname, 26, 2),
+            'iconclass' => $isunicon ? 'local-a11y-fab__icon--un' : '',
+            'iconsvg' => $isunicon ? icons::un_accessibility_svg(26) : icons::svg($iconname, 26, 2),
             'ariaopenlabel' => get_string('fabopen', 'local_a11y'),
             'accent' => $appearance['accent'],
             'activecount' => $activecount,

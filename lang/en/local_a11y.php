@@ -183,6 +183,7 @@ $string['position_bottomright'] = 'Bottom right';
 $string['position_bottomleft'] = 'Bottom left';
 $string['position_middleright'] = 'Middle right';
 $string['position_middleleft'] = 'Middle left';
+$string['icon_un'] = 'UN accessibility logo';
 $string['icon_accessibility'] = 'Accessibility';
 $string['icon_sparkles'] = 'Sparkles';
 $string['icon_user'] = 'User';

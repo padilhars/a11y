@@ -135,4 +135,8 @@ Usuário pediu para verificar se o plugin/servidor não expõe brechas exploráv
 
 Usuário apontou (com o CSS de referência do protótipo, `.moodle-shell`) que Contraste/Inverter/Mudar Cores/Saturação continuavam sem afetar "todos os elementos". Causa: `#page` (usado por D14) não é o ancestral real de tudo — a navbar principal, o drawer do índice do curso e o menu do usuário ficam fora de `#page`, dentro de `#page-wrapper`. Trocado o alvo do `filter` combinado e dos overrides de cor de link de `#page` para `#page-wrapper` em `styles.css` — ver DECISIONS.md D16. Reverificado via Playwright: navbar/drawer agora corretamente afetados nos 4 efeitos; FAB/painel continuam imunes (confirmado por comparação de pixel real, não só `getComputedStyle`, já que `filter` não é refletido em computed style de propriedades como `background-color`).
 
+## Ícone padrão do FAB trocado para o logo de acessibilidade da ONU (concluído)
+
+A pedido do usuário, o ícone padrão do botão flutuante agora é o "Accessibility logo (UN)" (Wikimedia Commons, CC BY-SA 4.0) em vez do ícone Lucide `accessibility`. Empacotado localmente em `pix/accessibility-un.svg` (nunca carregado de terceiros), renderizado via novo método `icons::un_accessibility_svg()` (asset de 2 cores fixas, diferente do resto dos ícones do plugin que são traços `currentColor`). Novo valor `un` no seletor `local_a11y/fabicon`, agora o default; os ícones anteriores continuam disponíveis. Atribuição CC BY-SA documentada em README.md — ver DECISIONS.md D17. Verificado via Playwright (ícone renderiza corretamente por padrão, troca entre os 4 ícones no admin funciona, PHPUnit 16/16 verde).
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

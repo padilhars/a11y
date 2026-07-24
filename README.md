@@ -75,3 +75,16 @@ vendor/bin/phpunit --configuration local/a11y/phpunit.xml
 ## Licença
 
 GNU GPL v3 ou posterior — ver `COPYING.txt` do Moodle.
+
+### Atribuição de terceiros
+
+`pix/accessibility-un.svg` (ícone padrão do botão flutuante) é uma cópia local de
+["Accessibility logo (UN)"](https://commons.wikimedia.org/wiki/File:Accessibility_logo.svg),
+Wikimedia Commons, licenciado sob
+[CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) (Creative Commons
+Attribution-ShareAlike 4.0 International). A geometria (paths/circles) é idêntica ao
+arquivo original; o único ajuste foi substituir o bloco `<style>`/classes CSS do
+arquivo original por atributos de apresentação equivalentes aplicados diretamente
+nos elementos, para que o SVG possa ser inserido com segurança inline na página do
+Moodle (sem depender de nomes de classe CSS globais que poderiam colidir com outros
+elementos da página). Ver `classes/icons.php::un_accessibility_svg()`.

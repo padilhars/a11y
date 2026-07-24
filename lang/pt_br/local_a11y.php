@@ -183,6 +183,7 @@ $string['position_bottomright'] = 'Inferior direita';
 $string['position_bottomleft'] = 'Inferior esquerda';
 $string['position_middleright'] = 'Meio direita';
 $string['position_middleleft'] = 'Meio esquerda';
+$string['icon_un'] = 'Logo de acessibilidade da ONU';
 $string['icon_accessibility'] = 'Acessibilidade';
 $string['icon_sparkles'] = 'Estrelas';
 $string['icon_user'] = 'Usuário';

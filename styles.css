@@ -126,6 +126,16 @@
   bottom: calc(24px + var(--local-a11y-lift, 0px));
 }
 .local-a11y-fab__icon { display: flex; }
+/* The UN accessibility logo (icons::un_accessibility_svg()) is a fixed
+   black+#53C2EE asset, not a currentColor stroke icon - give it a small
+   white backing circle so it stays legible against any configured accent
+   colour (including dark ones, where the black outline alone would nearly
+   disappear against the FAB's own dark background). */
+.local-a11y-fab__icon--un {
+  background: #fff;
+  border-radius: 50%;
+  padding: 3px;
+}
 .local-a11y-fab__badge {
   position: absolute;
   top: -4px;

@@ -100,8 +100,9 @@ if ($hassiteconfig) {
         'local_a11y/fabicon',
         new lang_string('settings_fabicon', 'local_a11y'),
         '',
-        'accessibility',
+        'un',
         [
+            'un' => new lang_string('icon_un', 'local_a11y'),
             'accessibility' => new lang_string('icon_accessibility', 'local_a11y'),
             'sparkles' => new lang_string('icon_sparkles', 'local_a11y'),
             'user' => new lang_string('icon_user', 'local_a11y'),

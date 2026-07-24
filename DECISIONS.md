@@ -2,6 +2,42 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D17 — Ícone padrão do FAB trocado para o logo de acessibilidade da ONU
+
+A pedido do usuário, o ícone padrão do botão flutuante passou a ser o
+["Accessibility logo (UN)"](https://commons.wikimedia.org/wiki/File:Accessibility_logo.svg)
+(Wikimedia Commons, CC BY-SA 4.0) em vez do ícone Lucide `accessibility` usado
+até então. Diferente de todos os outros ícones do plugin (que são ícones Lucide
+de traço único, renderizados com um wrapper `<svg>` compartilhado em
+`icons::svg()` — `stroke="currentColor"`, sem preenchimento próprio), esse é um
+logo de duas cores fixas (contorno preto + `#53C2EE`), então:
+
+- Baixado e salvo localmente em `pix/accessibility-un.svg` (nunca carregado da
+  Wikimedia em tempo de execução — mesma regra já seguida para as fontes, ver
+  D8). O bloco `<style>`/classes CSS do arquivo original foi substituído por
+  atributos de apresentação inline equivalentes nos `<g>`, porque o SVG é
+  injetado *inline* na página via `{{{iconsvg}}}` (Mustache não-escapado) —
+  um `<style>` com classes genéricas (`.c1`/`.c2`) correria risco real de
+  colidir com CSS de outros elementos já presentes na página do Moodle.
+  Geometria (paths/circles) idêntica ao arquivo original — verificado
+  visualmente lado a lado antes/depois da limpeza.
+- Ganhou seu próprio método `classes/icons.php::un_accessibility_svg()` (em
+  vez de uma entrada em `icons::PATHS`), já que seu viewBox (`0 0 1000 1000`)
+  e wrapper diferem do padrão Lucide de 24x24.
+- `templates/fab.mustache` ganhou uma classe modificadora opcional
+  (`iconclass`) e `styles.css` dá a esse ícone especificamente uma pequena
+  base circular branca (`local-a11y-fab__icon--un`), já que suas cores fixas
+  (ao contrário dos ícones `currentColor`) não se adaptam à cor de destaque
+  (`accent`) configurada pelo admin — sem a base branca, o contorno preto
+  ficaria pouco legível contra um `accent` escuro.
+- Novo valor `'un'` adicionado ao `admin_setting_configselect` de
+  `local_a11y/fabicon` (`settings.php`) e virou o novo default (era
+  `'accessibility'`), com o mesmo fallback espelhado em
+  `config::get_appearance()`. Os outros 3 ícones (`accessibility`/`sparkles`/`user`)
+  continuam disponíveis no seletor.
+- Atribuição CC BY-SA 4.0 documentada em `README.md` (obrigatória pela
+  licença) e no comentário de cabeçalho do próprio `pix/accessibility-un.svg`.
+
 ## D16 — Correção pós-entrega #2: cor/contraste ainda não alcançava toda a página (`#page` → `#page-wrapper`)
 
 Após D14, o usuário reportou que Contraste/Inverter Cores/Mudar Cores/Saturação ainda não se aplicavam a "todos os elementos da página". O usuário sugeriu, com base no CSS do protótipo (que usa `.moodle-shell` como alvo do `filter`), trocar o seletor-alvo pelo elemento real equivalente do Moodle — apontando `#page-wrapper` em vez de `#page`.
