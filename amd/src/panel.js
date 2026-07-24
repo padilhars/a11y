@@ -180,6 +180,119 @@ const renderCategoryCount = (categoryId, count) => {
 };
 
 /**
+ * Mark the given profile card as active (or none, if id is null) and update
+ * the header's "active profile" banner from that same card's own
+ * server-rendered content (icon markup, label text, tone CSS variables) -
+ * no need to duplicate that data a second time in JS.
+ *
+ * @param {String|null} id
+ */
+const renderActiveProfile = async(id) => {
+    panel.querySelectorAll('[data-region="profile-card"]').forEach((card) => {
+        const isActive = card.dataset.profileId === id;
+        card.classList.toggle('local-a11y-profile-card--active', isActive);
+        card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        const check = card.querySelector('[data-region="profile-check"]');
+        if (check) {
+            check.hidden = !isActive;
+        }
+    });
+
+    const banner = panel.querySelector('[data-region="active-profile"]');
+    if (!banner) {
+        return;
+    }
+    if (!id) {
+        banner.hidden = true;
+        return;
+    }
+    const card = panel.querySelector(`[data-region="profile-card"][data-profile-id="${id}"]`);
+    if (!card) {
+        banner.hidden = true;
+        return;
+    }
+    banner.hidden = false;
+    banner.style.setProperty('--local-a11y-tone-bg', card.style.getPropertyValue('--local-a11y-tone-bg'));
+    banner.style.setProperty('--local-a11y-tone-text', card.style.getPropertyValue('--local-a11y-tone-text'));
+    banner.style.setProperty('--local-a11y-tone-icon', card.style.getPropertyValue('--local-a11y-tone-icon'));
+    banner.style.setProperty('--local-a11y-tone-border', card.style.getPropertyValue('--local-a11y-tone-border'));
+    const icon = banner.querySelector('[data-region="active-profile-icon"]');
+    const cardIcon = card.querySelector('.local-a11y-profile-card__icon');
+    if (icon && cardIcon) {
+        icon.innerHTML = cardIcon.innerHTML;
+    }
+    const kicker = banner.querySelector('[data-region="active-profile-kicker"]');
+    if (kicker) {
+        kicker.textContent = await getString('activeprofile', 'local_a11y');
+    }
+    const name = banner.querySelector('[data-region="active-profile-name"]');
+    const cardLabel = card.querySelector('.local-a11y-profile-card__label');
+    if (name && cardLabel) {
+        name.textContent = cardLabel.textContent;
+    }
+};
+
+/**
+ * Show/hide option rows and categories to match a search query, forcing all
+ * matching categories open (and hiding the profiles section) while
+ * searching - matching the prototype's search behaviour exactly. Restores
+ * each category's prior expand state once the query is cleared.
+ *
+ * @param {String} query
+ */
+const filterOptions = (query) => {
+    const q = query.trim().toLowerCase();
+    const isSearching = q.length > 0;
+
+    const profilesSection = panel.querySelector('[data-region="profiles-section"]');
+    if (profilesSection) {
+        profilesSection.hidden = isSearching;
+    }
+
+    panel.querySelectorAll('[data-region="category"]').forEach((category) => {
+        const header = category.querySelector('[data-action="toggle-category"]');
+        const body = category.querySelector('[data-region="category-body"]');
+        let anyVisible = false;
+
+        category.querySelectorAll('[data-region="option"]').forEach((row) => {
+            const label = row.querySelector('.local-a11y-option__label');
+            const text = label ? label.textContent.toLowerCase() : '';
+            const match = !isSearching || text.includes(q);
+            row.hidden = !match;
+            if (match) {
+                anyVisible = true;
+            }
+        });
+
+        category.hidden = isSearching && !anyVisible;
+
+        if (isSearching) {
+            if (header.dataset.wasExpanded === undefined) {
+                header.dataset.wasExpanded = header.getAttribute('aria-expanded');
+            }
+            header.setAttribute('aria-expanded', 'true');
+            header.disabled = true;
+            body.hidden = false;
+        } else if (header.dataset.wasExpanded !== undefined) {
+            header.setAttribute('aria-expanded', header.dataset.wasExpanded);
+            body.hidden = header.dataset.wasExpanded !== 'true';
+            header.disabled = false;
+            delete header.dataset.wasExpanded;
+        }
+    });
+};
+
+/**
+ * All currently visible, non-disabled focusable elements inside the panel,
+ * in DOM order - used by the Tab-key focus trap.
+ *
+ * @return {HTMLElement[]}
+ */
+const getFocusable = () => Array.from(panel.querySelectorAll(
+    'button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+)).filter((el) => el.offsetParent !== null);
+
+/**
  * Wire up all panel-level DOM event listeners.
  */
 const registerEventListeners = () => {
@@ -249,6 +362,7 @@ const registerEventListeners = () => {
     const searchInput = panel.querySelector('[data-region="search-input"]');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
+            filterOptions(e.target.value);
             if (cb.onSearch) {
                 cb.onSearch(e.target.value);
             }
@@ -266,6 +380,26 @@ const registerEventListeners = () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && isOpen()) {
             close();
+        }
+    });
+
+    // WCAG 2.2 focus trap: Tab/Shift+Tab cycle within the panel while open.
+    panel.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab' || !isOpen()) {
+            return;
+        }
+        const focusable = getFocusable();
+        if (focusable.length === 0) {
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
         }
     });
 };
@@ -292,4 +426,5 @@ export default {
     renderOption,
     renderHeader,
     renderCategoryCount,
+    renderActiveProfile,
 };

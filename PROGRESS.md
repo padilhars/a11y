@@ -49,4 +49,14 @@
 - Também corrigido: modo debug do Moodle foi temporariamente elevado para diagnosticar o 400 e depois restaurado a 0/desligado.
 - Próximo: M4 — aplicar perfis (9 presets), busca com filtro nas opções, focus trap WCAG no painel, refinar Alt+A (já funcional desde M2, revisar acessibilidade completa).
 
+## M4 — Perfis, busca, contador, reset, atalho, focus trap (concluído)
+
+- `amd/src/profiles.js`: porte fiel dos 9 presets `apply` de `PROFILES` (só os dados de comportamento — ícone/tom/rótulo continuam só no servidor, lidos do próprio DOM pelo `panel.js`, sem triplicar dados).
+- `main.js`: `onProfileSelect(id)` — aplica `{...DEFAULTS, ...preset}` (reset antes de aplicar, como `applyProfile()` do protótipo); clicar no perfil já ativo desfaz (chama `onReset()`); qualquer edição manual de uma opção individual limpa o perfil ativo (`activeProfileId = null`), igual ao protótipo. Estado do perfil ativo é efêmero (não persistido), fiel ao `useState` do protótipo — só os valores resultantes em `settings` persistem.
+- `panel.js`: `renderActiveProfile(id)` — atualiza o banner "Perfil ativo" no cabeçalho e o estado visual dos cards (`aria-pressed`, borda/check) lendo ícone/tom/rótulo diretamente do próprio card já renderizado pelo servidor (sem duplicar dados de perfil uma segunda vez em JS).
+- `filterOptions(query)`: busca filtra as linhas de opção por texto do rótulo, força todas as categorias com resultado abertas (desabilitando o toggle manual enquanto busca, como no protótipo), esconde a seção de perfis durante a busca, e restaura o estado de expansão anterior de cada categoria ao limpar a busca.
+- Focus trap WCAG 2.2: `Tab`/`Shift+Tab` ciclam apenas entre os elementos focáveis visíveis dentro do painel; `Esc` fecha e devolve o foco ao FAB (já existia desde o M2); atalho `Alt+A` (já existia desde o M2, confirmado funcional integrado ao novo estado).
+- **Verificado via Playwright**: selecionar o perfil "Dislexia" aplica `a11y-dyslexic-font a11y-line-height-2 a11y-text-spacing-2` (fonte Lexend visivelmente aplicada em toda a página no screenshot), mostra banner "Perfil ativo / Dislexia" com o tom violeta correto e badge "4"; clicar de novo desfaz tudo; buscar "contraste" mostra só a opção "Contraste" e esconde os perfis; limpar a busca restaura tudo; 40 TABs seguidos nunca saem do painel; Esc devolve foco ao FAB. Capturas em `_verification/m4/`.
+- Próximo: M5 — leitor de tela (TTS), teclado virtual, comandos de voz, guia e máscara de leitura (os 5 booleanos que não viram classe de body, ver M3).
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

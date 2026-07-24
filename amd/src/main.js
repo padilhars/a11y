@@ -27,9 +27,14 @@
 import Panel from 'local_a11y/panel';
 import Effects from 'local_a11y/effects';
 import Storage from 'local_a11y/storage';
+import Profiles from 'local_a11y/profiles';
 
 let settings = {...Storage.DEFAULT_SETTINGS};
 let isLoggedIn = false;
+// Which profile preset (if any) is currently applied. Ephemeral (not
+// persisted) - matches the prototype's own local component state, which
+// also resets on reload; only the resulting `settings` values persist.
+let activeProfileId = null;
 // Built from the server-rendered DOM itself (data-kind/data-max/category),
 // so option metadata never has to be duplicated a third time in JS.
 let optionMeta = {};
@@ -91,6 +96,8 @@ const onToggle = (id, value) => {
         return;
     }
     settings = {...settings, [id]: value};
+    activeProfileId = null;
+    Panel.renderActiveProfile(null);
     commit(id);
 };
 
@@ -105,6 +112,8 @@ const onStepperCycle = (id) => {
     const current = Number(settings[id]) || 0;
     const next = (current + 1) % (meta.max + 1);
     settings = {...settings, [id]: next};
+    activeProfileId = null;
+    Panel.renderActiveProfile(null);
     commit(id);
 };
 
@@ -113,6 +122,29 @@ const onStepperCycle = (id) => {
  */
 const onReset = () => {
     settings = {...Storage.DEFAULT_SETTINGS};
+    activeProfileId = null;
+    Panel.renderActiveProfile(null);
+    commit();
+};
+
+/**
+ * Apply a profile preset (or clear it, if the same profile is clicked
+ * again - matching the prototype's toggle-off behaviour).
+ *
+ * @param {String} id
+ */
+const onProfileSelect = (id) => {
+    if (activeProfileId === id) {
+        onReset();
+        return;
+    }
+    const applied = Profiles.applyProfile(id, Storage.DEFAULT_SETTINGS);
+    if (!applied) {
+        return;
+    }
+    settings = applied;
+    activeProfileId = id;
+    Panel.renderActiveProfile(id);
     commit();
 };
 
@@ -157,6 +189,7 @@ export const init = async(loggedIn) => {
         onToggle,
         onStepperCycle,
         onReset,
+        onProfileSelect,
     });
 
     // Re-apply/re-render once the real settings are loaded: the inline
