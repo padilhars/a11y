@@ -2,6 +2,33 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D25 — Clique repetido nos steppers: shadow trocado por flash de background
+
+O usuário reportou que as 7 opções tipo *stepper* (Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Contraste, Mudar Cores, Saturação, Cursor) ganham um `box-shadow` ao serem clicadas de novo já ativas, e pediu para trocar esse indicador por um flash rápido do background voltando à cor de ativo.
+
+Investigação (inspecionando `document.styleSheets` por regras com `box-shadow` que casam com o elemento focado) identificou a origem exata: `.local-a11y-option[data-kind="stepper"]` tem `role="button" tabindex="0"` (necessário para ser navegável por teclado, ao contrário das opções toggle, que delegam o foco a um `<button>` real aninhado — ver comentário em `option_toggle.mustache`), e o **próprio Moodle core** estiliza qualquer `[role="button"]:focus` com um anel de foco (`rgba(15,108,191,.75) 0 0 0 .25rem`) — usando `:focus` puro, não `:focus-visible`, então aparece em *qualquer* clique de mouse, não só em navegação por teclado.
+
+Como é uma regra de acessibilidade legítima do Moodle (garante indicador de foco visível para `role="button"`, WCAG 2.4.7), a correção **não** podia simplesmente removê-la — precisava distinguir clique de mouse de navegação por teclado, preservando o anel só para o segundo caso:
+
+```css
+.local-a11y-option[data-kind="stepper"]:focus:not(:focus-visible) { box-shadow: none; }
+```
+
+`:focus-visible` já é exatamente a heurística nativa do navegador para "este foco veio do teclado" — `:not(:focus-visible)` cobre o caso de foco por mouse. Verificado que a navegação real por Tab ainda mostra o anel completo (`matches(':focus-visible')` = true, `box-shadow` intacto) — só o clique de mouse perdeu o anel.
+
+No lugar disso, `amd/src/panel.js` agora adiciona uma classe `local-a11y-option--pulse` (removida sozinha no fim da animação via evento `animationend`) sempre que o clique aconteceu numa stepper **já ativa antes do clique** (`option.classList.contains('local-a11y-option--active')` checado antes de disparar `cb.onStepperCycle`) — não no primeiro clique que ativa a opção, já que aí a mudança visual (fundo/borda/ícone aparecendo) já é suficientemente óbvia. CSS:
+
+```css
+@keyframes local-a11y-option-pulse {
+  0%, 100% { background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent); }
+  40% { background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 28%, transparent); }
+}
+```
+
+Opções toggle não têm o problema (nunca tiveram `role="button"` no row) e não foram tocadas.
+
+Verificado via Playwright: box-shadow "none" em qualquer clique de mouse (1º e repetidos); classe `--pulse` aparece imediatamente no clique repetido e some sozinha após a animação, com o background visivelmente mais escuro em pleno voo (capturado em screenshot) e de volta ao tom padrão de ativo ao final; foco real por teclado (Tab, 16 pressões até alcançar a opção) mantém o anel completo. PHPUnit 16/16 verde; ESLint/build AMD limpos.
+
 ## D24 — Correção do "deslocamento" das opções ao ativar (não era a borda)
 
 O usuário reportou que as opções dentro das categorias "ganham uma borda quando clicadas e isso faz com que as opções tenham um leve deslocamento", sugerindo reservar uma borda transparente em `.local-a11y-option` quando inativa como correção. Investigação (Playwright, medindo `getBoundingClientRect()` antes/depois de ativar várias opções em categorias diferentes) mostrou que:

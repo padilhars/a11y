@@ -332,8 +332,24 @@ const registerEventListeners = () => {
                     cb.onToggle(id, !pressed);
                 }
             } else if (cb.onStepperCycle) {
+                // Cycling a stepper that's already active doesn't otherwise
+                // change how the row looks much (still active, just a
+                // different level/dot) - flash the background briefly as
+                // click feedback in place of the focus ring styles.css now
+                // suppresses for mouse clicks on these rows (see D25).
+                if (option.classList.contains('local-a11y-option--active')) {
+                    option.classList.remove('local-a11y-option--pulse');
+                    void option.offsetWidth; // Force reflow so rapid re-clicks restart the animation.
+                    option.classList.add('local-a11y-option--pulse');
+                }
                 cb.onStepperCycle(id);
             }
+        }
+    });
+
+    panel.addEventListener('animationend', (e) => {
+        if (e.animationName === 'local-a11y-option-pulse') {
+            e.target.classList.remove('local-a11y-option--pulse');
         }
     });
 

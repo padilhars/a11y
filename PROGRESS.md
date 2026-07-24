@@ -167,4 +167,8 @@ O banner "perfil ativo" e o botão separado "Restaurar padrões" (ambos condicio
 
 A causa real não era a borda de `.local-a11y-option` (já reservada, 1px sempre) — era `.local-a11y-category__count` (bolha de contagem da categoria), cuja caixa é mais alta que o resto do cabeçalho e usava `[hidden]` puro, crescendo o cabeçalho da categoria ~1.75px na primeira opção ativada. Corrigido reservando o espaço sempre (`visibility:hidden` em vez de `display:none`, precisou de `!important` para vencer o `[hidden]{display:none!important}` global do Bootstrap). De passagem, corrigido também: o painel herdava a troca de fonte de `readableFont`/`dyslexicFont` por estar dentro de `#page`. Ver DECISIONS.md D24. Verificado via Playwright em duas categorias, PHPUnit 16/16 verde.
 
+## Clique repetido nos steppers: shadow trocado por flash de background (concluído)
+
+O box-shadow que aparecia ao reclicar uma opção stepper já ativa (Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Contraste, Mudar Cores, Saturação, Cursor) era na verdade o anel de foco `[role="button"]:focus` do próprio Moodle core, disparando em qualquer clique de mouse (não só teclado). Suprimido só para `:not(:focus-visible)` (mantém o anel intacto para navegação real por teclado, confirmado via Tab) e substituído por um flash rápido do background (classe `--pulse`, animação CSS) quando o clique acontece numa stepper que já estava ativa. Ver DECISIONS.md D25. Verificado via Playwright, PHPUnit 16/16 verde.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

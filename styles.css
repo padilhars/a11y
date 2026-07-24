@@ -379,6 +379,23 @@
   border-color: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 20%, transparent);
 }
 .local-a11y-option--active:hover { background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent); }
+/* Moodle core styles every [role="button"] (which .local-a11y-option is)
+   with a focus ring on plain :focus, not just :focus-visible - so mouse
+   clicks show it too, not only keyboard nav. For the 7 stepper options
+   (Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Contraste,
+   Mudar Cores, Saturação, Cursor) re-clicking while already active cycles
+   to another level without otherwise changing much about the row, so that
+   ring reappearing read as an odd little flash; amd/src/panel.js now
+   flashes the background instead (see .local-a11y-option--pulse below).
+   Suppressing it only for :not(:focus-visible) - i.e. only when focus
+   didn't come from the keyboard - keeps the real keyboard focus indicator
+   intact (WCAG 2.4.7). */
+.local-a11y-option[data-kind="stepper"]:focus:not(:focus-visible) { box-shadow: none; }
+@keyframes local-a11y-option-pulse {
+  0%, 100% { background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent); }
+  40% { background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 28%, transparent); }
+}
+.local-a11y-option--pulse { animation: local-a11y-option-pulse 350ms ease; }
 .local-a11y-option__icon {
   width: 32px; height: 32px; border-radius: 8px; background: #f4f4f5; color: #52525b;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 150ms ease;
