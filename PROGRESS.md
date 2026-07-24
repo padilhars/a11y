@@ -151,4 +151,8 @@ A pedido do usuário, o ícone padrão do botão flutuante agora é o "Accessibi
 
 `.local-a11y-panel__badge--un` (só quando o ícone configurado é o logo da ONU) foi de 36px para 41px, o SVG interno de 20px para 28px — a grossura das linhas escala proporcionalmente "de graça" porque o `stroke-width` do SVG é definido no mesmo espaço de coordenadas do `viewBox`. Outros ícones inalterados (36px/20px) — ver DECISIONS.md D20.
 
+## Badge do logo da ONU volta a ser igual aos demais ícones (concluído)
+
+A pedido do usuário, o badge do painel com o logo da ONU voltou a ter exatamente o mesmo tamanho (36px/20px) e fundo (pastel do `accent`) dos outros 3 ícones — revertendo os tratamentos especiais de D18/D20. Corrigido na raiz: `pix/accessibility-un.svg` passou a usar `currentColor` em vez de `#fff` fixo, então agora tema junto com o badge normalmente (no FAB continua branco, sem mudança, já que lá `color` já era branco). CSS/PHP/mustache do tratamento especial removidos. Ver DECISIONS.md D21.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

@@ -2,7 +2,17 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
-## D20 — Badge do logo da ONU maior que o dos outros ícones
+## D21 — Badge do logo da ONU volta a ser idêntico aos outros ícones (reverte D20)
+
+A pedido do usuário, `.local-a11y-panel__badge` com o logo da ONU deixou de ter tratamento especial: mesmo tamanho (36px/20px, revertendo o aumento de D20 para 41px/28px) e mesma cor de fundo (o tom pastel do `accent`, revertendo o fundo sólido introduzido em D18) dos outros 3 ícones.
+
+Isso só foi possível porque a causa raiz do tratamento especial (D18) foi eliminada, não contornada: `pix/accessibility-un.svg` tinha `fill`/`stroke` fixos em `#fff`, então nunca combinava com o fundo pastel do badge (branco sobre quase-branco). Corrigido a raiz: o SVG passou a usar `currentColor` (igual a todos os outros ícones em `classes/icons.php::PATHS`), então agora herda `color: var(--accent)` do badge normalmente. No FAB (`color: #fff` em `.local-a11y-fab`) o ícone continua branco, sem nenhuma mudança visual lá.
+
+Com isso, removidos: `.local-a11y-panel__badge--un` (CSS), o campo `badgeclass` (`panel.php`/`panel.mustache`) e o branch de re-render em tamanho maior em `panel.php` — nada disso tinha mais razão de existir. `icons::fabicon_svg()` continua retornando `isun`, agora só para o FAB usar (`local-a11y-fab__icon--un`, que só ajusta padding/border-radius, não mais cor).
+
+Verificado via Playwright: badge do logo da ONU agora é 36x36/20px com fundo pastel e `currentColor` resolvendo para o `accent` (idêntico aos outros 3 ícones); FAB continua branco, sem mudança. PHPUnit 16/16 verde.
+
+## D20 — Badge do logo da ONU maior que o dos outros ícones (revertido em D21)
 
 A pedido do usuário, `.local-a11y-panel__badge.local-a11y-panel__badge--un` (badge do cabeçalho do painel, só quando o ícone configurado é o logo da ONU) passou de 36px para 41px, e o SVG dentro dele de 20px para 28px — os outros 3 ícones (`accessibility`/`sparkles`/`user`) continuam em 36px/20px.
 

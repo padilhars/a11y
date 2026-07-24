@@ -113,13 +113,13 @@ class icons {
     private static $unaccessibilityinner = null;
 
     /**
-     * Render an inline <svg> for the "Accessibility logo (UN)" — a fixed
-     * solid-white logo (not a themable currentColor stroke icon like svg()
-     * above), so it gets its own method instead of an entry in PATHS/svg():
-     * its own viewBox (0 0 1000 1000) and inner markup come straight from
-     * pix/accessibility-un.svg (see that file for the source/licence — CC
-     * BY-SA 4.0, attribution in README.md), read once and cached rather
-     * than re-parsed on every render.
+     * Render an inline <svg> for the "Accessibility logo (UN)" — themes via
+     * currentColor like every icon in PATHS/svg() above, but gets its own
+     * method instead of a PATHS entry because its viewBox (0 0 1000 1000)
+     * and markup don't fit svg()'s 24x24 Lucide-style wrapper. Inner markup
+     * comes straight from pix/accessibility-un.svg (see that file for the
+     * source/licence — CC BY-SA 4.0, attribution in README.md), read once
+     * and cached rather than re-parsed on every render.
      *
      * @param int $size
      * @param string $class extra CSS class(es)
@@ -152,8 +152,11 @@ class icons {
      *        falls back to 'un' for anything unrecognised).
      * @param int $size
      * @return array{svg: string, isun: bool} `isun` lets callers apply their
-     *         own un-specific modifier class, since the logo is a fixed
-     *         solid-white asset rather than a themable currentColor icon.
+     *         own un-specific modifier class where needed (e.g. the FAB
+     *         gives it a touch of padding - see local-a11y-fab__icon--un in
+     *         styles.css); the icon itself themes via currentColor like the
+     *         rest of PATHS/svg(), so callers that don't need special
+     *         treatment (e.g. the panel badge) can ignore this flag.
      */
     public static function fabicon_svg(string $fabicon, int $size): array {
         $known = ['un', 'accessibility', 'sparkles', 'user'];

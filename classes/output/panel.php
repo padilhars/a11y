@@ -66,18 +66,11 @@ class panel implements renderable, templatable {
             'advanced' => 'tools',
         ];
         $defaultopen = options::category_default_open();
+        // The UN logo now themes via currentColor just like every other
+        // icon (see pix/accessibility-un.svg), so the badge needs no
+        // per-icon special-casing any more: same size, same background for
+        // all 4 choices.
         $badgeicon = icons::fabicon_svg($appearance['fabicon'], 20);
-        if ($badgeicon['isun']) {
-            // The UN logo badge is rendered larger than the other icons
-            // (styles.css: .local-a11y-panel__badge--un is 41px vs the
-            // default 36px) - re-render at a proportionally larger size too,
-            // rather than stretching the 20px version via CSS. Its stroke
-            // width is defined in the SVG's own 1000-unit viewBox coordinate
-            // space, so it scales up with the icon automatically - no
-            // separate adjustment needed to keep the line thickness in
-            // proportion.
-            $badgeicon['svg'] = icons::un_accessibility_svg(28);
-        }
 
         $bycategory = [];
         foreach (options::all() as $option) {
@@ -144,7 +137,6 @@ class panel implements renderable, templatable {
             'closeiconsvg' => icons::svg('close', 16),
             'refreshiconsvg' => icons::svg('refresh', 13),
             'accessibilityiconsvg' => $badgeicon['svg'],
-            'badgeclass' => $badgeicon['isun'] ? 'local-a11y-panel__badge--un' : '',
             'searchplaceholder' => get_string('search', 'local_a11y'),
             'searchiconsvg' => icons::svg('search', 15),
             'searchclearlabel' => get_string('searchclear', 'local_a11y'),
