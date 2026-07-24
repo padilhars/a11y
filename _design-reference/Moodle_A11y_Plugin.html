@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>A11y for Moodle — Plugin de Acessibilidade</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="a11y-effects.css">
+<style>
+  :root {
+    --a-bg: #f4f5f7;
+    --a-surface: #ffffff;
+    --a-border: #e5e7eb;
+    --a-border-strong: #d1d5db;
+    --a-text: #18181b;
+    --a-text-muted: #6b7280;
+    --a-text-hint: #9ca3af;
+    --a-accent: #3b82f6;
+    --a-accent-hover: #2563eb;
+    --a-accent-soft: #eff6ff;
+    --a-success: #10b981;
+    --a-warning: #f59e0b;
+    --a-danger: #ef4444;
+    --a-shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+    --a-shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+    --a-shadow-lg: 0 20px 50px -12px rgba(0,0,0,0.18), 0 10px 24px -8px rgba(0,0,0,0.08);
+    --a-radius-sm: 6px;
+    --a-radius: 10px;
+    --a-radius-lg: 14px;
+    --a-radius-xl: 20px;
+    --a-radius-full: 9999px;
+    --a-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--a-font);
+    background: var(--a-bg);
+    color: var(--a-text);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  button { font-family: inherit; }
+  /* Hide scrollbar styling for the document */
+  ::-webkit-scrollbar { width: 12px; height: 12px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 6px; border: 3px solid var(--a-bg); }
+  ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="a11y-data.jsx"></script>
+<script type="text/babel" src="moodle-page.jsx"></script>
+<script type="text/babel" src="a11y-panel.jsx"></script>
+<script type="text/babel" src="a11y-features.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+</body>
+</html>

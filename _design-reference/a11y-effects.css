@@ -1,0 +1,319 @@
+/* ===========================================================================
+   a11y-effects.css
+   Live accessibility effects applied to the Moodle page via body classes.
+   Scoped by body.a11y-* / data-a11y-* so it never affects the panel itself
+   (panel root has class .a11y-panel-root and opts out of all filters).
+   =========================================================================== */
+
+/* All filters target the Moodle page wrapper, not the panel */
+.moodle-shell {
+  transition: filter 200ms ease, background-color 200ms ease, color 200ms ease;
+}
+
+/* ===========================================================================
+   TYPOGRAPHY
+   =========================================================================== */
+body.a11y-readable-font .moodle-shell,
+body.a11y-readable-font .moodle-shell * {
+  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif !important;
+}
+body.a11y-dyslexic-font .moodle-shell,
+body.a11y-dyslexic-font .moodle-shell * {
+  font-family: 'Lexend', 'Comic Sans MS', system-ui, sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Highlight headings */
+body.a11y-highlight-titles .moodle-shell h1,
+body.a11y-highlight-titles .moodle-shell h2,
+body.a11y-highlight-titles .moodle-shell h3,
+body.a11y-highlight-titles .moodle-shell .m-section-title,
+body.a11y-highlight-titles .moodle-shell .m-course-title,
+body.a11y-highlight-titles .moodle-shell .m-page-title {
+  background: linear-gradient(180deg, transparent 60%, #fef08a 60%) !important;
+  padding: 0.05em 0.2em !important;
+  border-radius: 3px !important;
+  box-decoration-break: clone !important;
+  -webkit-box-decoration-break: clone !important;
+}
+
+/* Highlight links */
+body.a11y-highlight-links .moodle-shell a {
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  text-underline-offset: 2px !important;
+  background-color: #dbeafe !important;
+  color: #1e3a8a !important;
+  padding: 0 2px !important;
+  border-radius: 2px !important;
+  font-weight: 600 !important;
+}
+
+/* Highlight buttons */
+body.a11y-highlight-buttons .moodle-shell button,
+body.a11y-highlight-buttons .moodle-shell .m-btn,
+body.a11y-highlight-buttons .moodle-shell [role="button"] {
+  outline: 3px solid #f97316 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 1px white inset !important;
+}
+
+/* Text size — multiplier on root font size of moodle shell */
+body.a11y-text-size-1 .moodle-shell { font-size: 17px !important; }
+body.a11y-text-size-2 .moodle-shell { font-size: 19px !important; }
+body.a11y-text-size-3 .moodle-shell { font-size: 22px !important; }
+body.a11y-text-size-4 .moodle-shell { font-size: 26px !important; }
+
+body.a11y-text-size-1 .moodle-shell h1 { font-size: 32px !important; }
+body.a11y-text-size-2 .moodle-shell h1 { font-size: 36px !important; }
+body.a11y-text-size-3 .moodle-shell h1 { font-size: 40px !important; }
+body.a11y-text-size-4 .moodle-shell h1 { font-size: 48px !important; }
+
+/* Line height */
+body.a11y-line-height-1 .moodle-shell,
+body.a11y-line-height-1 .moodle-shell * { line-height: 1.5 !important; }
+body.a11y-line-height-2 .moodle-shell,
+body.a11y-line-height-2 .moodle-shell * { line-height: 1.8 !important; }
+body.a11y-line-height-3 .moodle-shell,
+body.a11y-line-height-3 .moodle-shell * { line-height: 2.2 !important; }
+
+/* Text spacing — letter-spacing + word-spacing */
+body.a11y-text-spacing-1 .moodle-shell,
+body.a11y-text-spacing-1 .moodle-shell p,
+body.a11y-text-spacing-1 .moodle-shell span,
+body.a11y-text-spacing-1 .moodle-shell h1,
+body.a11y-text-spacing-1 .moodle-shell h2,
+body.a11y-text-spacing-1 .moodle-shell h3 {
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.1em !important;
+}
+body.a11y-text-spacing-2 .moodle-shell,
+body.a11y-text-spacing-2 .moodle-shell p,
+body.a11y-text-spacing-2 .moodle-shell span,
+body.a11y-text-spacing-2 .moodle-shell h1,
+body.a11y-text-spacing-2 .moodle-shell h2,
+body.a11y-text-spacing-2 .moodle-shell h3 {
+  letter-spacing: 0.1em !important;
+  word-spacing: 0.2em !important;
+}
+body.a11y-text-spacing-3 .moodle-shell,
+body.a11y-text-spacing-3 .moodle-shell p,
+body.a11y-text-spacing-3 .moodle-shell span,
+body.a11y-text-spacing-3 .moodle-shell h1,
+body.a11y-text-spacing-3 .moodle-shell h2,
+body.a11y-text-spacing-3 .moodle-shell h3 {
+  letter-spacing: 0.18em !important;
+  word-spacing: 0.35em !important;
+}
+
+/* ===========================================================================
+   MEDIA & MOTION
+   =========================================================================== */
+body.a11y-hide-images .moodle-shell img,
+body.a11y-hide-images .moodle-shell video,
+body.a11y-hide-images .moodle-shell .m-banner-img,
+body.a11y-hide-images .moodle-shell .m-course-thumb {
+  visibility: hidden !important;
+  position: relative !important;
+}
+body.a11y-hide-images .moodle-shell img,
+body.a11y-hide-images .moodle-shell .m-banner-img,
+body.a11y-hide-images .moodle-shell .m-course-thumb {
+  background-image: repeating-linear-gradient(45deg, #e5e7eb, #e5e7eb 8px, #f3f4f6 8px, #f3f4f6 16px) !important;
+  background-color: #e5e7eb !important;
+}
+
+body.a11y-pause-animations .moodle-shell,
+body.a11y-pause-animations .moodle-shell *,
+body.a11y-pause-animations .moodle-shell *::before,
+body.a11y-pause-animations .moodle-shell *::after {
+  animation-play-state: paused !important;
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+
+/* ===========================================================================
+   COLOR & CONTRAST  — applied to .moodle-shell as a CSS filter
+   Combined dynamically via CSS variable so multiple effects stack.
+   =========================================================================== */
+.moodle-shell {
+  filter: var(--a11y-filter, none);
+}
+
+/* Contrast variants */
+body.a11y-contrast-1 .moodle-shell {
+  background: #1a1a1a !important;
+  color: #f3f4f6 !important;
+}
+body.a11y-contrast-1 .moodle-shell,
+body.a11y-contrast-1 .moodle-shell .m-page,
+body.a11y-contrast-1 .moodle-shell .m-card,
+body.a11y-contrast-1 .moodle-shell .m-section,
+body.a11y-contrast-1 .moodle-shell .m-header,
+body.a11y-contrast-1 .moodle-shell .m-sidebar,
+body.a11y-contrast-1 .moodle-shell .m-aside {
+  background-color: #1f1f1f !important;
+  color: #f3f4f6 !important;
+  border-color: #3f3f46 !important;
+}
+body.a11y-contrast-1 .moodle-shell .m-header {
+  background-color: #0a0a0a !important;
+  border-bottom-color: #27272a !important;
+}
+body.a11y-contrast-1 .moodle-shell .m-aside-card,
+body.a11y-contrast-1 .moodle-shell .m-activity {
+  background-color: #27272a !important;
+  border-color: #3f3f46 !important;
+}
+body.a11y-contrast-1 .moodle-shell h1,
+body.a11y-contrast-1 .moodle-shell h2,
+body.a11y-contrast-1 .moodle-shell h3,
+body.a11y-contrast-1 .moodle-shell .m-text-muted {
+  color: #f3f4f6 !important;
+}
+body.a11y-contrast-1 .moodle-shell .m-text-muted {
+  color: #a1a1aa !important;
+}
+
+body.a11y-contrast-2 .moodle-shell {
+  background: #faf7f0 !important;
+  color: #1c1917 !important;
+}
+body.a11y-contrast-2 .moodle-shell .m-page,
+body.a11y-contrast-2 .moodle-shell .m-card,
+body.a11y-contrast-2 .moodle-shell .m-section,
+body.a11y-contrast-2 .moodle-shell .m-header,
+body.a11y-contrast-2 .moodle-shell .m-sidebar,
+body.a11y-contrast-2 .moodle-shell .m-aside,
+body.a11y-contrast-2 .moodle-shell .m-aside-card,
+body.a11y-contrast-2 .moodle-shell .m-activity {
+  background-color: #fffbeb !important;
+  color: #1c1917 !important;
+  border-color: #d6d3d1 !important;
+}
+
+body.a11y-contrast-3 .moodle-shell {
+  background: #000 !important;
+}
+body.a11y-contrast-3 .moodle-shell .m-page,
+body.a11y-contrast-3 .moodle-shell .m-card,
+body.a11y-contrast-3 .moodle-shell .m-section,
+body.a11y-contrast-3 .moodle-shell .m-header,
+body.a11y-contrast-3 .moodle-shell .m-sidebar,
+body.a11y-contrast-3 .moodle-shell .m-aside,
+body.a11y-contrast-3 .moodle-shell .m-aside-card,
+body.a11y-contrast-3 .moodle-shell .m-activity {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: #fff !important;
+  border-width: 2px !important;
+}
+body.a11y-contrast-3 .moodle-shell * {
+  color: #fff !important;
+}
+body.a11y-contrast-3 .moodle-shell a {
+  color: #ffff00 !important;
+  text-decoration: underline !important;
+}
+body.a11y-contrast-3 .moodle-shell .m-btn-primary {
+  background: #ffff00 !important;
+  color: #000 !important;
+  font-weight: 700 !important;
+}
+
+/* Invert colors */
+body.a11y-invert .moodle-shell {
+  --a11y-filter-invert: invert(1) hue-rotate(180deg);
+}
+/* Saturation */
+body.a11y-saturation-1 .moodle-shell { --a11y-filter-saturate: saturate(1.8); }
+body.a11y-saturation-2 .moodle-shell { --a11y-filter-saturate: saturate(0.4); }
+body.a11y-saturation-3 .moodle-shell { --a11y-filter-saturate: grayscale(1); }
+
+/* Color change (color-blindness sim) — using hue-rotate as a simple sim */
+body.a11y-color-1 .moodle-shell { --a11y-filter-color: sepia(0.5) hue-rotate(-20deg); }   /* protanopia */
+body.a11y-color-2 .moodle-shell { --a11y-filter-color: sepia(0.5) hue-rotate(40deg); }    /* deuteranopia */
+body.a11y-color-3 .moodle-shell { --a11y-filter-color: sepia(0.5) hue-rotate(180deg); }   /* tritanopia */
+
+/* Stacked filter — applied to moodle-shell */
+.moodle-shell {
+  filter:
+    var(--a11y-filter-invert, )
+    var(--a11y-filter-saturate, )
+    var(--a11y-filter-color, );
+}
+
+/* ===========================================================================
+   FOCUS & NAVIGATION
+   =========================================================================== */
+/* Reading guide — thin full-width line that follows the mouse vertically */
+.a11y-reading-guide {
+  position: fixed;
+  top: 0;
+  left: 0; right: 0;
+  height: 3px;
+  background: #3b82f6;
+  box-shadow: 0 0 8px rgba(59,130,246,0.6);
+  pointer-events: none;
+  z-index: 99998;
+  transform: translateY(-100px);
+}
+
+/* Reading mask — dimmed regions above and below */
+.a11y-reading-mask-top, .a11y-reading-mask-bottom {
+  position: fixed;
+  left: 0; right: 0;
+  background: rgba(0,0,0,0.62);
+  pointer-events: none;
+  z-index: 99997;
+}
+.a11y-reading-mask-top { top: 0; height: 0; }
+.a11y-reading-mask-bottom { bottom: 0; height: 0; }
+
+/* Big cursors */
+body.a11y-cursor-1 .moodle-shell,
+body.a11y-cursor-1 .moodle-shell * {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23000' stroke='%23fff' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
+}
+body.a11y-cursor-2 .moodle-shell,
+body.a11y-cursor-2 .moodle-shell * {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23fff' stroke='%23000' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
+}
+
+/* Focus mode — hide non-essential moodle chrome */
+body.a11y-focus-mode .moodle-shell .m-aside,
+body.a11y-focus-mode .moodle-shell .m-banner-img,
+body.a11y-focus-mode .moodle-shell .m-breadcrumb,
+body.a11y-focus-mode .moodle-shell .m-search,
+body.a11y-focus-mode .moodle-shell .m-header-actions,
+body.a11y-focus-mode .moodle-shell .m-sidebar .m-nav-section:not(:first-child) {
+  display: none !important;
+}
+body.a11y-focus-mode .moodle-shell .m-banner {
+  background: #f3f4f6 !important;
+  height: auto !important;
+  padding: 24px !important;
+}
+body.a11y-focus-mode .moodle-shell .m-content {
+  max-width: 760px !important;
+  margin: 0 auto !important;
+}
+
+/* Tooltip helper — when 'tooltips' on, show enriched tooltips on link/button hover */
+body.a11y-tooltips .moodle-shell a:hover::after,
+body.a11y-tooltips .moodle-shell button:hover::after {
+  content: attr(data-tooltip, '');
+}
+
+/* ===========================================================================
+   PANEL OPT-OUT
+   The panel root must never receive these effects — it lives outside .moodle-shell
+   so it's already isolated, but be defensive.
+   =========================================================================== */
+.a11y-panel-root,
+.a11y-panel-root * {
+  filter: none !important;
+}
