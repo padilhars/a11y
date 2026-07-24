@@ -11,7 +11,7 @@ O host já continha uma instalação Moodle funcional quando o trabalho começou
 - **moodledata**: `/var/moodledata` (owned by `www-data`).
 - **Web server**: Apache 2 (`mpm` padrão), vhost único em `/etc/apache2/sites-available/moodle.conf`, `ServerName 192.168.8.108`, escutando na porta 80.
 - **URL**: http://192.168.8.108
-- **Admin**: usuário `admin` já existente. Senha original desconhecida (pré-existente); resetada nesta sessão via `admin/cli/reset_password.php --username=admin --password='A11yDev2026!' --ignore-password-policy` para permitir login automatizado (Playwright) durante o desenvolvimento/verificação visual.
+- **Admin**: usuário `admin` já existente. Senha original desconhecida (pré-existente); resetada via `admin/cli/reset_password.php --username=admin --password='...' --ignore-password-policy` para permitir login automatizado (Playwright) durante o desenvolvimento/verificação visual. **Rotacionada** na auditoria de segurança (ver DECISIONS.md D15) porque a senha anterior (`A11yDev2026!`) ficou publicamente acessível via HTTP por este mesmo `ENVIRONMENT.md` antes da correção do vhost Apache — nova senha: `A11yUxDxQ0nfJFyIwE!Xk9`. Este arquivo já está bloqueado (`403`) no vhost de produção/behat desde D15, mas segue sendo tratado como sensível: não versionar credenciais aqui além do necessário para reprodutibilidade local do ambiente de desenvolvimento.
 - Todos os arquivos do Moodle são propriedade de `www-data:www-data` com permissões `750`; o usuário do shell (`padilha`) tem sudo NOPASSWD total (`(ALL) NOPASSWD: ALL`), usado para leitura/gravação nesse diretório.
 
 > **Observação de segurança**: nunca imprima o conteúdo de `config.php` (contém `$CFG->dbpass`) em logs versionados. Ele já está fora do repositório do plugin.
