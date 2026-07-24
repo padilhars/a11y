@@ -242,6 +242,8 @@
    background instead, matching the FAB's own treatment of the same icon. */
 .local-a11y-panel__badge--un {
   background: var(--local-a11y-accent, var(--a11y-accent));
+  width: 41px;
+  height: 41px;
 }
 .local-a11y-panel__titles { flex: 1; min-width: 0; }
 .local-a11y-panel__title { display: block; font-size: 15px; font-weight: 600; color: var(--a11y-text); letter-spacing: -0.01em; }

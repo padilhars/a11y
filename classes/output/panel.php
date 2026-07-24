@@ -67,6 +67,17 @@ class panel implements renderable, templatable {
         ];
         $defaultopen = options::category_default_open();
         $badgeicon = icons::fabicon_svg($appearance['fabicon'], 20);
+        if ($badgeicon['isun']) {
+            // The UN logo badge is rendered larger than the other icons
+            // (styles.css: .local-a11y-panel__badge--un is 41px vs the
+            // default 36px) - re-render at a proportionally larger size too,
+            // rather than stretching the 20px version via CSS. Its stroke
+            // width is defined in the SVG's own 1000-unit viewBox coordinate
+            // space, so it scales up with the icon automatically - no
+            // separate adjustment needed to keep the line thickness in
+            // proportion.
+            $badgeicon['svg'] = icons::un_accessibility_svg(28);
+        }
 
         $bycategory = [];
         foreach (options::all() as $option) {

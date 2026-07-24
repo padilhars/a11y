@@ -2,6 +2,14 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D20 — Badge do logo da ONU maior que o dos outros ícones
+
+A pedido do usuário, `.local-a11y-panel__badge.local-a11y-panel__badge--un` (badge do cabeçalho do painel, só quando o ícone configurado é o logo da ONU) passou de 36px para 41px, e o SVG dentro dele de 20px para 28px — os outros 3 ícones (`accessibility`/`sparkles`/`user`) continuam em 36px/20px.
+
+O SVG de `pix/accessibility-un.svg` usa `viewBox="0 0 1000 1000"` com `stroke-width` definido nesse mesmo espaço de coordenadas (32.9 unidades) — então aumentar apenas o `width`/`height` do `<svg>` (28 em vez de 20) já escala a grossura das linhas na mesma proporção automaticamente, sem precisar tocar no valor de `stroke-width`. `classes/output/panel.php` foi ajustado para re-renderizar com `icons::un_accessibility_svg(28)` só quando o ícone é o `un` (em vez de esticar via CSS a versão de 20px, que deixaria as linhas borradas).
+
+Verificado via Playwright: badge do logo da ONU renderiza em 41x41 com svg 28x28 (`stroke-width` continua "32.9" no atributo, a grossura visual escala junto); trocando para outro ícone no admin, badge volta a 36x36/20 normalmente. PHPUnit 16/16 verde.
+
 ## D19 — Rodapé do painel: mensagem de crédito no lugar de "Preferências salvas"
 
 A pedido do usuário, o texto do rodapé do painel (`savetitle`/`savesubtitle`, antes "Preferências salvas" / "Suas configurações são lembradas em todas as páginas do Moodle.") foi substituído por uma única mensagem de crédito: "Desenvolvido com ❤️ pela **CPTED** para você." (pt_br) / "Made with ❤️ by **CPTED**, for you." (en, tradução equivalente já que `en` é canônico — ver CLAUDE.md), com "CPTED" em negrito. O atalho `Alt+A` (`<kbd>` fixo no template, não vem de lang string) foi mantido intacto, conforme pedido.

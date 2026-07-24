@@ -147,4 +147,8 @@ A pedido do usuário, o ícone padrão do botão flutuante agora é o "Accessibi
 
 "Preferências salvas" / "Suas configurações são lembradas..." no rodapé do painel foi substituído por "Desenvolvido com ❤️ pela **CPTED** para você." (com "CPTED" em negrito), atalho `Alt+A` mantido — ver DECISIONS.md D19. Verificado via Playwright e PHPUnit (16/16 verde).
 
+## Badge do logo da ONU aumentado (concluído)
+
+`.local-a11y-panel__badge--un` (só quando o ícone configurado é o logo da ONU) foi de 36px para 41px, o SVG interno de 20px para 28px — a grossura das linhas escala proporcionalmente "de graça" porque o `stroke-width` do SVG é definido no mesmo espaço de coordenadas do `viewBox`. Outros ícones inalterados (36px/20px) — ver DECISIONS.md D20.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_
