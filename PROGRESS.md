@@ -69,4 +69,12 @@
 - **Verificado via Playwright**: teclado virtual aparece com o layout completo (dígitos, QWERTY, acentos, shift/backspace/espaço/enter) e digita corretamente no campo focado; FAB visivelmente deslocado para cima acima do teclado; guia de leitura e máscara de leitura aparecem e seguem o mouse; pílula do leitor de tela aparece e permanece visível mesmo com o painel fechado (overlay de página, não do painel); teclado/guia/máscara desaparecem completamente ao desligar a opção. Capturas em `_verification/m5/`.
 - Próximo: M6 — settings de administração (mapeando os "Tweaks" do protótipo), capabilities (já criadas no M1) e privacy provider.
 
+## M6 — Settings de admin, capabilities e privacy provider (concluído)
+
+- `settings.php` completo: mapeamento 1:1 dos "Tweaks" do protótipo para `admin_setting_*` (seção 5.4) — `enabled`/`showforguests`/`excludedpages`/`enabledfeatures` (checkbox geral, checkbox visitantes, textarea de padrões de URL, multicheckbox com as 22 opções — rótulos reaproveitados de `classes/options.php`, tudo já default "todas ligadas"), `fabposition`/`fabicon`/`fabshape` (selects), `panelformat`/`density`/`showprofiles`, `accent` (`admin_setting_configcolourpicker`).
+- Capabilities (`local/a11y:view`, `local/a11y:configure`) já existiam desde o M1 — confirmado que `settings.php` não precisa de checagem extra de capability (o próprio `admin_settingpage` com `$hassiteconfig` já exige `moodle/site:config`, e a UI do painel/FAB usa `local/a11y:view` via `classes/config.php`).
+- `classes/privacy/provider.php`: implementa `core_privacy\local\metadata\provider` (declara a preferência `local_a11y_settings` via `add_user_preference()`) e `core_privacy\local\request\user_preference_provider` (`export_user_preferences()`, reaproveitando `manager::sanitize_settings()` para nunca exportar chaves desconhecidas/corrompidas). Sem tabelas de banco — nada além da preferência de usuário é armazenado (visitantes usam só `localStorage`, fora do alcance do Moodle).
+- **Verificado via Playwright**: página de settings (`admin/settings.php?section=local_a11y`) carrega sem nenhuma caixa de erro, todos os 22 rótulos aparecem corretamente na lista "Opções ativas", color picker funcional; `local_a11y` aparece no registro de plugins do `tool_dataprivacy` (prova de que o provider é descoberto corretamente). Captura em `_verification/m6/`.
+- Próximo: M7 — testes automatizados (PHPUnit, Behat, axe-core) e matriz de navegador/tema.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

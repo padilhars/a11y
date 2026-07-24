@@ -6,7 +6,7 @@
 - [x] M3 — Estado, persistência e as 22 opções aplicando efeitos CSS
 - [x] M4 — Perfis, busca, contador, reset, atalho Alt+A, focus trap
 - [x] M5 — Recursos avançados: leitor de tela, teclado virtual, comandos de voz, guia/máscara de leitura
-- [ ] M6 — Settings de admin + capabilities + privacy provider
+- [x] M6 — Settings de admin + capabilities + privacy provider
 - [ ] M7 — Testes (PHPUnit, Behat, axe, screenshots) e correções
 - [ ] M8 — Empacotamento: local_a11y.zip, README, CHANGELOG
 
