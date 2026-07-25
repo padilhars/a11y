@@ -792,6 +792,27 @@ body.a11y-color-3 #page-wrapper { --a11y-filter-color: url(#local-a11y-tritanopi
     var(--a11y-filter-saturate, )
     var(--a11y-filter-color, );
 }
+/* A `filter` other than none turns its element into the containing block
+   for position:fixed descendants (CSS spec, same mechanism that lets us
+   composite the FAB/panel's own filter:none independently above) - and
+   #page-wrapper contains several of Moodle's *own* fixed-position drawers
+   (message-drawer, the primary nav drawer) that are deliberately parked
+   just past the right edge of the viewport while closed, relying on
+   being *viewport*-fixed so that parking never affects page scroll.
+   Once #page-wrapper becomes their containing block instead, that
+   off-screen position counts as real overflow of #page-wrapper's own
+   (viewport-width) box, producing a spurious horizontal scrollbar the
+   moment any of these filters is active - confirmed via
+   document.documentElement.scrollWidth jumping by exactly the width of
+   the parked message-drawer. Contrast doesn't use `filter` at all (it's
+   background/colour swaps), so it never hit this. Suppressing overflow-x
+   only while a filter is actually active (rather than always) keeps this
+   scoped to the actual cause; relies on standard overflow propagation
+   from <body> to the viewport (html has no overflow of its own here). */
+body.a11y-invert, body.a11y-saturation-1, body.a11y-saturation-2, body.a11y-saturation-3,
+body.a11y-color-1, body.a11y-color-2, body.a11y-color-3 {
+  overflow-x: hidden;
+}
 
 /* Big cursors */
 body.a11y-cursor-1 #page, body.a11y-cursor-1 #page * {
