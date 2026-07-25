@@ -33,6 +33,7 @@ import ReadingMask from 'local_a11y/reading_mask';
 import ScreenReader from 'local_a11y/screen_reader';
 import VirtualKeyboard from 'local_a11y/virtual_keyboard';
 import VoiceCommands from 'local_a11y/voice_commands';
+import Tooltips from 'local_a11y/tooltips';
 
 let settings = {...Storage.DEFAULT_SETTINGS};
 let isLoggedIn = false;
@@ -79,7 +80,7 @@ const renderHeaderCount = () => {
 let voiceCallbacks = {};
 
 /**
- * Start/stop the 5 "advanced" features (the booleans that drive a live JS
+ * Start/stop the 6 "advanced" features (the booleans that drive a live JS
  * overlay/listener instead of a body CSS class, see classes/manager.php's
  * get_boolean_class_map() docblock) to match the current settings.
  */
@@ -89,6 +90,7 @@ const syncAdvancedFeatures = () => {
     ScreenReader.sync(Boolean(settings.screenReader));
     VirtualKeyboard.sync(Boolean(settings.virtualKeyboard));
     VoiceCommands.sync(Boolean(settings.voiceCommands), voiceCallbacks);
+    Tooltips.sync(Boolean(settings.tooltips));
 };
 
 /**

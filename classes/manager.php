@@ -83,10 +83,12 @@ class manager {
      * Boolean settings key -> body CSS class name, a verbatim port of the
      * `if (settings.x) body.classList.add('a11y-y')` lines in
      * _design-reference/app.jsx. Note this intentionally excludes
-     * readingGuide, readingMask, screenReader, virtualKeyboard and
-     * voiceCommands: those 5 booleans do NOT drive a body class in the
-     * prototype, they gate always-mounted JS overlay components instead
-     * (see amd/src/reading_guide.js etc., M5).
+     * readingGuide, readingMask, screenReader, virtualKeyboard,
+     * voiceCommands and (since D29 - the prototype itself does still map
+     * it to a body class, but a real browser's native title tooltip can
+     * only be suppressed from JS, not CSS) tooltips: those 6 booleans do
+     * NOT drive a body class here, they gate always-mounted JS overlay
+     * components instead (see amd/src/reading_guide.js etc., M5; D29).
      *
      * @return array<string, string>
      */
@@ -99,7 +101,6 @@ class manager {
             'highlightButtons' => 'a11y-highlight-buttons',
             'hideImages' => 'a11y-hide-images',
             'pauseAnimations' => 'a11y-pause-animations',
-            'tooltips' => 'a11y-tooltips',
             'invertColors' => 'a11y-invert',
             'focusMode' => 'a11y-focus-mode',
         ];

@@ -136,13 +136,14 @@ final class manager_test extends \advanced_testcase {
     }
 
     /**
-     * The boolean/stepper -> CSS class maps must never target the 5
+     * The boolean/stepper -> CSS class maps must never target the 6
      * always-JS-overlay booleans (readingGuide, readingMask, screenReader,
-     * virtualKeyboard, voiceCommands) - see DECISIONS.md / app.jsx parity.
+     * virtualKeyboard, voiceCommands, tooltips) - see DECISIONS.md D29 /
+     * app.jsx parity.
      */
     public function test_boolean_class_map_excludes_overlay_only_options(): void {
         $map = manager::get_boolean_class_map();
-        foreach (['readingGuide', 'readingMask', 'screenReader', 'virtualKeyboard', 'voiceCommands'] as $key) {
+        foreach (['readingGuide', 'readingMask', 'screenReader', 'virtualKeyboard', 'voiceCommands', 'tooltips'] as $key) {
             $this->assertArrayNotHasKey($key, $map);
         }
         $this->assertSame('a11y-invert', $map['invertColors']);

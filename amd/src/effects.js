@@ -25,7 +25,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Verbatim port of classes/manager.php::get_boolean_class_map().
+// Verbatim port of classes/manager.php::get_boolean_class_map(). tooltips is
+// handled by amd/src/tooltips.js instead (D29), not a body class.
 const BOOL_CLASS_MAP = {
     readableFont: 'a11y-readable-font',
     dyslexicFont: 'a11y-dyslexic-font',
@@ -34,7 +35,6 @@ const BOOL_CLASS_MAP = {
     highlightButtons: 'a11y-highlight-buttons',
     hideImages: 'a11y-hide-images',
     pauseAnimations: 'a11y-pause-animations',
-    tooltips: 'a11y-tooltips',
     invertColors: 'a11y-invert',
     focusMode: 'a11y-focus-mode',
 };

@@ -527,6 +527,39 @@
 .local-a11y-reading-mask-bottom { bottom: 0; height: 0; }
 
 /* ===========================================================================
+   TOOLTIPS (amd/src/tooltips.js) — dark bubble + arrow, replaces the
+   browser's native title tooltip while the option is active (see D29).
+   =========================================================================== */
+.local-a11y-tooltip {
+  position: fixed;
+  max-width: 260px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #18181b;
+  color: #fff;
+  font-size: 12.5px;
+  line-height: 1.4;
+  font-weight: 500;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+  pointer-events: none;
+  z-index: 99999;
+}
+.local-a11y-tooltip::after {
+  content: '';
+  position: absolute;
+  left: var(--local-a11y-tooltip-arrow-left, 50%);
+  width: 8px;
+  height: 8px;
+  background: #18181b;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 1px;
+}
+/* Default: bubble above the target, arrow on its bottom edge pointing down. */
+.local-a11y-tooltip::after { bottom: -4px; }
+/* Flipped below the target (not enough room above): arrow on the top edge. */
+.local-a11y-tooltip--below::after { top: -4px; bottom: auto; }
+
+/* ===========================================================================
    REDUCED MOTION / COLOR SCHEME
    =========================================================================== */
 @media (prefers-reduced-motion: reduce) {
@@ -840,8 +873,3 @@ body.a11y-focus-mode #region-main-box {
   margin: 0 auto !important;
 }
 
-/* Tooltip helper */
-body.a11y-tooltips #page a[title]:hover::after,
-body.a11y-tooltips #page button[title]:hover::after {
-  content: attr(title);
-}

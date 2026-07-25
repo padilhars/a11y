@@ -2,6 +2,23 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D29 — "Dicas de Ferramentas" reescrita como tooltip customizado via JS
+
+A implementação original de `tooltips` (herdada verbatim de `_design-reference/app.jsx`) era puramente CSS: `body.a11y-tooltips #page a[title]:hover::after, ... button[title]:hover::after { content: attr(title); }`. Isso nunca funcionou de verdade fora do protótipo (que é só um mock estático, sem tooltip nativo real do navegador competindo): CSS não tem nenhum mecanismo para suprimir o tooltip nativo do `title` (só JS pode remover/restaurar o atributo), o texto inserido via `content: attr(title)` não tinha nenhum estilo de balão (sem fundo, sem seta, só texto solto), e só cobria `a`/`button` com `title` — nada de `aria-label`, `alt` de imagem ou `data-tooltip`.
+
+A pedido do usuário, reescrito como uma 6ª "feature avançada" JS (mesmo padrão de `readingGuide`/`readingMask`/`screenReader`/`virtualKeyboard`/`voiceCommands` — um `sync(active)` chamado de `main.js::syncAdvancedFeatures()`, sem classe de `<body>`), em `amd/src/tooltips.js` novo:
+
+- Delegação em `document` via `mouseover`/`mouseout` (hover) e `focusin`/`focusout` (teclado, ambos borbulham ao contrário de `focus`/`blur`), casando com `[title], [aria-label], [data-tooltip], img[alt]` via `closest()`.
+- Texto do balão, em ordem de prioridade: `data-tooltip` (override explícito) > `title` > `aria-label` > `alt` (só `<img>`).
+- **Supressão do tooltip nativo**: ao mostrar o balão, se o elemento tem `title`, o valor é guardado em `data-a11y-tooltip-title` e o atributo `title` é removido do DOM — o navegador não tem mais nada para mostrar nativamente. Restaurado ao esconder o balão (mouseout/focusout/Esc/troca de alvo).
+- Balão (`.local-a11y-tooltip`, fundo escuro `#18181b`, texto branco, canto arredondado, seta via `::after` rotacionado 45°) é `position: fixed`, medido e posicionado via `getBoundingClientRect()`: acima do alvo por padrão, com flip automático para baixo quando não há espaço (`rect.top - altura do balão - 8px < 0`), e clamping horizontal para nunca vazar as bordas da viewport — a seta acompanha o centro horizontal do alvo mesmo quando o balão precisa deslocar lateralmente para caber.
+- `aria-describedby` no alvo apontando pro `id` do balão (`role="tooltip"`) enquanto mostrado, removido ao esconder — acessibilidade de leitor de tela para o próprio balão customizado.
+- `.local-a11y-root` no balão: imune aos efeitos de página (mesmo padrão de `reading_guide`/`screen_reader`) e "selado" contra vazamento de tipografia (D26) automaticamente, já que essa classe já carrega `font-size`/`line-height`/etc. próprios.
+
+Removido `tooltips` de `classes/manager.php::get_boolean_class_map()` e do espelho em `amd/src/effects.js` (não é mais um efeito de classe de `<body>`) — mesmo tratamento que as outras 5 booleans "always-JS-overlay" já recebiam. Teste PHPUnit `test_boolean_class_map_excludes_overlay_only_options` atualizado para cobrir `tooltips` também.
+
+Verificado via Playwright (elementos injetados com `title`/`aria-label`/`alt`/`data-tooltip`): balão mostra o texto certo para os 4 casos; `title` corretamente removido enquanto o balão está visível e restaurado ao sair; funciona por foco de teclado também; balão desaparece e não reaparece depois de desativar a opção; flip para baixo confirmado perto do topo da viewport; nenhum erro de console. PHPUnit 16/16 verde (59 asserções, +1 da nova cobertura).
+
 ## D28 — Segunda auditoria de segurança (pós D15, cobrindo D16-D27)
 
 Reauditoria completa a pedido do usuário, cobrindo tudo que mudou desde D15 (ícone da ONU, consolidação do botão de reset, mudanças em `panel.js`, novas regras CSS). Achados:

@@ -183,4 +183,8 @@ Inverter Cores, Mudar Cores e Saturação (as 3 opções que usam `filter` em `#
 
 Reauditoria completa a pedido do usuário (código + Apache), cobrindo tudo desde D15. Achado e corrigido: dois arquivos de backup de editor (`pix/accessibility-un-bak.svg`, `styles.css~`) estavam publicamente acessíveis via HTTP — removidos, e o `<FilesMatch>` do Apache endurecido para negar genericamente qualquer `*~`/`*.bak`/`*.orig`/`*.swp`/`*-bak.*` (defesa em profundidade, não só os dois arquivos encontrados). Resto das proteções de D15 reverificadas ao vivo (ainda corretas). Código novo desde D15 (ícone da ONU, reset consolidado, animação de pulso) revisado sem achados. Ver DECISIONS.md D28. PHPUnit 16/16 verde.
 
+## Tooltips customizados (concluído)
+
+"Dicas de Ferramentas" reescrita de um efeito CSS quebrado (`content: attr(title)`, sem suprimir o tooltip nativo, só `a`/`button`) para uma 6ª feature avançada em JS (`amd/src/tooltips.js`, mesmo padrão de reading guide/screen reader): balão escuro com seta, posicionado dinamicamente (com flip para baixo perto da borda), suprime o `title` nativo enquanto ativo, funciona com `title`/`aria-label`/`alt`/`data-tooltip`, hover e foco de teclado, `aria-describedby` para leitores de tela. Ver DECISIONS.md D29. Verificado via Playwright, PHPUnit 16/16 verde.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_
