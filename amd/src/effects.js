@@ -44,6 +44,7 @@ const STEPPER_CLASS_PREFIX_MAP = {
     textSize: 'a11y-text-size-',
     lineHeight: 'a11y-line-height-',
     textSpacing: 'a11y-text-spacing-',
+    textAlign: 'a11y-text-align-',
     contrast: 'a11y-contrast-',
     saturation: 'a11y-saturation-',
     colorChange: 'a11y-color-',

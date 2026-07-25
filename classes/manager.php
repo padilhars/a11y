@@ -30,8 +30,9 @@ class manager {
     const PREFERENCE_NAME = 'local_a11y_settings';
 
     /**
-     * Default value (all options off / level 0), mirrors DEFAULT_SETTINGS in
-     * _design-reference/a11y-data.jsx exactly (same keys, same order).
+     * Default value (all options off / level 0). Mirrors DEFAULT_SETTINGS in
+     * _design-reference/a11y-data.jsx (same keys, same order), plus
+     * 'textAlign' - one addition beyond the prototype (see DECISIONS.md D30).
      *
      * @return array<string, bool|int>
      */
@@ -48,6 +49,7 @@ class manager {
             'textSize' => 0,
             'lineHeight' => 0,
             'textSpacing' => 0,
+            'textAlign' => 0,
             'contrast' => 0,
             'invertColors' => false,
             'colorChange' => 0,
@@ -72,6 +74,7 @@ class manager {
             'textSize' => 4,
             'lineHeight' => 3,
             'textSpacing' => 3,
+            'textAlign' => 4,
             'contrast' => 3,
             'colorChange' => 3,
             'saturation' => 3,
@@ -119,6 +122,7 @@ class manager {
             'textSize' => 'a11y-text-size-',
             'lineHeight' => 'a11y-line-height-',
             'textSpacing' => 'a11y-text-spacing-',
+            'textAlign' => 'a11y-text-align-',
             'contrast' => 'a11y-contrast-',
             'saturation' => 'a11y-saturation-',
             'colorChange' => 'a11y-color-',

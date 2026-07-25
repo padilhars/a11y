@@ -66,6 +66,7 @@ class icons {
         'textSize' => '<path d="M21 6V4H3v2"/><path d="M7 18h10"/><path d="M12 4v14"/>',
         'lineHeight' => '<path d="M3 8 7 4l4 4"/><path d="M7 4v16"/><path d="m3 16 4 4 4-4"/><path d="M15 4h7"/><path d="M15 12h7"/><path d="M15 20h7"/>',
         'textSpacing' => '<path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h6"/>',
+        'textAlign' => '<line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/>',
         'contrast' => '<circle cx="12" cy="12" r="10"/><path d="M12 18a6 6 0 0 0 0-12v12z" fill="currentColor"/>',
         'sun' => '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
         'contrastHigh' => '<circle cx="12" cy="12" r="10"/><path d="M12 2v20"/><path d="M2 12h20"/>',

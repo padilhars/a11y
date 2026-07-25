@@ -67,26 +67,30 @@
   --a11y-radius-full: 9999px;
   --a11y-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   font-family: var(--a11y-font);
-  /* Several a11y-*-N typography effects (further down this file) set
-     one of these on #page (or .navbar/footer) *itself*, bare, with no
-     "#page *" descendant part to it - :not(.local-a11y-root, ...) on
-     their descendant selectors keeps them from *directly* matching
-     anything inside the panel/FAB, but these 5 properties are all
-     inherited, so #page's own (!important) value would still cascade
-     down via plain CSS inheritance into any panel/FAB element that
-     doesn't set its own value for that property (most do, but not all -
-     e.g. .local-a11y-option__desc has no font-weight of its own, and
-     none of the panel's many plain wrapper <div>/<span> containers
-     declare letter-spacing/word-spacing/line-height/font-size at all).
-     Pinning our own copy of each browser/Bootstrap default here breaks
-     that inheritance chain right at the panel/FAB root, before it can
-     reach any of those otherwise-unstyled descendants - without changing
-     how the panel already looks, since these *are* that default. */
+  /* Several a11y-*-N typography effects (further down this file) set one
+     of these !important on some ancestor of the panel/FAB - #page itself,
+     or (D30 caught this) any other real page region like #region-main,
+     which is *also* directly matched by a "#page *" selector and sits
+     between #page and #local-a11y-panel in the DOM. :not(.local-a11y-root,
+     ...) on those effects' descendant selectors keeps them from *directly*
+     matching anything inside the panel/FAB, but these 6 properties are
+     all inherited, so whichever ancestor's (!important) value would still
+     cascade down via plain CSS inheritance into any panel/FAB element
+     that doesn't set its own value for that property (most do, but not
+     all - e.g. .local-a11y-option__desc has no font-weight of its own,
+     and none of the panel's many plain wrapper <div>/<span> containers
+     declare letter-spacing/word-spacing/line-height/font-size/text-align
+     at all). Pinning our own copy of each browser/Bootstrap default here
+     breaks that inheritance chain right at the panel/FAB root, before it
+     can reach any of those otherwise-unstyled descendants - without
+     changing how the panel already looks, since these *are* that
+     default. */
   font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
   letter-spacing: normal;
   word-spacing: normal;
+  text-align: start;
 }
 
 /* ===========================================================================
@@ -668,6 +672,18 @@ body.a11y-text-spacing-3 #page, body.a11y-text-spacing-3 #page p:not(.local-a11y
 body.a11y-text-spacing-3 #page h1, body.a11y-text-spacing-3 #page h2, body.a11y-text-spacing-3 #page h3 {
   letter-spacing: 0.18em !important; word-spacing: 0.35em !important;
 }
+
+/* Text alignment (D30, new beyond the prototype). text-align is inherited,
+   so - learned the hard way with line-height above (D24/D26) - this never
+   uses a bare "#page" selector (which would set the property on #page
+   itself and leak into the panel/FAB via plain inheritance even past a
+   :not() on the *other* part of the rule); #page * with the exclusion
+   directly on it is a direct match on every real descendant instead,
+   sidestepping inheritance entirely. */
+body.a11y-text-align-1 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: left !important; }
+body.a11y-text-align-2 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: center !important; }
+body.a11y-text-align-3 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: right !important; }
+body.a11y-text-align-4 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: justify !important; }
 
 body.a11y-hide-images #page img,
 body.a11y-hide-images #page video {

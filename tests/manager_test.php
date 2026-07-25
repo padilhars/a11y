@@ -32,11 +32,11 @@ final class manager_test extends \advanced_testcase {
     }
 
     /**
-     * Default settings must have exactly the 22 known keys, all "off".
+     * Default settings must have exactly the 23 known keys, all "off".
      */
     public function test_get_default_settings_shape(): void {
         $defaults = manager::get_default_settings();
-        $this->assertCount(22, $defaults);
+        $this->assertCount(23, $defaults);
         foreach ($defaults as $key => $value) {
             $this->assertContains($value, [false, 0], "Default for '$key' should be false or 0");
         }

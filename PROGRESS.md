@@ -187,4 +187,8 @@ Reauditoria completa a pedido do usuário (código + Apache), cobrindo tudo desd
 
 "Dicas de Ferramentas" reescrita de um efeito CSS quebrado (`content: attr(title)`, sem suprimir o tooltip nativo, só `a`/`button`) para uma 6ª feature avançada em JS (`amd/src/tooltips.js`, mesmo padrão de reading guide/screen reader): balão escuro com seta, posicionado dinamicamente (com flip para baixo perto da borda), suprime o `title` nativo enquanto ativo, funciona com `title`/`aria-label`/`alt`/`data-tooltip`, hover e foco de teclado, `aria-describedby` para leitores de tela. Ver DECISIONS.md D29. Verificado via Playwright, PHPUnit 16/16 verde.
 
+## Nova opção: Alinhamento do Texto (concluído)
+
+23ª opção do plugin (a primeira sem equivalente no protótipo), na categoria Texto e Tipografia: stepper de 5 níveis (Padrão/Esquerda/Centralizado/Direita/Justificado), aplicando `text-align` via classe de `<body>`, mesmo padrão dos outros steppers. No caminho, achado e corrigido mais um caso do vazamento de herança de D26 — desta vez a propriedade vazava por herança através de `#region-main` (ancestral real do painel), não de `#page` diretamente; corrigido selando `text-align` em `.local-a11y-root` junto com as outras 5 propriedades já seladas. Ver DECISIONS.md D30. Verificado exaustivamente via Playwright (0 diferenças em ~519 elementos), PHPUnit 16/16 verde.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

@@ -1,6 +1,6 @@
 # local_a11y — A11y for Moodle
 
-Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (FAB) e um painel com **22 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. Réplica fiel do protótipo criado no Claude Design (`_design-reference/`, mantido no repositório apenas como referência somente-leitura, nunca enviado para produção).
+Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (FAB) e um painel com **23 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. Réplica fiel do protótipo criado no Claude Design (`_design-reference/`, mantido no repositório apenas como referência somente-leitura, nunca enviado para produção), com uma opção adicional além do protótipo (Alinhamento do Texto — ver DECISIONS.md D30).
 
 ![Painel aberto mostrando os perfis de acessibilidade](_verification/m2/02-panel-open.png)
 
@@ -28,11 +28,11 @@ Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (F
 - **Atalho global `Alt + A`** abre/fecha o painel de qualquer página.
 - Focus trap (WCAG 2.2), `Esc` fecha e devolve o foco ao botão, `aria-live` no contador de opções ativas.
 
-### As 22 opções (5 categorias)
+### As 23 opções (5 categorias)
 
 | Categoria | Opções |
 |---|---|
-| Texto e Tipografia | Fonte Legível, Fonte para Dislexia, Destacar Títulos/Links/Botões, Tamanho do Texto, Altura da Linha, Espaçamento do Texto |
+| Texto e Tipografia | Fonte Legível, Fonte para Dislexia, Destacar Títulos/Links/Botões, Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Alinhamento do Texto |
 | Cores e Contraste | Contraste (4 níveis), Inverter Cores, Mudar Cores (filtros de daltonismo via SVG), Saturação |
 | Mídia e Animação | Ocultar Imagens, Pausar Animações, Dicas de Ferramentas |
 | Foco e Navegação | Guia de Leitura, Máscara de Leitura, Cursor (3 níveis), Modo Foco |
@@ -53,7 +53,7 @@ Baixa Visão, Daltonismo, Dislexia, TDAH/Foco, Idoso/Sênior, Epilepsia, Defici�
 **Administração do site → Plugins → Plugins locais → Acessibilidade (A11y)**:
 
 - Ativar/desativar o plugin globalmente; mostrar (ou não) para visitantes; padrões de URL a excluir.
-- Quais das 22 opções ficam disponíveis para os usuários.
+- Quais das 23 opções ficam disponíveis para os usuários.
 - Posição/ícone/forma do botão flutuante; formato do painel (popover/gaveta/modal); densidade; mostrar perfis; cor de acento.
 
 ## Privacidade

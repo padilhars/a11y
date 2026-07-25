@@ -17,9 +17,10 @@
 namespace local_a11y;
 
 /**
- * The 22 accessibility options — a verbatim PHP port of OPTIONS in
- * _design-reference/a11y-data.jsx (same ids, same grouping, same order).
- * Labels/descriptions are resolved via get_string() instead of the
+ * The 23 accessibility options — a PHP port of OPTIONS in
+ * _design-reference/a11y-data.jsx (same ids, same grouping, same order),
+ * plus one addition beyond the prototype: 'textAlign' (see DECISIONS.md
+ * D30). Labels/descriptions are resolved via get_string() instead of the
  * prototype's inline pt-BR/en literals.
  *
  * @package    local_a11y
@@ -50,6 +51,8 @@ class options {
                 'labelkey' => 'opt_lineheight', 'desckey' => null, 'levelprefix' => 'lineheightlevel_'],
             ['id' => 'textSpacing', 'cat' => 'typography', 'kind' => 'stepper', 'max' => 3, 'icon' => 'textSpacing',
                 'labelkey' => 'opt_textspacing', 'desckey' => null, 'levelprefix' => 'spacinglevel_'],
+            ['id' => 'textAlign', 'cat' => 'typography', 'kind' => 'stepper', 'max' => 4, 'icon' => 'textAlign',
+                'labelkey' => 'opt_textalign', 'desckey' => null, 'levelprefix' => 'alignlevel_'],
 
             // -- Color & contrast --
             ['id' => 'contrast', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'contrast',
