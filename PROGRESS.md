@@ -179,4 +179,8 @@ D24 só tinha corrigido `font-family` de Fonte Legível/Fonte para Dislexia; est
 
 Inverter Cores, Mudar Cores e Saturação (as 3 opções que usam `filter` em `#page-wrapper`, D16) criavam uma barra de rolagem horizontal espúria (~320px) — causa: `filter` transforma o elemento em containing block de descendentes `position:fixed`, e `#page-wrapper` contém drawers do próprio Moodle deliberadamente estacionados fora da viewport enquanto fechados, cujo "fora da tela" passa a contar como overflow real assim que deixam de ser fixos-à-viewport. Corrigido com `overflow-x: hidden` no `<body>` só enquanto uma dessas opções está ativa, sem tocar no alvo do filtro nem nos drawers do Moodle. Contraste nunca teve o problema (não usa `filter`). Ver DECISIONS.md D27. Verificado via Playwright (tentativa real de rolagem, não só `scrollWidth`), PHPUnit 16/16 verde.
 
+## Segunda auditoria de segurança (concluída)
+
+Reauditoria completa a pedido do usuário (código + Apache), cobrindo tudo desde D15. Achado e corrigido: dois arquivos de backup de editor (`pix/accessibility-un-bak.svg`, `styles.css~`) estavam publicamente acessíveis via HTTP — removidos, e o `<FilesMatch>` do Apache endurecido para negar genericamente qualquer `*~`/`*.bak`/`*.orig`/`*.swp`/`*-bak.*` (defesa em profundidade, não só os dois arquivos encontrados). Resto das proteções de D15 reverificadas ao vivo (ainda corretas). Código novo desde D15 (ícone da ONU, reset consolidado, animação de pulso) revisado sem achados. Ver DECISIONS.md D28. PHPUnit 16/16 verde.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_
