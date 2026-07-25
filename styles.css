@@ -67,6 +67,26 @@
   --a11y-radius-full: 9999px;
   --a11y-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   font-family: var(--a11y-font);
+  /* Several a11y-*-N typography effects (further down this file) set
+     one of these on #page (or .navbar/footer) *itself*, bare, with no
+     "#page *" descendant part to it - :not(.local-a11y-root, ...) on
+     their descendant selectors keeps them from *directly* matching
+     anything inside the panel/FAB, but these 5 properties are all
+     inherited, so #page's own (!important) value would still cascade
+     down via plain CSS inheritance into any panel/FAB element that
+     doesn't set its own value for that property (most do, but not all -
+     e.g. .local-a11y-option__desc has no font-weight of its own, and
+     none of the panel's many plain wrapper <div>/<span> containers
+     declare letter-spacing/word-spacing/line-height/font-size at all).
+     Pinning our own copy of each browser/Bootstrap default here breaks
+     that inheritance chain right at the panel/FAB root, before it can
+     reach any of those otherwise-unstyled descendants - without changing
+     how the panel already looks, since these *are* that default. */
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: normal;
+  word-spacing: normal;
 }
 
 /* ===========================================================================
@@ -529,40 +549,40 @@ footer#page-footer {
   transition: filter 200ms ease, background-color 200ms ease, color 200ms ease;
 }
 
-/* Typography */
-body.a11y-readable-font #page, body.a11y-readable-font #page *,
+/* Typography
+   The FAB/panel live inside #page (the before_footer_html_generation hook
+   renders them into #region-main, despite the name), so all of the rules
+   below would otherwise also reach into our own chrome (D24/D26) -
+   :not(.local-a11y-root, .local-a11y-root *) keeps each source selector
+   from ever matching a FAB/panel descendant in the first place. */
+body.a11y-readable-font #page, body.a11y-readable-font #page *:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-readable-font .navbar, body.a11y-readable-font .navbar *,
 body.a11y-readable-font footer#page-footer, body.a11y-readable-font footer#page-footer * {
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif !important;
 }
-body.a11y-dyslexic-font #page, body.a11y-dyslexic-font #page *,
+body.a11y-dyslexic-font #page, body.a11y-dyslexic-font #page *:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-dyslexic-font .navbar, body.a11y-dyslexic-font .navbar *,
 body.a11y-dyslexic-font footer#page-footer, body.a11y-dyslexic-font footer#page-footer * {
   font-family: 'Lexend', 'Comic Sans MS', system-ui, sans-serif !important;
   font-weight: 500 !important;
   letter-spacing: 0.02em !important;
 }
-/* The FAB/panel live inside #page (the before_footer_html_generation hook
-   renders them into #region-main, despite the name), so the two rules
-   above also reach into our own chrome and swap its font - different
-   metrics (line height, glyph width) then reflow panel text, nudging
-   option rows up/down by a pixel or two right when they're clicked
-   active/inactive, which reads as a layout "jump" caused by the border
-   that changes colour at the same time (it isn't - .local-a11y-option's
-   border is already always 1px, only its colour changes, see below).
-   #local-a11y-panel/#local-a11y-fab need an ID in the selector to match
-   the specificity of the #page-based rules above and win the cascade tie
-   (same specificity + !important + later in the file = wins). */
-body.a11y-readable-font #local-a11y-panel, body.a11y-readable-font #local-a11y-panel *,
-body.a11y-readable-font #local-a11y-fab, body.a11y-readable-font #local-a11y-fab *,
-body.a11y-dyslexic-font #local-a11y-panel, body.a11y-dyslexic-font #local-a11y-panel *,
-body.a11y-dyslexic-font #local-a11y-fab, body.a11y-dyslexic-font #local-a11y-fab * {
-  font-family: var(--a11y-font) !important;
-}
 
-body.a11y-highlight-titles #page h1,
-body.a11y-highlight-titles #page h2,
-body.a11y-highlight-titles #page h3 {
+/* :not(.local-a11y-root, .local-a11y-root *) on every selector below keeps
+   these 5 effects (like readable/dyslexic-font above) from reaching into
+   the FAB/panel - all of them directly match panel descendants (spans,
+   buttons, [role="button"], the universal `*` for line-height), so unlike
+   D24's readable/dyslexic-font fix (which had to fight the cascade with a
+   same-specificity/later-wins override, since #page's own font-size only
+   leaked via *inheritance*, not a direct match), here it's simplest to
+   just stop the source selector from ever matching the panel in the first
+   place - no cascade tie needed. text-size isn't listed here: it only
+   sets font-size on #page itself (inherited from there), and
+   .local-a11y-panel already declares its own font-size, which breaks that
+   inheritance chain before it reaches any panel descendant. */
+body.a11y-highlight-titles #page h1:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-highlight-titles #page h2:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *) {
   background: linear-gradient(180deg, transparent 60%, #fef08a 60%) !important;
   padding: 0.05em 0.2em !important;
   border-radius: 3px !important;
@@ -570,7 +590,7 @@ body.a11y-highlight-titles #page h3 {
   -webkit-box-decoration-break: clone !important;
 }
 
-body.a11y-highlight-links #page a,
+body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-links .navbar a {
   text-decoration: underline !important;
   text-decoration-thickness: 2px !important;
@@ -582,9 +602,9 @@ body.a11y-highlight-links .navbar a {
   font-weight: 600 !important;
 }
 
-body.a11y-highlight-buttons #page button,
-body.a11y-highlight-buttons #page .btn,
-body.a11y-highlight-buttons #page [role="button"] {
+body.a11y-highlight-buttons #page button:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-highlight-buttons #page .btn:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-highlight-buttons #page [role="button"]:not(.local-a11y-root, .local-a11y-root *) {
   outline: 3px solid #f97316 !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 0 1px white inset !important;
@@ -599,19 +619,19 @@ body.a11y-text-size-2 #page h1 { font-size: 36px !important; }
 body.a11y-text-size-3 #page h1 { font-size: 40px !important; }
 body.a11y-text-size-4 #page h1 { font-size: 48px !important; }
 
-body.a11y-line-height-1 #page, body.a11y-line-height-1 #page * { line-height: 1.5 !important; }
-body.a11y-line-height-2 #page, body.a11y-line-height-2 #page * { line-height: 1.8 !important; }
-body.a11y-line-height-3 #page, body.a11y-line-height-3 #page * { line-height: 2.2 !important; }
+body.a11y-line-height-1 #page, body.a11y-line-height-1 #page *:not(.local-a11y-root, .local-a11y-root *) { line-height: 1.5 !important; }
+body.a11y-line-height-2 #page, body.a11y-line-height-2 #page *:not(.local-a11y-root, .local-a11y-root *) { line-height: 1.8 !important; }
+body.a11y-line-height-3 #page, body.a11y-line-height-3 #page *:not(.local-a11y-root, .local-a11y-root *) { line-height: 2.2 !important; }
 
-body.a11y-text-spacing-1 #page, body.a11y-text-spacing-1 #page p, body.a11y-text-spacing-1 #page span,
+body.a11y-text-spacing-1 #page, body.a11y-text-spacing-1 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-text-spacing-1 #page span:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-text-spacing-1 #page h1, body.a11y-text-spacing-1 #page h2, body.a11y-text-spacing-1 #page h3 {
   letter-spacing: 0.05em !important; word-spacing: 0.1em !important;
 }
-body.a11y-text-spacing-2 #page, body.a11y-text-spacing-2 #page p, body.a11y-text-spacing-2 #page span,
+body.a11y-text-spacing-2 #page, body.a11y-text-spacing-2 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-text-spacing-2 #page span:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-text-spacing-2 #page h1, body.a11y-text-spacing-2 #page h2, body.a11y-text-spacing-2 #page h3 {
   letter-spacing: 0.1em !important; word-spacing: 0.2em !important;
 }
-body.a11y-text-spacing-3 #page, body.a11y-text-spacing-3 #page p, body.a11y-text-spacing-3 #page span,
+body.a11y-text-spacing-3 #page, body.a11y-text-spacing-3 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-text-spacing-3 #page span:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-text-spacing-3 #page h1, body.a11y-text-spacing-3 #page h2, body.a11y-text-spacing-3 #page h3 {
   letter-spacing: 0.18em !important; word-spacing: 0.35em !important;
 }

@@ -171,4 +171,8 @@ A causa real não era a borda de `.local-a11y-option` (já reservada, 1px sempre
 
 O box-shadow que aparecia ao reclicar uma opção stepper já ativa (Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Contraste, Mudar Cores, Saturação, Cursor) era na verdade o anel de foco `[role="button"]:focus` do próprio Moodle core, disparando em qualquer clique de mouse (não só teclado). Suprimido só para `:not(:focus-visible)` (mantém o anel intacto para navegação real por teclado, confirmado via Tab) e substituído por um flash rápido do background (classe `--pulse`, animação CSS) quando o clique acontece numa stepper que já estava ativa. Ver DECISIONS.md D25. Verificado via Playwright, PHPUnit 16/16 verde.
 
+## Nenhuma opção de tipografia altera mais o painel (concluído)
+
+D24 só tinha corrigido `font-family` de Fonte Legível/Fonte para Dislexia; esta correção fecha as 7 lacunas restantes (Destacar Títulos/Links/Botões, Tamanho do Texto, Altura da Linha, Espaçamento do Texto, e `font-weight`/`letter-spacing` de Fonte para Dislexia). Duas técnicas: `:not(.local-a11y-root, .local-a11y-root *)` nos seletores que combinavam diretamente com elementos do painel (botões, spans), e "selar" `font-size`/`font-weight`/`line-height`/`letter-spacing`/`word-spacing` em `.local-a11y-root` para bloquear vazamento por herança (várias regras setam a propriedade no `#page` em si, que ainda propaga por herança mesmo com o `:not()`). Ver DECISIONS.md D26. Verificado exaustivamente via Playwright (503 elementos, 8 propriedades, 8 opções ativas simultâneas no máximo = 0 diferenças). PHPUnit 16/16 verde.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_
