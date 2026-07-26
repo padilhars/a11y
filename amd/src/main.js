@@ -260,20 +260,32 @@ export const init = async(loggedIn) => {
     // broke for Moodle's message-drawer before D31 stopped filtering
     // #page-wrapper as a whole. Unlike the navbar/drawers, though, a
     // .stickyfooter element renders *inside* #page's own content (course
-    // format templates), which still needs `filter` applied directly for
-    // Inverter Cores/Mudar Cores/Saturação to reach real page content - so
-    // instead of changing what gets filtered, relocate any .stickyfooter
-    // to <body> (same fix as the FAB/panel above) right when Moodle
-    // itself announces one has been enabled, via the public event
-    // core/sticky-footer already dispatches for exactly this kind of
-    // integration - cheaper and more precise than polling the DOM for it.
-    document.addEventListener('core/stickyfooter_state_changed', () => {
+    // format templates) - and, importantly, it's already sitting there in
+    // the DOM (parked, correctly invisible) the moment the page loads in
+    // editing mode, whether or not bulk-edit is ever actually turned on.
+    // An earlier version of this fix only relocated it reactively, on the
+    // 'core/stickyfooter_state_changed' event Moodle fires when bulk-edit
+    // is toggled - but since the element is already inside #page well
+    // before that event could ever fire, simply activating Inverter
+    // Cores/Mudar Cores/Saturação (which puts `filter` on #page - still
+    // needed there, for real page content) immediately recomputed its
+    // "parked" bottom:-Npx against #page's own (much taller) box instead
+    // of the viewport, dropping it at some arbitrary point down the page
+    // instead of just off the bottom of the screen - visible the moment
+    // that point scrolled into view, with no bulk-edit toggle involved at
+    // all. Relocating it here proactively, the same way as the FAB/panel
+    // above, fixes that; the event listener stays too, as a backstop for
+    // the (so far unobserved, but possible) case of one being inserted
+    // into the DOM later rather than already present at load.
+    const relocateStickyFooters = () => {
         document.querySelectorAll('.stickyfooter').forEach((el) => {
             if (el.parentElement !== document.body) {
                 document.body.appendChild(el);
             }
         });
-    });
+    };
+    relocateStickyFooters();
+    document.addEventListener('core/stickyfooter_state_changed', relocateStickyFooters);
 
     isLoggedIn = Boolean(loggedIn);
     optionMeta = buildOptionMeta(panelEl);

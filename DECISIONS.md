@@ -2,6 +2,16 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D32 — Correção do `.stickyfooter`: precisava ser proativa, não reativa (corrige D31)
+
+O usuário reportou que, mesmo após D31, a barra de ações em lote (`.stickyfooter`) continuava aparecendo — agora só de ativar Inverter Cores/Mudar Cores/Saturação, **sem nunca ter clicado em "Ações em lote"**. A correção de D31 para esse elemento (realocar para `<body>` reagindo ao evento `core/stickyfooter_state_changed`) partiu de uma suposição errada: que o elemento só passa a existir no DOM quando o modo de seleção em massa é ativado. Não é esse o caso.
+
+Confirmado ao vivo (usando o botão real "Ações em lote", achado em `course/format/templates/local/content/bulkedittoggler.mustache`): o `.stickyfooter` **já existe no DOM assim que a página carrega em modo de edição**, corretamente escondido (`bottom: -80px`) — o evento `core/stickyfooter_state_changed` só dispara quando o usuário de fato ativa/desativa o modo de seleção, e nesse meio tempo o elemento continuava dentro de `#page`. Assim que `#page` ganha `filter` (ativando qualquer uma das 3 opções), a posição "escondida" do elemento passou a ser calculada contra a caixa de `#page` (muito mais alta que a viewport) em vez da janela — jogando-o para um ponto arbitrário no meio do conteúdo da página, que fica visível assim que o usuário rola até ali. Nenhum evento do Moodle precisa disparar para isso acontecer.
+
+Corrigido movendo a realocação de reativa para **proativa**: `main.js::init()` agora move qualquer `.stickyfooter` para `<body>` uma única vez, na inicialização — exatamente como já era feito para o FAB/painel — e o listener do evento `core/stickyfooter_state_changed` foi mantido como reforço, para o caso (não observado, mas possível) de um `.stickyfooter` ser inserido no DOM depois da inicialização.
+
+Verificado via Playwright com o fluxo real: (1) modo de edição ativado, "Ações em lote" nunca clicado — `.stickyfooter` já nasce dentro de `<body>`, escondido, e sua posição não muda nem um pixel antes/depois de ativar Inverter Cores (antes da correção, pulava de `rectTop:900` para `rectTop:2261`); (2) fluxo real de "Ações em lote" (achar o botão de verdade, clicar, `.stickyfooter` aparece fixo no rodapé da viewport, continua fixo depois de rolar 400px); (3) cancelar o modo de seleção com Inverter Cores ativo — permanece corretamente escondido. PHPUnit 16/16 verde.
+
 ## D31 — Correção definitiva: Inverter Cores/Mudar Cores/Saturação quebravam o layout (drawer, FAB/painel e sticky-footer "descolavam" da tela)
 
 O usuário reportou (com foto) que ativar Inverter Cores, Mudar Cores ou Saturação quebrava o layout do Moodle: o drawer do índice do curso deixava de ficar fixo e passava a rolar junto com o conteúdo, o FAB/painel do próprio plugin faziam o mesmo, e um elemento `.stickyfooter` (barra de ações em massa da edição de curso) aparecia onde não devia.
