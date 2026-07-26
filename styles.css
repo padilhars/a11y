@@ -96,9 +96,13 @@
 /* ===========================================================================
    PANEL OPT-OUT
    The FAB and panel must never receive the page-wide accessibility filters
-   (contrast/invert/saturate/colour-blind/cursor/etc). They live outside the
-   Moodle page regions the effects target, but this is a defensive backstop
-   matching _design-reference/a11y-effects.css's own opt-out block.
+   (contrast/invert/saturate/colour-blind/cursor/etc). amd/src/main.js
+   relocates them to be direct children of <body> on load specifically so
+   they live outside every Moodle page region these effects target (D31) -
+   this rule is now a defensive backstop for that, matching
+   _design-reference/a11y-effects.css's own opt-out block, not the primary
+   mechanism (it used to have to be, before D31, since they were actually
+   nested inside #page until then).
    =========================================================================== */
 .local-a11y-root,
 .local-a11y-root * {
@@ -582,6 +586,7 @@
 #page,
 #page-content,
 .navbar,
+.drawer,
 footer#page-footer {
   transition: filter 200ms ease, background-color 200ms ease, color 200ms ease;
 }
@@ -720,14 +725,18 @@ body.a11y-pause-animations #page *::before, body.a11y-pause-animations #page *::
    .modal-content genuinely do use the variables (confirmed against the
    compiled Boost CSS) but are included here too, defensively.
 
-   Link-colour and filter-stacking rules below are scoped to #page-wrapper,
-   not #page: in the real Boost DOM (confirmed against the live markup,
-   not just _design-reference/'s .moodle-shell mock) the primary navbar
+   Contrast's link-colour rules below are scoped to #page-wrapper, not
+   #page: in the real Boost DOM (confirmed against the live markup, not
+   just _design-reference/'s .moodle-shell mock) the primary navbar
    (nav.navbar), the course-index drawer (#courseindex) and the user menu
    are *siblings* of #page, not descendants of it - #page-wrapper is the
    closest real ancestor that contains all of them. Scoping to #page alone
    (as an earlier fix did - see DECISIONS.md D14) left that chrome
-   completely untouched by Inverter Cores/Mudar Cores/Saturação. */
+   completely untouched by Contraste. Contrast only ever swaps colours
+   (never `filter`), so #page-wrapper is safe to use as a shared ancestor
+   here - unlike Inverter Cores/Mudar Cores/Saturação, which had the exact
+   same "reach the navbar/drawer" requirement but can't share one ancestor
+   like this without breaking fixed positioning; see D31 further down. */
 body.a11y-contrast-1 #region-main,
 body.a11y-contrast-1 .main-inner,
 body.a11y-contrast-1 .moremenu,
@@ -820,44 +829,49 @@ body.a11y-contrast-3 #page-wrapper a:not(.btn) { color: #ffff00 !important; }
 body.a11y-contrast-3 a { text-decoration: underline !important; }
 body.a11y-contrast-3 .btn-primary { background: #ffff00 !important; border-color: #ffff00 !important; color: #000 !important; font-weight: 700 !important; }
 
-/* Invert / saturation / colour-blind filters — combined via CSS filter on
-   #page-wrapper (not just #page - see comment above) so independent
-   options stack (unset variables resolve to empty). #local-a11y-fab/panel
-   are themselves descendants of #page-wrapper too, but stay unaffected
-   because .local-a11y-root forces filter:none !important on itself
-   (confirmed empirically: Chromium composites a filtered element's own
-   subtree independently of an inner element that resets filter, it does
-   not rasterize the whole #page-wrapper subtree as one indivisible unit). */
-body.a11y-invert #page-wrapper { --a11y-filter-invert: invert(1) hue-rotate(180deg); }
-body.a11y-saturation-1 #page-wrapper { --a11y-filter-saturate: saturate(1.8); }
-body.a11y-saturation-2 #page-wrapper { --a11y-filter-saturate: saturate(0.4); }
-body.a11y-saturation-3 #page-wrapper { --a11y-filter-saturate: grayscale(1); }
-body.a11y-color-1 #page-wrapper { --a11y-filter-color: url(#local-a11y-protanopia); }
-body.a11y-color-2 #page-wrapper { --a11y-filter-color: url(#local-a11y-deuteranopia); }
-body.a11y-color-3 #page-wrapper { --a11y-filter-color: url(#local-a11y-tritanopia); }
-#page-wrapper {
+/* Invert / saturation / colour-blind filters. D16 first combined these via
+   one shared `filter` on the single ancestor #page-wrapper (so the effect
+   would also reach the navbar/course-index drawer, which live outside
+   #page as #page-wrapper's other children) - but a `filter` other than
+   none turns its element into the containing block for position:fixed
+   descendants (CSS spec). #page-wrapper contains Moodle's own fixed-
+   position navbar and drawers *and* (via the before_footer_html_generation
+   hook, despite its name) our own FAB/panel deep inside #page - filtering
+   #page-wrapper broke fixed positioning for literally all of them: the
+   course-index drawer and navbar stopped tracking the viewport and
+   scrolled away with the page instead, and Moodle's message-drawer
+   (deliberately parked just past the right edge while closed, relying on
+   *viewport*-fixed positioning for that to never affect page scroll)
+   turned its parked position into real overflow, producing a spurious
+   horizontal scrollbar (D27 - patched over with overflow-x:hidden below,
+   kept as a defensive backstop but no longer the real fix).
+   D31 fixes this at the root two ways:
+   1. amd/src/main.js::init() now relocates the FAB/panel/overlay to be
+      direct children of <body> on load - never inside anything this
+      plugin (or Moodle core) filters, so their own position:fixed is
+      always resolved against the true viewport, permanently.
+   2. The filter is applied directly to #page, .navbar and .drawer
+      *independently* instead of to their shared ancestor #page-wrapper -
+      each keeps its own already-correct fixed positioning (nothing
+      *above* any of them is filtered), while their contents still get
+      inverted/saturated/colour-shifted exactly as before. */
+body.a11y-invert #page, body.a11y-invert .navbar, body.a11y-invert .drawer { --a11y-filter-invert: invert(1) hue-rotate(180deg); }
+body.a11y-saturation-1 #page, body.a11y-saturation-1 .navbar, body.a11y-saturation-1 .drawer { --a11y-filter-saturate: saturate(1.8); }
+body.a11y-saturation-2 #page, body.a11y-saturation-2 .navbar, body.a11y-saturation-2 .drawer { --a11y-filter-saturate: saturate(0.4); }
+body.a11y-saturation-3 #page, body.a11y-saturation-3 .navbar, body.a11y-saturation-3 .drawer { --a11y-filter-saturate: grayscale(1); }
+body.a11y-color-1 #page, body.a11y-color-1 .navbar, body.a11y-color-1 .drawer { --a11y-filter-color: url(#local-a11y-protanopia); }
+body.a11y-color-2 #page, body.a11y-color-2 .navbar, body.a11y-color-2 .drawer { --a11y-filter-color: url(#local-a11y-deuteranopia); }
+body.a11y-color-3 #page, body.a11y-color-3 .navbar, body.a11y-color-3 .drawer { --a11y-filter-color: url(#local-a11y-tritanopia); }
+#page, .navbar, .drawer {
   filter:
     var(--a11y-filter-invert, )
     var(--a11y-filter-saturate, )
     var(--a11y-filter-color, );
 }
-/* A `filter` other than none turns its element into the containing block
-   for position:fixed descendants (CSS spec, same mechanism that lets us
-   composite the FAB/panel's own filter:none independently above) - and
-   #page-wrapper contains several of Moodle's *own* fixed-position drawers
-   (message-drawer, the primary nav drawer) that are deliberately parked
-   just past the right edge of the viewport while closed, relying on
-   being *viewport*-fixed so that parking never affects page scroll.
-   Once #page-wrapper becomes their containing block instead, that
-   off-screen position counts as real overflow of #page-wrapper's own
-   (viewport-width) box, producing a spurious horizontal scrollbar the
-   moment any of these filters is active - confirmed via
-   document.documentElement.scrollWidth jumping by exactly the width of
-   the parked message-drawer. Contrast doesn't use `filter` at all (it's
-   background/colour swaps), so it never hit this. Suppressing overflow-x
-   only while a filter is actually active (rather than always) keeps this
-   scoped to the actual cause; relies on standard overflow propagation
-   from <body> to the viewport (html has no overflow of its own here). */
+/* Defensive backstop kept from D27 even though per-element filtering (D31)
+   fixes the actual cause of the horizontal-scroll bug (see above) - cheap
+   insurance in case some other still-fixed element we haven't found yet
+   reacts the same way. */
 body.a11y-invert, body.a11y-saturation-1, body.a11y-saturation-2, body.a11y-saturation-3,
 body.a11y-color-1, body.a11y-color-2, body.a11y-color-3 {
   overflow-x: hidden;

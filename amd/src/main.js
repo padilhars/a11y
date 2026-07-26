@@ -233,6 +233,48 @@ export const init = async(loggedIn) => {
     }
     const overlay = document.querySelector('.local-a11y-panel-overlay');
 
+    // classes/output/renderer.php::render_footer_html() is injected by the
+    // before_footer_html_generation hook deep inside #region-main (despite
+    // the name), which sits inside #page - one of the elements the colour
+    // filters (styles.css, D31) apply `filter` to directly. `filter` makes
+    // its element the containing block for position:fixed descendants, so
+    // if the FAB/panel stayed there, activating Inverter Cores/Mudar
+    // Cores/Saturação would silently break their (and the reset button's,
+    // etc.) fixed positioning - they'd scroll away with the page instead of
+    // staying put, exactly like Moodle's own navbar/drawers did before D31.
+    // Relocating them to be direct children of <body> - never inside
+    // anything this plugin (or, so far, Moodle core) ever applies a filter
+    // to - decouples them from that permanently, regardless of which page
+    // regions future effects end up touching.
+    document.body.appendChild(fab);
+    if (overlay) {
+        document.body.appendChild(overlay);
+    }
+    document.body.appendChild(panelEl);
+
+    // Moodle's own "sticky footer" pattern (theme_boost/sticky-footer,
+    // core/sticky-footer; used e.g. by the course content bulk-edit
+    // toolbar) parks a position:fixed element just below the viewport via
+    // a negative `bottom` offset until activated - the exact same "relies
+    // on staying *viewport*-fixed while parked off-screen" pattern that
+    // broke for Moodle's message-drawer before D31 stopped filtering
+    // #page-wrapper as a whole. Unlike the navbar/drawers, though, a
+    // .stickyfooter element renders *inside* #page's own content (course
+    // format templates), which still needs `filter` applied directly for
+    // Inverter Cores/Mudar Cores/Saturação to reach real page content - so
+    // instead of changing what gets filtered, relocate any .stickyfooter
+    // to <body> (same fix as the FAB/panel above) right when Moodle
+    // itself announces one has been enabled, via the public event
+    // core/sticky-footer already dispatches for exactly this kind of
+    // integration - cheaper and more precise than polling the DOM for it.
+    document.addEventListener('core/stickyfooter_state_changed', () => {
+        document.querySelectorAll('.stickyfooter').forEach((el) => {
+            if (el.parentElement !== document.body) {
+                document.body.appendChild(el);
+            }
+        });
+    });
+
     isLoggedIn = Boolean(loggedIn);
     optionMeta = buildOptionMeta(panelEl);
     settings = await Storage.getSettings(isLoggedIn);
