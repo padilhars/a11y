@@ -877,6 +877,29 @@ body.a11y-color-1, body.a11y-color-2, body.a11y-color-3 {
   overflow-x: hidden;
 }
 
+/* D33: #page's own background-color is transparent by default (it relies
+   on <body>'s opaque white showing through - invisible in the unfiltered
+   state, since both are the same white). But `filter` only processes what
+   #page itself actually *paints*: any part of its box left transparent
+   (e.g. the side gutters outside the centred `.limitedwidth` content
+   column, or a short page whose content doesn't fill the viewport) has
+   nothing for the filter to invert/desaturate, so <body>'s white bleeds
+   through completely unfiltered - a stark unmodified-white patch on an
+   otherwise inverted/desaturated page. Giving #page an explicit opaque
+   white background *only* while one of these classes is active closes
+   that gap: it's still <body>'s same default white (no visible change
+   when unfiltered), but now it's #page's own paint, inside the box that
+   `filter` actually processes, so it inverts/desaturates correctly too.
+   Deliberately scoped to #page alone (not <body> itself, and not
+   #page-wrapper, neither of which receive `filter`) - it carries no
+   position:fixed containing-block risk at all, so it can't regress the
+   FAB/panel/navbar/drawer/sticky-footer fixes above. */
+body.a11y-invert #page, body.a11y-saturation-1 #page, body.a11y-saturation-2 #page,
+body.a11y-saturation-3 #page, body.a11y-color-1 #page, body.a11y-color-2 #page,
+body.a11y-color-3 #page {
+  background-color: #fff;
+}
+
 /* Big cursors */
 body.a11y-cursor-1 #page, body.a11y-cursor-1 #page * {
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23000' stroke='%23fff' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
