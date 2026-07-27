@@ -2,6 +2,17 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D35 — Contraste não modificava `.secondary-navigation` nem a borda de `.section-item`
+
+O usuário perguntou por que ativar Contraste não muda a cor de `.secondary-navigation` nem a borda de `.section-item`. Investigado ao vivo (`getComputedStyle` + inspeção do CSS compilado do tema Boost, `theme/boost/style/moodle.css`):
+
+- **`.secondary-navigation .navigation`** (a barra de abas "Curso/Configurações/Participantes/..." abaixo do título da página): Boost hardcoda `background-color: #ffffff` diretamente nessa regra, em vez de usar `var(--bs-body-bg)` como a maioria dos outros componentes - por isso as variáveis `--bs-*` que Contraste sobrescreve em `body.a11y-contrast-N` não têm nenhum efeito nela. Ela chegava a *parecer* funcionar em algumas páginas testadas (curso, participantes) só por coincidência: nessas páginas o mesmo elemento também carrega a classe `.moremenu` (usada pelo JS do menu "mais opções" quando há abas demais para caber), que já estava na lista de seletores com override explícito - mas isso não é garantido em toda página com navegação secundária (ex.: quando o JS do moremenu ainda não rodou, ou uma página sem abas suficientes para precisar dele).
+- **`.course-section .section-item`** (o card de cada seção do curso): Boost hardcoda `border: 1px solid #dee2e6` do mesmo jeito - confirmado que a variável `--bs-border-color` chega corretamente até o elemento (herdada de `body.a11y-contrast-N`, `getComputedStyle` mostra o valor certo), mas a regra do Boost nunca lê essa variável, então a borda nunca muda de cor.
+
+Corrigido adicionando `.secondary-navigation .navigation` e `.section-item` à mesma lista de seletores com override explícito de `background-color`/`color`/`border-color` (`!important`) que `#region-main`/`.card`/`.drawer`/etc. já usavam nos 3 níveis de Contraste - o mesmo padrão já estabelecido para qualquer componente do Boost que hardcoda cor em vez de usar as variáveis Bootstrap.
+
+Verificado via Playwright nos 3 níveis: fundo da barra de abas e cor da borda dos cards de seção acompanham corretamente cada nível (nível 1: `#1f1f1f`/`#3f3f46`; nível 2: `#fffbeb`/`#d6d3d1`; nível 3: `#000`/`#fff` 2px), captura de tela do nível 3 confirma visualmente. PHPUnit 16/16 verde (mudança é só CSS).
+
 ## D34 — Frase do rodapé do painel agora configurável nas configurações do plugin
 
 A pedido do usuário, o texto do rodapé do painel (`savetitle`, hoje "Desenvolvido com ❤️ pela **CPTED** para você." — ver D-anterior que introduziu essa frase de crédito) deixou de ser fixo via lang string e passou a ser configurável por site em **Administração do site → Plugins → Plugins locais → Acessibilidade (A11y)**, seção Painel.

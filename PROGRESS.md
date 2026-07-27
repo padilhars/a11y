@@ -207,4 +207,8 @@ Usuário notou que "o fundo da página" não era modificado por essas 3 opções
 
 O texto de crédito no rodapé do painel ("Desenvolvido com ❤️ pela CPTED para você.") deixou de ser fixo e passou a ser configurável em Administração do site → Plugins → Plugins locais → Acessibilidade (A11y): novo campo rich-text (`local_a11y/footertext`); vazio (padrão) mantém a frase original via lang string, preenchido substitui o texto (sanitizado com `format_text()`, nunca ecoado cru, mesmo padrão de qualquer HTML vindo de configuração de admin no Moodle). Ver DECISIONS.md D34. Verificado via Playwright (campo nas configurações, fallback ao padrão quando vazio, texto customizado com `<strong>` renderizado corretamente sem quebrar o layout), PHPUnit 16/16 verde.
 
+## Contraste não modificava .secondary-navigation nem borda de .section-item (concluído)
+
+Usuário perguntou por que Contraste deixava a barra de abas secundária e a borda dos cards de seção do curso intocadas. Causa: Boost hardcoda `background-color`/`border-color` literais nesses dois seletores em vez de usar as variáveis `--bs-*` que Contraste sobrescreve - o mesmo tipo de gap já resolvido antes para `#region-main`/`.card`/`.drawer`/etc., só que para dois seletores que ainda não estavam na lista. Corrigido adicionando ambos à mesma lista de overrides explícitos nos 3 níveis. Ver DECISIONS.md D35. Verificado via Playwright nos 3 níveis, PHPUnit 16/16 verde.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

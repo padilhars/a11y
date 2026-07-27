@@ -736,7 +736,19 @@ body.a11y-pause-animations #page *::before, body.a11y-pause-animations #page *::
    (never `filter`), so #page-wrapper is safe to use as a shared ancestor
    here - unlike Inverter Cores/Mudar Cores/Saturação, which had the exact
    same "reach the navbar/drawer" requirement but can't share one ancestor
-   like this without breaking fixed positioning; see D31 further down. */
+   like this without breaking fixed positioning; see D31 further down.
+
+   D35 added two more entries to this same list, for the same reason as
+   all the others: `.secondary-navigation .navigation` (the tab bar under
+   the page title - "Curso/Configurações/Participantes/...") and
+   `.course-section .section-item` (each collapsible section's card) both
+   hardcode their colours in the compiled Boost CSS too
+   (`background-color: #fff` / `border: 1px solid #dee2e6`) instead of
+   using `var(--bs-border-color)` etc. `.secondary-navigation .navigation`
+   happened to *look* fixed already on some pages only because it also
+   carries Moodle's own `.moremenu` class there (already in this list) -
+   coincidental, not guaranteed on every page that has a secondary nav, so
+   it needed its own explicit entry rather than relying on that. */
 body.a11y-contrast-1 #region-main,
 body.a11y-contrast-1 .main-inner,
 body.a11y-contrast-1 .moremenu,
@@ -746,6 +758,8 @@ body.a11y-contrast-1 .bg-white,
 body.a11y-contrast-1 .dropdown-menu,
 body.a11y-contrast-1 .popover,
 body.a11y-contrast-1 .modal-content,
+body.a11y-contrast-1 .secondary-navigation .navigation,
+body.a11y-contrast-1 .section-item,
 body.a11y-contrast-1 footer#page-footer {
   background-color: #1f1f1f !important;
   color: #f3f4f6 !important;
@@ -779,6 +793,8 @@ body.a11y-contrast-2 .bg-white,
 body.a11y-contrast-2 .dropdown-menu,
 body.a11y-contrast-2 .popover,
 body.a11y-contrast-2 .modal-content,
+body.a11y-contrast-2 .secondary-navigation .navigation,
+body.a11y-contrast-2 .section-item,
 body.a11y-contrast-2 footer#page-footer {
   background-color: #fffbeb !important;
   color: #1c1917 !important;
@@ -806,6 +822,8 @@ body.a11y-contrast-3 .dropdown-menu,
 body.a11y-contrast-3 .popover,
 body.a11y-contrast-3 .modal-content,
 body.a11y-contrast-3 .navbar,
+body.a11y-contrast-3 .secondary-navigation .navigation,
+body.a11y-contrast-3 .section-item,
 body.a11y-contrast-3 footer#page-footer {
   background-color: #000000 !important;
   color: #ffffff !important;
