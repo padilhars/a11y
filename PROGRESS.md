@@ -219,4 +219,8 @@ A pedido do usuário, buscados sistematicamente (script Playwright varrendo 8 ti
 
 A pedido do usuário, revertida a imunidade que o FAB/painel tinham (desde D16/D31) especificamente às 4 opções da categoria Cores e Contraste (Contraste, Inverter Cores, Mudar Cores, Saturação) - as demais categorias (tipografia/cursor/foco) continuam não afetando o plugin, como sempre. Inverter/Mudar Cores/Saturação passaram a aplicar `filter` também em `.local-a11y-root` (FAB/painel/overlay/etc.), seguro porque nenhum deles é ancestral de outro (todos filhos diretos de `<body>`). Contraste exigiu mais trabalho: o CSS do FAB/painel nunca teve variante de tema, então vários tons foram retokenizados (mesmos valores, zero mudança visual por padrão) para que os 3 níveis de Contraste pudessem sobrescrevê-los - nível 3 (máximo contraste) também força o acento do plugin para amarelo, igual ao resto da página nesse nível. Ver DECISIONS.md D37. Verificado via Playwright nos 3 níveis + Inverter Cores, sem regressão nas correções de posicionamento fixo (D31/D33), PHPUnit 16/16 verde.
 
+## Guia/Máscara de Leitura sobrepondo o FAB/painel (concluído)
+
+Usuário reportou que essas 2 opções (barras `position:fixed` de largura total, seguindo o mouse) desenhavam por cima do FAB/painel do plugin quando o cursor passava perto deles - `z-index` maior que o do FAB/painel/overlay. Corrigido baixando o `z-index` de ambas para ficarem abaixo desse conjunto, mantendo a ordem relativa entre si. Ver DECISIONS.md D38. Verificado via Playwright (mouse posicionado sobre o FAB, captura de tela confirma que ele fica visível por cima em ambos os casos), PHPUnit 16/16 verde.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

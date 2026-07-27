@@ -551,15 +551,26 @@
 
 /* ===========================================================================
    READING GUIDE / MASK
-   =========================================================================== */
+   Both track the mouse's Y position across the *full* viewport width
+   (left:0; right:0), so whenever the cursor happens to be near the
+   FAB/panel's own corner, the guide line or a mask bar would otherwise
+   pass right over them. z-index used to put both above the FAB (99990)/
+   panel (99989)/overlay (99988) - visually correct for page content (the
+   whole point of the feature), but also drew over our own chrome, which
+   the user reported as unwanted overlap. pointer-events:none (kept)
+   already meant clicks always passed through to the FAB/panel
+   underneath regardless - this was a paint-order-only problem. Lowered
+   below the FAB/panel/overlay stack (which now always paints on top
+   in the small rectangle they occupy) while staying above sr-pill/vk,
+   preserving the guide-above-mask relative order the two already had. */
 .local-a11y-reading-guide {
   position: fixed; top: 0; left: 0; right: 0; height: 3px;
   background: var(--local-a11y-accent, #3b82f6);
   box-shadow: 0 0 8px color-mix(in srgb, var(--local-a11y-accent, #3b82f6) 60%, transparent);
-  pointer-events: none; z-index: 99998; transform: translateY(-100px);
+  pointer-events: none; z-index: 99985; transform: translateY(-100px);
 }
 .local-a11y-reading-mask-top, .local-a11y-reading-mask-bottom {
-  position: fixed; left: 0; right: 0; background: rgba(0,0,0,0.62); pointer-events: none; z-index: 99997;
+  position: fixed; left: 0; right: 0; background: rgba(0,0,0,0.62); pointer-events: none; z-index: 99984;
 }
 .local-a11y-reading-mask-top { top: 0; height: 0; }
 .local-a11y-reading-mask-bottom { bottom: 0; height: 0; }

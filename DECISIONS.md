@@ -2,6 +2,14 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D38 — Guia de Leitura / Máscara de Leitura sobrepondo o FAB e o painel
+
+O usuário reportou que essas 2 opções (categoria Foco e Navegação) sobrepunham o FAB e o painel do plugin. Causa: ambas são barras `position: fixed` que acompanham a posição Y do mouse cobrindo a largura *inteira* da viewport (`left: 0; right: 0`) - a linha de destaque de 3px da Guia, e as duas faixas escurecidas (`rgba(0,0,0,0.62)`) da Máscara - e tinham `z-index` (99998 e 99997) maior que o do FAB (99990)/painel (99989)/overlay (99988). Sempre que o cursor passava perto do canto onde o FAB/painel ficam, a linha ou a faixa escura era desenhada por cima deles. `pointer-events: none` (já existia em ambas) significava que clicar sempre "atravessava" para o FAB/painel por baixo - o problema era puramente visual (ordem de pintura), não de interação.
+
+Corrigido baixando o `z-index` da Guia para `99985` e da Máscara para `99984` - abaixo de todo o conjunto FAB/painel/overlay (99988-99990), mantendo a mesma ordem relativa que já tinham entre si (Guia acima da Máscara) e permanecendo acima do teclado virtual/pill do leitor de tela (99982/99986).
+
+Verificado via Playwright: movendo o mouse até a posição do FAB com cada opção ativa, a linha da Guia agora aparece visivelmente interrompida/atrás do botão (captura de tela) em vez de atravessá-lo; com a Máscara ativa, o FAB continua totalmente visível e nítido sobre a faixa escurecida. PHPUnit 16/16 verde (mudança é só CSS).
+
 ## D37 — Cores e Contraste agora também afeta o próprio FAB/painel do plugin (reverte a imunidade de D16/D31)
 
 A pedido explícito do usuário: "As opções da categoria Cores e Contrastes devem também surtir efeito sobre o nosso plugin." Até aqui, por design deliberado (ver o bloco "PANEL OPT-OUT" desde D16, reforçado em D31), o FAB/painel eram imunes a **todos** os efeitos de página, incluindo os 4 desta categoria (Contraste, Inverter Cores, Mudar Cores, Saturação) - a lógica original era manter o painel sempre legível/previsível independente das opções ativas. Esse racional continua válido para tipografia/cursor/foco (ver D26/D30), mas o usuário quer especificamente que Cores e Contraste "pinte" o plugin também, então essa categoria virou uma exceção deliberada.
