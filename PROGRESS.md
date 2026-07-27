@@ -223,4 +223,8 @@ A pedido do usuário, revertida a imunidade que o FAB/painel tinham (desde D16/D
 
 Usuário reportou que essas 2 opções (barras `position:fixed` de largura total, seguindo o mouse) desenhavam por cima do FAB/painel do plugin quando o cursor passava perto deles - `z-index` maior que o do FAB/painel/overlay. Corrigido baixando o `z-index` de ambas para ficarem abaixo desse conjunto, mantendo a ordem relativa entre si. Ver DECISIONS.md D38. Verificado via Playwright (mouse posicionado sobre o FAB, captura de tela confirma que ele fica visível por cima em ambos os casos), PHPUnit 16/16 verde.
 
+## Auditoria de código não utilizado (concluído)
+
+A pedido do usuário, varredura completa do plugin (checagem cruzada de uso de cada método/classe/chave de template em todo o código) em busca de sobras de atualizações anteriores. Removidos: `options::find()` e `profiles::find()` (métodos PHP nunca chamados em lugar nenhum), a classe `.moodle-shell` num seletor de `styles.css` (nunca existe no DOM real do plugin, sobra do port do CSS do protótipo), e duas chaves de contexto Mustache nunca lidas nos templates (`fab.php`'s `position`, `panel.php`'s `panelformat` - só as versões `*class` derivadas são usadas). Deliberadamente preservados o catálogo completo de ícones/tokens de design (port verbatim documentado de `_design-reference/`) e a capability `local/a11y:configure` (já revisada e mantida num audit anterior). Ver DECISIONS.md D39. Nenhuma mudança de comportamento; PHPUnit 16/16 verde, FAB/painel verificados via Playwright com as mesmas classes de antes.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_

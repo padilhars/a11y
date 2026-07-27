@@ -612,8 +612,12 @@
    REDUCED MOTION / COLOR SCHEME
    =========================================================================== */
 @media (prefers-reduced-motion: reduce) {
+  /* D39: .moodle-shell (the prototype's own single page-wrapper mock,
+     _design-reference/a11y-panel.jsx) removed from this list - our plugin
+     never creates an element with that class in real Moodle, so it never
+     matched anything here; harmless (an inert selector), but dead. */
   .local-a11y-fab, .local-a11y-panel, .local-a11y-switch__thumb, .local-a11y-stepper__dot,
-  .local-a11y-category__chevron, .local-a11y-option, .moodle-shell {
+  .local-a11y-category__chevron, .local-a11y-option {
     transition: none !important;
     animation: none !important;
   }

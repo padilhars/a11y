@@ -42,7 +42,6 @@ class fab implements renderable, templatable {
         $activecount = manager::count_active(manager::get_current_user_settings());
 
         return [
-            'position' => $appearance['fabposition'],
             'positionclass' => 'local-a11y-fab--' . preg_replace('/[^a-z-]/', '', $appearance['fabposition']),
             'shapeclass' => $appearance['fabshape'] === 'square' ? 'local-a11y-fab--square' : 'local-a11y-fab--circle',
             'iconclass' => $icon['isun'] ? 'local-a11y-fab__icon--un' : '',

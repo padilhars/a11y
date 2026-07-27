@@ -114,16 +114,4 @@ class options {
         ];
     }
 
-    /**
-     * @param string $id
-     * @return array<string, mixed>|null
-     */
-    public static function find(string $id): ?array {
-        foreach (self::all() as $option) {
-            if ($option['id'] === $id) {
-                return $option;
-            }
-        }
-        return null;
-    }
 }

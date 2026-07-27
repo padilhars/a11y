@@ -148,7 +148,6 @@ class panel implements renderable, templatable {
             'profiles' => $profilecards,
             'categories' => $categories,
             'savetitle' => config::footer_text(),
-            'panelformat' => $appearance['panelformat'],
             'panelformatclass' => 'local-a11y-panel--' . $appearance['panelformat'],
             'positionclass' => 'local-a11y-panel--' . preg_replace('/[^a-z-]/', '', $appearance['fabposition']),
             'densityclass' => 'local-a11y-panel--density-' . $appearance['density'],

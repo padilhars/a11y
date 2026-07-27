@@ -79,16 +79,4 @@ class profiles {
         ];
     }
 
-    /**
-     * @param string $id
-     * @return array<string, mixed>|null
-     */
-    public static function find(string $id): ?array {
-        foreach (self::all() as $profile) {
-            if ($profile['id'] === $id) {
-                return $profile;
-            }
-        }
-        return null;
-    }
 }
