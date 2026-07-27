@@ -60,6 +60,17 @@
   --a11y-shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
   --a11y-shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
   --a11y-shadow-lg: 0 20px 50px -12px rgba(0,0,0,0.18), 0 10px 24px -8px rgba(0,0,0,0.08);
+  /* D37: a handful of neutral tones the FAB/panel/vk/sr-pill CSS below
+     used as plain hex instead of a token (header/footer/search bar
+     backgrounds, hover backgrounds, category/section-heading label
+     colours) - added here (same literal values, so nothing about the
+     default look changes) purely so Contraste (D37) has something to
+     override; every occurrence of these exact hex values further down
+     was swapped for the matching var(). */
+  --a11y-surface-subtle: #f4f4f5;
+  --a11y-surface-hover: #fafafa;
+  --a11y-text-secondary: #52525b;
+  --a11y-text-tertiary: #3f3f46;
   --a11y-radius-sm: 6px;
   --a11y-radius: 10px;
   --a11y-radius-lg: 14px;
@@ -95,18 +106,37 @@
 
 /* ===========================================================================
    PANEL OPT-OUT
-   The FAB and panel must never receive the page-wide accessibility filters
-   (contrast/invert/saturate/colour-blind/cursor/etc). amd/src/main.js
-   relocates them to be direct children of <body> on load specifically so
-   they live outside every Moodle page region these effects target (D31) -
-   this rule is now a defensive backstop for that, matching
-   _design-reference/a11y-effects.css's own opt-out block, not the primary
-   mechanism (it used to have to be, before D31, since they were actually
-   nested inside #page until then).
-   =========================================================================== */
-.local-a11y-root,
+   The FAB/panel/etc. must never receive most page-wide accessibility
+   effects (typography, cursor, focus mode...) - amd/src/main.js relocates
+   them to be direct children of <body> on load specifically so they live
+   outside every Moodle page region those effects target (D31), and the
+   `cursor` reset below is a defensive backstop for that (matching
+   _design-reference/a11y-effects.css's own opt-out block).
+
+   D37 - Cores e Contraste (Inverter/Mudar Cores/Saturação/Contraste) is a
+   deliberate EXCEPTION, at the user's explicit request: those 4 options
+   now DO reach our own FAB/panel/overlay/reading-guide/reading-mask/
+   vk/sr-pill (every `.local-a11y-root` element), same as any Moodle page
+   region. `filter: none` is therefore no longer forced on `.local-a11y-root`
+   itself (further down, PAGE EFFECTS adds it to the same --a11y-filter-*
+   composition #page/.navbar/.drawer already use) - only kept on its
+   *descendants*, so nothing inside can independently pick up a stray
+   filter of its own; the visual effect of a parent's filter still reaches
+   every descendant automatically regardless (that's how `filter`
+   rendering works - no per-descendant rule is needed, exactly like #page
+   never needed one for its own contents either). This carries none of the
+   position:fixed containing-block risk D31/D33 were about: every
+   `.local-a11y-root` element here is a top-level sibling appended
+   straight to <body> (never nested inside another one), so none of them
+   ever becomes another one's containing block. Contraste's recolouring
+   works differently (design-token overrides, not `filter`) - see the
+   dedicated `.local-a11y-root` blocks inside each body.a11y-contrast-N
+   rule further down. */
 .local-a11y-root * {
   filter: none !important;
+  cursor: auto !important;
+}
+.local-a11y-root {
   cursor: auto !important;
 }
 .local-a11y-root button,
@@ -170,7 +200,7 @@
   height: 22px;
   padding: 0 6px;
   border-radius: 999px;
-  background: #fff;
+  background: var(--a11y-surface);
   color: var(--local-a11y-accent, var(--a11y-accent));
   font-size: 11px;
   font-weight: 700;
@@ -253,8 +283,8 @@
 .local-a11y-panel__header {
   position: relative;
   padding: 18px 20px 14px;
-  border-bottom: 1px solid #f4f4f5;
-  background: #fff;
+  border-bottom: 1px solid var(--a11y-surface-subtle);
+  background: var(--a11y-surface);
 }
 .local-a11y-panel__header-row { display: flex; align-items: center; gap: 12px; }
 .local-a11y-panel__badge {
@@ -271,12 +301,12 @@
 }
 .local-a11y-iconbutton {
   width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
-  border: 1px solid var(--a11y-border); background: #fff; color: var(--a11y-text-muted);
+  border: 1px solid var(--a11y-border); background: var(--a11y-surface); color: var(--a11y-text-muted);
   cursor: pointer; display: flex; align-items: center; justify-content: center;
   transition: all 150ms ease;
   min-width: 24px; min-height: 24px;
 }
-.local-a11y-iconbutton:hover { background: #f4f4f5; color: var(--a11y-text); }
+.local-a11y-iconbutton:hover { background: var(--a11y-surface-subtle); color: var(--a11y-text); }
 
 /* Single fixed reset button in the header row (see DECISIONS.md D23) -
    always rendered, never hidden/shown, so the header has a constant
@@ -307,7 +337,7 @@
 .local-a11y-panel__search {
   margin: 14px 20px 8px; position: sticky; top: 0; z-index: 5;
   height: 38px; display: flex; align-items: center; gap: 10px; padding: 0 12px;
-  background: #f4f4f5; border: 1px solid transparent; border-radius: 10px;
+  background: var(--a11y-surface-subtle); border: 1px solid transparent; border-radius: 10px;
 }
 .local-a11y-panel__search-icon { color: var(--a11y-text-hint); display: flex; flex-shrink: 0; }
 .local-a11y-panel__search-input {
@@ -322,19 +352,19 @@
    =========================================================================== */
 .local-a11y-panel__section { padding: 6px 20px 4px; }
 .local-a11y-panel__section-heading { padding: 10px 0 8px; display: flex; align-items: center; gap: 10px; }
-.local-a11y-panel__section-heading-icon { color: #52525b; display: flex; }
+.local-a11y-panel__section-heading-icon { color: var(--a11y-text-secondary); display: flex; }
 .local-a11y-panel__section-heading-text { flex: 1; min-width: 0; }
-.local-a11y-panel__section-heading-label { display: block; font-size: 11.5px; font-weight: 600; color: #52525b; text-transform: uppercase; letter-spacing: 0.06em; }
+.local-a11y-panel__section-heading-label { display: block; font-size: 11.5px; font-weight: 600; color: var(--a11y-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
 .local-a11y-panel__section-heading-sublabel { display: block; font-size: 11.5px; color: var(--a11y-text-muted); margin-top: 1px; }
 
 .local-a11y-profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
 .local-a11y-profile-card {
   position: relative; padding: 10px 8px; border-radius: 12px;
-  border: 1px solid var(--a11y-border); background: #fff; cursor: pointer;
+  border: 1px solid var(--a11y-border); background: var(--a11y-surface); cursor: pointer;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   transition: all 150ms ease; text-align: center; min-height: 78px; font-family: inherit;
 }
-.local-a11y-profile-card:hover { border-color: var(--a11y-border-strong); background: #fafafa; }
+.local-a11y-profile-card:hover { border-color: var(--a11y-border-strong); background: var(--a11y-surface-hover); }
 .local-a11y-profile-card__icon {
   width: 30px; height: 30px; border-radius: 8px; background: var(--local-a11y-tone-bg);
   color: var(--local-a11y-tone-icon); display: flex; align-items: center; justify-content: center;
@@ -348,7 +378,7 @@
 .local-a11y-profile-card--active {
   border: 1.5px solid var(--local-a11y-tone-icon); background: var(--local-a11y-tone-bg);
 }
-.local-a11y-profile-card--active .local-a11y-profile-card__icon { background: #fff; }
+.local-a11y-profile-card--active .local-a11y-profile-card__icon { background: var(--a11y-surface); }
 .local-a11y-profile-card--active .local-a11y-profile-card__label { color: var(--local-a11y-tone-text); }
 
 /* ===========================================================================
@@ -359,11 +389,11 @@
 .local-a11y-category__header {
   width: 100%; display: flex; align-items: center; gap: 10px;
   padding: 12px 10px 10px; background: transparent; border: 0; cursor: pointer;
-  color: #3f3f46; text-align: left; border-radius: 8px; font-family: inherit;
+  color: var(--a11y-text-tertiary); text-align: left; border-radius: 8px; font-family: inherit;
   min-height: 24px;
 }
-.local-a11y-category__icon { color: #52525b; display: flex; }
-.local-a11y-category__label { font-size: 11.5px; font-weight: 600; color: #52525b; text-transform: uppercase; letter-spacing: 0.06em; flex: 1; }
+.local-a11y-category__icon { color: var(--a11y-text-secondary); display: flex; }
+.local-a11y-category__label { font-size: 11.5px; font-weight: 600; color: var(--a11y-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; flex: 1; }
 .local-a11y-category__count {
   font-size: 10px; font-weight: 700; color: var(--local-a11y-accent, var(--a11y-accent));
   background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent);
@@ -401,7 +431,7 @@
      effects reaching into the panel's own text further down - see both. */
   border: 1px solid transparent; transition: all 150ms ease;
 }
-.local-a11y-option:hover { background: #fafafa; }
+.local-a11y-option:hover { background: var(--a11y-surface-hover); }
 .local-a11y-option--active {
   background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent);
   border-color: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 20%, transparent);
@@ -425,7 +455,7 @@
 }
 .local-a11y-option--pulse { animation: local-a11y-option-pulse 350ms ease; }
 .local-a11y-option__icon {
-  width: 32px; height: 32px; border-radius: 8px; background: #f4f4f5; color: #52525b;
+  width: 32px; height: 32px; border-radius: 8px; background: var(--a11y-surface-subtle); color: var(--a11y-text-secondary);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 150ms ease;
 }
 .local-a11y-option--active .local-a11y-option__icon { background: var(--local-a11y-accent, var(--a11y-accent)); color: #fff; }
@@ -443,7 +473,7 @@
 .local-a11y-switch[aria-pressed="true"] { background: var(--local-a11y-accent, var(--a11y-accent)); }
 .local-a11y-switch__thumb {
   position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
-  background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: left 200ms cubic-bezier(0.4,0,0.2,1);
+  background: var(--a11y-surface); box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: left 200ms cubic-bezier(0.4,0,0.2,1);
 }
 .local-a11y-switch[aria-pressed="true"] .local-a11y-switch__thumb { left: 18px; }
 
@@ -459,13 +489,13 @@
    PANEL — footer
    =========================================================================== */
 .local-a11y-panel__footer {
-  padding: 12px 20px; border-top: 1px solid #f4f4f5; background: #fafafa;
+  padding: 12px 20px; border-top: 1px solid var(--a11y-surface-subtle); background: var(--a11y-surface-hover);
   display: flex; align-items: center; gap: 10px;
 }
 .local-a11y-panel__footer-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .local-a11y-panel__footer-title { font-size: 12px; font-weight: 600; color: var(--a11y-text); line-height: 1.2; }
 .local-a11y-panel__footer-kbd {
-  font-size: 10px; font-family: inherit; color: var(--a11y-text-muted); background: #fff;
+  font-size: 10px; font-family: inherit; color: var(--a11y-text-muted); background: var(--a11y-surface);
   border: 1px solid var(--a11y-border); border-radius: 4px; padding: 2px 5px; white-space: nowrap;
 }
 
@@ -474,7 +504,7 @@
    =========================================================================== */
 .local-a11y-sr-pill {
   position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 99986;
-  background: #fff; border: 1px solid var(--a11y-border); border-radius: 999px;
+  background: var(--a11y-surface); border: 1px solid var(--a11y-border); border-radius: 999px;
   box-shadow: 0 10px 30px -8px rgba(0,0,0,0.2), 0 4px 10px rgba(0,0,0,0.06);
   padding: 10px 16px 10px 12px; display: flex; align-items: center; gap: 10px;
   font-size: 13px; color: var(--a11y-text); max-width: 480px;
@@ -486,7 +516,7 @@
   color: var(--local-a11y-accent, var(--a11y-accent));
   display: flex; align-items: center; justify-content: center;
 }
-.local-a11y-sr-pill__hint { color: #52525b; }
+.local-a11y-sr-pill__hint { color: var(--a11y-text-secondary); }
 .local-a11y-sr-pill__title { font-weight: 600; font-size: 12px; }
 .local-a11y-sr-pill__text { font-size: 11.5px; color: var(--a11y-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 280px; }
 .local-a11y-sr-pill__stop {
@@ -496,27 +526,27 @@
 
 .local-a11y-vk {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 99982;
-  background: #f4f4f5; border-top: 1px solid #e2e2e5; box-shadow: 0 -8px 24px rgba(0,0,0,0.08);
+  background: var(--a11y-surface-subtle); border-top: 1px solid #e2e2e5; box-shadow: 0 -8px 24px rgba(0,0,0,0.08);
   padding: 10px 14px 14px;
 }
 .local-a11y-vk[hidden] { display: none; }
-.local-a11y-vk__status { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; color: #52525b; }
+.local-a11y-vk__status { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; color: var(--a11y-text-secondary); }
 .local-a11y-vk__status-icon { color: var(--local-a11y-accent, var(--a11y-accent)); display: flex; }
 .local-a11y-vk__status-target { font-weight: 600; color: var(--a11y-text); }
 .local-a11y-vk__rows { display: flex; flex-direction: column; gap: 6px; max-width: 760px; margin: 0 auto; }
 .local-a11y-vk__row { display: flex; gap: 6px; justify-content: center; }
 .local-a11y-vk__key {
-  border: 1px solid var(--a11y-border); background: #fff; color: var(--a11y-text); cursor: pointer;
+  border: 1px solid var(--a11y-border); background: var(--a11y-surface); color: var(--a11y-text); cursor: pointer;
   border-radius: 9px; font-family: inherit; font-weight: 500; display: flex; align-items: center; justify-content: center;
   transition: all 100ms ease; flex-shrink: 0; width: 40px; height: 42px; font-size: 14px;
 }
-.local-a11y-vk__key:hover { background: #f4f4f5; }
+.local-a11y-vk__key:hover { background: var(--a11y-surface-subtle); }
 .local-a11y-vk__key--wide { width: 52px; }
 .local-a11y-vk__key--small { width: 34px; height: 34px; font-size: 12px; }
 .local-a11y-vk__key--active { border: 1.5px solid var(--local-a11y-accent, var(--a11y-accent)); color: var(--local-a11y-accent, var(--a11y-accent)); background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent); }
 .local-a11y-vk__space {
   flex: 1; max-width: 360px; height: 42px; border-radius: 9px; border: 1px solid var(--a11y-border);
-  background: #fff; cursor: pointer; font-family: inherit; font-size: 12.5px; color: #52525b; font-weight: 500;
+  background: var(--a11y-surface); cursor: pointer; font-family: inherit; font-size: 12.5px; color: var(--a11y-text-secondary); font-weight: 500;
 }
 
 /* ===========================================================================
@@ -823,6 +853,33 @@ body.a11y-contrast-1 .navbar { background-color: #0a0a0a !important; border-bott
    inheriting --bs-link-color (e.g. activity/section title links), so the
    variable override above doesn't reach them - force it explicitly too. */
 body.a11y-contrast-1 #page-wrapper a:not(.btn) { color: #93c5fd !important; }
+/* D37: re-theme our own FAB/panel/vk/sr-pill/etc. too (see the D37 comment
+   on PANEL OPT-OUT, further up) - same 8 design tokens their component
+   CSS already reads everywhere (--a11y-bg/surface/surface-subtle/
+   surface-hover/border/border-strong/text/text-muted/text-hint/
+   text-secondary/text-tertiary), just given this level's dark palette
+   instead of the light defaults declared on plain .local-a11y-root
+   further up. --local-a11y-accent (the FAB/panel's actual accent colour -
+   admin-configurable, always set inline, so plain --a11y-accent alone
+   never reaches it, see D37 on .btn-primary/.local-a11y-fab below) is
+   deliberately left alone at levels 1/2: the admin's chosen accent
+   already has reasonable contrast against both the dark and warm-light
+   palette, exactly like Contraste leaves Moodle's own primary links/
+   buttons alone at these two levels too. */
+body.a11y-contrast-1 .local-a11y-root {
+  --a11y-bg: #1f1f1f;
+  --a11y-surface: #27272a;
+  --a11y-surface-subtle: #18181b;
+  --a11y-surface-hover: #3f3f46;
+  --a11y-border: #3f3f46;
+  --a11y-border-strong: #52525b;
+  --a11y-text: #f3f4f6;
+  --a11y-text-muted: #a1a1aa;
+  --a11y-text-hint: #71717a;
+  --a11y-text-secondary: #d4d4d8;
+  --a11y-text-tertiary: #e4e4e7;
+  --a11y-accent-soft: #1e3a5f;
+}
 
 body.a11y-contrast-2 #region-main,
 body.a11y-contrast-2 .main-inner,
@@ -854,6 +911,21 @@ body.a11y-contrast-2 {
   --bs-border-color-translucent: #d6d3d1;
   --bs-light: #fef3c7;
   --bs-light-rgb: 254, 243, 199;
+}
+/* D37 - see the equivalent block for contrast-1 above. */
+body.a11y-contrast-2 .local-a11y-root {
+  --a11y-bg: #fffbeb;
+  --a11y-surface: #fffdf7;
+  --a11y-surface-subtle: #fef3c7;
+  --a11y-surface-hover: #fef9ec;
+  --a11y-border: #d6d3d1;
+  --a11y-border-strong: #b8b0a8;
+  --a11y-text: #1c1917;
+  --a11y-text-muted: #57534e;
+  --a11y-text-hint: #78716c;
+  --a11y-text-secondary: #44403c;
+  --a11y-text-tertiary: #292524;
+  --a11y-accent-soft: #fef3c7;
 }
 
 body.a11y-contrast-3 #region-main,
@@ -894,6 +966,34 @@ body.a11y-contrast-3 {
 body.a11y-contrast-3 #page-wrapper a:not(.btn) { color: #ffff00 !important; }
 body.a11y-contrast-3 a { text-decoration: underline !important; }
 body.a11y-contrast-3 .btn-primary { background: #ffff00 !important; border-color: #ffff00 !important; color: #000 !important; font-weight: 700 !important; }
+/* D37 - see the equivalent block for contrast-1 further up. Unlike levels
+   1/2, level 3 also forces --local-a11y-accent itself (not just
+   --a11y-accent, which alone would never reach it - it's always set
+   inline on both .local-a11y-fab/.local-a11y-panel from the admin's
+   configured accent colour, see templates/fab.mustache /
+   templates/panel.mustache, and an inline style always wins over a
+   plain-specificity class rule; needs !important here specifically to
+   beat that inline declaration, the one place this file relies on that):
+   matches the yellow .btn-primary/link treatment already given to the
+   rest of the page at this level, so the FAB/badge/focus-ring/active-
+   option/profile accents all become the same black-background,
+   yellow-accent pairing instead of keeping the admin's normal accent at
+   a contrast ratio this level was never designed around. */
+body.a11y-contrast-3 .local-a11y-root {
+  --a11y-bg: #000000;
+  --a11y-surface: #000000;
+  --a11y-surface-subtle: #000000;
+  --a11y-surface-hover: #1a1a1a;
+  --a11y-border: #ffffff;
+  --a11y-border-strong: #ffffff;
+  --a11y-text: #ffffff;
+  --a11y-text-muted: #e5e5e5;
+  --a11y-text-hint: #d4d4d4;
+  --a11y-text-secondary: #ffffff;
+  --a11y-text-tertiary: #ffffff;
+  --a11y-accent-soft: #3a3a00;
+  --local-a11y-accent: #ffff00 !important;
+}
 
 /* Invert / saturation / colour-blind filters. D16 first combined these via
    one shared `filter` on the single ancestor #page-wrapper (so the effect
@@ -921,14 +1021,21 @@ body.a11y-contrast-3 .btn-primary { background: #ffff00 !important; border-color
       each keeps its own already-correct fixed positioning (nothing
       *above* any of them is filtered), while their contents still get
       inverted/saturated/colour-shifted exactly as before. */
-body.a11y-invert #page, body.a11y-invert .navbar, body.a11y-invert .drawer { --a11y-filter-invert: invert(1) hue-rotate(180deg); }
-body.a11y-saturation-1 #page, body.a11y-saturation-1 .navbar, body.a11y-saturation-1 .drawer { --a11y-filter-saturate: saturate(1.8); }
-body.a11y-saturation-2 #page, body.a11y-saturation-2 .navbar, body.a11y-saturation-2 .drawer { --a11y-filter-saturate: saturate(0.4); }
-body.a11y-saturation-3 #page, body.a11y-saturation-3 .navbar, body.a11y-saturation-3 .drawer { --a11y-filter-saturate: grayscale(1); }
-body.a11y-color-1 #page, body.a11y-color-1 .navbar, body.a11y-color-1 .drawer { --a11y-filter-color: url(#local-a11y-protanopia); }
-body.a11y-color-2 #page, body.a11y-color-2 .navbar, body.a11y-color-2 .drawer { --a11y-filter-color: url(#local-a11y-deuteranopia); }
-body.a11y-color-3 #page, body.a11y-color-3 .navbar, body.a11y-color-3 .drawer { --a11y-filter-color: url(#local-a11y-tritanopia); }
-#page, .navbar, .drawer {
+body.a11y-invert #page, body.a11y-invert .navbar, body.a11y-invert .drawer, body.a11y-invert .local-a11y-root { --a11y-filter-invert: invert(1) hue-rotate(180deg); }
+body.a11y-saturation-1 #page, body.a11y-saturation-1 .navbar, body.a11y-saturation-1 .drawer, body.a11y-saturation-1 .local-a11y-root { --a11y-filter-saturate: saturate(1.8); }
+body.a11y-saturation-2 #page, body.a11y-saturation-2 .navbar, body.a11y-saturation-2 .drawer, body.a11y-saturation-2 .local-a11y-root { --a11y-filter-saturate: saturate(0.4); }
+body.a11y-saturation-3 #page, body.a11y-saturation-3 .navbar, body.a11y-saturation-3 .drawer, body.a11y-saturation-3 .local-a11y-root { --a11y-filter-saturate: grayscale(1); }
+body.a11y-color-1 #page, body.a11y-color-1 .navbar, body.a11y-color-1 .drawer, body.a11y-color-1 .local-a11y-root { --a11y-filter-color: url(#local-a11y-protanopia); }
+body.a11y-color-2 #page, body.a11y-color-2 .navbar, body.a11y-color-2 .drawer, body.a11y-color-2 .local-a11y-root { --a11y-filter-color: url(#local-a11y-deuteranopia); }
+body.a11y-color-3 #page, body.a11y-color-3 .navbar, body.a11y-color-3 .drawer, body.a11y-color-3 .local-a11y-root { --a11y-filter-color: url(#local-a11y-tritanopia); }
+/* D37: .local-a11y-root joins this composition too (see the PANEL OPT-OUT
+   comment above) - every element carrying that class (FAB, panel,
+   overlay, reading-guide/mask, vk, sr-pill, tooltip bubble) is a
+   top-level <body> child with no position:fixed descendants of its own,
+   so giving each its own `filter` here is exactly as safe as #page/
+   .navbar/.drawer already are, with none of the containing-block risk a
+   shared ancestor (or <body> itself) would carry. */
+#page, .navbar, .drawer, .local-a11y-root {
   filter:
     var(--a11y-filter-invert, )
     var(--a11y-filter-saturate, )
