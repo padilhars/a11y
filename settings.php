@@ -158,6 +158,14 @@ if ($hassiteconfig) {
         1
     ));
 
+    $settings->add(new admin_setting_confightmleditor(
+        'local_a11y/footertext',
+        new lang_string('settings_footertext', 'local_a11y'),
+        new lang_string('settings_footertext_desc', 'local_a11y'),
+        '',
+        PARAM_RAW
+    ));
+
     // -- Appearance ---------------------------------------------------------
     $settings->add(new admin_setting_heading(
         'local_a11y/appearanceheading',

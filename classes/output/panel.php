@@ -147,7 +147,7 @@ class panel implements renderable, templatable {
             'checkiconsvg' => icons::svg('check', 9, 3),
             'profiles' => $profilecards,
             'categories' => $categories,
-            'savetitle' => get_string('savetitle', 'local_a11y'),
+            'savetitle' => config::footer_text(),
             'panelformat' => $appearance['panelformat'],
             'panelformatclass' => 'local-a11y-panel--' . $appearance['panelformat'],
             'positionclass' => 'local-a11y-panel--' . preg_replace('/[^a-z-]/', '', $appearance['fabposition']),

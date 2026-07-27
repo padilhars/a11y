@@ -2,6 +2,16 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D34 — Frase do rodapé do painel agora configurável nas configurações do plugin
+
+A pedido do usuário, o texto do rodapé do painel (`savetitle`, hoje "Desenvolvido com ❤️ pela **CPTED** para você." — ver D-anterior que introduziu essa frase de crédito) deixou de ser fixo via lang string e passou a ser configurável por site em **Administração do site → Plugins → Plugins locais → Acessibilidade (A11y)**, seção Painel.
+
+Novo setting `local_a11y/footertext`, `admin_setting_confightmleditor` (editor rich-text do próprio Moodle, TinyMCE) — escolhido em vez de um simples campo de texto porque o padrão *default* já usa uma tag `<strong>` para destacar "CPTED", então um admin trocando a frase deveria poder manter esse mesmo tipo de ênfase. Renderização em `classes/config.php::footer_text()`: se o setting estiver vazio (padrão de fábrica), cai de volta na lang string `savetitle` como sempre; se o admin configurou algo, o valor passa por `format_text(..., FORMAT_HTML, ['para' => false])` antes de ser usado — nunca é ecoado cru. `'para' => false` evita o Moodle envolver o HTML num `<div>`/parágrafo extra que quebraria o layout do rodapé (que é um `<span>` inline). Mesmo padrão de segurança usado em qualquer outro trecho de HTML vindo de configuração de admin no core do Moodle (resumo da página inicial, HTML adicional do rodapé do site, etc.) — é conteúdo de um usuário com `moodle/site:config` (o nível de confiança mais alto do sistema), mas ainda assim nunca é tratado como confiável o bastante para pular `format_text()`.
+
+`classes/output/panel.php` trocou `get_string('savetitle', 'local_a11y')` por `config::footer_text()`; o template (`templates/panel.mustache`) não mudou — continua `{{{savetitle}}}` (raw), já que agora é `format_text()` (não mais `get_string()` puro) que garante a segurança do HTML antes de chegar ali.
+
+Verificado via Playwright: campo aparece nas configurações do plugin; com o campo vazio, o rodapé mostra a frase padrão de sempre; configurando um texto customizado com `<strong>` (via o editor TinyMCE de verdade, não só manipulando o `<textarea>` escondido por trás dele — que por si só não bastava, pois o TinyMCE sobrescreve o `<textarea>` a partir do seu próprio iframe no momento do `submit`), o rodapé passa a mostrar exatamente esse texto, sem quebrar o layout; limpando o campo, volta a mostrar a frase padrão. PHPUnit 16/16 verde (mudança não afeta nenhum teste existente).
+
 ## D33 — Inverter Cores/Mudar Cores/Saturação: `#page` precisava de fundo opaco próprio, não bastava aplicar o filtro a `<body>`
 
 O usuário notou que, com Inverter Cores/Mudar Cores/Saturação ativos, alguns elementos não pareciam ser modificados — citando especificamente "o fundo da página" — e sugeriu aplicar o `filter` a `<body>` em vez de `#page`, mas pediu explicitamente cautela em relação a tudo que D31/D32 já haviam corrigido (FAB/painel/navbar/drawer/`.stickyfooter` descolando da tela).

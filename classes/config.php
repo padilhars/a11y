@@ -120,4 +120,25 @@ class config {
         }
         return explode(',', $raw);
     }
+
+    /**
+     * The panel footer message (below the option categories, above the
+     * Alt+A hint) - "Made with <3 by CPTED, for you" by default (the
+     * 'savetitle' lang string), customisable per-site since D34. Admin
+     * input is rich text (admin_setting_confightmleditor) so the same kind
+     * of inline emphasis the default already uses (a <strong> tag) stays
+     * possible, but it's run through format_text() - never trusted/output
+     * verbatim - exactly like any other admin-authored HTML snippet
+     * (frontpage summary, additional HTML footer, etc.) elsewhere in
+     * Moodle core.
+     *
+     * @return string Safe HTML, ready for raw (unescaped) template output.
+     */
+    public static function footer_text(): string {
+        $custom = trim((string) (get_config('local_a11y', 'footertext') ?? ''));
+        if ($custom === '') {
+            return get_string('savetitle', 'local_a11y');
+        }
+        return format_text($custom, FORMAT_HTML, ['context' => \context_system::instance(), 'para' => false]);
+    }
 }

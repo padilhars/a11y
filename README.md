@@ -54,7 +54,7 @@ Baixa Visão, Daltonismo, Dislexia, TDAH/Foco, Idoso/Sênior, Epilepsia, Defici�
 
 - Ativar/desativar o plugin globalmente; mostrar (ou não) para visitantes; padrões de URL a excluir.
 - Quais das 23 opções ficam disponíveis para os usuários.
-- Posição/ícone/forma do botão flutuante; formato do painel (popover/gaveta/modal); densidade; mostrar perfis; cor de acento.
+- Posição/ícone/forma do botão flutuante; formato do painel (popover/gaveta/modal); densidade; mostrar perfis; texto do rodapé do painel; cor de acento.
 
 ## Privacidade
 
