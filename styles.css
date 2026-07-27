@@ -748,13 +748,51 @@ body.a11y-pause-animations #page *::before, body.a11y-pause-animations #page *::
    happened to *look* fixed already on some pages only because it also
    carries Moodle's own `.moremenu` class there (already in this list) -
    coincidental, not guaranteed on every page that has a secondary nav, so
-   it needed its own explicit entry rather than relying on that. */
+   it needed its own explicit entry rather than relying on that.
+
+   D36 — a broader sweep (Playwright: walked the live DOM of 8 different
+   page types with Contraste ativo, flagging any visible element whose
+   resolved background/border colour was still a stock Bootstrap light
+   grey) turned up 3 more instances of the exact same root cause, all
+   confirmed against the *served* theme CSS (`theme/styles.php/...`, not
+   just the static file on disk - Moodle's SCSS compiler bakes some Sass
+   variables into literal hex at build time, which reads identically to a
+   hand-hardcoded colour from the browser's point of view):
+   - `.moremenu .nav-tabs` (the "mais"/overflow tab list under the page
+     title) - Boost's rule for it is `background-color: #ffffff` inside a
+     *nested* selector (`.moremenu .nav-tabs`, not `.moremenu` itself), so
+     it wasn't reached by this list's own `.moremenu` entry above (same
+     "ancestor override doesn't reach a hardcoded descendant" shape as
+     `.secondary-navigation .navigation` in D35, just one level deeper).
+   - `.btn-secondary` - like `.btn-primary` further down, Bootstrap 5.3
+     buttons declare their own component-scoped custom properties
+     (`--bs-btn-bg`, `--bs-btn-border-color`, ...) directly on the
+     `.btn-secondary` rule itself with literal hex values, not by reading
+     `--bs-secondary-bg`/`--bs-border-color` - overriding those page-wide
+     variables (this block, below) never reaches them.
+   - `.navbar`'s bottom border - confirmed via the live CSSOM
+     (`document.styleSheets`, matching rules against the real element,
+     not just grepping the static source) that the *compiled* rule is
+     `.navbar.fixed-top { border-bottom: 1px solid #dee2e6; }` - a literal
+     value, even though the equivalent source selectors elsewhere in the
+     same stylesheet correctly use `var(--bs-border-color)`.
+   All three fixed the same way as everything else here: added to this
+   list (`.moremenu .nav-tabs`, `.btn-secondary`) or given their own
+   explicit `border-color` override (`.navbar`, next to its existing
+   `background-color` one below). `--bs-light`/`--bs-light-rgb` were also
+   added to each level's variable block below - genuinely var-driven
+   (`.bg-light` correctly reads `var(--bs-light-rgb)`), just never
+   overridden before, so `.bg-light` elements (e.g. the participants page
+   filter panel) stayed the default light grey through no fault of their
+   own. */
 body.a11y-contrast-1 #region-main,
 body.a11y-contrast-1 .main-inner,
 body.a11y-contrast-1 .moremenu,
+body.a11y-contrast-1 .moremenu .nav-tabs,
 body.a11y-contrast-1 .drawer,
 body.a11y-contrast-1 .card,
 body.a11y-contrast-1 .bg-white,
+body.a11y-contrast-1 .btn-secondary,
 body.a11y-contrast-1 .dropdown-menu,
 body.a11y-contrast-1 .popover,
 body.a11y-contrast-1 .modal-content,
@@ -777,8 +815,10 @@ body.a11y-contrast-1 {
   --bs-border-color-translucent: #3f3f46;
   --bs-link-color: #93c5fd;
   --bs-link-hover-color: #bfdbfe;
+  --bs-light: #27272a;
+  --bs-light-rgb: 39, 39, 42;
 }
-body.a11y-contrast-1 .navbar { background-color: #0a0a0a !important; }
+body.a11y-contrast-1 .navbar { background-color: #0a0a0a !important; border-bottom-color: #3f3f46 !important; }
 /* Belt-and-braces: some Moodle links set their own colour instead of
    inheriting --bs-link-color (e.g. activity/section title links), so the
    variable override above doesn't reach them - force it explicitly too. */
@@ -787,9 +827,11 @@ body.a11y-contrast-1 #page-wrapper a:not(.btn) { color: #93c5fd !important; }
 body.a11y-contrast-2 #region-main,
 body.a11y-contrast-2 .main-inner,
 body.a11y-contrast-2 .moremenu,
+body.a11y-contrast-2 .moremenu .nav-tabs,
 body.a11y-contrast-2 .drawer,
 body.a11y-contrast-2 .card,
 body.a11y-contrast-2 .bg-white,
+body.a11y-contrast-2 .btn-secondary,
 body.a11y-contrast-2 .dropdown-menu,
 body.a11y-contrast-2 .popover,
 body.a11y-contrast-2 .modal-content,
@@ -800,7 +842,7 @@ body.a11y-contrast-2 footer#page-footer {
   color: #1c1917 !important;
   border-color: #d6d3d1 !important;
 }
-body.a11y-contrast-2 .navbar { background-color: #fffbeb !important; }
+body.a11y-contrast-2 .navbar { background-color: #fffbeb !important; border-bottom-color: #d6d3d1 !important; }
 body.a11y-contrast-2 {
   --bs-body-bg: #fffbeb;
   --bs-body-bg-rgb: 255, 251, 235;
@@ -810,14 +852,18 @@ body.a11y-contrast-2 {
   --bs-tertiary-bg: #fef9ec;
   --bs-border-color: #d6d3d1;
   --bs-border-color-translucent: #d6d3d1;
+  --bs-light: #fef3c7;
+  --bs-light-rgb: 254, 243, 199;
 }
 
 body.a11y-contrast-3 #region-main,
 body.a11y-contrast-3 .main-inner,
 body.a11y-contrast-3 .moremenu,
+body.a11y-contrast-3 .moremenu .nav-tabs,
 body.a11y-contrast-3 .drawer,
 body.a11y-contrast-3 .card,
 body.a11y-contrast-3 .bg-white,
+body.a11y-contrast-3 .btn-secondary,
 body.a11y-contrast-3 .dropdown-menu,
 body.a11y-contrast-3 .popover,
 body.a11y-contrast-3 .modal-content,
@@ -842,6 +888,8 @@ body.a11y-contrast-3 {
   --bs-border-color-translucent: #ffffff;
   --bs-link-color: #ffff00;
   --bs-link-hover-color: #ffff66;
+  --bs-light: #000000;
+  --bs-light-rgb: 0, 0, 0;
 }
 body.a11y-contrast-3 #page-wrapper a:not(.btn) { color: #ffff00 !important; }
 body.a11y-contrast-3 a { text-decoration: underline !important; }

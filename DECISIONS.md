@@ -2,6 +2,23 @@
 
 Registro de decisões tomadas autonomamente diante de ambiguidades do briefing. Fonte de verdade em caso de dúvida futura: `_design-reference/` (protótipo) > este arquivo > bom senso Moodle.
 
+## D36 — Varredura mais ampla por cores "hardcoded" que Contraste não alcançava
+
+A pedido do usuário, após D35, uma busca mais sistemática (não mais um elemento por vez conforme reportado, mas uma varredura ativa) por outros elementos na mesma situação: cor fixa no CSS compilado do Boost em vez de ler as variáveis `--bs-*` que Contraste sobrescreve.
+
+**Método**: script Playwright que, com cada nível de Contraste ativo, percorre todo o DOM visível de 8 tipos de página (curso, painel, configurações de admin, participantes, editar curso, calendário, notas, perfil) e sinaliza qualquer elemento cuja `background-color`/`border-color` computada ainda resolvesse para um cinza claro padrão do Bootstrap (`#dee2e6`, `#ced4da`, etc.) — um proxy razoável para "isso não respondeu ao Contraste". Cada sinal foi então confirmado individualmente inspecionando `document.styleSheets` ao vivo (não o CSS estático em disco - o compilador SCSS do Moodle às vezes resolve uma variável Sass para um hex literal no build, o que parece idêntico a uma cor hardcoded manualmente do ponto de vista do navegador) para achar a regra exata e confirmar que de fato não lê `var(--bs-*)`.
+
+**Achados confirmados e corrigidos** (mesmo tratamento de sempre: adicionados à lista de seletores com override explícito, ou receberam sua própria regra pontual):
+
+- **`.moremenu .nav-tabs`** (a lista de abas "mais opções" sob o título da página): `background-color: #ffffff` hardcoded numa regra *aninhada* (`.moremenu .nav-tabs`, não `.moremenu` sozinho) - por isso a entrada `.moremenu` já existente na lista não alcançava; mesmo formato de vazamento do D35 (`.secondary-navigation .navigation`), só que um nível mais fundo.
+- **`.btn-secondary`**: assim como `.btn-primary` (já tratado à parte, mais abaixo, só no nível 3), os botões do Bootstrap 5.3 declaram suas próprias variáveis (`--bs-btn-bg`, `--bs-btn-border-color`, ...) com hex literal diretamente na regra `.btn-secondary`, não lendo `--bs-secondary-bg`/`--bs-border-color` (as variáveis de página que este bloco sobrescreve). Ao contrário de `.btn-primary` (que só ganha tratamento especial - amarelo - no nível 3, para manter o destaque de "ação primária"), `.btn-secondary` foi adicionado à lista geral em todos os 3 níveis, recebendo o mesmo tratamento neutro de qualquer outro card/superfície.
+- **Borda inferior do `.navbar`**: confirmado via `document.styleSheets` ao vivo que a regra servida é `.navbar.fixed-top { border-bottom: 1px solid #dee2e6; }` - um valor literal, mesmo havendo outras regras no mesmo arquivo que corretamente usam `var(--bs-border-color)` para casos equivalentes. Corrigido com `border-bottom-color` explícito na mesma linha que já sobrescrevia o `background-color` do `.navbar` (níveis 1 e 2 - o nível 3 já cobria isso, pois `.navbar` já estava na lista geral desde D31/D14).
+- **`--bs-light`/`--bs-light-rgb`**: diferente dos três acima, esse é o caso oposto - `.bg-light` (usado por ex. no painel de filtros da página de Participantes) já lê corretamente `var(--bs-light-rgb)`, só que essa variável nunca tinha sido incluída no bloco de variáveis de nenhum dos 3 níveis. Adicionada nos 3, seguindo o mesmo tom de cada paleta (ex.: nível 1 usa o mesmo `#27272a` já usado por `--bs-secondary-bg`).
+
+Achados descartados por baixo valor/escopo muito estreito (não corrigidos nesta rodada): `.userinitials` (círculo de iniciais do avatar - texto escuro sobre fundo claro já tem contraste interno suficiente por si só, é um elemento pequeno e propositalmente neutro entre temas); cabeçalhos de tabela do relatório de notas (`<th>` do gradebook, página bem específica); `.badge.bg-secondary` da tela de edição de curso (uso único, página administrativa).
+
+Verificado via Playwright nos 3 níveis (valores computados de `.navbar`, `.moremenu .nav-tabs`, `.btn-secondary` e `.bg-light` batendo com a paleta de cada nível) e captura de tela do nível 3 confirmando visualmente nenhuma mancha clara remanescente na página de Participantes. Regressão: FAB/navbar continuam com posição idêntica antes/depois de rolar com Inverter Cores ativo (D31/D33 intactos). PHPUnit 16/16 verde (mudança é só CSS).
+
 ## D35 — Contraste não modificava `.secondary-navigation` nem a borda de `.section-item`
 
 O usuário perguntou por que ativar Contraste não muda a cor de `.secondary-navigation` nem a borda de `.section-item`. Investigado ao vivo (`getComputedStyle` + inspeção do CSS compilado do tema Boost, `theme/boost/style/moodle.css`):

@@ -211,4 +211,8 @@ O texto de crédito no rodapé do painel ("Desenvolvido com ❤️ pela CPTED pa
 
 Usuário perguntou por que Contraste deixava a barra de abas secundária e a borda dos cards de seção do curso intocadas. Causa: Boost hardcoda `background-color`/`border-color` literais nesses dois seletores em vez de usar as variáveis `--bs-*` que Contraste sobrescreve - o mesmo tipo de gap já resolvido antes para `#region-main`/`.card`/`.drawer`/etc., só que para dois seletores que ainda não estavam na lista. Corrigido adicionando ambos à mesma lista de overrides explícitos nos 3 níveis. Ver DECISIONS.md D35. Verificado via Playwright nos 3 níveis, PHPUnit 16/16 verde.
 
+## Varredura ampla de cores hardcoded no Contraste (concluído)
+
+A pedido do usuário, buscados sistematicamente (script Playwright varrendo 8 tipos de página nos 3 níveis) outros elementos na mesma situação de D35. Corrigidos: `.moremenu .nav-tabs` (lista de abas "mais opções", presente em quase toda página), `.btn-secondary` (componente usado em formulários/filtros por todo o site), a borda inferior do `.navbar`, e as variáveis `--bs-light`/`--bs-light-rgb` (cobrindo `.bg-light`, usado no painel de filtros de Participantes). Ver DECISIONS.md D36. Verificado nos 3 níveis via Playwright + captura de tela, sem regressão nas correções de posicionamento fixo (D31/D33), PHPUnit 16/16 verde.
+
 _(Este arquivo será atualizado ao final de cada marco subsequente.)_
