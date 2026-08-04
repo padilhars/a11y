@@ -55,6 +55,7 @@ export const DEFAULT_SETTINGS = {
     screenReader: false,
     virtualKeyboard: false,
     voiceCommands: false,
+    faceNavigation: false,
 };
 
 const STEPPER_MAX = {

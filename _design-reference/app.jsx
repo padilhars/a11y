@@ -113,6 +113,7 @@ function App() {
       <ReadingMask active={!!settings.readingMask} />
       <ScreenReaderLayer active={!!settings.screenReader} language={t.language} accent={t.accent} />
       <VirtualKeyboard active={!!settings.virtualKeyboard} language={t.language} accent={t.accent} />
+      <FaceNavigationLayer active={!!settings.faceNavigation} language={t.language} accent={t.accent} />
 
       <A11yTweaks t={t} setTweak={setTweak} />
     </>

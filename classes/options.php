@@ -88,7 +88,9 @@ class options {
             ['id' => 'virtualKeyboard', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'keyboard',
                 'labelkey' => 'opt_virtualkeyboard', 'desckey' => null],
             ['id' => 'voiceCommands', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'mic',
-                'labelkey' => 'opt_voicecommands', 'desckey' => null],
+                'labelkey' => 'opt_voicecommands', 'desckey' => null, 'hashelp' => true],
+            ['id' => 'faceNavigation', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'scanFace',
+                'labelkey' => 'opt_facenavigation', 'desckey' => 'opt_facenavigation_desc', 'hashelp' => true],
         ];
     }
 

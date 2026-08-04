@@ -61,6 +61,7 @@ class manager {
             'screenReader' => false,
             'virtualKeyboard' => false,
             'voiceCommands' => false,
+            'faceNavigation' => false,
         ];
     }
 

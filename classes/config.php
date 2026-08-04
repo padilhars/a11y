@@ -111,6 +111,21 @@ class config {
     }
 
     /**
+     * Colours for the page-effect options that don't have a fixed one
+     * (--local-a11y-accent is FAB/panel-only, see get_appearance() -
+     * these two apply to page content itself): "Destacar títulos/links/
+     * botões" and "Guia de leitura".
+     *
+     * @return string[] hex colours, keyed 'highlight' and 'readingguide'.
+     */
+    public static function get_effect_colors(): array {
+        return [
+            'highlight' => (string) (get_config('local_a11y', 'highlightcolor') ?: '#f97316'),
+            'readingguide' => (string) (get_config('local_a11y', 'readingguidecolor') ?: '#3b82f6'),
+        ];
+    }
+
+    /**
      * @return string[] Option ids enabled by the site admin (default: all).
      */
     public static function enabled_features(): array {

@@ -48,6 +48,11 @@ const open = () => {
     panel.hidden = false;
     panel.setAttribute('aria-hidden', 'false');
     fab.setAttribute('aria-expanded', 'true');
+    // In drawer format the open panel takes the FAB's place: hide the FAB
+    // while the drawer is open (close() restores it).
+    if (panel.classList.contains('local-a11y-panel--drawer')) {
+        fab.classList.add('local-a11y-fab--hidden');
+    }
     if (overlay && (panel.classList.contains('local-a11y-panel--modal')
             || panel.classList.contains('local-a11y-panel--drawer'))) {
         overlay.hidden = false;
@@ -68,6 +73,8 @@ const close = () => {
     panel.hidden = true;
     panel.setAttribute('aria-hidden', 'true');
     fab.setAttribute('aria-expanded', 'false');
+    // Restore the FAB (no-op unless drawer-format open() hid it).
+    fab.classList.remove('local-a11y-fab--hidden');
     if (overlay) {
         overlay.hidden = true;
     }
@@ -297,6 +304,17 @@ const registerEventListeners = () => {
         if (resetTrigger) {
             if (cb.onReset) {
                 cb.onReset();
+            }
+            return;
+        }
+        const helpBtn = e.target.closest('[data-action="toggle-help"]');
+        if (helpBtn) {
+            const row = helpBtn.closest('[data-region="option"]');
+            const block = row ? row.querySelector('[data-region="help-block"]') : null;
+            if (block) {
+                const wasHidden = block.hidden;
+                block.hidden = !wasHidden;
+                helpBtn.setAttribute('aria-expanded', wasHidden ? 'true' : 'false');
             }
             return;
         }

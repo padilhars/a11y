@@ -179,4 +179,18 @@ if ($hassiteconfig) {
         '',
         '#3b82f6'
     ));
+
+    $settings->add(new admin_setting_configcolourpicker(
+        'local_a11y/highlightcolor',
+        new lang_string('settings_highlightcolor', 'local_a11y'),
+        new lang_string('settings_highlightcolor_desc', 'local_a11y'),
+        '#f97316'
+    ));
+
+    $settings->add(new admin_setting_configcolourpicker(
+        'local_a11y/readingguidecolor',
+        new lang_string('settings_readingguidecolor', 'local_a11y'),
+        new lang_string('settings_readingguidecolor_desc', 'local_a11y'),
+        '#3b82f6'
+    ));
 }

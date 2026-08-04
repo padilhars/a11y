@@ -163,6 +163,7 @@ class panel implements renderable, templatable {
      */
     private function export_option(array $option, $value, $defaultvalue): array {
         $isactive = $value !== $defaultvalue;
+        $hashelp  = !empty($option['hashelp']);
         $row = [
             'id' => $option['id'],
             'datakey' => $option['id'],
@@ -173,6 +174,9 @@ class panel implements renderable, templatable {
             'isstepper' => $option['kind'] === 'stepper',
             'isactive' => $isactive,
             'pressed' => $option['kind'] === 'toggle' && $value ? 'true' : 'false',
+            'hashelp' => $hashelp,
+            'helplabel' => $hashelp ? get_string('helpbtn', 'local_a11y') : null,
+            'helphtml' => $hashelp ? $this->build_help_html($option['id']) : null,
         ];
 
         if ($option['kind'] === 'stepper') {
@@ -188,5 +192,34 @@ class panel implements renderable, templatable {
         }
 
         return $row;
+    }
+
+    /**
+     * Build the help block HTML for options that declare hashelp.
+     * Content is composed from lang strings so it is translatable.
+     *
+     * @param string $optionid
+     * @return string Safe HTML.
+     */
+    private function build_help_html(string $optionid): string {
+        if ($optionid === 'voiceCommands') {
+            $intro = get_string('help_vc_intro', 'local_a11y');
+            $items = [];
+            for ($i = 1; $i <= 12; $i++) {
+                $items[] = '<li>' . get_string('help_vc_' . $i, 'local_a11y') . '</li>';
+            }
+            return '<p class="local-a11y-help-intro">' . $intro . '</p>'
+                . '<ul class="local-a11y-help-list">' . implode('', $items) . '</ul>';
+        }
+        if ($optionid === 'faceNavigation') {
+            $intro = get_string('help_fn_intro', 'local_a11y');
+            $steps = [];
+            for ($i = 1; $i <= 5; $i++) {
+                $steps[] = '<li>' . get_string('help_fn_' . $i, 'local_a11y') . '</li>';
+            }
+            return '<p class="local-a11y-help-intro">' . $intro . '</p>'
+                . '<ol class="local-a11y-help-list">' . implode('', $steps) . '</ol>';
+        }
+        return '';
     }
 }

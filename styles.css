@@ -165,6 +165,9 @@
 }
 .local-a11y-fab--circle { border-radius: 50%; }
 .local-a11y-fab--square { border-radius: 16px; }
+/* Drawer panel format hides the FAB: it stays in the DOM (amd/src/main.js
+   needs it) but is visually removed. */
+.local-a11y-fab--hidden { display: none !important; }
 .local-a11y-fab--bottom-right { bottom: 24px; right: 24px; }
 .local-a11y-fab--bottom-left { bottom: 24px; left: 24px; }
 .local-a11y-fab--middle-right { top: 50%; right: 24px; transform: translateY(-50%); }
@@ -454,6 +457,35 @@
   40% { background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 28%, transparent); }
 }
 .local-a11y-option--pulse { animation: local-a11y-option-pulse 350ms ease; }
+/* Options that have a help block wrap their children (the block goes on its
+   own line below the icon / text / switch row). */
+.local-a11y-option--has-help { flex-wrap: wrap; }
+/* Help toggle button "?" */
+.local-a11y-help-btn {
+  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--a11y-border-strong);
+  background: transparent; color: var(--a11y-text-secondary); font-size: 11px; font-weight: 700;
+  cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  transition: border-color 120ms, color 120ms; font-family: inherit;
+}
+.local-a11y-help-btn:hover,
+.local-a11y-help-btn[aria-expanded="true"] {
+  border-color: var(--local-a11y-accent, var(--a11y-accent));
+  color: var(--local-a11y-accent, var(--a11y-accent));
+}
+/* Expandable help block */
+.local-a11y-help-block {
+  flex: 0 0 100%; /* full-width on its own flex line */
+  background: var(--a11y-surface-subtle); border-radius: 8px;
+  padding: 10px 12px; margin-top: 4px; font-size: 12px; color: var(--a11y-text-secondary);
+  line-height: 1.5;
+}
+.local-a11y-help-intro { margin: 0 0 6px; font-weight: 500; color: var(--a11y-text); }
+.local-a11y-help-list { margin: 0; padding-left: 16px; display: flex; flex-direction: column; gap: 3px; }
+.local-a11y-help-list li code {
+  font-family: monospace; font-size: 11px;
+  background: var(--a11y-surface); border: 1px solid var(--a11y-border); border-radius: 4px;
+  padding: 1px 4px;
+}
 .local-a11y-option__icon {
   width: 32px; height: 32px; border-radius: 8px; background: var(--a11y-surface-subtle); color: var(--a11y-text-secondary);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 150ms ease;
@@ -565,8 +597,8 @@
    preserving the guide-above-mask relative order the two already had. */
 .local-a11y-reading-guide {
   position: fixed; top: 0; left: 0; right: 0; height: 3px;
-  background: var(--local-a11y-accent, #3b82f6);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--local-a11y-accent, #3b82f6) 60%, transparent);
+  background: var(--a11y-guide-color, #3b82f6);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--a11y-guide-color, #3b82f6) 60%, transparent);
   pointer-events: none; z-index: 99985; transform: translateY(-100px);
 }
 .local-a11y-reading-mask-top, .local-a11y-reading-mask-bottom {
@@ -641,15 +673,22 @@ footer#page-footer {
    renders them into #region-main, despite the name), so all of the rules
    below would otherwise also reach into our own chrome (D24/D26) -
    :not(.local-a11y-root, .local-a11y-root *) keeps each source selector
-   from ever matching a FAB/panel descendant in the first place. */
-body.a11y-readable-font #page, body.a11y-readable-font #page *:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-readable-font .navbar, body.a11y-readable-font .navbar *,
-body.a11y-readable-font footer#page-footer, body.a11y-readable-font footer#page-footer * {
+   from ever matching a FAB/panel descendant in the first place.
+   Icon fonts (FontAwesome - iconsystem::FONTAWESOME, <i class="icon fa
+   fa-*">, used throughout Moodle core/Boost) are glyphs selected *by*
+   font-family, not text - forcing a different font-family onto them swaps
+   the glyph out entirely (garbled/blank icons) instead of just changing
+   how text renders. Excluded the same way as the FAB/panel, via
+   .icon/.fa/[class*="fa-"] (covers fa/fas/far/fab/fal/fad + any fa-*
+   modifier) on top of the existing exclusion. */
+body.a11y-readable-font #page, body.a11y-readable-font #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
+body.a11y-readable-font .navbar, body.a11y-readable-font .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-readable-font footer#page-footer, body.a11y-readable-font footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
   font-family: 'Atkinson Hyperlegible', system-ui, sans-serif !important;
 }
-body.a11y-dyslexic-font #page, body.a11y-dyslexic-font #page *:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-dyslexic-font .navbar, body.a11y-dyslexic-font .navbar *,
-body.a11y-dyslexic-font footer#page-footer, body.a11y-dyslexic-font footer#page-footer * {
+body.a11y-dyslexic-font #page, body.a11y-dyslexic-font #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
+body.a11y-dyslexic-font .navbar, body.a11y-dyslexic-font .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-dyslexic-font footer#page-footer, body.a11y-dyslexic-font footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
   font-family: 'Lexend', 'Comic Sans MS', system-ui, sans-serif !important;
   font-weight: 500 !important;
   letter-spacing: 0.02em !important;
@@ -667,10 +706,18 @@ body.a11y-dyslexic-font footer#page-footer, body.a11y-dyslexic-font footer#page-
    sets font-size on #page itself (inherited from there), and
    .local-a11y-panel already declares its own font-size, which breaks that
    inheritance chain before it reaches any panel descendant. */
+/* Admin-configurable via local_a11y/highlightcolor (--a11y-highlight-color,
+   set on :root by renderer.php::render_head_html()). Text colour is never
+   derived from it (only background tint/underline/outline) - forcing a
+   readable text colour against a background tint would need to know
+   whether the admin's chosen colour is light or dark, which a plain hex
+   admin setting can't tell us; leaving the page's own text colour alone
+   sidesteps that contrast risk entirely, on a plugin whose whole point is
+   accessibility. */
 body.a11y-highlight-titles #page h1:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-titles #page h2:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *) {
-  background: linear-gradient(180deg, transparent 60%, #fef08a 60%) !important;
+  background: linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--a11y-highlight-color, #f97316) 55%, transparent) 60%) !important;
   padding: 0.05em 0.2em !important;
   border-radius: 3px !important;
   box-decoration-break: clone !important;
@@ -680,10 +727,10 @@ body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *) {
 body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-links .navbar a {
   text-decoration: underline !important;
+  text-decoration-color: var(--a11y-highlight-color, #f97316) !important;
   text-decoration-thickness: 2px !important;
   text-underline-offset: 2px !important;
-  background-color: #dbeafe !important;
-  color: #1e3a8a !important;
+  background-color: color-mix(in srgb, var(--a11y-highlight-color, #f97316) 16%, transparent) !important;
   padding: 0 2px !important;
   border-radius: 2px !important;
   font-weight: 600 !important;
@@ -692,34 +739,59 @@ body.a11y-highlight-links .navbar a {
 body.a11y-highlight-buttons #page button:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-buttons #page .btn:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-buttons #page [role="button"]:not(.local-a11y-root, .local-a11y-root *) {
-  outline: 3px solid #f97316 !important;
+  outline: 3px solid var(--a11y-highlight-color, #f97316) !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 0 1px white inset !important;
 }
 
-body.a11y-text-size-1 #page { font-size: 17px !important; }
-body.a11y-text-size-2 #page { font-size: 19px !important; }
-body.a11y-text-size-3 #page { font-size: 22px !important; }
-body.a11y-text-size-4 #page { font-size: 26px !important; }
+/* Text size/line-height/spacing below all also reach .navbar and the two
+   drawers (.drawer-left, .drawer-right) now, not just #page - previously
+   these three only ever touched the content area, leaving the navbar and
+   course-index/blocks drawers at their normal size/spacing regardless of
+   the setting. Same bare (non-:not()) pattern already used for #page:
+   the FAB/panel are direct <body> children (D31), never descendants of
+   .navbar/.drawer-*, so nothing here needs excluding them. */
+body.a11y-text-size-1 #page, body.a11y-text-size-1 .navbar, body.a11y-text-size-1 .drawer-left, body.a11y-text-size-1 .drawer-right { font-size: 17px !important; }
+body.a11y-text-size-2 #page, body.a11y-text-size-2 .navbar, body.a11y-text-size-2 .drawer-left, body.a11y-text-size-2 .drawer-right { font-size: 19px !important; }
+body.a11y-text-size-3 #page, body.a11y-text-size-3 .navbar, body.a11y-text-size-3 .drawer-left, body.a11y-text-size-3 .drawer-right { font-size: 22px !important; }
+body.a11y-text-size-4 #page, body.a11y-text-size-4 .navbar, body.a11y-text-size-4 .drawer-left, body.a11y-text-size-4 .drawer-right { font-size: 26px !important; }
 body.a11y-text-size-1 #page h1 { font-size: 32px !important; }
 body.a11y-text-size-2 #page h1 { font-size: 36px !important; }
 body.a11y-text-size-3 #page h1 { font-size: 40px !important; }
 body.a11y-text-size-4 #page h1 { font-size: 48px !important; }
 
-body.a11y-line-height-1 #page, body.a11y-line-height-1 #page *:not(.local-a11y-root, .local-a11y-root *) { line-height: 1.5 !important; }
-body.a11y-line-height-2 #page, body.a11y-line-height-2 #page *:not(.local-a11y-root, .local-a11y-root *) { line-height: 1.8 !important; }
-body.a11y-line-height-3 #page, body.a11y-line-height-3 #page *:not(.local-a11y-root, .local-a11y-root *) { line-height: 2.2 !important; }
+body.a11y-line-height-1 #page, body.a11y-line-height-1 #page *:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-line-height-1 .navbar, body.a11y-line-height-1 .navbar *,
+body.a11y-line-height-1 .drawer-left, body.a11y-line-height-1 .drawer-left *,
+body.a11y-line-height-1 .drawer-right, body.a11y-line-height-1 .drawer-right * { line-height: 1.5 !important; }
+body.a11y-line-height-2 #page, body.a11y-line-height-2 #page *:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-line-height-2 .navbar, body.a11y-line-height-2 .navbar *,
+body.a11y-line-height-2 .drawer-left, body.a11y-line-height-2 .drawer-left *,
+body.a11y-line-height-2 .drawer-right, body.a11y-line-height-2 .drawer-right * { line-height: 1.8 !important; }
+body.a11y-line-height-3 #page, body.a11y-line-height-3 #page *:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-line-height-3 .navbar, body.a11y-line-height-3 .navbar *,
+body.a11y-line-height-3 .drawer-left, body.a11y-line-height-3 .drawer-left *,
+body.a11y-line-height-3 .drawer-right, body.a11y-line-height-3 .drawer-right * { line-height: 2.2 !important; }
 
 body.a11y-text-spacing-1 #page, body.a11y-text-spacing-1 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-text-spacing-1 #page span:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-text-spacing-1 #page h1, body.a11y-text-spacing-1 #page h2, body.a11y-text-spacing-1 #page h3 {
+body.a11y-text-spacing-1 #page h1, body.a11y-text-spacing-1 #page h2, body.a11y-text-spacing-1 #page h3,
+body.a11y-text-spacing-1 .navbar, body.a11y-text-spacing-1 .navbar p, body.a11y-text-spacing-1 .navbar span,
+body.a11y-text-spacing-1 .drawer-left, body.a11y-text-spacing-1 .drawer-left p, body.a11y-text-spacing-1 .drawer-left span,
+body.a11y-text-spacing-1 .drawer-right, body.a11y-text-spacing-1 .drawer-right p, body.a11y-text-spacing-1 .drawer-right span {
   letter-spacing: 0.05em !important; word-spacing: 0.1em !important;
 }
 body.a11y-text-spacing-2 #page, body.a11y-text-spacing-2 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-text-spacing-2 #page span:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-text-spacing-2 #page h1, body.a11y-text-spacing-2 #page h2, body.a11y-text-spacing-2 #page h3 {
+body.a11y-text-spacing-2 #page h1, body.a11y-text-spacing-2 #page h2, body.a11y-text-spacing-2 #page h3,
+body.a11y-text-spacing-2 .navbar, body.a11y-text-spacing-2 .navbar p, body.a11y-text-spacing-2 .navbar span,
+body.a11y-text-spacing-2 .drawer-left, body.a11y-text-spacing-2 .drawer-left p, body.a11y-text-spacing-2 .drawer-left span,
+body.a11y-text-spacing-2 .drawer-right, body.a11y-text-spacing-2 .drawer-right p, body.a11y-text-spacing-2 .drawer-right span {
   letter-spacing: 0.1em !important; word-spacing: 0.2em !important;
 }
 body.a11y-text-spacing-3 #page, body.a11y-text-spacing-3 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-text-spacing-3 #page span:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-text-spacing-3 #page h1, body.a11y-text-spacing-3 #page h2, body.a11y-text-spacing-3 #page h3 {
+body.a11y-text-spacing-3 #page h1, body.a11y-text-spacing-3 #page h2, body.a11y-text-spacing-3 #page h3,
+body.a11y-text-spacing-3 .navbar, body.a11y-text-spacing-3 .navbar p, body.a11y-text-spacing-3 .navbar span,
+body.a11y-text-spacing-3 .drawer-left, body.a11y-text-spacing-3 .drawer-left p, body.a11y-text-spacing-3 .drawer-left span,
+body.a11y-text-spacing-3 .drawer-right, body.a11y-text-spacing-3 .drawer-right p, body.a11y-text-spacing-3 .drawer-right span {
   letter-spacing: 0.18em !important; word-spacing: 0.35em !important;
 }
 
@@ -735,12 +807,36 @@ body.a11y-text-align-2 #page *:not(.local-a11y-root, .local-a11y-root *) { text-
 body.a11y-text-align-3 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: right !important; }
 body.a11y-text-align-4 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: justify !important; }
 
+/* Reserves the image's own layout space (no jump) without painting
+   anything itself - visibility:hidden hides an element's own background
+   too, so the striped placeholder + label actually shown while hidden is
+   .local-a11y-hidden-image-wrap/-badge below (amd/src/hide_images.js
+   wraps each <img>/<video> to host them - a void/replaced element can't
+   have children of its own to paint them). */
 body.a11y-hide-images #page img,
 body.a11y-hide-images #page video {
   visibility: hidden !important;
-  position: relative !important;
-  background-image: repeating-linear-gradient(45deg, #e5e7eb, #e5e7eb 8px, #f3f4f6 8px, #f3f4f6 16px) !important;
-  background-color: #e5e7eb !important;
+}
+.local-a11y-hidden-image-wrap {
+  position: relative;
+  max-width: 100%;
+}
+.local-a11y-hidden-image-badge {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px;
+  text-align: center;
+  background-image: repeating-linear-gradient(45deg, #e5e7eb, #e5e7eb 8px, #f3f4f6 8px, #f3f4f6 16px);
+  background-color: #e5e7eb;
+  color: #57534e;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  pointer-events: none;
 }
 
 body.a11y-pause-animations #page, body.a11y-pause-animations #page *,
@@ -834,7 +930,6 @@ body.a11y-contrast-1 #region-main,
 body.a11y-contrast-1 .main-inner,
 body.a11y-contrast-1 .moremenu,
 body.a11y-contrast-1 .moremenu .nav-tabs,
-body.a11y-contrast-1 .drawer,
 body.a11y-contrast-1 .card,
 body.a11y-contrast-1 .bg-white,
 body.a11y-contrast-1 .btn-secondary,
@@ -847,6 +942,20 @@ body.a11y-contrast-1 footer#page-footer {
   background-color: #1f1f1f !important;
   color: #f3f4f6 !important;
   border-color: #3f3f46 !important;
+}
+/* Drawers (course-index left, blocks right) get their own, visibly
+   different tone from #region-main/.card/etc above - sharing the exact
+   same background as the content area made it hard to tell where the
+   drawer ends and the page begins. #18181b (--bs-tertiary-bg for this
+   level) was tried first but measured only ~7/255 off #1f1f1f per
+   channel - confirmed imperceptible in QA testing even at high zoom;
+   --a11y-surface-hover's value (#3f3f46, already used as this level's
+   border colour) is a much bigger, clearly visible jump. */
+body.a11y-contrast-1 .drawer-left,
+body.a11y-contrast-1 .drawer-right {
+  background-color: #3f3f46 !important;
+  color: #f3f4f6 !important;
+  border-color: #52525b !important;
 }
 body.a11y-contrast-1 {
   --bs-body-bg: #1f1f1f;
@@ -900,7 +1009,6 @@ body.a11y-contrast-2 #region-main,
 body.a11y-contrast-2 .main-inner,
 body.a11y-contrast-2 .moremenu,
 body.a11y-contrast-2 .moremenu .nav-tabs,
-body.a11y-contrast-2 .drawer,
 body.a11y-contrast-2 .card,
 body.a11y-contrast-2 .bg-white,
 body.a11y-contrast-2 .btn-secondary,
@@ -911,6 +1019,13 @@ body.a11y-contrast-2 .secondary-navigation .navigation,
 body.a11y-contrast-2 .section-item,
 body.a11y-contrast-2 footer#page-footer {
   background-color: #fffbeb !important;
+  color: #1c1917 !important;
+  border-color: #d6d3d1 !important;
+}
+/* Drawers - see the equivalent comment on contrast-1 above. */
+body.a11y-contrast-2 .drawer-left,
+body.a11y-contrast-2 .drawer-right {
+  background-color: #fef3c7 !important;
   color: #1c1917 !important;
   border-color: #d6d3d1 !important;
 }
@@ -947,7 +1062,6 @@ body.a11y-contrast-3 #region-main,
 body.a11y-contrast-3 .main-inner,
 body.a11y-contrast-3 .moremenu,
 body.a11y-contrast-3 .moremenu .nav-tabs,
-body.a11y-contrast-3 .drawer,
 body.a11y-contrast-3 .card,
 body.a11y-contrast-3 .bg-white,
 body.a11y-contrast-3 .btn-secondary,
@@ -959,6 +1073,19 @@ body.a11y-contrast-3 .secondary-navigation .navigation,
 body.a11y-contrast-3 .section-item,
 body.a11y-contrast-3 footer#page-footer {
   background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+  border-width: 2px !important;
+}
+/* Drawers - see the equivalent comment on contrast-1 further up. #141414
+   (~20/255 off #000000) was tried first and, same as contrast-1's first
+   attempt, measured as indistinguishable from the content area in QA
+   testing - bumped to a clearly-visible dark grey. Border stays pure
+   white, matching this level's whole "maximum black/white contrast"
+   point - only the *fill* needs to read as a distinct region. */
+body.a11y-contrast-3 .drawer-left,
+body.a11y-contrast-3 .drawer-right {
+  background-color: #333333 !important;
   color: #ffffff !important;
   border-color: #ffffff !important;
   border-width: 2px !important;
@@ -1096,15 +1223,25 @@ body.a11y-cursor-2 #page, body.a11y-cursor-2 #page * {
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23fff' stroke='%23000' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
 }
 
-/* Focus mode — hide non-essential Moodle chrome (Boost theme structure:
-   left course-index drawer, right blocks drawer, secondary course tabs,
-   drawer toggle buttons, breadcrumb), centring the remaining content. */
+/* Focus mode — hide as much non-essential Moodle chrome as possible,
+   keeping only the top navbar and the content area (as requested): left
+   course-index drawer, right blocks drawer (#theme_boost-drawers-blocks -
+   the id theme_boost/drawers.mustache actually renders it with; the id
+   this rule used before, #theme_boost-drawers-primary, is a *different*
+   drawer - the small-screen main-nav one - left in the list below too,
+   but it was never the blocks drawer, so the real one was never hidden by
+   id on the standard drawers.mustache layout, only incidentally on the
+   columns2/secure layouts via [data-region="blocks-column"]), mobile
+   primary-nav drawer, secondary course tabs, drawer toggle buttons,
+   breadcrumb, and the site footer - centring the remaining content. */
 body.a11y-focus-mode #theme_boost-drawers-courseindex,
+body.a11y-focus-mode #theme_boost-drawers-blocks,
 body.a11y-focus-mode #theme_boost-drawers-primary,
 body.a11y-focus-mode .secondary-navigation,
 body.a11y-focus-mode .drawertoggle,
 body.a11y-focus-mode [data-region="blocks-column"],
 body.a11y-focus-mode #page-content .breadcrumb,
+body.a11y-focus-mode footer#page-footer,
 body.a11y-focus-mode .navbar .nav-item:not(:first-child) {
   display: none !important;
 }

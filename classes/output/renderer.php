@@ -16,6 +16,7 @@
 
 namespace local_a11y\output;
 
+use local_a11y\config;
 use local_a11y\manager;
 
 /**
@@ -36,7 +37,7 @@ class renderer extends \plugin_renderer_base {
      * @return string
      */
     public function render_head_html(): string {
-        return $this->render_colourblind_filters();
+        return $this->render_colourblind_filters() . $this->render_effect_color_vars();
     }
 
     /**
@@ -115,6 +116,33 @@ JS;
         $panel = new panel();
 
         return $this->render($fab) . $this->render($panel);
+    }
+
+    /**
+     * HTML injected into <head>: a tiny inline <style> defining the two
+     * admin-configurable page-effect colours (config::get_effect_colors())
+     * as CSS custom properties on :root - --a11y-highlight-color (Destacar
+     * títulos/links/botões) and --a11y-guide-color (Guia de leitura),
+     * consumed by the matching rules in styles.css. Custom-property
+     * inheritance resolves from wherever they're declared down through the
+     * whole DOM regardless of stylesheet load order, so an early <head>
+     * declaration reaches rules in the (separately loaded, compiled-in)
+     * plugin stylesheet just fine.
+     *
+     * admin_setting_configcolourpicker already validates hex on save, but
+     * re-validated here too before it goes into raw HTML - defence in
+     * depth against a malformed value somehow ending up in config either
+     * way (matches this plugin's general stance on trusting stored config,
+     * e.g. footer_text()'s own format_text() pass).
+     *
+     * @return string
+     */
+    private function render_effect_color_vars(): string {
+        $colors = config::get_effect_colors();
+        $hex = '/^#[0-9a-fA-F]{3,8}$/';
+        $highlight = preg_match($hex, $colors['highlight']) ? $colors['highlight'] : '#f97316';
+        $readingguide = preg_match($hex, $colors['readingguide']) ? $colors['readingguide'] : '#3b82f6';
+        return '<style>:root{--a11y-highlight-color:' . $highlight . ';--a11y-guide-color:' . $readingguide . ';}</style>';
     }
 
     /**

@@ -28,12 +28,16 @@ import Panel from 'local_a11y/panel';
 import Effects from 'local_a11y/effects';
 import Storage from 'local_a11y/storage';
 import Profiles from 'local_a11y/profiles';
+import FabLift from 'local_a11y/fab_lift';
 import ReadingGuide from 'local_a11y/reading_guide';
 import ReadingMask from 'local_a11y/reading_mask';
 import ScreenReader from 'local_a11y/screen_reader';
 import VirtualKeyboard from 'local_a11y/virtual_keyboard';
 import VoiceCommands from 'local_a11y/voice_commands';
 import Tooltips from 'local_a11y/tooltips';
+import FaceNavigation from 'local_a11y/face_navigation';
+import PauseMedia from 'local_a11y/pause_media';
+import HideImages from 'local_a11y/hide_images';
 
 let settings = {...Storage.DEFAULT_SETTINGS};
 let isLoggedIn = false;
@@ -80,9 +84,21 @@ const renderHeaderCount = () => {
 let voiceCallbacks = {};
 
 /**
- * Start/stop the 6 "advanced" features (the booleans that drive a live JS
- * overlay/listener instead of a body CSS class, see classes/manager.php's
- * get_boolean_class_map() docblock) to match the current settings.
+ * Navigate to a Moodle page by path. Uses M.cfg.wwwroot when available so
+ * this works regardless of whether Moodle is installed at the domain root.
+ *
+ * @param {String} path
+ */
+const navigateTo = (path) => {
+    const root = (window.M && window.M.cfg && window.M.cfg.wwwroot) || '';
+    window.location.href = root + path;
+};
+
+/**
+ * Start/stop the "advanced" features that need a live JS overlay/listener
+ * on top of (or, for pauseAnimations, in addition to) their body CSS class -
+ * see classes/manager.php's get_boolean_class_map() docblock - to match the
+ * current settings.
  */
 const syncAdvancedFeatures = () => {
     ReadingGuide.sync(Boolean(settings.readingGuide));
@@ -91,6 +107,9 @@ const syncAdvancedFeatures = () => {
     VirtualKeyboard.sync(Boolean(settings.virtualKeyboard));
     VoiceCommands.sync(Boolean(settings.voiceCommands), voiceCallbacks);
     Tooltips.sync(Boolean(settings.tooltips));
+    FaceNavigation.sync(Boolean(settings.faceNavigation));
+    PauseMedia.sync(Boolean(settings.pauseAnimations));
+    HideImages.sync(Boolean(settings.hideImages));
 };
 
 /**
@@ -189,15 +208,91 @@ const onProfileSelect = (id) => {
 };
 
 voiceCallbacks = {
+    // Panel
     openPanel: () => Panel.open(),
     closePanel: () => Panel.close(),
+
+    // Text size
     increaseTextSize: () => setStepperValue('textSize', (Number(settings.textSize) || 0) + 1),
     decreaseTextSize: () => setStepperValue('textSize', (Number(settings.textSize) || 0) - 1),
+
+    // Line height
+    increaseLineHeight: () => setStepperValue('lineHeight', (Number(settings.lineHeight) || 0) + 1),
+    decreaseLineHeight: () => setStepperValue('lineHeight', (Number(settings.lineHeight) || 0) - 1),
+
+    // Text spacing
+    increaseTextSpacing: () => setStepperValue('textSpacing', (Number(settings.textSpacing) || 0) + 1),
+    decreaseTextSpacing: () => setStepperValue('textSpacing', (Number(settings.textSpacing) || 0) - 1),
+
+    // Text alignment
+    alignLeft: () => setStepperValue('textAlign', 1),
+    alignCenter: () => setStepperValue('textAlign', 2),
+    alignRight: () => setStepperValue('textAlign', 3),
+    alignJustify: () => setStepperValue('textAlign', 4),
+    alignDefault: () => setStepperValue('textAlign', 0),
+
+    // Contrast
     highContrast: () => setStepperValue('contrast', 3),
     darkMode: () => setStepperValue('contrast', 1),
-    reset: () => onReset(),
+    lightContrast: () => setStepperValue('contrast', 2),
+    noContrast: () => setStepperValue('contrast', 0),
+
+    // Colors
+    toggleInvertColors: () => onToggle('invertColors', !settings.invertColors),
+    colorProtanopia: () => setStepperValue('colorChange', 1),
+    colorDeuteranopia: () => setStepperValue('colorChange', 2),
+    colorTritanopia: () => setStepperValue('colorChange', 3),
+    colorDefault: () => setStepperValue('colorChange', 0),
+
+    // Saturation
+    saturationHigh: () => setStepperValue('saturation', 1),
+    saturationLow: () => setStepperValue('saturation', 2),
+    saturationMono: () => setStepperValue('saturation', 3),
+    saturationNormal: () => setStepperValue('saturation', 0),
+
+    // Cursor
+    cursorBigBlack: () => setStepperValue('cursor', 1),
+    cursorBigWhite: () => setStepperValue('cursor', 2),
+    cursorDefault: () => setStepperValue('cursor', 0),
+
+    // Font
+    toggleReadableFont: () => onToggle('readableFont', !settings.readableFont),
+    toggleDyslexicFont: () => onToggle('dyslexicFont', !settings.dyslexicFont),
+
+    // Highlights
+    toggleHighlightTitles: () => onToggle('highlightTitles', !settings.highlightTitles),
+    toggleHighlightLinks: () => onToggle('highlightLinks', !settings.highlightLinks),
+    toggleHighlightButtons: () => onToggle('highlightButtons', !settings.highlightButtons),
+
+    // Media & motion
+    toggleHideImages: () => onToggle('hideImages', !settings.hideImages),
+    togglePauseAnimations: () => onToggle('pauseAnimations', !settings.pauseAnimations),
+    toggleTooltips: () => onToggle('tooltips', !settings.tooltips),
+
+    // Focus & navigation tools
+    toggleReadingGuide: () => onToggle('readingGuide', !settings.readingGuide),
+    toggleReadingMask: () => onToggle('readingMask', !settings.readingMask),
+    toggleFocusMode: () => onToggle('focusMode', !settings.focusMode),
     toggleScreenReader: () => onToggle('screenReader', !settings.screenReader),
     toggleVirtualKeyboard: () => onToggle('virtualKeyboard', !settings.virtualKeyboard),
+
+    // Reset
+    reset: () => onReset(),
+
+    // Moodle navigation
+    goToDashboard: () => navigateTo('/my'),
+    goToCourses: () => navigateTo('/my/courses.php'),
+    goToCalendar: () => navigateTo('/calendar/view.php'),
+    goToMessages: () => navigateTo('/message/index.php'),
+    goToProfile: () => navigateTo('/user/profile.php'),
+    goBack: () => window.history.back(),
+    goForward: () => window.history.forward(),
+
+    // Page scroll
+    scrollDown: () => window.scrollBy({top: 400, behavior: 'smooth'}),
+    scrollUp: () => window.scrollBy({top: -400, behavior: 'smooth'}),
+    scrollTop: () => window.scrollTo({top: 0, behavior: 'smooth'}),
+    scrollBottom: () => window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'}),
 };
 
 /**
@@ -258,34 +353,102 @@ export const init = async(loggedIn) => {
     // a negative `bottom` offset until activated - the exact same "relies
     // on staying *viewport*-fixed while parked off-screen" pattern that
     // broke for Moodle's message-drawer before D31 stopped filtering
-    // #page-wrapper as a whole. Unlike the navbar/drawers, though, a
-    // .stickyfooter element renders *inside* #page's own content (course
-    // format templates) - and, importantly, it's already sitting there in
-    // the DOM (parked, correctly invisible) the moment the page loads in
-    // editing mode, whether or not bulk-edit is ever actually turned on.
-    // An earlier version of this fix only relocated it reactively, on the
-    // 'core/stickyfooter_state_changed' event Moodle fires when bulk-edit
-    // is toggled - but since the element is already inside #page well
-    // before that event could ever fire, simply activating Inverter
-    // Cores/Mudar Cores/Saturação (which puts `filter` on #page - still
-    // needed there, for real page content) immediately recomputed its
-    // "parked" bottom:-Npx against #page's own (much taller) box instead
-    // of the viewport, dropping it at some arbitrary point down the page
-    // instead of just off the bottom of the screen - visible the moment
-    // that point scrolled into view, with no bulk-edit toggle involved at
-    // all. Relocating it here proactively, the same way as the FAB/panel
-    // above, fixes that; the event listener stays too, as a backstop for
-    // the (so far unobserved, but possible) case of one being inserted
-    // into the DOM later rather than already present at load.
+    // #page-wrapper as a whole. Unlike the navbar/drawers, a .stickyfooter
+    // element renders *inside* #page's own content (course format
+    // templates), so activating Inverter Cores/Mudar Cores/Saturação
+    // (which puts `filter` on #page - still needed there, for real page
+    // content) recomputes its "parked" bottom:-Npx against #page's own
+    // (much taller) box instead of the viewport, dropping it at some
+    // arbitrary point down the page instead of just off the bottom of the
+    // screen.
+    //
+    // An earlier version of this fix relocated .stickyfooter to be a
+    // direct <body> child *unconditionally*, on load, regardless of
+    // whether any filter was ever active - on the theory that it's
+    // already in the DOM before any 'core/stickyfooter_state_changed'
+    // event could fire, so waiting for that event to relocate reactively
+    // would be too late. That traded the (real, but narrow - only while a
+    // colour filter is active) positioning bug for a much bigger one:
+    // core_courseformat/local/content's whole click-handling model
+    // (amd/src/local/content/actions.js::stateReady()) delegates clicks
+    // via a single listener on '#page' itself (component.init('#page',
+    // ...), templates/local/content.mustache) and matches on
+    // [data-action] - exactly what the bulk-edit toolbar's own
+    // Disponibilidade/Duplicar/Mover/Excluir buttons are. Pulling
+    // .stickyfooter permanently out of #page meant clicks on those
+    // buttons could never bubble up to that delegated listener again -
+    // they'd still take native focus (hence the focus ring reported) but
+    // never actually fire, on *every* page with a sticky footer, with or
+    // without any a11y option active at all (confirmed by QA testing with
+    // literally nothing enabled). A real, worse bug traded for a narrower
+    // one.
+    //
+    // Fixed by only relocating while it's actually needed - a colour
+    // filter (Inverter Cores/Mudar Cores/Saturação/daltonismo) is active -
+    // and restoring .stickyfooter to its original DOM position (tracked
+    // per-element, since it's the *position*, not just "is it in #page",
+    // that #page's delegated listener needs) the moment none of those are
+    // active any more. In the common case (no colour filter running,
+    // which is most of the time - these aren't on-by-default) the sticky
+    // footer never moves at all, so #page's delegation is never broken in
+    // the first place.
+    const FILTER_CLASSES = [
+        'a11y-invert', 'a11y-saturation-1', 'a11y-saturation-2', 'a11y-saturation-3',
+        'a11y-color-1', 'a11y-color-2', 'a11y-color-3',
+    ];
+    const isColourFilterActive = () => FILTER_CLASSES.some((cls) => document.body.classList.contains(cls));
+    const stickyFooterOriginalPosition = new WeakMap();
+
     const relocateStickyFooters = () => {
         document.querySelectorAll('.stickyfooter').forEach((el) => {
             if (el.parentElement !== document.body) {
+                stickyFooterOriginalPosition.set(el, {parent: el.parentElement, nextSibling: el.nextSibling});
                 document.body.appendChild(el);
             }
         });
     };
-    relocateStickyFooters();
-    document.addEventListener('core/stickyfooter_state_changed', relocateStickyFooters);
+    const restoreStickyFooters = () => {
+        document.querySelectorAll('.stickyfooter').forEach((el) => {
+            const original = stickyFooterOriginalPosition.get(el);
+            if (el.parentElement === document.body && original && document.body.contains(original.parent)) {
+                original.parent.insertBefore(el, original.nextSibling);
+                stickyFooterOriginalPosition.delete(el);
+            }
+        });
+    };
+    const syncStickyFooterPosition = () => (isColourFilterActive() ? relocateStickyFooters() : restoreStickyFooters());
+
+    // The FAB sits bottom:24px/right:24px by default - directly over
+    // .stickyfooter's own bottom:0, right-aligned action buttons (it spans
+    // the full viewport width) once Moodle shows one (theme_boost/
+    // sticky-footer.js adds body.hasstickyfooter). At z-index 99990 the FAB
+    // was intercepting clicks meant for those buttons - lift the FAB clear
+    // of it via fab_lift.js (shared with Virtual Keyboard, so neither
+    // feature clobbers the other's lift). Measured from the element
+    // itself rather than theme's $stickyfooter-height so it stays correct
+    // if a theme/page ever changes that height. Runs regardless of
+    // .stickyfooter's current DOM position (offsetHeight doesn't care).
+    const updateStickyFooterLift = () => {
+        const footer = document.querySelector('.stickyfooter');
+        const active = Boolean(footer) && document.body.classList.contains('hasstickyfooter');
+        FabLift.setLift('stickyfooter', active ? footer.offsetHeight : 0);
+    };
+
+    const syncStickyFooter = () => {
+        syncStickyFooterPosition();
+        updateStickyFooterLift();
+    };
+    syncStickyFooter();
+    document.addEventListener('core/stickyfooter_state_changed', syncStickyFooter);
+    // Belt-and-braces for the case (unobserved so far, but see the comment
+    // above for why this codebase treats that possibility seriously)
+    // where hasstickyfooter or an a11y-* filter class is toggled without
+    // the event firing - e.g. a future core change - so position/lift
+    // never get stuck out of sync with the actual classes.
+    new MutationObserver(syncStickyFooter).observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class'],
+    });
 
     isLoggedIn = Boolean(loggedIn);
     optionMeta = buildOptionMeta(panelEl);
@@ -316,6 +479,15 @@ export const init = async(loggedIn) => {
         if (e.altKey && (e.key === 'a' || e.key === 'A')) {
             e.preventDefault();
             Panel.toggle();
+        }
+    });
+
+    // The Face Navigation HUD's "Stop" button asks to turn the whole option
+    // off: route it through onToggle so the panel switch, saved preference
+    // and the feature's own teardown all stay in sync.
+    document.addEventListener('local_a11y/face-disable', () => {
+        if (settings.faceNavigation) {
+            onToggle('faceNavigation', false);
         }
     });
 };

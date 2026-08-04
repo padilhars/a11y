@@ -29,6 +29,7 @@
  */
 
 import {getString} from 'core/str';
+import FabLift from 'local_a11y/fab_lift';
 
 const LETTER_ROWS = [
     ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
@@ -43,6 +44,7 @@ let container = null;
 let target = null;
 let shift = false;
 let onFocusIn = null;
+let onModalShown = null;
 
 /**
  * @param {HTMLElement} el
@@ -211,20 +213,36 @@ const renderStatus = async() => {
 };
 
 /**
- * Shift the FAB/panel out of the way of the keyboard.
+ * core/modal.js::calculateZIndex() (Moodle core) sets every new modal's
+ * z-index to (highest currently-visible [role=dialog]/[role=menubar]/
+ * .moodle-has-zindex element's z-index) + 2 - a deliberate "always on top"
+ * escalation. templates/panel.mustache gives the a11y panel role="dialog"
+ * (rightly - it needs that for accessibility) at z-index 99989, so any
+ * Moodle modal opened while the panel happens to be open/visible (e.g.
+ * "Add an activity or resource") escalates itself to ~99991: past the
+ * panel *and* the FAB (99990), and - the actual bug report - past the
+ * keyboard (99982, never itself part of that scan, so it can never win
+ * the arms race on its own). That's a real problem for the keyboard
+ * specifically: its whole purpose is typing into fields, including ones
+ * inside that very modal - it needs to end up on top of whatever just
+ * opened, not just have a big fixed number. core/modal:shown (dispatched
+ * on the modal's own root element, bubbles) fires after Moodle finishes
+ * that escalation, so re-reading the modal's resolved z-index then and
+ * jumping one above it (inline style beats the CSS z-index:99982 rule)
+ * keeps the keyboard on top of *any* Moodle modal shown while it's
+ * active, however high core/modal.js decided to go.
  *
- * @param {Boolean} lifted
+ * @param {CustomEvent} e core/modal:shown - e.target is the modal's root element.
  */
-const setLift = (lifted) => {
-    const fab = document.getElementById('local-a11y-fab');
-    const panel = document.getElementById('local-a11y-panel');
-    [fab, panel].forEach((el) => {
-        if (!el) {
-            return;
-        }
-        el.style.setProperty('--local-a11y-lift', lifted ? `${LIFT_PX}px` : '0px');
-        el.classList.toggle('local-a11y-fab--lifted', lifted && el === fab);
-    });
+const raiseAboveModal = (e) => {
+    if (!container || !e.target) {
+        return;
+    }
+    const modalZ = parseInt(getComputedStyle(e.target).zIndex, 10) || 0;
+    const currentZ = parseInt(getComputedStyle(container).zIndex, 10) || 0;
+    if (modalZ >= currentZ) {
+        container.style.zIndex = modalZ + 1;
+    }
 };
 
 /**
@@ -255,11 +273,14 @@ export const start = async() => {
     };
     document.addEventListener('focusin', onFocusIn, true);
 
+    onModalShown = raiseAboveModal;
+    document.addEventListener('core/modal:shown', onModalShown);
+
     if (!target) {
         target = document.querySelector('#page input[type="text"], #page input:not([type])');
     }
 
-    setLift(true);
+    FabLift.setLift('vk', LIFT_PX);
     await renderStatus();
     await renderKeys();
 };
@@ -272,7 +293,9 @@ export const stop = () => {
         return;
     }
     document.removeEventListener('focusin', onFocusIn, true);
-    setLift(false);
+    document.removeEventListener('core/modal:shown', onModalShown);
+    onModalShown = null;
+    FabLift.setLift('vk', 0);
     container.remove();
     container = null;
     target = null;
