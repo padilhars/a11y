@@ -37,7 +37,9 @@ let onOver = null;
 let onClick = null;
 
 /**
- * @return {HTMLElement}
+ * Build and append the status pill DOM element (icon + live-region body).
+ *
+ * @return {HTMLElement} The created pill container, already appended to <body>.
  */
 const buildPill = () => {
     const container = document.createElement('div');
@@ -58,6 +60,8 @@ const buildPill = () => {
 
 /**
  * Render the idle ("hover text to hear it") state.
+ *
+ * @return {Promise<void>}
  */
 const renderIdle = async() => {
     const body = pill.querySelector('[data-region="body"]');
@@ -71,7 +75,8 @@ const renderIdle = async() => {
 /**
  * Render the "reading…" state with a Stop button.
  *
- * @param {String} text
+ * @param {String} text The text currently being read aloud.
+ * @return {Promise<void>}
  */
 const renderSpeaking = async(text) => {
     const body = pill.querySelector('[data-region="body"]');
@@ -100,8 +105,11 @@ const renderSpeaking = async(text) => {
 };
 
 /**
- * @param {Event} e
- * @return {HTMLElement|null}
+ * Resolve the nearest readable, in-page (not plugin-chrome) ancestor of the
+ * event's target, if any.
+ *
+ * @param {Event} e The mouseover or click event.
+ * @return {HTMLElement|null} The readable target element, or null if none matches.
  */
 const findTarget = (e) => {
     const el = e.target.closest(READABLE_SELECTOR);
@@ -115,7 +123,10 @@ const findTarget = (e) => {
 };
 
 /**
- * @param {HTMLElement|null} el
+ * Move the hover outline from the previously-hovered element (if any) to `el`.
+ *
+ * @param {HTMLElement|null} el The element to outline, or null to just clear the current one.
+ * @return {void}
  */
 const setHoverOutline = (el) => {
     if (hovered && hovered !== el) {
@@ -133,6 +144,8 @@ const setHoverOutline = (el) => {
 
 /**
  * Start listening for hover/click on readable page content. Idempotent.
+ *
+ * @return {Promise<void>}
  */
 export const start = async() => {
     if (pill) {
@@ -169,6 +182,8 @@ export const start = async() => {
 
 /**
  * Stop listening and remove the overlay. Idempotent.
+ *
+ * @return {void}
  */
 export const stop = () => {
     if (!pill) {
@@ -185,7 +200,10 @@ export const stop = () => {
 };
 
 /**
- * @param {Boolean} active
+ * Toggle the screen reader overlay on/off.
+ *
+ * @param {Boolean} active Whether the overlay should be active.
+ * @return {Promise<void>|void}
  */
 export const sync = (active) => (active ? start() : stop());
 

@@ -43,8 +43,10 @@ class provider implements
     \core_privacy\local\request\user_preference_provider {
 
     /**
-     * @param collection $items
-     * @return collection
+     * Declares the one piece of personal data this plugin stores.
+     *
+     * @param collection $items The metadata collection to add to.
+     * @return collection The updated metadata collection.
      */
     public static function get_metadata(collection $items): collection {
         $items->add_user_preference(
@@ -55,7 +57,10 @@ class provider implements
     }
 
     /**
-     * @param int $userid
+     * Exports this user's local_a11y_settings preference, if set.
+     *
+     * @param int $userid The user whose preference should be exported.
+     * @return void
      */
     public static function export_user_preferences(int $userid) {
         $preference = get_user_preferences(\local_a11y\manager::PREFERENCE_NAME, null, $userid);

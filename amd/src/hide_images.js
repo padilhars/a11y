@@ -51,7 +51,11 @@ const ICON_SVG = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" st
 let label = null;
 
 /**
- * @param {HTMLElement} el
+ * Wrap a single <img>/<video> with a hidden-image badge wrapper, unless it's
+ * already wrapped or is part of the plugin's own chrome. Idempotent.
+ *
+ * @param {HTMLElement} el The <img> or <video> element to wrap.
+ * @return {Promise<void>}
  */
 const wrapMedia = async(el) => {
     if (el.closest('.local-a11y-root') || el.parentElement?.classList.contains('local-a11y-hidden-image-wrap')) {
@@ -79,7 +83,11 @@ const wrapMedia = async(el) => {
 };
 
 /**
- * @param {HTMLElement} el
+ * Undo wrapMedia() for a single element: move it back out of its wrapper and
+ * remove the wrapper. No-op if the element isn't currently wrapped.
+ *
+ * @param {HTMLElement} el The <img> or <video> element to unwrap.
+ * @return {void}
  */
 const unwrapMedia = (el) => {
     const wrapper = el.parentElement;
@@ -92,6 +100,8 @@ const unwrapMedia = (el) => {
 
 /**
  * Wrap every currently-present image/video in #page with a hidden-image badge.
+ *
+ * @return {Promise<void>}
  */
 export const start = async() => {
     const items = document.querySelectorAll('#page img, #page video');
@@ -100,13 +110,18 @@ export const start = async() => {
 
 /**
  * Undo start(): unwrap every image/video this module wrapped.
+ *
+ * @return {void}
  */
 export const stop = () => {
     document.querySelectorAll('#page img, #page video').forEach(unwrapMedia);
 };
 
 /**
- * @param {Boolean} active
+ * Toggle Hide Images on/off.
+ *
+ * @param {Boolean} active Whether hidden-image badges should be shown.
+ * @return {Promise<void>|void}
  */
 export const sync = (active) => (active ? start() : stop());
 

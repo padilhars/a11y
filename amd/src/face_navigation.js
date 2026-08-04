@@ -46,6 +46,12 @@ const MP_MODEL = 'https://storage.googleapis.com/mediapipe-models/face_landmarke
 // user turns the feature off (so re-enabling requires a fresh calibration).
 const CALIB_KEY = 'local_a11y_face_calibration';
 
+/**
+ * Persist the current neutral pose + sensitivity to sessionStorage, so
+ * navigating to another page can resume without recalibrating.
+ *
+ * @return {void}
+ */
 const saveCalibration = () => {
     try {
         sessionStorage.setItem(CALIB_KEY, JSON.stringify({neutral, sensitivity}));
@@ -53,6 +59,12 @@ const saveCalibration = () => {
         // sessionStorage unavailable (private mode etc.) - degrade gracefully.
     }
 };
+/**
+ * Read back a previously-saved calibration from sessionStorage, if any and
+ * if it looks structurally valid.
+ *
+ * @return {Object|null} `{neutral, sensitivity}`, or null if none/invalid.
+ */
 const loadCalibration = () => {
     try {
         const raw = sessionStorage.getItem(CALIB_KEY);
@@ -68,6 +80,12 @@ const loadCalibration = () => {
         return null;
     }
 };
+/**
+ * Remove the saved calibration, so the next start() requires a fresh
+ * Calibrate step.
+ *
+ * @return {void}
+ */
 const clearCalibration = () => {
     try {
         sessionStorage.removeItem(CALIB_KEY);
@@ -120,14 +138,24 @@ const STRINGS = {
     },
 };
 
+/**
+ * Resolve an inline i18n string for the current page language (pt/en only).
+ *
+ * @param {String} key A key from the STRINGS map.
+ * @return {String} The resolved string for the current language.
+ */
 const t = (key) => {
     const lang = (document.documentElement.lang || 'en').startsWith('pt') ? 'pt' : 'en';
     return (STRINGS[lang] || STRINGS.en)[key];
 };
 
 // ── MediaPipe loader ──────────────────────────────────────────────────────────
-// Injects a <script type="module"> that imports FaceLandmarker/FilesetResolver
-// and stores them on window.__mp. Resolves via a DOM event. Idempotent.
+/**
+ * Injects a <script type="module"> that imports FaceLandmarker/FilesetResolver
+ * and stores them on window.__mp. Resolves via a DOM event. Idempotent.
+ *
+ * @return {Promise<Object>} Resolves to `window.__mp` ({FaceLandmarker, FilesetResolver}).
+ */
 const loadMediaPipe = () => {
     if (window.__mp) {
         return Promise.resolve(window.__mp);
@@ -151,7 +179,15 @@ const loadMediaPipe = () => {
 };
 
 // ── Click helper ──────────────────────────────────────────────────────────────
-// pointer-events:none on the cursor means elementFromPoint sees through it.
+/**
+ * Simulate a click at the given viewport coordinates (used for jaw/blink
+ * dwell clicks). pointer-events:none on the virtual cursor means
+ * elementFromPoint sees through it to the real element underneath.
+ *
+ * @param {Number} x The viewport X coordinate to click at.
+ * @param {Number} y The viewport Y coordinate to click at.
+ * @return {void}
+ */
 const syntheticClick = (x, y) => {
     const el = document.elementFromPoint(x, y);
     if (!el) {
@@ -165,6 +201,12 @@ const syntheticClick = (x, y) => {
 };
 
 // ── DOM helpers ───────────────────────────────────────────────────────────────
+/**
+ * Build and append the HUD panel (bottom-right card showing loading/
+ * calibration/active state).
+ *
+ * @return {HTMLElement} The created HUD container, already appended to <body>.
+ */
 const buildHud = () => {
     const el = document.createElement('div');
     el.className = 'local-a11y-root local-a11y-face-hud';
@@ -183,6 +225,11 @@ const CURSOR_SIZE = 40;
 const RING_R = (CURSOR_SIZE - 4) / 2;
 const RING_CIRC = 2 * Math.PI * RING_R;
 
+/**
+ * Build and append the virtual cursor element (dot + dwell-progress ring).
+ *
+ * @return {HTMLElement} The created cursor container, already appended to <body>.
+ */
 const buildCursor = () => {
     const el = document.createElement('div');
     el.className = 'local-a11y-root local-a11y-face-cursor';
@@ -204,6 +251,12 @@ const buildCursor = () => {
     return el;
 };
 
+/**
+ * Update the virtual cursor's dwell-progress ring.
+ *
+ * @param {Number} pct Progress fraction from 0 (empty) to 1 (full circle, about to click).
+ * @return {void}
+ */
 const setDwellProgress = (pct) => {
     if (!cursorEl) {
         return;
@@ -215,6 +268,11 @@ const setDwellProgress = (pct) => {
 };
 
 // ── HUD state renderers ───────────────────────────────────────────────────────
+/**
+ * Render the HUD's "loading model" state.
+ *
+ * @return {void}
+ */
 const renderLoading = () => {
     hud.innerHTML = '<style>@keyframes a11y-face-spin{to{transform:rotate(360deg)}}</style>' +
         '<div style="padding:12px;color:#6b7280;display:flex;align-items:center;gap:8px">' +
@@ -223,12 +281,24 @@ const renderLoading = () => {
         '<path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>' + t('loading') + '</div>';
 };
 
+/**
+ * Render the HUD's error state.
+ *
+ * @param {String} msg The error message to display (HTML-escaped before insertion).
+ * @return {void}
+ */
 const renderError = (msg) => {
     hud.innerHTML = '<div style="padding:12px"><div style="font-weight:600;color:#b91c1c;margin-bottom:2px">' +
         t('error') + '</div><div style="font-size:11px;color:#6b7280;word-break:break-word">' +
         String(msg).replace(/</g, '&lt;') + '</div></div>';
 };
 
+/**
+ * Attach the already-acquired webcam MediaStream to the current `videoEl`
+ * (re-created on every HUD state render) and start playback.
+ *
+ * @return {void}
+ */
 const attachVideoStream = () => {
     if (videoEl && stream) {
         videoEl.srcObject = stream;
@@ -236,6 +306,12 @@ const attachVideoStream = () => {
     }
 };
 
+/**
+ * Render the HUD's "calibrating" state: webcam preview, hint text, and a
+ * Calibrate button.
+ *
+ * @return {void}
+ */
 const renderCalibrating = () => {
     hud.innerHTML = '';
 
@@ -265,6 +341,12 @@ const renderCalibrating = () => {
     hud.appendChild(body);
 };
 
+/**
+ * Render the HUD's "active" state: webcam preview with a live indicator,
+ * status text, usage hints, sensitivity slider, and a Stop button.
+ *
+ * @return {void}
+ */
 const renderActive = () => {
     hud.innerHTML = '';
 
@@ -339,8 +421,15 @@ const renderActive = () => {
 };
 
 // ── Enter the live "active" state ───────────────────────────────────────────────
-// recapture=true  -> capture a fresh neutral pose on the next frame (Calibrate)
-// recapture=false -> keep the (restored) neutral pose (resume after navigation)
+/**
+ * Enter the live "active" state: reset cursor position/velocity, render the
+ * active HUD, and start the detection loop.
+ *
+ * @param {Boolean} recapture True to capture a fresh neutral pose on the next
+ *   frame (Calibrate button); false to keep the (already restored) neutral
+ *   pose when resuming after navigating to a new page.
+ * @return {void}
+ */
 const enterActive = (recapture) => {
     captureNext = recapture;
     cursorPos = {x: window.innerWidth / 2, y: window.innerHeight / 2};
@@ -355,9 +444,23 @@ const enterActive = (recapture) => {
     animFrame = requestAnimationFrame(detect);
 };
 
+/**
+ * Calibrate button handler: capture a fresh neutral pose and enter the
+ * active state.
+ *
+ * @return {void}
+ */
 const calibrate = () => enterActive(true);
 
 // ── Detection loop ────────────────────────────────────────────────────────────
+/**
+ * Per-frame detection loop (driven by requestAnimationFrame while
+ * isRunning): reads the current face landmarks, updates the virtual
+ * cursor's position via head-yaw/pitch joystick input, handles edge
+ * scrolling, and detects jaw-open/blink dwell clicks.
+ *
+ * @return {void}
+ */
 const detect = () => {
     if (!isRunning) {
         return;
@@ -478,7 +581,11 @@ const detect = () => {
 // ── Public API ────────────────────────────────────────────────────────────────
 
 /**
- * Start face navigation. Idempotent.
+ * Start face navigation: builds the HUD/cursor, loads MediaPipe, requests
+ * camera access, and either resumes a saved calibration or shows the
+ * Calibrate step. Idempotent.
+ *
+ * @return {void}
  */
 export const start = () => {
     if (hud) {
@@ -527,6 +634,8 @@ export const start = () => {
 
 /**
  * Stop face navigation and release the camera. Idempotent.
+ *
+ * @return {void}
  */
 export const stop = () => {
     isRunning = false;
@@ -552,7 +661,10 @@ export const stop = () => {
 };
 
 /**
- * @param {Boolean} active
+ * Toggle Face Navigation on/off.
+ *
+ * @param {Boolean} active Whether face navigation should be active.
+ * @return {void}
  */
 export const sync = (active) => {
     if (active) {

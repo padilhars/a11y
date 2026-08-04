@@ -34,6 +34,11 @@ use core_privacy\local\request\writer;
  */
 final class privacy_provider_test extends \advanced_testcase {
 
+    /**
+     * PHPUnit fixture setup: resets the Moodle test environment after each test.
+     *
+     * @return void
+     */
     public function setUp(): void {
         parent::setUp();
         $this->resetAfterTest();
@@ -41,6 +46,7 @@ final class privacy_provider_test extends \advanced_testcase {
 
     /**
      * Metadata must declare exactly the local_a11y_settings user preference.
+     * @return void
      */
     public function test_get_metadata_declares_the_preference(): void {
         $collection = new collection('local_a11y');
@@ -55,6 +61,7 @@ final class privacy_provider_test extends \advanced_testcase {
 
     /**
      * No preference saved -> nothing exported.
+     * @return void
      */
     public function test_export_user_preferences_without_data(): void {
         $user = $this->getDataGenerator()->create_user();
@@ -68,6 +75,7 @@ final class privacy_provider_test extends \advanced_testcase {
 
     /**
      * A saved preference must be exported as pretty-printed, sanitized JSON.
+     * @return void
      */
     public function test_export_user_preferences_with_data(): void {
         $user = $this->getDataGenerator()->create_user();

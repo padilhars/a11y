@@ -32,6 +32,8 @@ namespace local_a11y;
 class profiles {
 
     /**
+     * Returns the full list of accessibility profile preset definitions.
+     *
      * @return array<int, array<string, mixed>> Profile definitions, in display order.
      */
     public static function all(): array {

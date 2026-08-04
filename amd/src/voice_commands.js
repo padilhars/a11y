@@ -44,8 +44,10 @@ let callbacks = {};
 const getSpeechRecognitionCtor = () => window.SpeechRecognition || window.webkitSpeechRecognition || null;
 
 /**
- * @param {String} label
- * @return {HTMLElement}
+ * Build and append the status pill DOM element showing the given label.
+ *
+ * @param {String} label The text to show in the pill (e.g. "Ouvindo…").
+ * @return {HTMLElement} The created pill container, already appended to <body>.
  */
 const buildPill = (label) => {
     const el = document.createElement('div');
@@ -68,6 +70,13 @@ const buildPill = (label) => {
 // Briefly shows the recognized phrase in the pill, then restores the
 // "Ouvindo…" label so the user knows the command was heard.
 let feedbackTimer = null;
+/**
+ * Briefly show the recognized phrase in the pill, then restore the
+ * "listening" label after a short delay.
+ *
+ * @param {String} phrase The recognized speech phrase to display.
+ * @return {void}
+ */
 const showFeedback = (phrase) => {
     if (!pill) {
         return;
@@ -93,7 +102,8 @@ const showFeedback = (phrase) => {
  * matched loosely via substring so partial phrases still work) and invoke
  * the matching callback. Shows brief feedback in the pill on any match.
  *
- * @param {String} phrase
+ * @param {String} phrase The recognized speech phrase.
+ * @return {void}
  */
 const dispatch = (phrase) => {
     const p = phrase.toLowerCase();
@@ -202,6 +212,7 @@ const dispatch = (phrase) => {
  * SpeechRecognition support (graceful fallback, per the brief).
  *
  * @param {Object} cb Action callbacks, see `dispatch()` for the supported keys.
+ * @return {Promise<void>}
  */
 export const start = async(cb) => {
     if (recognition) {
@@ -256,6 +267,8 @@ export const start = async(cb) => {
 
 /**
  * Stop listening and remove the overlay. Idempotent.
+ *
+ * @return {void}
  */
 export const stop = () => {
     if (feedbackTimer) {
@@ -275,8 +288,11 @@ export const stop = () => {
 };
 
 /**
- * @param {Boolean} active
- * @param {Object} cb
+ * Toggle voice command recognition on/off.
+ *
+ * @param {Boolean} active Whether voice recognition should be listening.
+ * @param {Object} cb Action callbacks, forwarded to start() when activating.
+ * @return {Promise<void>|void}
  */
 export const sync = (active, cb) => (active ? start(cb) : stop());
 

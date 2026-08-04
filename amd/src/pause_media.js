@@ -44,13 +44,21 @@ let playHandler = null;
 const frozenGifSrc = new WeakMap();
 
 /**
- * @param {HTMLImageElement} img
- * @return {Boolean}
+ * Detect whether an <img> is (likely) an animated GIF, by URL extension.
+ *
+ * @param {HTMLImageElement} img The image element to check.
+ * @return {Boolean} True if the image's current src looks like a .gif file.
  */
 const isGif = (img) => /\.gif(\?|#|$)/i.test(img.currentSrc || img.src || '');
 
 /**
- * @param {HTMLImageElement} img
+ * Freeze a single GIF <img> on its currently-displayed frame by drawing it
+ * to a canvas and swapping the src to that frame's data URL. No-op if
+ * already frozen or not yet loaded. Silently skipped (left animating) if
+ * the canvas gets tainted by a cross-origin image without CORS headers.
+ *
+ * @param {HTMLImageElement} img The GIF image element to freeze.
+ * @return {void}
  */
 const freezeGif = (img) => {
     if (frozenGifSrc.has(img) || !img.naturalWidth) {
@@ -72,7 +80,11 @@ const freezeGif = (img) => {
 };
 
 /**
- * @param {HTMLImageElement} img
+ * Restore a single previously-frozen GIF <img> to its original animated src.
+ * No-op if it wasn't frozen by freezeGif().
+ *
+ * @param {HTMLImageElement} img The GIF image element to unfreeze.
+ * @return {void}
  */
 const unfreezeGif = (img) => {
     const original = frozenGifSrc.get(img);
@@ -82,6 +94,12 @@ const unfreezeGif = (img) => {
     }
 };
 
+/**
+ * Freeze every animated GIF <img> currently inside #page (or queue a freeze
+ * for once its 'load' event fires, if still loading).
+ *
+ * @return {void}
+ */
 const freezeAllGifs = () => {
     document.querySelectorAll('#page img').forEach((img) => {
         if (!isGif(img)) {
@@ -96,7 +114,12 @@ const freezeAllGifs = () => {
 };
 
 /**
- * @param {HTMLVideoElement} video
+ * Pause a single <video> if it's currently playing, flagging it as paused
+ * by this module (so resumeAllVideos() knows to resume it later, and not
+ * videos that were already paused for other reasons).
+ *
+ * @param {HTMLVideoElement} video The video element to pause.
+ * @return {void}
  */
 const pauseVideo = (video) => {
     if (!video.paused) {
@@ -105,8 +128,20 @@ const pauseVideo = (video) => {
     }
 };
 
+/**
+ * Pause every <video> currently inside #page.
+ *
+ * @return {void}
+ */
 const pauseAllVideos = () => document.querySelectorAll('#page video').forEach(pauseVideo);
 
+/**
+ * Resume every <video> this module previously paused (marked via
+ * pauseVideo()'s dataset flag) - videos the page/user paused on their own
+ * are left alone.
+ *
+ * @return {void}
+ */
 const resumeAllVideos = () => {
     document.querySelectorAll('#page video[data-a11y-paused-by-plugin]').forEach((video) => {
         delete video.dataset.a11yPausedByPlugin;
@@ -119,6 +154,8 @@ const resumeAllVideos = () => {
 
 /**
  * Start pausing GIFs/videos, and keep pausing any that (re)start while active.
+ *
+ * @return {void}
  */
 export const start = () => {
     if (active) {
@@ -137,6 +174,8 @@ export const start = () => {
 
 /**
  * Stop: resume whatever videos this module paused, unfreeze GIFs.
+ *
+ * @return {void}
  */
 export const stop = () => {
     if (!active) {
@@ -150,7 +189,10 @@ export const stop = () => {
 };
 
 /**
- * @param {Boolean} isActive
+ * Toggle Pausar Animações' GIF/video handling on/off.
+ *
+ * @param {Boolean} isActive Whether GIFs/videos should be paused.
+ * @return {void}
  */
 export const sync = (isActive) => (isActive ? start() : stop());
 

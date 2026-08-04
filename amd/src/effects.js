@@ -58,8 +58,8 @@ const STEPPER_CLASS_PREFIX_MAP = {
 /**
  * Compute the full list of `a11y-*` classes for a given settings object.
  *
- * @param {Object} settings
- * @return {String[]}
+ * @param {Object} settings The current a11y settings object (boolean/stepper values keyed by option id).
+ * @return {String[]} The list of `a11y-*` body classes matching the given settings.
  */
 export const computeClassList = (settings) => {
     const classes = [];
@@ -82,7 +82,8 @@ export const computeClassList = (settings) => {
  * have previously added, then add back only the ones the current settings
  * call for. Idempotent - safe to call on every change.
  *
- * @param {Object} settings
+ * @param {Object} settings The current a11y settings object to apply to <body>.
+ * @return {void}
  */
 export const apply = (settings) => {
     const body = document.body;

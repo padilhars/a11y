@@ -31,6 +31,11 @@ namespace local_a11y;
  */
 final class manager_test extends \advanced_testcase {
 
+    /**
+     * PHPUnit fixture setup: resets the Moodle test environment after each test.
+     *
+     * @return void
+     */
     public function setUp(): void {
         parent::setUp();
         $this->resetAfterTest();
@@ -38,6 +43,7 @@ final class manager_test extends \advanced_testcase {
 
     /**
      * Default settings must have exactly the 23 known keys, all "off".
+     * @return void
      */
     public function test_get_default_settings_shape(): void {
         $defaults = manager::get_default_settings();
@@ -49,6 +55,7 @@ final class manager_test extends \advanced_testcase {
 
     /**
      * A fully valid payload should pass through unchanged.
+     * @return void
      */
     public function test_sanitize_settings_valid_payload(): void {
         $payload = manager::get_default_settings();
@@ -64,6 +71,7 @@ final class manager_test extends \advanced_testcase {
 
     /**
      * Non-array input must fall back to defaults rather than erroring.
+     * @return void
      */
     public function test_sanitize_settings_rejects_non_array(): void {
         $this->assertSame(manager::get_default_settings(), manager::sanitize_settings(null));
@@ -73,6 +81,7 @@ final class manager_test extends \advanced_testcase {
 
     /**
      * Stepper values must be clamped to [0, max], regardless of how far out of range.
+     * @return void
      */
     public function test_sanitize_settings_clamps_stepper_values(): void {
         $result = manager::sanitize_settings(['textSize' => 999, 'contrast' => -50]);
@@ -82,6 +91,7 @@ final class manager_test extends \advanced_testcase {
 
     /**
      * Unknown keys in the payload must be silently dropped, not merged in.
+     * @return void
      */
     public function test_sanitize_settings_drops_unknown_keys(): void {
         $result = manager::sanitize_settings(['readableFont' => true, 'notARealOption' => 'x']);
@@ -92,6 +102,7 @@ final class manager_test extends \advanced_testcase {
     /**
      * Booleans arriving as the strings "true"/"1" (e.g. a naive form round-trip)
      * must still coerce correctly, and anything else must coerce to false.
+     * @return void
      */
     public function test_sanitize_settings_coerces_stringy_booleans(): void {
         $result = manager::sanitize_settings([
@@ -109,6 +120,7 @@ final class manager_test extends \advanced_testcase {
     /**
      * An option the site admin has disabled (enabledfeatures) must be forced
      * back to its default, even if the client requests a non-default value.
+     * @return void
      */
     public function test_sanitize_settings_respects_disabled_features(): void {
         set_config('enabledfeatures', 'readableFont,dyslexicFont', 'local_a11y');
@@ -120,16 +132,21 @@ final class manager_test extends \advanced_testcase {
     }
 
     /**
+     * count_active() must count exactly the options that differ from default.
+     *
      * @dataProvider count_active_provider
-     * @param array $settings
-     * @param int $expected
+     * @param array $settings Raw settings payload to sanitize and count.
+     * @param int $expected Expected count_active() result.
+     * @return void
      */
     public function test_count_active(array $settings, int $expected): void {
         $this->assertSame($expected, manager::count_active(manager::sanitize_settings($settings)));
     }
 
     /**
-     * @return array
+     * Data provider for test_count_active().
+     *
+     * @return array<string, array{0: array, 1: int}> Named cases of [settings, expected count].
      */
     public static function count_active_provider(): array {
         return [
@@ -145,6 +162,7 @@ final class manager_test extends \advanced_testcase {
      * always-JS-overlay booleans (readingGuide, readingMask, screenReader,
      * virtualKeyboard, voiceCommands, tooltips) - see DECISIONS.md D29 /
      * app.jsx parity.
+     * @return void
      */
     public function test_boolean_class_map_excludes_overlay_only_options(): void {
         $map = manager::get_boolean_class_map();
@@ -156,6 +174,7 @@ final class manager_test extends \advanced_testcase {
 
     /**
      * colorChange must map to the "a11y-color-" prefix, not "a11y-color-change-".
+     * @return void
      */
     public function test_stepper_class_prefix_map_colorchange(): void {
         $map = manager::get_stepper_class_prefix_map();

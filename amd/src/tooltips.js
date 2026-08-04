@@ -43,8 +43,11 @@ let currentTarget = null;
 let listenersBound = false;
 
 /**
- * @param {HTMLElement} el
- * @return {String|null}
+ * Resolve the tooltip text for an element, in priority order:
+ * data-tooltip, title, aria-label, then (for <img>) alt.
+ *
+ * @param {HTMLElement} el The candidate element.
+ * @return {String|null} The trimmed label text, or null if none of the sources are set/non-empty.
  */
 const labelFor = (el) => {
     const value = el.getAttribute('data-tooltip')
@@ -59,7 +62,8 @@ const labelFor = (el) => {
  * flipping below it when there isn't enough room above, and clamping
  * horizontally so it never runs off either edge of the viewport.
  *
- * @param {HTMLElement} target
+ * @param {HTMLElement} target The element the visible tooltip bubble is attached to.
+ * @return {void}
  */
 const position = (target) => {
     const rect = target.getBoundingClientRect();
@@ -81,8 +85,13 @@ const position = (target) => {
 };
 
 /**
- * @param {HTMLElement} target
- * @param {String} text
+ * Show the tooltip bubble for `target` with the given text, hiding any
+ * currently-shown one first, and stashing/removing `target`'s own `title`
+ * attribute so the native browser tooltip never appears alongside it.
+ *
+ * @param {HTMLElement} target The element to show the tooltip for.
+ * @param {String} text The tooltip's text content.
+ * @return {void}
  */
 const show = (target, text) => {
     if (currentTarget === target) {
@@ -109,6 +118,8 @@ const show = (target, text) => {
 /**
  * Hide the current tooltip (if any) and restore whatever `title` was
  * stashed on its target. Idempotent.
+ *
+ * @return {void}
  */
 const hide = () => {
     if (currentTarget) {
@@ -126,7 +137,11 @@ const hide = () => {
 };
 
 /**
- * @param {Event} e
+ * mouseover/focusin handler: shows the tooltip for the nearest ancestor
+ * (or the target itself) matching SELECTOR, if it has a resolvable label.
+ *
+ * @param {Event} e The mouseover or focusin event.
+ * @return {void}
  */
 const handleEnter = (e) => {
     const target = e.target.closest(SELECTOR);
@@ -137,7 +152,11 @@ const handleEnter = (e) => {
 };
 
 /**
- * @param {Event} e
+ * mouseout/focusout handler: hides the current tooltip, unless the pointer/
+ * focus moved to a descendant of the current target (still "inside" it).
+ *
+ * @param {Event} e The mouseout or focusout event.
+ * @return {void}
  */
 const handleLeave = (e) => {
     if (!currentTarget) {
@@ -150,12 +169,23 @@ const handleLeave = (e) => {
     hide();
 };
 
+/**
+ * Scroll handler: re-position the visible tooltip so it tracks its target.
+ *
+ * @return {void}
+ */
 const handleScroll = () => {
     if (currentTarget && bubble) {
         position(currentTarget);
     }
 };
 
+/**
+ * Keydown handler: dismiss the current tooltip on Escape.
+ *
+ * @param {KeyboardEvent} e The keydown event.
+ * @return {void}
+ */
 const handleKeydown = (e) => {
     if (e.key === 'Escape') {
         hide();
@@ -164,6 +194,8 @@ const handleKeydown = (e) => {
 
 /**
  * Start listening for hover/focus on tooltip-bearing elements. Idempotent.
+ *
+ * @return {void}
  */
 export const start = () => {
     if (listenersBound) {
@@ -180,6 +212,8 @@ export const start = () => {
 
 /**
  * Stop listening and clean up any tooltip currently showing. Idempotent.
+ *
+ * @return {void}
  */
 export const stop = () => {
     if (!listenersBound) {
@@ -196,7 +230,10 @@ export const stop = () => {
 };
 
 /**
- * @param {Boolean} active
+ * Toggle the custom tooltip behaviour on/off.
+ *
+ * @param {Boolean} active Whether tooltip listeners should be active.
+ * @return {void}
  */
 export const sync = (active) => (active ? start() : stop());
 

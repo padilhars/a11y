@@ -38,8 +38,11 @@ use renderer_base;
 class fab implements renderable, templatable {
 
     /**
-     * @param renderer_base $output
-     * @return array<string, mixed>
+     * Builds the FAB's Mustache context: position/shape/icon, accent colour,
+     * and the current active-option count badge.
+     *
+     * @param renderer_base $output The renderer requesting this export (unused - required by templatable).
+     * @return array<string, mixed> Context for templates/fab.mustache.
      */
     public function export_for_template(renderer_base $output): array {
         $appearance = config::get_appearance();

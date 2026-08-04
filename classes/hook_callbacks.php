@@ -34,7 +34,8 @@ class hook_callbacks {
      * Injects the plugin's CSS, web fonts, colour-blindness SVG filters and
      * the inline no-FOUC bootstrap snippet into the page <head>.
      *
-     * @param \core\hook\output\before_standard_head_html_generation $hook
+     * @param \core\hook\output\before_standard_head_html_generation $hook The core hook instance to add HTML to.
+     * @return void
      */
     public static function before_standard_head_html_generation(
         \core\hook\output\before_standard_head_html_generation $hook
@@ -50,7 +51,8 @@ class hook_callbacks {
     /**
      * Injects the synchronous no-FOUC bootstrap script right after <body> opens.
      *
-     * @param \core\hook\output\before_standard_top_of_body_html_generation $hook
+     * @param \core\hook\output\before_standard_top_of_body_html_generation $hook The core hook instance to add HTML to.
+     * @return void
      */
     public static function before_standard_top_of_body_html_generation(
         \core\hook\output\before_standard_top_of_body_html_generation $hook
@@ -66,7 +68,8 @@ class hook_callbacks {
     /**
      * Injects the FAB + panel HTML and the AMD bootstrap call into the footer.
      *
-     * @param \core\hook\output\before_footer_html_generation $hook
+     * @param \core\hook\output\before_footer_html_generation $hook The core hook instance to add HTML to.
+     * @return void
      */
     public static function before_footer_html_generation(
         \core\hook\output\before_footer_html_generation $hook

@@ -51,8 +51,11 @@ let onFocusIn = null;
 let onModalShown = null;
 
 /**
- * @param {HTMLElement} el
- * @return {Boolean}
+ * Whether an element is a plain text-like input/textarea the keyboard can
+ * type into (never the plugin's own chrome).
+ *
+ * @param {HTMLElement} el The element to check.
+ * @return {Boolean} True if the element accepts typed text input.
  */
 const isEditable = (el) => {
     if (!el || (el.closest && el.closest('.local-a11y-root'))) {
@@ -70,8 +73,13 @@ const isEditable = (el) => {
 };
 
 /**
- * @param {HTMLElement} el
- * @param {String} text
+ * Insert text at the current caret/selection of a text field, using the
+ * native value setter (so React/Vue-style controlled inputs elsewhere on
+ * the page still see the change), and re-dispatch an `input` event.
+ *
+ * @param {HTMLElement} el The target input/textarea element.
+ * @param {String} text The text to insert.
+ * @return {void}
  */
 const insertText = (el, text) => {
     if (!el) {
@@ -90,7 +98,11 @@ const insertText = (el, text) => {
 };
 
 /**
- * @param {HTMLElement} el
+ * Delete the character before the caret (or the current selection, if
+ * non-empty) in a text field, mirroring Backspace's native behaviour.
+ *
+ * @param {HTMLElement} el The target input/textarea element.
+ * @return {void}
  */
 const deleteBack = (el) => {
     if (!el) {
@@ -117,9 +129,13 @@ const deleteBack = (el) => {
 };
 
 /**
- * @param {String} label
- * @param {Object} opts {wide, small}
- * @return {HTMLButtonElement}
+ * Build a single keyboard key <button>.
+ *
+ * @param {String} label The key's visible label.
+ * @param {Object} opts Modifier flags.
+ * @param {Boolean} [opts.wide] Adds the wide-key modifier class.
+ * @param {Boolean} [opts.small] Adds the small-key modifier class.
+ * @return {HTMLButtonElement} The created (not yet appended) key button.
  */
 const makeKey = (label, opts = {}) => {
     const btn = document.createElement('button');
@@ -138,6 +154,8 @@ const makeKey = (label, opts = {}) => {
 
 /**
  * Rebuild the whole key grid (needed when shift toggles, since letters change case).
+ *
+ * @return {Promise<void>}
  */
 const renderKeys = async() => {
     const rows = container.querySelector('[data-region="rows"]');
@@ -202,6 +220,8 @@ const renderKeys = async() => {
 
 /**
  * Update the "Typing into: ..." status line.
+ *
+ * @return {Promise<void>}
  */
 const renderStatus = async() => {
     const label = container.querySelector('[data-region="target-label"]');
@@ -237,6 +257,7 @@ const renderStatus = async() => {
  * active, however high core/modal.js decided to go.
  *
  * @param {CustomEvent} e core/modal:shown - e.target is the modal's root element.
+ * @return {void}
  */
 const raiseAboveModal = (e) => {
     if (!container || !e.target) {
@@ -251,6 +272,8 @@ const raiseAboveModal = (e) => {
 
 /**
  * Show the keyboard and start tracking focus. Idempotent.
+ *
+ * @return {Promise<void>}
  */
 export const start = async() => {
     if (container) {
@@ -291,6 +314,8 @@ export const start = async() => {
 
 /**
  * Hide the keyboard and stop tracking focus. Idempotent.
+ *
+ * @return {void}
  */
 export const stop = () => {
     if (!container) {
@@ -307,7 +332,10 @@ export const stop = () => {
 };
 
 /**
- * @param {Boolean} active
+ * Toggle the virtual keyboard on/off.
+ *
+ * @param {Boolean} active Whether the keyboard should be shown.
+ * @return {Promise<void>|void}
  */
 export const sync = (active) => (active ? start() : stop());
 

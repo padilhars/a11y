@@ -99,11 +99,11 @@ class icons {
      * prototype's <Icon> component defaults exactly (viewBox 0 0 24 24,
      * stroke currentColor, round caps/joins).
      *
-     * @param string $name
-     * @param int $size
-     * @param float $stroke
+     * @param string $name Icon key into self::PATHS; unknown names render as empty string.
+     * @param int $size Width/height in pixels (icon is square).
+     * @param float $stroke SVG stroke-width.
      * @param string $class extra CSS class(es)
-     * @return string
+     * @return string Inline <svg>...</svg> markup, or '' if $name is unknown.
      */
     public static function svg(string $name, int $size = 18, float $stroke = 1.75, string $class = ''): string {
         $inner = self::PATHS[$name] ?? '';
@@ -128,9 +128,9 @@ class icons {
      * source/licence — CC BY-SA 4.0, attribution in README.md), read once
      * and cached rather than re-parsed on every render.
      *
-     * @param int $size
+     * @param int $size Width/height in pixels (icon is square).
      * @param string $class extra CSS class(es)
-     * @return string
+     * @return string Inline <svg>...</svg> markup, or '' if the source file is unreadable.
      */
     public static function un_accessibility_svg(int $size = 26, string $class = ''): string {
         if (self::$unaccessibilityinner === null) {
@@ -157,7 +157,7 @@ class icons {
      *
      * @param string $fabicon raw `appearance['fabicon']` value (untrusted -
      *        falls back to 'un' for anything unrecognised).
-     * @param int $size
+     * @param int $size Width/height in pixels (icon is square).
      * @return array{svg: string, isun: bool} `isun` lets callers apply their
      *         own un-specific modifier class where needed (e.g. the FAB
      *         gives it a touch of padding - see local-a11y-fab__icon--un in

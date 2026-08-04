@@ -35,6 +35,8 @@ namespace local_a11y;
 class options {
 
     /**
+     * Returns the full list of accessibility option definitions.
+     *
      * @return array<int, array<string, mixed>> Option definitions, in display order.
      */
     public static function all(): array {
@@ -100,6 +102,8 @@ class options {
     }
 
     /**
+     * Returns the display order of option categories.
+     *
      * @return array<int, string> Category ids in display order, mirroring CATEGORIES in a11y-panel.jsx.
      */
     public static function category_order(): array {

@@ -46,8 +46,11 @@ use renderer_base;
 class panel implements renderable, templatable {
 
     /**
-     * @param renderer_base $output
-     * @return array<string, mixed>
+     * Builds the full panel Mustache context: header/status text, profile
+     * preset cards, and every enabled option grouped into its category.
+     *
+     * @param renderer_base $output The renderer requesting this export (unused - required by templatable).
+     * @return array<string, mixed> Context for templates/panel.mustache.
      */
     public function export_for_template(renderer_base $output): array {
         $appearance = config::get_appearance();
@@ -161,10 +164,13 @@ class panel implements renderable, templatable {
     }
 
     /**
-     * @param array<string, mixed> $option
+     * Builds one option row's Mustache context (templates/option_toggle.mustache
+     * or templates/option_stepper.mustache, chosen client-side via istoggle/isstepper).
+     *
+     * @param array<string, mixed> $option Option definition, from options::all().
      * @param bool|int $value Current value for this option (already sanitized).
-     * @param bool|int $defaultvalue
-     * @return array<string, mixed>
+     * @param bool|int $defaultvalue This option's default value, used to compute isactive.
+     * @return array<string, mixed> Row context, keyed by the option's id.
      */
     private function export_option(array $option, $value, $defaultvalue): array {
         $isactive = $value !== $defaultvalue;
@@ -203,8 +209,8 @@ class panel implements renderable, templatable {
      * Build the help block HTML for options that declare hashelp.
      * Content is composed from lang strings so it is translatable.
      *
-     * @param string $optionid
-     * @return string Safe HTML.
+     * @param string $optionid Option id; only 'voiceCommands' and 'faceNavigation' produce content.
+     * @return string Safe HTML, or '' for any other option id.
      */
     private function build_help_html(string $optionid): string {
         if ($optionid === 'voiceCommands') {

@@ -39,7 +39,7 @@ class renderer extends \plugin_renderer_base {
      * render_nofouc_script()) because `document.body` does not exist yet
      * while <head> is being parsed.
      *
-     * @return string
+     * @return string Safe HTML, ready for raw (unescaped) output into <head>.
      */
     public function render_head_html(): string {
         return $this->render_colourblind_filters() . $this->render_effect_color_vars();
@@ -57,7 +57,7 @@ class renderer extends \plugin_renderer_base {
      * the AMD loader is even available, so it cannot import that module.
      * Keep the two in sync (see CLAUDE.md).
      *
-     * @return string
+     * @return string A <script>...</script> tag, ready for raw (unescaped) output.
      */
     public function render_nofouc_script(): string {
         $settings = manager::get_current_user_settings();
@@ -114,7 +114,7 @@ JS;
      * $PAGE->requires->js_call_amd(), not here, so it participates in
      * Moodle's normal JS loading/caching instead of an inline <script>.
      *
-     * @return string
+     * @return string Concatenated safe HTML for the FAB and panel, ready for raw output.
      */
     public function render_footer_html(): string {
         $fab = new fab();
@@ -140,7 +140,7 @@ JS;
      * way (matches this plugin's general stance on trusting stored config,
      * e.g. footer_text()'s own format_text() pass).
      *
-     * @return string
+     * @return string A <style>...</style> tag, ready for raw (unescaped) output.
      */
     private function render_effect_color_vars(): string {
         $colors = config::get_effect_colors();
@@ -156,7 +156,7 @@ JS;
      * Kept as real SVG filters (not just CSS sepia/hue-rotate approximations)
      * for a more accurate simulation; see DECISIONS.md D6.
      *
-     * @return string
+     * @return string An inline (visually hidden) <svg> containing the 3 <filter> defs.
      */
     private function render_colourblind_filters(): string {
         // Colour-blindness simulation matrices (Machado, Oliveira & Fluck 2009).

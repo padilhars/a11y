@@ -45,8 +45,10 @@ class tone_colors {
     ];
 
     /**
-     * @param string $tone
-     * @return array<string, string>
+     * Looks up a profile tone's colour chip (bg/text/icon/border).
+     *
+     * @param string $tone Tone id, e.g. 'blue'; falls back to 'blue' if unknown.
+     * @return array<string, string> Keys: bg, text, icon, border (hex colours).
      */
     public static function get(string $tone): array {
         return self::COLORS[$tone] ?? self::COLORS['blue'];

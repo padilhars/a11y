@@ -34,6 +34,8 @@ let onMove = null;
 
 /**
  * Start following the mouse. Idempotent.
+ *
+ * @return {void}
  */
 export const start = () => {
     if (top) {
@@ -57,6 +59,8 @@ export const start = () => {
 
 /**
  * Stop and remove the overlays. Idempotent.
+ *
+ * @return {void}
  */
 export const stop = () => {
     if (!top) {
@@ -71,7 +75,10 @@ export const stop = () => {
 };
 
 /**
- * @param {Boolean} active
+ * Toggle the reading mask on/off.
+ *
+ * @param {Boolean} active Whether the reading mask should be shown.
+ * @return {void}
  */
 export const sync = (active) => (active ? start() : stop());
 

@@ -31,6 +31,8 @@ let onMove = null;
 
 /**
  * Start following the mouse. Idempotent.
+ *
+ * @return {void}
  */
 export const start = () => {
     if (el) {
@@ -48,6 +50,8 @@ export const start = () => {
 
 /**
  * Stop and remove the overlay. Idempotent.
+ *
+ * @return {void}
  */
 export const stop = () => {
     if (!el) {
@@ -60,7 +64,10 @@ export const stop = () => {
 };
 
 /**
- * @param {Boolean} active
+ * Toggle the reading guide on/off.
+ *
+ * @param {Boolean} active Whether the reading guide should be shown.
+ * @return {void}
  */
 export const sync = (active) => (active ? start() : stop());
 

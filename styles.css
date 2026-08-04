@@ -28,6 +28,8 @@
 
 /* ===========================================================================
    FONTS — packaged locally (no external CDN, see DECISIONS.md D8)
+
+   Styleguide 1.
    =========================================================================== */
 @font-face {
   font-family: 'Atkinson Hyperlegible';
@@ -53,6 +55,8 @@
 
 /* ===========================================================================
    DESIGN TOKENS
+
+   Styleguide 2.
    =========================================================================== */
 .local-a11y-root {
   --a11y-bg: #f4f5f7;
@@ -142,7 +146,9 @@
    ever becomes another one's containing block. Contraste's recolouring
    works differently (design-token overrides, not `filter`) - see the
    dedicated `.local-a11y-root` blocks inside each body.a11y-contrast-N
-   rule further down. */
+   rule further down.
+
+   Styleguide 3. */
 .local-a11y-root * {
   filter: none !important;
   cursor: auto !important;
@@ -157,6 +163,8 @@
 
 /* ===========================================================================
    FAB
+
+   Styleguide 4.
    =========================================================================== */
 .local-a11y-fab {
   position: fixed;
@@ -228,6 +236,8 @@
 
 /* ===========================================================================
    PANEL — overlay (modal/drawer formats only)
+
+   Styleguide 5.1.
    =========================================================================== */
 .local-a11y-panel-overlay {
   position: fixed;
@@ -241,6 +251,8 @@
 
 /* ===========================================================================
    PANEL — container
+
+   Styleguide 5.2.
    =========================================================================== */
 .local-a11y-panel {
   position: fixed;
@@ -293,6 +305,8 @@
 
 /* ===========================================================================
    PANEL — header
+
+   Styleguide 5.3.
    =========================================================================== */
 .local-a11y-panel__header {
   position: relative;
@@ -346,6 +360,8 @@
 
 /* ===========================================================================
    PANEL — body / search
+
+   Styleguide 5.4.
    =========================================================================== */
 .local-a11y-panel__body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; }
 .local-a11y-panel__search {
@@ -363,6 +379,8 @@
 
 /* ===========================================================================
    PANEL — sections / profiles
+
+   Styleguide 5.5.
    =========================================================================== */
 .local-a11y-panel__section { padding: 6px 20px 4px; }
 .local-a11y-panel__section-heading { padding: 10px 0 8px; display: flex; align-items: center; gap: 10px; }
@@ -397,6 +415,8 @@
 
 /* ===========================================================================
    PANEL — categories / options
+
+   Styleguide 5.6.
    =========================================================================== */
 .local-a11y-panel__categories { padding: 4px 20px 12px; }
 .local-a11y-category { margin-bottom: 6px; }
@@ -530,6 +550,8 @@
 
 /* ===========================================================================
    PANEL — footer
+
+   Styleguide 5.7.
    =========================================================================== */
 .local-a11y-panel__footer {
   padding: 12px 20px; border-top: 1px solid var(--a11y-surface-subtle); background: var(--a11y-surface-hover);
@@ -544,6 +566,8 @@
 
 /* ===========================================================================
    SCREEN READER (TTS) overlay pill  &  VIRTUAL KEYBOARD  (see M5)
+
+   Styleguide 6.
    =========================================================================== */
 .local-a11y-sr-pill {
   position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 99986;
@@ -594,6 +618,8 @@
 
 /* ===========================================================================
    READING GUIDE / MASK
+
+   Styleguide 7.
    Both track the mouse's Y position across the *full* viewport width
    (left:0; right:0), so whenever the cursor happens to be near the
    FAB/panel's own corner, the guide line or a mask bar would otherwise
@@ -621,6 +647,8 @@
 /* ===========================================================================
    TOOLTIPS (amd/src/tooltips.js) — dark bubble + arrow, replaces the
    browser's native title tooltip while the option is active (see D29).
+
+   Styleguide 8.
    =========================================================================== */
 .local-a11y-tooltip {
   position: fixed;
@@ -653,6 +681,8 @@
 
 /* ===========================================================================
    REDUCED MOTION / COLOR SCHEME
+
+   Styleguide 9.
    =========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   /* D39: .moodle-shell (the prototype's own single page-wrapper mock,
@@ -670,6 +700,8 @@
    PAGE EFFECTS — applied via <body class="a11y-*">, scoped to Moodle's page
    regions so the FAB/panel (outside those regions) are never affected.
    Verbatim behaviour port of _design-reference/a11y-effects.css.
+
+   Styleguide 10.
    =========================================================================== */
 #page,
 #page-content,
@@ -679,7 +711,7 @@ footer#page-footer {
   transition: filter 200ms ease, background-color 200ms ease, color 200ms ease;
 }
 
-/* Typography
+/* Typography — Styleguide 10.1.
    The FAB/panel live inside #page (the before_footer_html_generation hook
    renders them into #region-main, despite the name), so all of the rules
    below would otherwise also reach into our own chrome (D24/D26) -
@@ -717,7 +749,8 @@ body.a11y-dyslexic-font footer#page-footer, body.a11y-dyslexic-font footer#page-
    sets font-size on #page itself (inherited from there), and
    .local-a11y-panel already declares its own font-size, which breaks that
    inheritance chain before it reaches any panel descendant. */
-/* Admin-configurable via local_a11y/highlightcolor (--a11y-highlight-color,
+/* Highlights (Titles/Links/Buttons) — Styleguide 10.2.
+   Admin-configurable via local_a11y/highlightcolor (--a11y-highlight-color,
    set on :root by renderer.php::render_head_html()). Text colour is never
    derived from it (only background tint/underline/outline) - forcing a
    readable text colour against a background tint would need to know
@@ -755,7 +788,8 @@ body.a11y-highlight-buttons #page [role="button"]:not(.local-a11y-root, .local-a
   box-shadow: 0 0 0 1px white inset !important;
 }
 
-/* Text size/line-height/spacing below all also reach .navbar and the two
+/* Text Size / Line Height / Spacing — Styleguide 10.3.
+   Text size/line-height/spacing below all also reach .navbar and the two
    drawers (.drawer-left, .drawer-right) now, not just #page - previously
    these three only ever touched the content area, leaving the navbar and
    course-index/blocks drawers at their normal size/spacing regardless of
@@ -806,7 +840,8 @@ body.a11y-text-spacing-3 .drawer-right, body.a11y-text-spacing-3 .drawer-right p
   letter-spacing: 0.18em !important; word-spacing: 0.35em !important;
 }
 
-/* Text alignment (D30, new beyond the prototype). text-align is inherited,
+/* Text Alignment — Styleguide 10.4.
+   (D30, new beyond the prototype). text-align is inherited,
    so - learned the hard way with line-height above (D24/D26) - this never
    uses a bare "#page" selector (which would set the property on #page
    itself and leak into the panel/FAB via plain inheritance even past a
@@ -818,7 +853,8 @@ body.a11y-text-align-2 #page *:not(.local-a11y-root, .local-a11y-root *) { text-
 body.a11y-text-align-3 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: right !important; }
 body.a11y-text-align-4 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: justify !important; }
 
-/* Reserves the image's own layout space (no jump) without painting
+/* Hide Images — Styleguide 10.5.
+   Reserves the image's own layout space (no jump) without painting
    anything itself - visibility:hidden hides an element's own background
    too, so the striped placeholder + label actually shown while hidden is
    .local-a11y-hidden-image-wrap/-badge below (amd/src/hide_images.js
@@ -850,6 +886,7 @@ body.a11y-hide-images #page video {
   pointer-events: none;
 }
 
+/* Pause Animations — Styleguide 10.6. */
 body.a11y-pause-animations #page, body.a11y-pause-animations #page *,
 body.a11y-pause-animations #page *::before, body.a11y-pause-animations #page *::after {
   animation-play-state: paused !important;
@@ -860,6 +897,10 @@ body.a11y-pause-animations #page *::before, body.a11y-pause-animations #page *::
 }
 
 /* ===========================================================================
+   CONTRAST & COLOUR FILTERS
+
+   Styleguide 11.
+
    Contrast variants — Boost/Bootstrap 5.3 themes almost every component
    (.card, .dropdown-menu, .list-group-item, form controls, links...) off a
    handful of CSS custom properties (--bs-body-bg, --bs-body-color,
@@ -936,7 +977,9 @@ body.a11y-pause-animations #page *::before, body.a11y-pause-animations #page *::
    (`.bg-light` correctly reads `var(--bs-light-rgb)`), just never
    overridden before, so `.bg-light` elements (e.g. the participants page
    filter panel) stayed the default light grey through no fault of their
-   own. */
+   own.
+
+   Contrast Level 1 (Dark) — Styleguide 11.1. */
 body.a11y-contrast-1 #region-main,
 body.a11y-contrast-1 .main-inner,
 body.a11y-contrast-1 .moremenu,
@@ -1016,6 +1059,7 @@ body.a11y-contrast-1 .local-a11y-root {
   --a11y-accent-soft: #1e3a5f;
 }
 
+/* Contrast Level 2 (Light) — Styleguide 11.2. */
 body.a11y-contrast-2 #region-main,
 body.a11y-contrast-2 .main-inner,
 body.a11y-contrast-2 .moremenu,
@@ -1069,6 +1113,7 @@ body.a11y-contrast-2 .local-a11y-root {
   --a11y-accent-soft: #fef3c7;
 }
 
+/* Contrast Level 3 (High) — Styleguide 11.3. */
 body.a11y-contrast-3 #region-main,
 body.a11y-contrast-3 .main-inner,
 body.a11y-contrast-3 .moremenu,
@@ -1148,7 +1193,8 @@ body.a11y-contrast-3 .local-a11y-root {
   --local-a11y-accent: #ffff00 !important;
 }
 
-/* Invert / saturation / colour-blind filters. D16 first combined these via
+/* Invert / Saturation / Colour-blind Filters — Styleguide 11.4.
+   D16 first combined these via
    one shared `filter` on the single ancestor #page-wrapper (so the effect
    would also reach the navbar/course-index drawer, which live outside
    #page as #page-wrapper's other children) - but a `filter` other than
@@ -1226,7 +1272,7 @@ body.a11y-color-3 #page {
   background-color: #fff;
 }
 
-/* Big cursors */
+/* Big Cursors — Styleguide 11.5. */
 body.a11y-cursor-1 #page, body.a11y-cursor-1 #page * {
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23000' stroke='%23fff' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
 }
@@ -1234,7 +1280,8 @@ body.a11y-cursor-2 #page, body.a11y-cursor-2 #page * {
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23fff' stroke='%23000' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
 }
 
-/* Focus mode — hide as much non-essential Moodle chrome as possible,
+/* Focus Mode — Styleguide 11.6.
+   Hide as much non-essential Moodle chrome as possible,
    keeping only the top navbar and the content area (as requested): left
    course-index drawer, right blocks drawer (#theme_boost-drawers-blocks -
    the id theme_boost/drawers.mustache actually renders it with; the id

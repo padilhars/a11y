@@ -78,8 +78,8 @@ const STEPPER_MAX = {
  * clamping stepper values and coercing booleans - the client-side mirror of
  * classes/manager.php::sanitize_settings(). Unknown keys are dropped.
  *
- * @param {Object|null} raw
- * @return {Object}
+ * @param {Object|null} raw The raw, possibly partial/untrusted settings object (or null).
+ * @return {Object} A full settings object with every key from DEFAULT_SETTINGS present and sanitized.
  */
 export const sanitize = (raw) => {
     const result = {...DEFAULT_SETTINGS};
@@ -101,7 +101,9 @@ export const sanitize = (raw) => {
 };
 
 /**
- * @return {Object|null}
+ * Read and JSON-parse the settings stored in localStorage, if any.
+ *
+ * @return {Object|null} The parsed object, or null if unset/unavailable/invalid JSON.
  */
 const readLocalStorage = () => {
     try {
@@ -113,7 +115,12 @@ const readLocalStorage = () => {
 };
 
 /**
- * @param {Object} settings
+ * JSON-stringify and write a settings object to localStorage. Silently
+ * ignores failures (storage full, private browsing, etc.) - best-effort
+ * persistence, matching the prototype.
+ *
+ * @param {Object} settings The settings object to persist.
+ * @return {void}
  */
 const writeLocalStorage = (settings) => {
     try {
@@ -128,7 +135,7 @@ const writeLocalStorage = (settings) => {
  * Load the current settings.
  *
  * @param {Boolean} isLoggedIn True for a real (non-guest) logged-in user.
- * @return {Promise<Object>}
+ * @return {Promise<Object>} Resolves to a full, sanitized settings object.
  */
 export const getSettings = async(isLoggedIn) => {
     if (!isLoggedIn) {
@@ -167,9 +174,9 @@ export const getSettings = async(isLoggedIn) => {
 /**
  * Persist the current settings.
  *
- * @param {Object} settings
- * @param {Boolean} isLoggedIn
- * @return {Promise}
+ * @param {Object} settings The settings object to persist.
+ * @param {Boolean} isLoggedIn True for a real (non-guest) logged-in user.
+ * @return {Promise} Resolves once the preference/localStorage write completes.
  */
 export const saveSettings = async(settings, isLoggedIn) => {
     if (!isLoggedIn) {

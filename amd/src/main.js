@@ -54,13 +54,17 @@ let activeProfileId = null;
 let optionMeta = {};
 
 /**
- * @param {String} id
- * @return {Boolean|Number}
+ * Look up an option's default value.
+ *
+ * @param {String} id The option id.
+ * @return {Boolean|Number} The option's default value.
  */
 const defaultOf = (id) => Storage.DEFAULT_SETTINGS[id];
 
 /**
  * Recompute and render every category's active-option badge.
+ *
+ * @return {void}
  */
 const renderCategoryCounts = () => {
     const byCategory = {};
@@ -74,6 +78,8 @@ const renderCategoryCounts = () => {
 
 /**
  * Recompute the total active-option count and render the header/badge.
+ *
+ * @return {void}
  */
 const renderHeaderCount = () => {
     const count = Object.keys(Storage.DEFAULT_SETTINGS)
@@ -91,7 +97,8 @@ let voiceCallbacks = {};
  * Navigate to a Moodle page by path. Uses M.cfg.wwwroot when available so
  * this works regardless of whether Moodle is installed at the domain root.
  *
- * @param {String} path
+ * @param {String} path The Moodle-relative path to navigate to, e.g. "/my".
+ * @return {void}
  */
 const navigateTo = (path) => {
     const root = (window.M && window.M.cfg && window.M.cfg.wwwroot) || '';
@@ -103,6 +110,8 @@ const navigateTo = (path) => {
  * on top of (or, for pauseAnimations, in addition to) their body CSS class -
  * see classes/manager.php's get_boolean_class_map() docblock - to match the
  * current settings.
+ *
+ * @return {void}
  */
 const syncAdvancedFeatures = () => {
     ReadingGuide.sync(Boolean(settings.readingGuide));
@@ -121,6 +130,7 @@ const syncAdvancedFeatures = () => {
  * (single option, or all of them), counts, and persist it.
  *
  * @param {String|null} onlyId Re-render just this option row, or null for all.
+ * @return {Promise<void>}
  */
 const commit = async(onlyId = null) => {
     Effects.apply(settings);
@@ -138,8 +148,11 @@ const commit = async(onlyId = null) => {
 };
 
 /**
- * @param {String} id
- * @param {Boolean} value
+ * Toggle a boolean option and commit the new settings.
+ *
+ * @param {String} id The option id.
+ * @param {Boolean} value The new value.
+ * @return {void}
  */
 const onToggle = (id, value) => {
     if (!(id in optionMeta)) {
@@ -154,8 +167,9 @@ const onToggle = (id, value) => {
 /**
  * Set a stepper option to a specific (clamped) value.
  *
- * @param {String} id
- * @param {Number} value
+ * @param {String} id The stepper option id.
+ * @param {Number} value The requested value (clamped to [0, meta.max]).
+ * @return {void}
  */
 const setStepperValue = (id, value) => {
     const meta = optionMeta[id];
@@ -169,7 +183,10 @@ const setStepperValue = (id, value) => {
 };
 
 /**
- * @param {String} id
+ * Cycle a stepper option to its next value, wrapping back to 0 after max.
+ *
+ * @param {String} id The stepper option id.
+ * @return {void}
  */
 const onStepperCycle = (id) => {
     const meta = optionMeta[id];
@@ -182,6 +199,8 @@ const onStepperCycle = (id) => {
 
 /**
  * Restore every option to its default value.
+ *
+ * @return {void}
  */
 const onReset = () => {
     settings = {...Storage.DEFAULT_SETTINGS};
@@ -194,7 +213,8 @@ const onReset = () => {
  * Apply a profile preset (or clear it, if the same profile is clicked
  * again - matching the prototype's toggle-off behaviour).
  *
- * @param {String} id
+ * @param {String} id The profile id to apply (or clear, if already active).
+ * @return {void}
  */
 const onProfileSelect = (id) => {
     if (activeProfileId === id) {
@@ -303,8 +323,8 @@ voiceCallbacks = {
  * Scan the server-rendered option rows to build the id -> {kind, max,
  * categoryId} metadata map, without duplicating that data a third time.
  *
- * @param {HTMLElement} panelEl
- * @return {Object}
+ * @param {HTMLElement} panelEl The root panel element to scan for `[data-region="option"]` rows.
+ * @return {Object} Map of option id -> {kind, max, categoryId}.
  */
 const buildOptionMeta = (panelEl) => {
     const meta = {};
@@ -323,6 +343,7 @@ const buildOptionMeta = (panelEl) => {
  * Entry point.
  *
  * @param {Boolean} loggedIn True for a real (non-guest) logged-in user.
+ * @return {Promise<void>}
  */
 export const init = async(loggedIn) => {
     const fab = document.getElementById('local-a11y-fab');
@@ -400,9 +421,18 @@ export const init = async(loggedIn) => {
         'a11y-invert', 'a11y-saturation-1', 'a11y-saturation-2', 'a11y-saturation-3',
         'a11y-color-1', 'a11y-color-2', 'a11y-color-3',
     ];
+    /**
+     * @return {Boolean} True if any colour-filter body class (invert/saturation/colour-blind) is active.
+     */
     const isColourFilterActive = () => FILTER_CLASSES.some((cls) => document.body.classList.contains(cls));
     const stickyFooterOriginalPosition = new WeakMap();
 
+    /**
+     * Move every `.stickyfooter` to be a direct <body> child, recording its
+     * original parent/sibling first so restoreStickyFooters() can undo it.
+     *
+     * @return {void}
+     */
     const relocateStickyFooters = () => {
         document.querySelectorAll('.stickyfooter').forEach((el) => {
             if (el.parentElement !== document.body) {
@@ -411,6 +441,12 @@ export const init = async(loggedIn) => {
             }
         });
     };
+    /**
+     * Undo relocateStickyFooters(): move every previously-relocated
+     * `.stickyfooter` back to its original position, if recorded.
+     *
+     * @return {void}
+     */
     const restoreStickyFooters = () => {
         document.querySelectorAll('.stickyfooter').forEach((el) => {
             const original = stickyFooterOriginalPosition.get(el);
@@ -420,6 +456,12 @@ export const init = async(loggedIn) => {
             }
         });
     };
+    /**
+     * Relocate or restore `.stickyfooter` depending on whether a colour
+     * filter is currently active.
+     *
+     * @return {void}
+     */
     const syncStickyFooterPosition = () => (isColourFilterActive() ? relocateStickyFooters() : restoreStickyFooters());
 
     // The FAB sits bottom:24px/right:24px by default - directly over
@@ -432,12 +474,21 @@ export const init = async(loggedIn) => {
     // itself rather than theme's $stickyfooter-height so it stays correct
     // if a theme/page ever changes that height. Runs regardless of
     // .stickyfooter's current DOM position (offsetHeight doesn't care).
+    /**
+     * @return {void}
+     */
     const updateStickyFooterLift = () => {
         const footer = document.querySelector('.stickyfooter');
         const active = Boolean(footer) && document.body.classList.contains('hasstickyfooter');
         FabLift.setLift('stickyfooter', active ? footer.offsetHeight : 0);
     };
 
+    /**
+     * Re-sync both the sticky footer's DOM position and the FAB's lift
+     * amount to the current body classes. Safe to call any time.
+     *
+     * @return {void}
+     */
     const syncStickyFooter = () => {
         syncStickyFooterPosition();
         updateStickyFooterLift();

@@ -34,7 +34,9 @@ namespace local_a11y;
 class config {
 
     /**
-     * @return bool
+     * Whether the plugin is enabled site-wide.
+     *
+     * @return bool True if enabled (default when the setting is unset).
      */
     public static function is_enabled(): bool {
         $value = get_config('local_a11y', 'enabled');
@@ -42,7 +44,9 @@ class config {
     }
 
     /**
-     * @return bool
+     * Whether the plugin should be shown to not-logged-in/guest users.
+     *
+     * @return bool True if shown to guests (default when the setting is unset).
      */
     public static function show_for_guests(): bool {
         $value = get_config('local_a11y', 'showforguests');
@@ -50,6 +54,9 @@ class config {
     }
 
     /**
+     * Checks visibility for the current request: guests are gated by
+     * show_for_guests(), logged-in users by the local/a11y:view capability.
+     *
      * @return bool True if the current user (guest or logged in) is allowed to see the plugin.
      */
     public static function allowed_for_current_user(): bool {
@@ -65,6 +72,8 @@ class config {
     }
 
     /**
+     * Parses the admin-configured excludedpages textarea into a clean list.
+     *
      * @return string[] URL wildcard patterns (one per line in the setting) to exclude.
      */
     public static function excluded_page_patterns(): array {
@@ -74,6 +83,8 @@ class config {
     }
 
     /**
+     * Matches the current request URL ($FULLME) against excluded_page_patterns().
+     *
      * @return bool True if the current request URL matches an excluded pattern.
      */
     public static function current_page_excluded(): bool {
@@ -98,6 +109,8 @@ class config {
     }
 
     /**
+     * Reads the FAB/panel appearance admin settings with defaults applied.
+     *
      * @return array Tweak-style settings consumed by the panel/FAB templates.
      */
     public static function get_appearance(): array {
@@ -131,6 +144,8 @@ class config {
     }
 
     /**
+     * Reads the admin-configured list of enabled option ids.
+     *
      * @return string[] Option ids enabled by the site admin (default: all).
      */
     public static function enabled_features(): array {

@@ -206,7 +206,9 @@ class manager {
     }
 
     /**
-     * @param array<string, bool|int> $settings
+     * Counts how many options in $settings are active (non-default).
+     *
+     * @param array<string, bool|int> $settings A complete settings array (see get_default_settings()).
      * @return int Count of options that differ from their default value.
      */
     public static function count_active(array $settings): int {

@@ -44,9 +44,9 @@ export const PROFILES = {
  * Apply a profile preset onto the defaults (a full reset before layering the
  * preset, matching applyProfile() in the prototype).
  *
- * @param {String} id
- * @param {Object} defaults
- * @return {Object|null}
+ * @param {String} id The profile id (key into PROFILES), e.g. "lowVision".
+ * @param {Object} defaults The full default settings object to layer the preset on top of.
+ * @return {Object|null} The merged settings object, or null if `id` doesn't match a known profile.
  */
 export const applyProfile = (id, defaults) => {
     const preset = PROFILES[id];

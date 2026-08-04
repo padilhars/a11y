@@ -43,6 +43,7 @@ const lifts = {};
  *
  * @param {String} key Stable identifier for the calling feature.
  * @param {Number} px 0 (or less) clears this feature's contribution.
+ * @return {void}
  */
 export const setLift = (key, px) => {
     if (px > 0) {

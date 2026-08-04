@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  * module). This is the replacement for the removed
  * user_preference_allow_ajax_update() whitelist - see DECISIONS.md.
  *
- * @return array
+ * @return array<string, array<string, mixed>> Preference definitions keyed by preference name.
  */
 function local_a11y_user_preferences() {
     return [

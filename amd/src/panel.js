@@ -37,12 +37,16 @@ let lastFocused = null;
 let cb = {};
 
 /**
- * @return {boolean}
+ * Whether the panel is currently open (visible).
+ *
+ * @return {boolean} True if the panel element exists and isn't hidden.
  */
 const isOpen = () => panel && !panel.hidden;
 
 /**
  * Open the panel: unhide it, flip ARIA state, move focus in.
+ *
+ * @return {void}
  */
 const open = () => {
     if (!panel || isOpen()) {
@@ -69,6 +73,8 @@ const open = () => {
 
 /**
  * Close the panel: hide it, flip ARIA state, return focus to the FAB.
+ *
+ * @return {void}
  */
 const close = () => {
     if (!panel || !isOpen()) {
@@ -87,6 +93,8 @@ const close = () => {
 
 /**
  * Toggle open/closed.
+ *
+ * @return {void}
  */
 const toggle = () => {
     if (isOpen()) {
@@ -99,7 +107,8 @@ const toggle = () => {
 /**
  * Expand/collapse an option category.
  *
- * @param {HTMLElement} header
+ * @param {HTMLElement} header The category's header element (holds aria-expanded).
+ * @return {void}
  */
 const toggleCategory = (header) => {
     const expanded = header.getAttribute('aria-expanded') === 'true';
@@ -115,9 +124,10 @@ const toggleCategory = (header) => {
 /**
  * Re-render a single option row (toggle switch or stepper) to match `value`.
  *
- * @param {String} id
- * @param {Boolean|Number} value
- * @param {Boolean|Number} defaultValue
+ * @param {String} id The option id.
+ * @param {Boolean|Number} value The option's current value.
+ * @param {Boolean|Number} defaultValue The option's default value (used to derive the active state).
+ * @return {Promise<void>}
  */
 const renderOption = async(id, value, defaultValue) => {
     const row = panel.querySelector(`[data-region="option"][data-option-id="${id}"]`);
@@ -152,7 +162,8 @@ const renderOption = async(id, value, defaultValue) => {
  * hidden - see DECISIONS.md D23) - only its disabled state and colouring
  * change.
  *
- * @param {Number} count
+ * @param {Number} count The total number of currently active (non-default) options.
+ * @return {Promise<void>}
  */
 const renderHeader = async(count) => {
     const status = panel.querySelector('[data-region="status"]');
@@ -178,8 +189,9 @@ const renderHeader = async(count) => {
 /**
  * Update a category's active-option badge.
  *
- * @param {String} categoryId
- * @param {Number} count
+ * @param {String} categoryId The category's id.
+ * @param {Number} count The number of currently active options within it.
+ * @return {void}
  */
 const renderCategoryCount = (categoryId, count) => {
     const category = panel.querySelector(`[data-region="category"][data-category-id="${categoryId}"]`);
@@ -200,7 +212,8 @@ const renderCategoryCount = (categoryId, count) => {
  * of the plain accent - cleared when no profile is active, so the button's
  * CSS falls back to the accent again.
  *
- * @param {String|null} id
+ * @param {String|null} id The active profile's id, or null if none is active.
+ * @return {void}
  */
 const renderActiveProfile = (id) => {
     const toneprops = ['--local-a11y-tone-bg', '--local-a11y-tone-text', '--local-a11y-tone-icon', '--local-a11y-tone-border'];
@@ -238,7 +251,8 @@ const renderActiveProfile = (id) => {
  * searching - matching the prototype's search behaviour exactly. Restores
  * each category's prior expand state once the query is cleared.
  *
- * @param {String} query
+ * @param {String} query The raw search input value.
+ * @return {void}
  */
 const filterOptions = (query) => {
     const q = query.trim().toLowerCase();
@@ -294,6 +308,8 @@ const getFocusable = () => Array.from(panel.querySelectorAll(
 
 /**
  * Wire up all panel-level DOM event listeners.
+ *
+ * @return {void}
  */
 const registerEventListeners = () => {
     fab.addEventListener('click', toggle);
@@ -432,10 +448,13 @@ const registerEventListeners = () => {
 };
 
 /**
- * @param {HTMLElement} fabEl
- * @param {HTMLElement} panelEl
- * @param {HTMLElement|null} overlayEl
+ * Take ownership of the panel/FAB/overlay DOM and wire up event listeners.
+ *
+ * @param {HTMLElement} fabEl The floating action button element.
+ * @param {HTMLElement} panelEl The panel root element.
+ * @param {HTMLElement|null} overlayEl The backdrop overlay element (modal/drawer formats only), or null.
  * @param {Object} callbacks {onToggle, onStepperCycle, onReset, onProfileSelect, onSearch}
+ * @return {void}
  */
 export const init = (fabEl, panelEl, overlayEl, callbacks = {}) => {
     fab = fabEl;
