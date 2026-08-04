@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+            <title>local_a11y - API PHP</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="../">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
+    <link rel="icon" href="images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/template.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    </head>
+<body id="top">
+    <header class="phpdocumentor-header phpdocumentor-section">
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">local_a11y - API PHP</a></h1>
+    <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
+    <label class="phpdocumentor-header__menu-icon" for="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+    <section data-search-form class="phpdocumentor-search">
+    <label>
+        <span class="visually-hidden">Search for</span>
+        <svg class="phpdocumentor-search__icon" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12.4892" y1="12.2727" x2="19.1559" y2="18.9393" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+    </label>
+</section>
+
+    <nav class="phpdocumentor-topnav">
+    <ul class="phpdocumentor-topnav__menu">
+        </ul>
+</nav>
+</header>
+
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <input class="phpdocumentor-sidebar__menu-button" type="checkbox" id="sidebar-button" name="sidebar-button" />
+<label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
+    Menu
+</label>
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
+            <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/local-a11y.html" class="">local_a11y</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="namespaces/local-a11y-output.html" class="">output</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/local-a11y-privacy.html" class="">privacy</a>
+                
+            </li>
+            </ul>
+
+                        </section>
+                <section class="phpdocumentor-sidebar__category -packages">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Plugina11y.html" class="">Plugina11y</a>
+</h4>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Moodle.html" class="">Moodle</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Moodle-Plugina11y.html" class="">Plugina11y</a>
+                
+            </li>
+            </ul>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category -reports">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category -indices">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/local-a11y.html">local_a11y</a></li>
+    </ul>
+
+    <article class="phpdocumentor-element -class">
+        <h2 class="phpdocumentor-content__title">
+    manager
+
+    
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Moodle.html">Moodle</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Moodle-Plugina11y.html">Plugina11y</a></li>
+                            </ul>
+        </div>
+    
+    
+    </h2>
+
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
+        <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/manager.php"><a href="files/classes-manager.html"><abbr title="classes/manager.php">manager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">32</span>
+
+    </aside>
+
+            <p class="phpdocumentor-summary">Central place for defaults, activation checks, merge/validate/sanitize
+logic for local_a11y settings.</p>
+
+
+
+
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/local-a11y-manager.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">description</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Central place for defaults, activation checks, merge/validate/sanitize logic.</p>
+</section>
+
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">subpackage</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Plugin a11y</p>
+</section>
+
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">author</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Rodrigo Padilha Silveira <a href="mailto:padilhars@gmail.com">padilhars@gmail.com</a></p>
+</section>
+
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">copyright</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Universidade Federal de Pelotas - UFPel</p>
+</section>
+
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">license</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later</p>
+</section>
+
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">version</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                            <span class="phpdocumentor-tag-link">0.1.0</span>
+                                                                                                        
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">since</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                            <span class="phpdocumentor-tag-link">0.1.0</span>
+                                                                                                        
+                                    </dd>
+                        </dl>
+
+    
+    
+<h3 id="toc">
+    Table of Contents
+    <a href="classes/local-a11y-manager.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h3>
+
+
+
+
+
+
+
+<h4 id="toc-constants">
+    Constants
+    <a href="classes/local-a11y-manager.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a class="" href="classes/local-a11y-manager.html#constant_PREFERENCE_NAME">PREFERENCE_NAME</a>
+    <span>
+        &nbsp;: string&nbsp;= &#039;local_a11y_settings&#039;                            </span>
+</dt>
+
+    </dl>
+
+
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/local-a11y-manager.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-manager.html#method_count_active">count_active()</a>
+    <span>
+                                &nbsp;: int    </span>
+</dt>
+<dd>Counts how many options in $settings are active (non-default).</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-manager.html#method_get_boolean_class_map">get_boolean_class_map()</a>
+    <span>
+                                &nbsp;: array&lt;string, string&gt;    </span>
+</dt>
+<dd>Boolean settings key -&gt; body CSS class name, a verbatim port of the
+`if (settings.x) body.classList.add(&#039;a11y-y&#039;)` lines in
+_design-reference/app.jsx. Note this intentionally excludes
+readingGuide, readingMask, screenReader, virtualKeyboard,
+voiceCommands and (since D29 - the prototype itself does still map
+it to a body class, but a real browser&#039;s native title tooltip can
+only be suppressed from JS, not CSS) tooltips: those 6 booleans do
+NOT drive a body class here, they gate always-mounted JS overlay
+components instead (see amd/src/reading_guide.js etc., M5; D29).</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-manager.html#method_get_current_user_settings">get_current_user_settings()</a>
+    <span>
+                                &nbsp;: array&lt;string, bool|int&gt;    </span>
+</dt>
+<dd>Server-side known settings for the *current* user, used only for the
+no-FOUC bootstrap (classes/output/renderer.php::render_nofouc_script()).</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-manager.html#method_get_default_settings">get_default_settings()</a>
+    <span>
+                                &nbsp;: array&lt;string, bool|int&gt;    </span>
+</dt>
+<dd>Default value (all options off / level 0). Mirrors DEFAULT_SETTINGS in
+_design-reference/a11y-data.jsx (same keys, same order), plus
+&#039;textAlign&#039; - one addition beyond the prototype (see DECISIONS.md D30).</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-manager.html#method_get_stepper_class_prefix_map">get_stepper_class_prefix_map()</a>
+    <span>
+                                &nbsp;: array&lt;string, string&gt;    </span>
+</dt>
+<dd>Stepper settings key -&gt; body CSS class prefix (the level number is
+appended, e.g. &#039;textSize&#039; level 2 -&gt; &quot;a11y-text-size-2&quot;), a verbatim
+port of the equivalent lines in _design-reference/app.jsx. Note
+colorChange maps to the &quot;a11y-color-&quot; prefix, not &quot;a11y-color-change-&quot;.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-manager.html#method_get_stepper_max">get_stepper_max()</a>
+    <span>
+                                &nbsp;: array&lt;string, int&gt;    </span>
+</dt>
+<dd>Maximum stepper value per key (0 for toggles, boolean keys are absent here).</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-manager.html#method_is_active_on_current_page">is_active_on_current_page()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Whether the plugin should render on the current request.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-manager.html#method_sanitize_settings">sanitize_settings()</a>
+    <span>
+                                &nbsp;: array&lt;string, bool|int&gt;    </span>
+</dt>
+<dd>Merge, validate and sanitize a raw (client-supplied or stored) settings
+payload against the default shape: unknown keys are dropped, booleans
+are coerced, stepper values are clamped to their valid range, and any
+option disabled by the site admin (settings.php enabledfeatures) is
+forced back to its default value.</dd>
+
+    </dl>
+
+
+
+        
+    <section class="phpdocumentor-constants">
+        <h3 class="phpdocumentor-elements__header" id="constants">
+            Constants
+            <a href="classes/local-a11y-manager.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_PREFERENCE_NAME">
+        PREFERENCE_NAME
+        <a href="classes/local-a11y-manager.html#constant_PREFERENCE_NAME" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/manager.php"><a href="files/classes-manager.html"><abbr title="classes/manager.php">manager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">35</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">string</span>
+    <span class="phpdocumentor-signature__name">PREFERENCE_NAME</span>
+    = <span class="phpdocumentor-signature__default-value">&#039;local_a11y_settings&#039;</span>
+</code>
+
+
+    
+        <section class="phpdocumentor-description"><p>User preference name storing the JSON-encoded settings blob.</p>
+</section>
+
+    
+
+        
+    </article>
+            </section>
+
+        
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/local-a11y-manager.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_count_active">
+        count_active()
+        <a href="classes/local-a11y-manager.html#method_count_active" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/manager.php"><a href="files/classes-manager.html"><abbr title="classes/manager.php">manager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">214</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Counts how many options in $settings are active (non-default).</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">count_active</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">array&lt;string, bool|int&gt;&nbsp;</span><span class="phpdocumentor-signature__argument__name">$settings</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">int</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$settings</span>
+                : <span class="phpdocumentor-argument-list__argument__type">array&lt;string, bool|int&gt;</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>A complete settings array (see get_default_settings()).</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">int</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Count of options that differ from their default value.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_boolean_class_map">
+        get_boolean_class_map()
+        <a href="classes/local-a11y-manager.html#method_get_boolean_class_map" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/manager.php"><a href="files/classes-manager.html"><abbr title="classes/manager.php">manager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">104</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Boolean settings key -&gt; body CSS class name, a verbatim port of the
+`if (settings.x) body.classList.add(&#039;a11y-y&#039;)` lines in
+_design-reference/app.jsx. Note this intentionally excludes
+readingGuide, readingMask, screenReader, virtualKeyboard,
+voiceCommands and (since D29 - the prototype itself does still map
+it to a body class, but a real browser&#039;s native title tooltip can
+only be suppressed from JS, not CSS) tooltips: those 6 booleans do
+NOT drive a body class here, they gate always-mounted JS overlay
+components instead (see amd/src/reading_guide.js etc., M5; D29).</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">get_boolean_class_map</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_current_user_settings">
+        get_current_user_settings()
+        <a href="classes/local-a11y-manager.html#method_get_current_user_settings" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/manager.php"><a href="files/classes-manager.html"><abbr title="classes/manager.php">manager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">235</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Server-side known settings for the *current* user, used only for the
+no-FOUC bootstrap (classes/output/renderer.php::render_nofouc_script()).</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">get_current_user_settings</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, bool|int&gt;</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><p>Guests/not-logged-in users have no server-side preference (their
+settings live in localStorage only) so this returns defaults for them;
+the client-side bootstrap script falls back to reading localStorage
+itself in that case.</p>
+</section>
+
+    
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, bool|int&gt;</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_default_settings">
+        get_default_settings()
+        <a href="classes/local-a11y-manager.html#method_get_default_settings" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/manager.php"><a href="files/classes-manager.html"><abbr title="classes/manager.php">manager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">44</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Default value (all options off / level 0). Mirrors DEFAULT_SETTINGS in
+_design-reference/a11y-data.jsx (same keys, same order), plus
+&#039;textAlign&#039; - one addition beyond the prototype (see DECISIONS.md D30).</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">get_default_settings</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, bool|int&gt;</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, bool|int&gt;</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_stepper_class_prefix_map">
+        get_stepper_class_prefix_map()
+        <a href="classes/local-a11y-manager.html#method_get_stepper_class_prefix_map" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/manager.php"><a href="files/classes-manager.html"><abbr title="classes/manager.php">manager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">126</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Stepper settings key -&gt; body CSS class prefix (the level number is
+appended, e.g. &#039;textSize&#039; level 2 -&gt; &quot;a11y-text-size-2&quot;), a verbatim
+port of the equivalent lines in _design-reference/app.jsx. Note
+colorChange maps to the &quot;a11y-color-&quot; prefix, not &quot;a11y-color-change-&quot;.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">get_stepper_class_prefix_map</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, string&gt;</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_get_stepper_max">
+        get_stepper_max()
+        <a href="classes/local-a11y-manager.html#method_get_stepper_max" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/manager.php"><a href="files/classes-manager.html"><abbr title="classes/manager.php">manager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">78</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Maximum stepper value per key (0 for toggles, boolean keys are absent here).</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">get_stepper_max</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, int&gt;</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, int&gt;</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_is_active_on_current_page">
+        is_active_on_current_page()
+        <a href="classes/local-a11y-manager.html#method_is_active_on_current_page" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/manager.php"><a href="files/classes-manager.html"><abbr title="classes/manager.php">manager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">149</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Whether the plugin should render on the current request.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">is_active_on_current_page</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+        <section class="phpdocumentor-description"><p>Checks: plugin enabled, guest visibility, excluded page patterns.
+Implemented fully in M6 (config.php); returns true for now so the
+M1..M5 milestones can be verified end-to-end before the admin
+settings exist.</p>
+</section>
+
+    
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_sanitize_settings">
+        sanitize_settings()
+        <a href="classes/local-a11y-manager.html#method_sanitize_settings" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/manager.php"><a href="files/classes-manager.html"><abbr title="classes/manager.php">manager.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">173</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Merge, validate and sanitize a raw (client-supplied or stored) settings
+payload against the default shape: unknown keys are dropped, booleans
+are coerced, stepper values are clamped to their valid range, and any
+option disabled by the site admin (settings.php enabledfeatures) is
+forced back to its default value.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">sanitize_settings</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">mixed&nbsp;</span><span class="phpdocumentor-signature__argument__name">$raw</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array&lt;string, bool|int&gt;</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$raw</span>
+                : <span class="phpdocumentor-argument-list__argument__type">mixed</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Decoded JSON (assoc array) or already-an-array settings payload.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array&lt;string, bool|int&gt;</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>A complete, safe settings array.</p>
+</section>
+
+            </section>
+
+</article>
+            </section>
+
+        
+    </article>
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                        <li><a href="classes/local-a11y-manager.html#toc-constants">Constants</a></li>
+                                                                                <li><a href="classes/local-a11y-manager.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+                            <li class="phpdocumentor-on-this-page-section__title">Constants</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/local-a11y-manager.html#constant_PREFERENCE_NAME">PREFERENCE_NAME</a></li>
+                                            </ul>
+                </li>
+            
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li class=""><a href="classes/local-a11y-manager.html#method_count_active">count_active()</a></li>
+                                            <li class=""><a href="classes/local-a11y-manager.html#method_get_boolean_class_map">get_boolean_class_map()</a></li>
+                                            <li class=""><a href="classes/local-a11y-manager.html#method_get_current_user_settings">get_current_user_settings()</a></li>
+                                            <li class=""><a href="classes/local-a11y-manager.html#method_get_default_settings">get_default_settings()</a></li>
+                                            <li class=""><a href="classes/local-a11y-manager.html#method_get_stepper_class_prefix_map">get_stepper_class_prefix_map()</a></li>
+                                            <li class=""><a href="classes/local-a11y-manager.html#method_get_stepper_max">get_stepper_max()</a></li>
+                                            <li class=""><a href="classes/local-a11y-manager.html#method_is_active_on_current_page">is_active_on_current_page()</a></li>
+                                            <li class=""><a href="classes/local-a11y-manager.html#method_sanitize_settings">sanitize_settings()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+    <section class="phpdocumentor-search-results__dialog">
+        <header class="phpdocumentor-search-results__header">
+            <h2 class="phpdocumentor-search-results__title">Search results</h2>
+            <button class="phpdocumentor-search-results__close"><i class="fas fa-times"></i></button>
+        </header>
+        <section class="phpdocumentor-search-results__body">
+            <ul class="phpdocumentor-search-results__entries"></ul>
+        </section>
+    </section>
+</section>
+        </div>
+        <a href="classes/local-a11y-manager.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+
+    </main>
+
+    <script>
+        cssVars({});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
+</body>
+</html>

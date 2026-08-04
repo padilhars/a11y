@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see &lt;http://www.gnu.org/licenses/>.
+
+/**
+ * local_a11y bootstrap. Called once per page via $PAGE->requires->js_call_amd()
+ * from classes/hook_callbacks.php. Owns the settings state object; Panel
+ * owns the DOM and reports user interaction back via callbacks; Effects
+ * translates settings into body classes; Storage persists them.
+ *
+ * @module     local_a11y/main
+ * @description local_a11y bootstrap: owns settings state, wires Panel/Effects/Storage together.
+ * @author     Rodrigo Padilha Silveira &lt;padilhars@gmail.com>
+ * @copyright  Universidade Federal de Pelotas - UFPel
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @version    0.1.0
+ * @since      0.1.0
+ */
+
+import Panel from 'local_a11y/panel';
+import Effects from 'local_a11y/effects';
+import Storage from 'local_a11y/storage';
+import Profiles from 'local_a11y/profiles';
+import FabLift from 'local_a11y/fab_lift';
+import ReadingGuide from 'local_a11y/reading_guide';
+import ReadingMask from 'local_a11y/reading_mask';
+import ScreenReader from 'local_a11y/screen_reader';
+import VirtualKeyboard from 'local_a11y/virtual_keyboard';
+import VoiceCommands from 'local_a11y/voice_commands';
+import Tooltips from 'local_a11y/tooltips';
+import FaceNavigation from 'local_a11y/face_navigation';
+import PauseMedia from 'local_a11y/pause_media';
+import HideImages from 'local_a11y/hide_images';
+
+let settings = {...Storage.DEFAULT_SETTINGS};
+let isLoggedIn = false;
+// Which profile preset (if any) is currently applied. Ephemeral (not
+// persisted) - matches the prototype's own local component state, which
+// also resets on reload; only the resulting `settings` values persist.
+let activeProfileId = null;
+// Built from the server-rendered DOM itself (data-kind/data-max/category),
+// so option metadata never has to be duplicated a third time in JS.
+let optionMeta = {};
+
+/**
+ * Look up an option's default value.
+ *
+ * @param {String} id The option id.
+ * @return {Boolean|Number} The option's default value.
+ */
+const defaultOf = (id) => Storage.DEFAULT_SETTINGS[id];
+
+/**
+ * Recompute and render every category's active-option badge.
+ *
+ * @return {void}
+ */
+const renderCategoryCounts = () => {
+    const byCategory = {};
+    Object.keys(optionMeta).forEach((id) => {
+        const cat = optionMeta[id].categoryId;
+        const isActive = settings[id] !== defaultOf(id);
+        byCategory[cat] = (byCategory[cat] || 0) + (isActive ? 1 : 0);
+    });
+    Object.keys(byCategory).forEach((cat) => Panel.renderCategoryCount(cat, byCategory[cat]));
+};
+
+/**
+ * Recompute the total active-option count and render the header/badge.
+ *
+ * @return {void}
+ */
+const renderHeaderCount = () => {
+    const count = Object.keys(Storage.DEFAULT_SETTINGS)
+        .filter((id) => settings[id] !== Storage.DEFAULT_SETTINGS[id]).length;
+    Panel.renderHeader(count);
+};
+
+/**
+ * Voice command action -> settings mutation, passed to VoiceCommands.start().
+ * Defined once init() has bound onToggle/onReset (see below).
+ */
+let voiceCallbacks = {};
+
+/**
+ * Navigate to a Moodle page by path. Uses M.cfg.wwwroot when available so
+ * this works regardless of whether Moodle is installed at the domain root.
+ *
+ * @param {String} path The Moodle-relative path to navigate to, e.g. "/my".
+ * @return {void}
+ */
+const navigateTo = (path) => {
+    const root = (window.M &amp;&amp; window.M.cfg &amp;&amp; window.M.cfg.wwwroot) || '';
+    window.location.href = root + path;
+};
+
+/**
+ * Start/stop the "advanced" features that need a live JS overlay/listener
+ * on top of (or, for pauseAnimations, in addition to) their body CSS class -
+ * see classes/manager.php's get_boolean_class_map() docblock - to match the
+ * current settings.
+ *
+ * @return {void}
+ */
+const syncAdvancedFeatures = () => {
+    ReadingGuide.sync(Boolean(settings.readingGuide));
+    ReadingMask.sync(Boolean(settings.readingMask));
+    ScreenReader.sync(Boolean(settings.screenReader));
+    VirtualKeyboard.sync(Boolean(settings.virtualKeyboard));
+    VoiceCommands.sync(Boolean(settings.voiceCommands), voiceCallbacks);
+    Tooltips.sync(Boolean(settings.tooltips));
+    FaceNavigation.sync(Boolean(settings.faceNavigation));
+    PauseMedia.sync(Boolean(settings.pauseAnimations));
+    HideImages.sync(Boolean(settings.hideImages));
+};
+
+/**
+ * Apply the in-memory `settings` object everywhere: page effects, DOM
+ * (single option, or all of them), counts, and persist it.
+ *
+ * @param {String|null} onlyId Re-render just this option row, or null for all.
+ * @return {Promise&lt;void>}
+ */
+const commit = async(onlyId = null) => {
+    Effects.apply(settings);
+    syncAdvancedFeatures();
+    if (onlyId) {
+        await Panel.renderOption(onlyId, settings[onlyId], defaultOf(onlyId));
+    } else {
+        await Promise.all(Object.keys(optionMeta).map(
+            (id) => Panel.renderOption(id, settings[id], defaultOf(id))
+        ));
+    }
+    renderCategoryCounts();
+    await renderHeaderCount();
+    await Storage.saveSettings(settings, isLoggedIn);
+};
+
+/**
+ * Toggle a boolean option and commit the new settings.
+ *
+ * @param {String} id The option id.
+ * @param {Boolean} value The new value.
+ * @return {void}
+ */
+const onToggle = (id, value) => {
+    if (!(id in optionMeta)) {
+        return;
+    }
+    settings = {...settings, [id]: value};
+    activeProfileId = null;
+    Panel.renderActiveProfile(null);
+    commit(id);
+};
+
+/**
+ * Set a stepper option to a specific (clamped) value.
+ *
+ * @param {String} id The stepper option id.
+ * @param {Number} value The requested value (clamped to [0, meta.max]).
+ * @return {void}
+ */
+const setStepperValue = (id, value) => {
+    const meta = optionMeta[id];
+    if (!meta) {
+        return;
+    }
+    settings = {...settings, [id]: Math.max(0, Math.min(meta.max, value))};
+    activeProfileId = null;
+    Panel.renderActiveProfile(null);
+    commit(id);
+};
+
+/**
+ * Cycle a stepper option to its next value, wrapping back to 0 after max.
+ *
+ * @param {String} id The stepper option id.
+ * @return {void}
+ */
+const onStepperCycle = (id) => {
+    const meta = optionMeta[id];
+    if (!meta) {
+        return;
+    }
+    const current = Number(settings[id]) || 0;
+    setStepperValue(id, (current + 1) % (meta.max + 1));
+};
+
+/**
+ * Restore every option to its default value.
+ *
+ * @return {void}
+ */
+const onReset = () => {
+    settings = {...Storage.DEFAULT_SETTINGS};
+    activeProfileId = null;
+    Panel.renderActiveProfile(null);
+    commit();
+};
+
+/**
+ * Apply a profile preset (or clear it, if the same profile is clicked
+ * again - matching the prototype's toggle-off behaviour).
+ *
+ * @param {String} id The profile id to apply (or clear, if already active).
+ * @return {void}
+ */
+const onProfileSelect = (id) => {
+    if (activeProfileId === id) {
+        onReset();
+        return;
+    }
+    const applied = Profiles.applyProfile(id, Storage.DEFAULT_SETTINGS);
+    if (!applied) {
+        return;
+    }
+    settings = applied;
+    activeProfileId = id;
+    Panel.renderActiveProfile(id);
+    commit();
+};
+
+voiceCallbacks = {
+    // Panel
+    openPanel: () => Panel.open(),
+    closePanel: () => Panel.close(),
+
+    // Text size
+    increaseTextSize: () => setStepperValue('textSize', (Number(settings.textSize) || 0) + 1),
+    decreaseTextSize: () => setStepperValue('textSize', (Number(settings.textSize) || 0) - 1),
+
+    // Line height
+    increaseLineHeight: () => setStepperValue('lineHeight', (Number(settings.lineHeight) || 0) + 1),
+    decreaseLineHeight: () => setStepperValue('lineHeight', (Number(settings.lineHeight) || 0) - 1),
+
+    // Text spacing
+    increaseTextSpacing: () => setStepperValue('textSpacing', (Number(settings.textSpacing) || 0) + 1),
+    decreaseTextSpacing: () => setStepperValue('textSpacing', (Number(settings.textSpacing) || 0) - 1),
+
+    // Text alignment
+    alignLeft: () => setStepperValue('textAlign', 1),
+    alignCenter: () => setStepperValue('textAlign', 2),
+    alignRight: () => setStepperValue('textAlign', 3),
+    alignJustify: () => setStepperValue('textAlign', 4),
+    alignDefault: () => setStepperValue('textAlign', 0),
+
+    // Contrast
+    highContrast: () => setStepperValue('contrast', 3),
+    darkMode: () => setStepperValue('contrast', 1),
+    lightContrast: () => setStepperValue('contrast', 2),
+    noContrast: () => setStepperValue('contrast', 0),
+
+    // Colors
+    toggleInvertColors: () => onToggle('invertColors', !settings.invertColors),
+    colorProtanopia: () => setStepperValue('colorChange', 1),
+    colorDeuteranopia: () => setStepperValue('colorChange', 2),
+    colorTritanopia: () => setStepperValue('colorChange', 3),
+    colorDefault: () => setStepperValue('colorChange', 0),
+
+    // Saturation
+    saturationHigh: () => setStepperValue('saturation', 1),
+    saturationLow: () => setStepperValue('saturation', 2),
+    saturationMono: () => setStepperValue('saturation', 3),
+    saturationNormal: () => setStepperValue('saturation', 0),
+
+    // Cursor
+    cursorBigBlack: () => setStepperValue('cursor', 1),
+    cursorBigWhite: () => setStepperValue('cursor', 2),
+    cursorDefault: () => setStepperValue('cursor', 0),
+
+    // Font
+    toggleReadableFont: () => onToggle('readableFont', !settings.readableFont),
+    toggleDyslexicFont: () => onToggle('dyslexicFont', !settings.dyslexicFont),
+
+    // Highlights
+    toggleHighlightTitles: () => onToggle('highlightTitles', !settings.highlightTitles),
+    toggleHighlightLinks: () => onToggle('highlightLinks', !settings.highlightLinks),
+    toggleHighlightButtons: () => onToggle('highlightButtons', !settings.highlightButtons),
+
+    // Media &amp; motion
+    toggleHideImages: () => onToggle('hideImages', !settings.hideImages),
+    togglePauseAnimations: () => onToggle('pauseAnimations', !settings.pauseAnimations),
+    toggleTooltips: () => onToggle('tooltips', !settings.tooltips),
+
+    // Focus &amp; navigation tools
+    toggleReadingGuide: () => onToggle('readingGuide', !settings.readingGuide),
+    toggleReadingMask: () => onToggle('readingMask', !settings.readingMask),
+    toggleFocusMode: () => onToggle('focusMode', !settings.focusMode),
+    toggleScreenReader: () => onToggle('screenReader', !settings.screenReader),
+    toggleVirtualKeyboard: () => onToggle('virtualKeyboard', !settings.virtualKeyboard),
+
+    // Reset
+    reset: () => onReset(),
+
+    // Moodle navigation
+    goToDashboard: () => navigateTo('/my'),
+    goToCourses: () => navigateTo('/my/courses.php'),
+    goToCalendar: () => navigateTo('/calendar/view.php'),
+    goToMessages: () => navigateTo('/message/index.php'),
+    goToProfile: () => navigateTo('/user/profile.php'),
+    goBack: () => window.history.back(),
+    goForward: () => window.history.forward(),
+
+    // Page scroll
+    scrollDown: () => window.scrollBy({top: 400, behavior: 'smooth'}),
+    scrollUp: () => window.scrollBy({top: -400, behavior: 'smooth'}),
+    scrollTop: () => window.scrollTo({top: 0, behavior: 'smooth'}),
+    scrollBottom: () => window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'}),
+};
+
+/**
+ * Scan the server-rendered option rows to build the id -> {kind, max,
+ * categoryId} metadata map, without duplicating that data a third time.
+ *
+ * @param {HTMLElement} panelEl The root panel element to scan for `[data-region="option"]` rows.
+ * @return {Object} Map of option id -> {kind, max, categoryId}.
+ */
+const buildOptionMeta = (panelEl) => {
+    const meta = {};
+    panelEl.querySelectorAll('[data-region="option"]').forEach((row) => {
+        const category = row.closest('[data-region="category"]');
+        meta[row.dataset.optionId] = {
+            kind: row.dataset.kind,
+            max: row.dataset.max ? parseInt(row.dataset.max, 10) : 0,
+            categoryId: category ? category.dataset.categoryId : null,
+        };
+    });
+    return meta;
+};
+
+/**
+ * Entry point.
+ *
+ * @param {Boolean} loggedIn True for a real (non-guest) logged-in user.
+ * @return {Promise&lt;void>}
+ */
+export const init = async(loggedIn) => {
+    const fab = document.getElementById('local-a11y-fab');
+    const panelEl = document.getElementById('local-a11y-panel');
+    if (!fab || !panelEl) {
+        return;
+    }
+    const overlay = document.querySelector('.local-a11y-panel-overlay');
+
+    // classes/output/renderer.php::render_footer_html() is injected by the
+    // before_footer_html_generation hook deep inside #region-main (despite
+    // the name), which sits inside #page - one of the elements the colour
+    // filters (styles.css, D31) apply `filter` to directly. `filter` makes
+    // its element the containing block for position:fixed descendants, so
+    // if the FAB/panel stayed there, activating Inverter Cores/Mudar
+    // Cores/Saturação would silently break their (and the reset button's,
+    // etc.) fixed positioning - they'd scroll away with the page instead of
+    // staying put, exactly like Moodle's own navbar/drawers did before D31.
+    // Relocating them to be direct children of &lt;body> - never inside
+    // anything this plugin (or, so far, Moodle core) ever applies a filter
+    // to - decouples them from that permanently, regardless of which page
+    // regions future effects end up touching.
+    document.body.appendChild(fab);
+    if (overlay) {
+        document.body.appendChild(overlay);
+    }
+    document.body.appendChild(panelEl);
+
+    // Moodle's own "sticky footer" pattern (theme_boost/sticky-footer,
+    // core/sticky-footer; used e.g. by the course content bulk-edit
+    // toolbar) parks a position:fixed element just below the viewport via
+    // a negative `bottom` offset until activated - the exact same "relies
+    // on staying *viewport*-fixed while parked off-screen" pattern that
+    // broke for Moodle's message-drawer before D31 stopped filtering
+    // #page-wrapper as a whole. Unlike the navbar/drawers, a .stickyfooter
+    // element renders *inside* #page's own content (course format
+    // templates), so activating Inverter Cores/Mudar Cores/Saturação
+    // (which puts `filter` on #page - still needed there, for real page
+    // content) recomputes its "parked" bottom:-Npx against #page's own
+    // (much taller) box instead of the viewport, dropping it at some
+    // arbitrary point down the page instead of just off the bottom of the
+    // screen.
+    //
+    // An earlier version of this fix relocated .stickyfooter to be a
+    // direct &lt;body> child *unconditionally*, on load, regardless of
+    // whether any filter was ever active - on the theory that it's
+    // already in the DOM before any 'core/stickyfooter_state_changed'
+    // event could fire, so waiting for that event to relocate reactively
+    // would be too late. That traded the (real, but narrow - only while a
+    // colour filter is active) positioning bug for a much bigger one:
+    // core_courseformat/local/content's whole click-handling model
+    // (amd/src/local/content/actions.js::stateReady()) delegates clicks
+    // via a single listener on '#page' itself (component.init('#page',
+    // ...), templates/local/content.mustache) and matches on
+    // [data-action] - exactly what the bulk-edit toolbar's own
+    // Disponibilidade/Duplicar/Mover/Excluir buttons are. Pulling
+    // .stickyfooter permanently out of #page meant clicks on those
+    // buttons could never bubble up to that delegated listener again -
+    // they'd still take native focus (hence the focus ring reported) but
+    // never actually fire, on *every* page with a sticky footer, with or
+    // without any a11y option active at all (confirmed by QA testing with
+    // literally nothing enabled). A real, worse bug traded for a narrower
+    // one.
+    //
+    // Fixed by only relocating while it's actually needed - a colour
+    // filter (Inverter Cores/Mudar Cores/Saturação/daltonismo) is active -
+    // and restoring .stickyfooter to its original DOM position (tracked
+    // per-element, since it's the *position*, not just "is it in #page",
+    // that #page's delegated listener needs) the moment none of those are
+    // active any more. In the common case (no colour filter running,
+    // which is most of the time - these aren't on-by-default) the sticky
+    // footer never moves at all, so #page's delegation is never broken in
+    // the first place.
+    const FILTER_CLASSES = [
+        'a11y-invert', 'a11y-saturation-1', 'a11y-saturation-2', 'a11y-saturation-3',
+        'a11y-color-1', 'a11y-color-2', 'a11y-color-3',
+    ];
+    /**
+     * @return {Boolean} True if any colour-filter body class (invert/saturation/colour-blind) is active.
+     */
+    const isColourFilterActive = () => FILTER_CLASSES.some((cls) => document.body.classList.contains(cls));
+    const stickyFooterOriginalPosition = new WeakMap();
+
+    /**
+     * Move every `.stickyfooter` to be a direct &lt;body> child, recording its
+     * original parent/sibling first so restoreStickyFooters() can undo it.
+     *
+     * @return {void}
+     */
+    const relocateStickyFooters = () => {
+        document.querySelectorAll('.stickyfooter').forEach((el) => {
+            if (el.parentElement !== document.body) {
+                stickyFooterOriginalPosition.set(el, {parent: el.parentElement, nextSibling: el.nextSibling});
+                document.body.appendChild(el);
+            }
+        });
+    };
+    /**
+     * Undo relocateStickyFooters(): move every previously-relocated
+     * `.stickyfooter` back to its original position, if recorded.
+     *
+     * @return {void}
+     */
+    const restoreStickyFooters = () => {
+        document.querySelectorAll('.stickyfooter').forEach((el) => {
+            const original = stickyFooterOriginalPosition.get(el);
+            if (el.parentElement === document.body &amp;&amp; original &amp;&amp; document.body.contains(original.parent)) {
+                original.parent.insertBefore(el, original.nextSibling);
+                stickyFooterOriginalPosition.delete(el);
+            }
+        });
+    };
+    /**
+     * Relocate or restore `.stickyfooter` depending on whether a colour
+     * filter is currently active.
+     *
+     * @return {void}
+     */
+    const syncStickyFooterPosition = () => (isColourFilterActive() ? relocateStickyFooters() : restoreStickyFooters());
+
+    // The FAB sits bottom:24px/right:24px by default - directly over
+    // .stickyfooter's own bottom:0, right-aligned action buttons (it spans
+    // the full viewport width) once Moodle shows one (theme_boost/
+    // sticky-footer.js adds body.hasstickyfooter). At z-index 99990 the FAB
+    // was intercepting clicks meant for those buttons - lift the FAB clear
+    // of it via fab_lift.js (shared with Virtual Keyboard, so neither
+    // feature clobbers the other's lift). Measured from the element
+    // itself rather than theme's $stickyfooter-height so it stays correct
+    // if a theme/page ever changes that height. Runs regardless of
+    // .stickyfooter's current DOM position (offsetHeight doesn't care).
+    /**
+     * @return {void}
+     */
+    const updateStickyFooterLift = () => {
+        const footer = document.querySelector('.stickyfooter');
+        const active = Boolean(footer) &amp;&amp; document.body.classList.contains('hasstickyfooter');
+        FabLift.setLift('stickyfooter', active ? footer.offsetHeight : 0);
+    };
+
+    /**
+     * Re-sync both the sticky footer's DOM position and the FAB's lift
+     * amount to the current body classes. Safe to call any time.
+     *
+     * @return {void}
+     */
+    const syncStickyFooter = () => {
+        syncStickyFooterPosition();
+        updateStickyFooterLift();
+    };
+    syncStickyFooter();
+    document.addEventListener('core/stickyfooter_state_changed', syncStickyFooter);
+    // Belt-and-braces for the case (unobserved so far, but see the comment
+    // above for why this codebase treats that possibility seriously)
+    // where hasstickyfooter or an a11y-* filter class is toggled without
+    // the event firing - e.g. a future core change - so position/lift
+    // never get stuck out of sync with the actual classes.
+    new MutationObserver(syncStickyFooter).observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class'],
+    });
+
+    isLoggedIn = Boolean(loggedIn);
+    optionMeta = buildOptionMeta(panelEl);
+    settings = await Storage.getSettings(isLoggedIn);
+
+    Panel.init(fab, panelEl, overlay, {
+        onToggle,
+        onStepperCycle,
+        onReset,
+        onProfileSelect,
+    });
+
+    // Re-apply/re-render once the real settings are loaded: the inline
+    // no-FOUC script (classes/output/renderer.php::render_nofouc_script())
+    // already applied its best guess synchronously to avoid a flash, but
+    // this is the authoritative value (e.g. after a guest->login migration)
+    // and keeps the option rows' own state in sync with it.
+    Effects.apply(settings);
+    syncAdvancedFeatures();
+    await Promise.all(Object.keys(optionMeta).map(
+        (id) => Panel.renderOption(id, settings[id], defaultOf(id))
+    ));
+    renderCategoryCounts();
+    await renderHeaderCount();
+
+    // Alt+A global shortcut (documented in the panel footer).
+    document.addEventListener('keydown', (e) => {
+        if (e.altKey &amp;&amp; (e.key === 'a' || e.key === 'A')) {
+            e.preventDefault();
+            Panel.toggle();
+        }
+    });
+
+    // The Face Navigation HUD's "Stop" button asks to turn the whole option
+    // off: route it through onToggle so the panel switch, saved preference
+    // and the feature's own teardown all stay in sync.
+    document.addEventListener('local_a11y/face-disable', () => {
+        if (settings.faceNavigation) {
+            onToggle('faceNavigation', false);
+        }
+    });
+};
+
+export default {
+    init,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-local_a11y_effects.html">local_a11y/effects</a></li><li><a href="module-local_a11y_fab_lift.html">local_a11y/fab_lift</a></li><li><a href="module-local_a11y_face_navigation.html">local_a11y/face_navigation</a></li><li><a href="module-local_a11y_hide_images.html">local_a11y/hide_images</a></li><li><a href="module-local_a11y_main.html">local_a11y/main</a></li><li><a href="module-local_a11y_panel.html">local_a11y/panel</a></li><li><a href="module-local_a11y_pause_media.html">local_a11y/pause_media</a></li><li><a href="module-local_a11y_profiles.html">local_a11y/profiles</a></li><li><a href="module-local_a11y_reading_guide.html">local_a11y/reading_guide</a></li><li><a href="module-local_a11y_reading_mask.html">local_a11y/reading_mask</a></li><li><a href="module-local_a11y_screen_reader.html">local_a11y/screen_reader</a></li><li><a href="module-local_a11y_storage.html">local_a11y/storage</a></li><li><a href="module-local_a11y_tooltips.html">local_a11y/tooltips</a></li><li><a href="module-local_a11y_virtual_keyboard.html">local_a11y/virtual_keyboard</a></li><li><a href="module-local_a11y_voice_commands.html">local_a11y/voice_commands</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Aug 03 2026 23:24:29 GMT-0300 (Brasilia Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

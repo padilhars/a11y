@@ -3,3 +3,4 @@ node_modules/
 .phpunit.cache/
 behat_*.json
 /local_a11y.zip
+.phpdoc/

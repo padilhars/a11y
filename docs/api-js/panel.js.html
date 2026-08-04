@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: panel.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: panel.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see &lt;http://www.gnu.org/licenses/>.
+
+/**
+ * Panel DOM ownership: open/close, category collapse, option row rendering
+ * and click delegation. Holds no state of its own - local_a11y/main owns the
+ * settings object and passes render updates in, and receives user
+ * interactions back out via the `callbacks` passed to init().
+ *
+ * @module     local_a11y/panel
+ * @description Panel DOM ownership: open/close, category collapse, option row rendering.
+ * @author     Rodrigo Padilha Silveira &lt;padilhars@gmail.com>
+ * @copyright  Universidade Federal de Pelotas - UFPel
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @version    0.1.0
+ * @since      0.1.0
+ */
+
+import {getString} from 'core/str';
+
+let fab = null;
+let panel = null;
+let overlay = null;
+let lastFocused = null;
+let cb = {};
+
+/**
+ * Whether the panel is currently open (visible).
+ *
+ * @return {boolean} True if the panel element exists and isn't hidden.
+ */
+const isOpen = () => panel &amp;&amp; !panel.hidden;
+
+/**
+ * Open the panel: unhide it, flip ARIA state, move focus in.
+ *
+ * @return {void}
+ */
+const open = () => {
+    if (!panel || isOpen()) {
+        return;
+    }
+    lastFocused = document.activeElement;
+    panel.hidden = false;
+    panel.setAttribute('aria-hidden', 'false');
+    fab.setAttribute('aria-expanded', 'true');
+    // In drawer format the open panel takes the FAB's place: hide the FAB
+    // while the drawer is open (close() restores it).
+    if (panel.classList.contains('local-a11y-panel--drawer')) {
+        fab.classList.add('local-a11y-fab--hidden');
+    }
+    if (overlay &amp;&amp; (panel.classList.contains('local-a11y-panel--modal')
+            || panel.classList.contains('local-a11y-panel--drawer'))) {
+        overlay.hidden = false;
+    }
+    const closeBtn = panel.querySelector('[data-action="close"]');
+    if (closeBtn) {
+        closeBtn.focus();
+    }
+};
+
+/**
+ * Close the panel: hide it, flip ARIA state, return focus to the FAB.
+ *
+ * @return {void}
+ */
+const close = () => {
+    if (!panel || !isOpen()) {
+        return;
+    }
+    panel.hidden = true;
+    panel.setAttribute('aria-hidden', 'true');
+    fab.setAttribute('aria-expanded', 'false');
+    // Restore the FAB (no-op unless drawer-format open() hid it).
+    fab.classList.remove('local-a11y-fab--hidden');
+    if (overlay) {
+        overlay.hidden = true;
+    }
+    (lastFocused || fab).focus();
+};
+
+/**
+ * Toggle open/closed.
+ *
+ * @return {void}
+ */
+const toggle = () => {
+    if (isOpen()) {
+        close();
+    } else {
+        open();
+    }
+};
+
+/**
+ * Expand/collapse an option category.
+ *
+ * @param {HTMLElement} header The category's header element (holds aria-expanded).
+ * @return {void}
+ */
+const toggleCategory = (header) => {
+    const expanded = header.getAttribute('aria-expanded') === 'true';
+    const category = header.closest('[data-region="category"]');
+    const body = category ? category.querySelector('[data-region="category-body"]') : null;
+    if (!body) {
+        return;
+    }
+    header.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    body.hidden = expanded;
+};
+
+/**
+ * Re-render a single option row (toggle switch or stepper) to match `value`.
+ *
+ * @param {String} id The option id.
+ * @param {Boolean|Number} value The option's current value.
+ * @param {Boolean|Number} defaultValue The option's default value (used to derive the active state).
+ * @return {Promise&lt;void>}
+ */
+const renderOption = async(id, value, defaultValue) => {
+    const row = panel.querySelector(`[data-region="option"][data-option-id="${id}"]`);
+    if (!row) {
+        return;
+    }
+    const isActive = value !== defaultValue;
+    row.classList.toggle('local-a11y-option--active', isActive);
+
+    if (row.dataset.kind === 'toggle') {
+        const switchEl = row.querySelector('[data-region="switch"]');
+        if (switchEl) {
+            switchEl.setAttribute('aria-pressed', value ? 'true' : 'false');
+        }
+        return;
+    }
+
+    // Stepper.
+    row.dataset.value = String(value);
+    const labelEl = row.querySelector('[data-region="stepper-label"]');
+    if (labelEl) {
+        labelEl.textContent = await getString(`${row.dataset.levelprefix}${value}`, 'local_a11y');
+    }
+    row.querySelectorAll('[data-region="stepper-dots"] > span').forEach((dot, index) => {
+        dot.classList.toggle('local-a11y-stepper__dot--active', index === Number(value) &amp;&amp; index > 0);
+    });
+};
+
+/**
+ * Update the header status text, reset button and FAB badge to match the
+ * current active-option count. The reset button is always present (never
+ * hidden - see DECISIONS.md D23) - only its disabled state and colouring
+ * change.
+ *
+ * @param {Number} count The total number of currently active (non-default) options.
+ * @return {Promise&lt;void>}
+ */
+const renderHeader = async(count) => {
+    const status = panel.querySelector('[data-region="status"]');
+    const resetButton = panel.querySelector('[data-region="reset-button"]');
+    const badge = fab.querySelector('[data-region="badge"]');
+
+    if (status) {
+        status.classList.toggle('local-a11y-panel__subtitle--active', count > 0);
+        status.textContent = count > 0
+            ? await getString(count === 1 ? 'activecountone' : 'activecount', 'local_a11y', count)
+            : await getString('noneactive', 'local_a11y');
+    }
+    if (resetButton) {
+        resetButton.disabled = count === 0;
+        resetButton.classList.toggle('local-a11y-panel__reset-icon--active', count > 0);
+    }
+    if (badge) {
+        badge.hidden = count === 0;
+        badge.textContent = String(count);
+    }
+};
+
+/**
+ * Update a category's active-option badge.
+ *
+ * @param {String} categoryId The category's id.
+ * @param {Number} count The number of currently active options within it.
+ * @return {void}
+ */
+const renderCategoryCount = (categoryId, count) => {
+    const category = panel.querySelector(`[data-region="category"][data-category-id="${categoryId}"]`);
+    if (!category) {
+        return;
+    }
+    const countEl = category.querySelector('[data-region="category-count"]');
+    if (countEl) {
+        countEl.hidden = count === 0;
+        countEl.textContent = String(count);
+    }
+};
+
+/**
+ * Mark the given profile card as active (or none, if id is null) and, when
+ * one is, copy its tone CSS variables onto the header reset button (see
+ * DECISIONS.md D23) so it reads in the active profile's own colour instead
+ * of the plain accent - cleared when no profile is active, so the button's
+ * CSS falls back to the accent again.
+ *
+ * @param {String|null} id The active profile's id, or null if none is active.
+ * @return {void}
+ */
+const renderActiveProfile = (id) => {
+    const toneprops = ['--local-a11y-tone-bg', '--local-a11y-tone-text', '--local-a11y-tone-icon', '--local-a11y-tone-border'];
+    const resetButton = panel.querySelector('[data-region="reset-button"]');
+    let activeCard = null;
+
+    panel.querySelectorAll('[data-region="profile-card"]').forEach((card) => {
+        const isActive = card.dataset.profileId === id;
+        card.classList.toggle('local-a11y-profile-card--active', isActive);
+        card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        const check = card.querySelector('[data-region="profile-check"]');
+        if (check) {
+            check.hidden = !isActive;
+        }
+        if (isActive) {
+            activeCard = card;
+        }
+    });
+
+    if (!resetButton) {
+        return;
+    }
+    toneprops.forEach((prop) => {
+        if (activeCard) {
+            resetButton.style.setProperty(prop, activeCard.style.getPropertyValue(prop));
+        } else {
+            resetButton.style.removeProperty(prop);
+        }
+    });
+};
+
+/**
+ * Show/hide option rows and categories to match a search query, forcing all
+ * matching categories open (and hiding the profiles section) while
+ * searching - matching the prototype's search behaviour exactly. Restores
+ * each category's prior expand state once the query is cleared.
+ *
+ * @param {String} query The raw search input value.
+ * @return {void}
+ */
+const filterOptions = (query) => {
+    const q = query.trim().toLowerCase();
+    const isSearching = q.length > 0;
+
+    const profilesSection = panel.querySelector('[data-region="profiles-section"]');
+    if (profilesSection) {
+        profilesSection.hidden = isSearching;
+    }
+
+    panel.querySelectorAll('[data-region="category"]').forEach((category) => {
+        const header = category.querySelector('[data-action="toggle-category"]');
+        const body = category.querySelector('[data-region="category-body"]');
+        let anyVisible = false;
+
+        category.querySelectorAll('[data-region="option"]').forEach((row) => {
+            const label = row.querySelector('.local-a11y-option__label');
+            const text = label ? label.textContent.toLowerCase() : '';
+            const match = !isSearching || text.includes(q);
+            row.hidden = !match;
+            if (match) {
+                anyVisible = true;
+            }
+        });
+
+        category.hidden = isSearching &amp;&amp; !anyVisible;
+
+        if (isSearching) {
+            if (header.dataset.wasExpanded === undefined) {
+                header.dataset.wasExpanded = header.getAttribute('aria-expanded');
+            }
+            header.setAttribute('aria-expanded', 'true');
+            header.disabled = true;
+            body.hidden = false;
+        } else if (header.dataset.wasExpanded !== undefined) {
+            header.setAttribute('aria-expanded', header.dataset.wasExpanded);
+            body.hidden = header.dataset.wasExpanded !== 'true';
+            header.disabled = false;
+            delete header.dataset.wasExpanded;
+        }
+    });
+};
+
+/**
+ * All currently visible, non-disabled focusable elements inside the panel,
+ * in DOM order - used by the Tab-key focus trap.
+ *
+ * @return {HTMLElement[]}
+ */
+const getFocusable = () => Array.from(panel.querySelectorAll(
+    'button:not([disabled]), [href], input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+)).filter((el) => el.offsetParent !== null);
+
+/**
+ * Wire up all panel-level DOM event listeners.
+ *
+ * @return {void}
+ */
+const registerEventListeners = () => {
+    fab.addEventListener('click', toggle);
+
+    panel.addEventListener('click', (e) => {
+        const closeTrigger = e.target.closest('[data-action="close"]');
+        if (closeTrigger) {
+            close();
+            return;
+        }
+        const resetTrigger = e.target.closest('[data-action="reset"]');
+        if (resetTrigger) {
+            if (cb.onReset) {
+                cb.onReset();
+            }
+            return;
+        }
+        const helpBtn = e.target.closest('[data-action="toggle-help"]');
+        if (helpBtn) {
+            const row = helpBtn.closest('[data-region="option"]');
+            const block = row ? row.querySelector('[data-region="help-block"]') : null;
+            if (block) {
+                const wasHidden = block.hidden;
+                block.hidden = !wasHidden;
+                helpBtn.setAttribute('aria-expanded', wasHidden ? 'true' : 'false');
+            }
+            return;
+        }
+        const categoryHeader = e.target.closest('[data-action="toggle-category"]');
+        if (categoryHeader) {
+            toggleCategory(categoryHeader);
+            return;
+        }
+        const clearSearch = e.target.closest('[data-action="clear-search"]');
+        if (clearSearch) {
+            const input = panel.querySelector('[data-region="search-input"]');
+            if (input) {
+                input.value = '';
+                input.dispatchEvent(new Event('input'));
+                input.focus();
+            }
+            return;
+        }
+        const profileCard = e.target.closest('[data-region="profile-card"]');
+        if (profileCard) {
+            if (cb.onProfileSelect) {
+                cb.onProfileSelect(profileCard.dataset.profileId);
+            }
+            return;
+        }
+        const option = e.target.closest('[data-region="option"]');
+        if (option) {
+            const id = option.dataset.optionId;
+            if (option.dataset.kind === 'toggle') {
+                const switchEl = option.querySelector('[data-region="switch"]');
+                const pressed = switchEl &amp;&amp; switchEl.getAttribute('aria-pressed') === 'true';
+                if (cb.onToggle) {
+                    cb.onToggle(id, !pressed);
+                }
+            } else if (cb.onStepperCycle) {
+                // Cycling a stepper that's already active doesn't otherwise
+                // change how the row looks much (still active, just a
+                // different level/dot) - flash the background briefly as
+                // click feedback in place of the focus ring styles.css now
+                // suppresses for mouse clicks on these rows (see D25).
+                if (option.classList.contains('local-a11y-option--active')) {
+                    option.classList.remove('local-a11y-option--pulse');
+                    void option.offsetWidth; // Force reflow so rapid re-clicks restart the animation.
+                    option.classList.add('local-a11y-option--pulse');
+                }
+                cb.onStepperCycle(id);
+            }
+        }
+    });
+
+    panel.addEventListener('animationend', (e) => {
+        if (e.animationName === 'local-a11y-option-pulse') {
+            e.target.classList.remove('local-a11y-option--pulse');
+        }
+    });
+
+    panel.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' &amp;&amp; e.key !== ' ') {
+            return;
+        }
+        const option = e.target.closest('[data-region="option"]');
+        if (option) {
+            e.preventDefault();
+            option.click();
+        }
+    });
+
+    const searchInput = panel.querySelector('[data-region="search-input"]');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            filterOptions(e.target.value);
+            if (cb.onSearch) {
+                cb.onSearch(e.target.value);
+            }
+            const clearBtn = panel.querySelector('[data-action="clear-search"]');
+            if (clearBtn) {
+                clearBtn.hidden = e.target.value === '';
+            }
+        });
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', close);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' &amp;&amp; isOpen()) {
+            close();
+        }
+    });
+
+    // WCAG 2.2 focus trap: Tab/Shift+Tab cycle within the panel while open.
+    panel.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab' || !isOpen()) {
+            return;
+        }
+        const focusable = getFocusable();
+        if (focusable.length === 0) {
+            return;
+        }
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey &amp;&amp; document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey &amp;&amp; document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
+    });
+};
+
+/**
+ * Take ownership of the panel/FAB/overlay DOM and wire up event listeners.
+ *
+ * @param {HTMLElement} fabEl The floating action button element.
+ * @param {HTMLElement} panelEl The panel root element.
+ * @param {HTMLElement|null} overlayEl The backdrop overlay element (modal/drawer formats only), or null.
+ * @param {Object} callbacks {onToggle, onStepperCycle, onReset, onProfileSelect, onSearch}
+ * @return {void}
+ */
+export const init = (fabEl, panelEl, overlayEl, callbacks = {}) => {
+    fab = fabEl;
+    panel = panelEl;
+    overlay = overlayEl;
+    cb = callbacks;
+    registerEventListeners();
+};
+
+export default {
+    init,
+    open,
+    close,
+    toggle,
+    renderOption,
+    renderHeader,
+    renderCategoryCount,
+    renderActiveProfile,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-local_a11y_effects.html">local_a11y/effects</a></li><li><a href="module-local_a11y_fab_lift.html">local_a11y/fab_lift</a></li><li><a href="module-local_a11y_face_navigation.html">local_a11y/face_navigation</a></li><li><a href="module-local_a11y_hide_images.html">local_a11y/hide_images</a></li><li><a href="module-local_a11y_main.html">local_a11y/main</a></li><li><a href="module-local_a11y_panel.html">local_a11y/panel</a></li><li><a href="module-local_a11y_pause_media.html">local_a11y/pause_media</a></li><li><a href="module-local_a11y_profiles.html">local_a11y/profiles</a></li><li><a href="module-local_a11y_reading_guide.html">local_a11y/reading_guide</a></li><li><a href="module-local_a11y_reading_mask.html">local_a11y/reading_mask</a></li><li><a href="module-local_a11y_screen_reader.html">local_a11y/screen_reader</a></li><li><a href="module-local_a11y_storage.html">local_a11y/storage</a></li><li><a href="module-local_a11y_tooltips.html">local_a11y/tooltips</a></li><li><a href="module-local_a11y_virtual_keyboard.html">local_a11y/virtual_keyboard</a></li><li><a href="module-local_a11y_voice_commands.html">local_a11y/voice_commands</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Aug 03 2026 23:24:29 GMT-0300 (Brasilia Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

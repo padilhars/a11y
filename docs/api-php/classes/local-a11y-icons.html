@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+            <title>local_a11y - API PHP</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="../">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png"/>
+    <link rel="icon" href="images/favicon.ico"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/base.css">
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;200;300;400;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/template.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.0/css/all.min.css" integrity="sha256-ybRkN9dBjhcS2qrW1z+hfCxq+1aBdwyQM5wlQoQVt/0=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism-okaidia.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.css">
+                <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+        <script src="js/template.js"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    </head>
+<body id="top">
+    <header class="phpdocumentor-header phpdocumentor-section">
+    <h1 class="phpdocumentor-title"><a href="" class="phpdocumentor-title__link">local_a11y - API PHP</a></h1>
+    <input class="phpdocumentor-header__menu-button" type="checkbox" id="menu-button" name="menu-button" />
+    <label class="phpdocumentor-header__menu-icon" for="menu-button">
+        <i class="fas fa-bars"></i>
+    </label>
+    <section data-search-form class="phpdocumentor-search">
+    <label>
+        <span class="visually-hidden">Search for</span>
+        <svg class="phpdocumentor-search__icon" width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="7.5" cy="7.5" r="6.5" stroke="currentColor" stroke-width="2"/>
+            <line x1="12.4892" y1="12.2727" x2="19.1559" y2="18.9393" stroke="currentColor" stroke-width="3"/>
+        </svg>
+        <input type="search" class="phpdocumentor-field phpdocumentor-search__field" placeholder="Loading .." disabled />
+    </label>
+</section>
+
+    <nav class="phpdocumentor-topnav">
+    <ul class="phpdocumentor-topnav__menu">
+        </ul>
+</nav>
+</header>
+
+    <main class="phpdocumentor">
+        <div class="phpdocumentor-section">
+            <input class="phpdocumentor-sidebar__menu-button" type="checkbox" id="sidebar-button" name="sidebar-button" />
+<label class="phpdocumentor-sidebar__menu-icon" for="sidebar-button">
+    Menu
+</label>
+<aside class="phpdocumentor-column -three phpdocumentor-sidebar">
+                    <section class="phpdocumentor-sidebar__category -namespaces">
+            <h2 class="phpdocumentor-sidebar__category-header">Namespaces</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="namespaces/local-a11y.html" class="">local_a11y</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="namespaces/local-a11y-output.html" class="">output</a>
+                
+            </li>
+                    <li>
+                <a href="namespaces/local-a11y-privacy.html" class="">privacy</a>
+                
+            </li>
+            </ul>
+
+                        </section>
+                <section class="phpdocumentor-sidebar__category -packages">
+            <h2 class="phpdocumentor-sidebar__category-header">Packages</h2>
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Plugina11y.html" class="">Plugina11y</a>
+</h4>
+
+                                    <h4 class="phpdocumentor-sidebar__root-namespace">
+    <a href="packages/Moodle.html" class="">Moodle</a>
+</h4>
+    <ul class="phpdocumentor-list">
+                    <li>
+                <a href="packages/Moodle-Plugina11y.html" class="">Plugina11y</a>
+                
+            </li>
+            </ul>
+
+                        </section>
+            
+    <section class="phpdocumentor-sidebar__category -reports">
+        <h2 class="phpdocumentor-sidebar__category-header">Reports</h2>
+                <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/deprecated.html">Deprecated</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/errors.html">Errors</a></h3>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="reports/markers.html">Markers</a></h3>
+    </section>
+
+    <section class="phpdocumentor-sidebar__category -indices">
+        <h2 class="phpdocumentor-sidebar__category-header">Indices</h2>
+        <h3 class="phpdocumentor-sidebar__root-package"><a href="indices/files.html">Files</a></h3>
+    </section>
+</aside>
+
+            <div class="phpdocumentor-column -nine phpdocumentor-content">
+                                <section>
+                                        <ul class="phpdocumentor-breadcrumbs">
+            <li class="phpdocumentor-breadcrumb"><a href="namespaces/local-a11y.html">local_a11y</a></li>
+    </ul>
+
+    <article class="phpdocumentor-element -class">
+        <h2 class="phpdocumentor-content__title">
+    icons
+
+    
+            <div class="phpdocumentor-element__package">
+            in package
+            <ul class="phpdocumentor-breadcrumbs">
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Moodle.html">Moodle</a></li>
+                                    <li class="phpdocumentor-breadcrumb"><a href="packages/Moodle-Plugina11y.html">Plugina11y</a></li>
+                            </ul>
+        </div>
+    
+    
+    </h2>
+
+<div class="phpdocumentor-label-line">
+
+
+</div>
+
+        <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/icons.php"><a href="files/classes-icons.html"><abbr title="classes/icons.php">icons.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">33</span>
+
+    </aside>
+
+            <p class="phpdocumentor-summary">Inline SVG icon registry — a verbatim PHP port of ICON_PATHS in
+_design-reference/a11y-data.jsx (Lucide icons @ 0.453, stroke 1.75), so
+the plugin renders pixel-identical icons without a JS icon library.</p>
+
+
+
+
+    <h5 class="phpdocumentor-tag-list__heading" id="tags">
+        Tags
+        <a href="classes/local-a11y-icons.html#tags" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h5>
+    <dl class="phpdocumentor-tag-list">
+                    <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">description</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Inline SVG icon registry (verbatim PHP port of ICON_PATHS).</p>
+</section>
+
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">subpackage</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Plugin a11y</p>
+</section>
+
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">author</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Rodrigo Padilha Silveira <a href="mailto:padilhars@gmail.com">padilhars@gmail.com</a></p>
+</section>
+
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">copyright</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Universidade Federal de Pelotas - UFPel</p>
+</section>
+
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">license</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later</p>
+</section>
+
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">version</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                            <span class="phpdocumentor-tag-link">0.1.0</span>
+                                                                                                        
+                                    </dd>
+                                <dt class="phpdocumentor-tag-list__entry">
+                <span class="phpdocumentor-tag__name">since</span>
+            </dt>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                            <span class="phpdocumentor-tag-link">0.1.0</span>
+                                                                                                        
+                                    </dd>
+                        </dl>
+
+    
+    
+<h3 id="toc">
+    Table of Contents
+    <a href="classes/local-a11y-icons.html#toc" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h3>
+
+
+
+
+
+
+
+<h4 id="toc-constants">
+    Constants
+    <a href="classes/local-a11y-icons.html#toc-constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -constant -public">
+    <a class="" href="classes/local-a11y-icons.html#constant_PATHS">PATHS</a>
+    <span>
+        &nbsp;: array&lt;string, string&gt;&nbsp;= [&#039;accessibility&#039; =&gt; &#039;&lt;circle cx=&quot;12&quot; cy=&quot;4&quot; r=&quot;...                            </span>
+</dt>
+
+    </dl>
+
+
+<h4 id="toc-properties">
+    Properties
+    <a href="classes/local-a11y-icons.html#toc-properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -property -private">
+    <a class="" href="classes/local-a11y-icons.html#property_unaccessibilityinner">$unaccessibilityinner</a>
+    <span>
+                        &nbsp;: string|null            </span>
+</dt>
+
+    </dl>
+
+<h4 id="toc-methods">
+    Methods
+    <a href="classes/local-a11y-icons.html#toc-methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+</h4>
+<dl class="phpdocumentor-table-of-contents">
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-icons.html#method_fabicon_svg">fabicon_svg()</a>
+    <span>
+                                &nbsp;: array{svg: string, isun: bool}    </span>
+</dt>
+<dd>Resolve the admin-configured `local_a11y/fabicon` setting to actual
+rendered markup — shared by the FAB (classes/output/fab.php) and the
+panel header badge (classes/output/panel.php) so both always show the
+*same* icon, per the setting.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-icons.html#method_svg">svg()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Render an inline &lt;svg&gt; for the given icon name, matching the
+prototype&#039;s &lt;Icon&gt; component defaults exactly (viewBox 0 0 24 24,
+stroke currentColor, round caps/joins).</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-icons.html#method_un_accessibility_svg">un_accessibility_svg()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Render an inline &lt;svg&gt; for the &quot;Accessibility logo (UN)&quot; — themes via
+currentColor like every icon in PATHS/svg() above, but gets its own
+method instead of a PATHS entry because its viewBox (0 0 1000 1000)
+and markup don&#039;t fit svg()&#039;s 24x24 Lucide-style wrapper. Inner markup
+comes straight from pix/accessibility-un.svg (see that file for the
+source/licence — CC BY-SA 4.0, attribution in README.md), read once
+and cached rather than re-parsed on every render.</dd>
+
+    </dl>
+
+
+
+        
+    <section class="phpdocumentor-constants">
+        <h3 class="phpdocumentor-elements__header" id="constants">
+            Constants
+            <a href="classes/local-a11y-icons.html#constants" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article class="phpdocumentor-element -constant -public ">
+    <h4 class="phpdocumentor-element__name" id="constant_PATHS">
+        PATHS
+        <a href="classes/local-a11y-icons.html#constant_PATHS" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/icons.php"><a href="files/classes-icons.html"><abbr title="classes/icons.php">icons.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">36</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-signature phpdocumentor-code ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+        <span class="phpdocumentor-signature__type">array&lt;string, string&gt;</span>
+    <span class="phpdocumentor-signature__name">PATHS</span>
+    = <span class="phpdocumentor-signature__default-value">[&#039;accessibility&#039; =&gt; &#039;&lt;circle cx=&quot;12&quot; cy=&quot;4&quot; r=&quot;2&quot;/&gt;&lt;path d=&quot;M19 13v-2a7 7 0 0 0-14 0v2&quot;/&gt;&lt;path d=&quot;m12 12 4 10&quot;/&gt;&lt;path d=&quot;m12 12-4 10&quot;/&gt;&lt;path d=&quot;M8 16h8&quot;/&gt;&#039;, &#039;close&#039; =&gt; &#039;&lt;path d=&quot;M18 6 6 18&quot;/&gt;&lt;path d=&quot;m6 6 12 12&quot;/&gt;&#039;, &#039;chevronDown&#039; =&gt; &#039;&lt;path d=&quot;m6 9 6 6 6-6&quot;/&gt;&#039;, &#039;chevronRight&#039; =&gt; &#039;&lt;path d=&quot;m9 18 6-6-6-6&quot;/&gt;&#039;, &#039;search&#039; =&gt; &#039;&lt;circle cx=&quot;11&quot; cy=&quot;11&quot; r=&quot;8&quot;/&gt;&lt;path d=&quot;m21 21-4.3-4.3&quot;/&gt;&#039;, &#039;refresh&#039; =&gt; &#039;&lt;path d=&quot;M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8&quot;/&gt;&lt;path d=&quot;M21 3v5h-5&quot;/&gt;&lt;path d=&quot;M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16&quot;/&gt;&lt;path d=&quot;M3 21v-5h5&quot;/&gt;&#039;, &#039;check&#039; =&gt; &#039;&lt;path d=&quot;M20 6 9 17l-5-5&quot;/&gt;&#039;, &#039;star&#039; =&gt; &#039;&lt;polygon points=&quot;12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2&quot;/&gt;&#039;, &#039;sparkles&#039; =&gt; &#039;&lt;path d=&quot;M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z&quot;/&gt;&lt;path d=&quot;M20 3v4&quot;/&gt;&lt;path d=&quot;M22 5h-4&quot;/&gt;&lt;path d=&quot;M4 17v2&quot;/&gt;&lt;path d=&quot;M5 18H3&quot;/&gt;&#039;, &#039;typography&#039; =&gt; &#039;&lt;polyline points=&quot;4 7 4 4 20 4 20 7&quot;/&gt;&lt;line x1=&quot;9&quot; x2=&quot;15&quot; y1=&quot;20&quot; y2=&quot;20&quot;/&gt;&lt;line x1=&quot;12&quot; x2=&quot;12&quot; y1=&quot;4&quot; y2=&quot;20&quot;/&gt;&#039;, &#039;palette&#039; =&gt; &#039;&lt;circle cx=&quot;13.5&quot; cy=&quot;6.5&quot; r=&quot;.5&quot; fill=&quot;currentColor&quot;/&gt;&lt;circle cx=&quot;17.5&quot; cy=&quot;10.5&quot; r=&quot;.5&quot; fill=&quot;currentColor&quot;/&gt;&lt;circle cx=&quot;8.5&quot; cy=&quot;7.5&quot; r=&quot;.5&quot; fill=&quot;currentColor&quot;/&gt;&lt;circle cx=&quot;6.5&quot; cy=&quot;12.5&quot; r=&quot;.5&quot; fill=&quot;currentColor&quot;/&gt;&lt;path d=&quot;M12 2A10 10 0 0 0 2 12c0 5.5 4.5 10 10 10a3 3 0 0 0 3-3 1.7 1.7 0 0 0-.4-1.1 1.7 1.7 0 0 1-.4-1.1 3 3 0 0 1 3-3h2.5a4.5 4.5 0 0 0 4.5-4.5c0-5.5-4.5-9.3-10-9.3z&quot;/&gt;&#039;, &#039;media&#039; =&gt; &#039;&lt;rect width=&quot;18&quot; height=&quot;18&quot; x=&quot;3&quot; y=&quot;3&quot; rx=&quot;2&quot; ry=&quot;2&quot;/&gt;&lt;circle cx=&quot;9&quot; cy=&quot;9&quot; r=&quot;2&quot;/&gt;&lt;path d=&quot;m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21&quot;/&gt;&#039;, &#039;navigation&#039; =&gt; &#039;&lt;polygon points=&quot;3 11 22 2 13 21 11 13 3 11&quot;/&gt;&#039;, &#039;tools&#039; =&gt; &#039;&lt;path d=&quot;M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z&quot;/&gt;&#039;, &#039;profile&#039; =&gt; &#039;&lt;path d=&quot;M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;9&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&lt;path d=&quot;M22 21v-2a4 4 0 0 0-3-3.87&quot;/&gt;&lt;path d=&quot;M16 3.13a4 4 0 0 1 0 7.75&quot;/&gt;&#039;, &#039;eye&#039; =&gt; &#039;&lt;path d=&quot;M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/&gt;&#039;, &#039;eyeLow&#039; =&gt; &#039;&lt;path d=&quot;M9.88 9.88a3 3 0 1 0 4.24 4.24&quot;/&gt;&lt;path d=&quot;M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68&quot;/&gt;&lt;path d=&quot;M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61&quot;/&gt;&lt;line x1=&quot;2&quot; x2=&quot;22&quot; y1=&quot;2&quot; y2=&quot;22&quot;/&gt;&#039;, &#039;droplets&#039; =&gt; &#039;&lt;path d=&quot;M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z&quot;/&gt;&lt;path d=&quot;M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97&quot;/&gt;&#039;, &#039;book&#039; =&gt; &#039;&lt;path d=&quot;M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20&quot;/&gt;&#039;, &#039;zap&#039; =&gt; &#039;&lt;path d=&quot;M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z&quot;/&gt;&#039;, &#039;user&#039; =&gt; &#039;&lt;path d=&quot;M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;7&quot; r=&quot;4&quot;/&gt;&#039;, &#039;alertTriangle&#039; =&gt; &#039;&lt;path d=&quot;m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z&quot;/&gt;&lt;path d=&quot;M12 9v4&quot;/&gt;&lt;path d=&quot;M12 17h.01&quot;/&gt;&#039;, &#039;hand&#039; =&gt; &#039;&lt;path d=&quot;M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2&quot;/&gt;&lt;path d=&quot;M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2&quot;/&gt;&lt;path d=&quot;M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8&quot;/&gt;&lt;path d=&quot;M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15&quot;/&gt;&#039;, &#039;brain&#039; =&gt; &#039;&lt;path d=&quot;M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z&quot;/&gt;&lt;path d=&quot;M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z&quot;/&gt;&#039;, &#039;moon&#039; =&gt; &#039;&lt;path d=&quot;M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z&quot;/&gt;&#039;, &#039;type&#039; =&gt; &#039;&lt;polyline points=&quot;4 7 4 4 20 4 20 7&quot;/&gt;&lt;line x1=&quot;9&quot; x2=&quot;15&quot; y1=&quot;20&quot; y2=&quot;20&quot;/&gt;&lt;line x1=&quot;12&quot; x2=&quot;12&quot; y1=&quot;4&quot; y2=&quot;20&quot;/&gt;&#039;, &#039;bookOpen&#039; =&gt; &#039;&lt;path d=&quot;M12 7v14&quot;/&gt;&lt;path d=&quot;M16 12h2&quot;/&gt;&lt;path d=&quot;M16 8h2&quot;/&gt;&lt;path d=&quot;M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z&quot;/&gt;&lt;path d=&quot;M6 12h2&quot;/&gt;&lt;path d=&quot;M6 8h2&quot;/&gt;&#039;, &#039;heading&#039; =&gt; &#039;&lt;path d=&quot;M6 12h12&quot;/&gt;&lt;path d=&quot;M6 20V4&quot;/&gt;&lt;path d=&quot;M18 20V4&quot;/&gt;&#039;, &#039;link&#039; =&gt; &#039;&lt;path d=&quot;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&quot;/&gt;&lt;path d=&quot;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&quot;/&gt;&#039;, &#039;squareButton&#039; =&gt; &#039;&lt;rect width=&quot;18&quot; height=&quot;18&quot; x=&quot;3&quot; y=&quot;3&quot; rx=&quot;2&quot;/&gt;&lt;path d=&quot;M9 12h6&quot;/&gt;&#039;, &#039;image&#039; =&gt; &#039;&lt;rect width=&quot;18&quot; height=&quot;18&quot; x=&quot;3&quot; y=&quot;3&quot; rx=&quot;2&quot; ry=&quot;2&quot;/&gt;&lt;circle cx=&quot;9&quot; cy=&quot;9&quot; r=&quot;2&quot;/&gt;&lt;path d=&quot;m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21&quot;/&gt;&#039;, &#039;imageOff&#039; =&gt; &#039;&lt;line x1=&quot;2&quot; x2=&quot;22&quot; y1=&quot;2&quot; y2=&quot;22&quot;/&gt;&lt;path d=&quot;M10.41 10.41a2 2 0 1 1-2.83-2.83&quot;/&gt;&lt;line x1=&quot;13.5&quot; x2=&quot;6&quot; y1=&quot;13.5&quot; y2=&quot;21&quot;/&gt;&lt;line x1=&quot;18&quot; x2=&quot;21&quot; y1=&quot;12&quot; y2=&quot;15&quot;/&gt;&lt;path d=&quot;M3.59 3.59A1.99 1.99 0 0 0 3 5v14a2 2 0 0 0 2 2h14c.55 0 1.052-.22 1.41-.59&quot;/&gt;&lt;path d=&quot;M21 15V5a2 2 0 0 0-2-2H9&quot;/&gt;&#039;, &#039;tooltip&#039; =&gt; &#039;&lt;path d=&quot;M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z&quot;/&gt;&#039;, &#039;pause&#039; =&gt; &#039;&lt;rect x=&quot;14&quot; y=&quot;4&quot; width=&quot;4&quot; height=&quot;16&quot; rx=&quot;1&quot;/&gt;&lt;rect x=&quot;6&quot; y=&quot;4&quot; width=&quot;4&quot; height=&quot;16&quot; rx=&quot;1&quot;/&gt;&#039;, &#039;textSize&#039; =&gt; &#039;&lt;path d=&quot;M21 6V4H3v2&quot;/&gt;&lt;path d=&quot;M7 18h10&quot;/&gt;&lt;path d=&quot;M12 4v14&quot;/&gt;&#039;, &#039;lineHeight&#039; =&gt; &#039;&lt;path d=&quot;M3 8 7 4l4 4&quot;/&gt;&lt;path d=&quot;M7 4v16&quot;/&gt;&lt;path d=&quot;m3 16 4 4 4-4&quot;/&gt;&lt;path d=&quot;M15 4h7&quot;/&gt;&lt;path d=&quot;M15 12h7&quot;/&gt;&lt;path d=&quot;M15 20h7&quot;/&gt;&#039;, &#039;textSpacing&#039; =&gt; &#039;&lt;path d=&quot;M21 8V5a2 2 0 0 0-2-2h-3&quot;/&gt;&lt;path d=&quot;M3 16v3a2 2 0 0 0 2 2h3&quot;/&gt;&lt;path d=&quot;M16 21h3a2 2 0 0 0 2-2v-3&quot;/&gt;&lt;path d=&quot;M8 3H5a2 2 0 0 0-2 2v3&quot;/&gt;&lt;path d=&quot;M7 8h10&quot;/&gt;&lt;path d=&quot;M7 12h10&quot;/&gt;&lt;path d=&quot;M7 16h6&quot;/&gt;&#039;, &#039;textAlign&#039; =&gt; &#039;&lt;line x1=&quot;21&quot; x2=&quot;3&quot; y1=&quot;6&quot; y2=&quot;6&quot;/&gt;&lt;line x1=&quot;15&quot; x2=&quot;3&quot; y1=&quot;12&quot; y2=&quot;12&quot;/&gt;&lt;line x1=&quot;17&quot; x2=&quot;3&quot; y1=&quot;18&quot; y2=&quot;18&quot;/&gt;&#039;, &#039;contrast&#039; =&gt; &#039;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;path d=&quot;M12 18a6 6 0 0 0 0-12v12z&quot; fill=&quot;currentColor&quot;/&gt;&#039;, &#039;sun&#039; =&gt; &#039;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;4&quot;/&gt;&lt;path d=&quot;M12 2v2&quot;/&gt;&lt;path d=&quot;M12 20v2&quot;/&gt;&lt;path d=&quot;m4.93 4.93 1.41 1.41&quot;/&gt;&lt;path d=&quot;m17.66 17.66 1.41 1.41&quot;/&gt;&lt;path d=&quot;M2 12h2&quot;/&gt;&lt;path d=&quot;M20 12h2&quot;/&gt;&lt;path d=&quot;m6.34 17.66-1.41 1.41&quot;/&gt;&lt;path d=&quot;m19.07 4.93-1.41 1.41&quot;/&gt;&#039;, &#039;contrastHigh&#039; =&gt; &#039;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;path d=&quot;M12 2v20&quot;/&gt;&lt;path d=&quot;M2 12h20&quot;/&gt;&#039;, &#039;invertColors&#039; =&gt; &#039;&lt;path d=&quot;M12 22A10 10 0 0 1 5 5l7 7Z&quot;/&gt;&lt;path d=&quot;M12 2a10 10 0 0 1 7 17l-7-7Z&quot;/&gt;&#039;, &#039;pipette&#039; =&gt; &#039;&lt;path d=&quot;m2 22 1-1h3l9-9&quot;/&gt;&lt;path d=&quot;M3 21v-3l9-9&quot;/&gt;&lt;path d=&quot;m15 6 3.4-3.4a2.1 2.1 0 1 1 3 3L18 9l.4.4a2.1 2.1 0 1 1-3 3l-3.8-3.8a2.1 2.1 0 1 1 3-3l.4.4Z&quot;/&gt;&#039;, &#039;saturation&#039; =&gt; &#039;&lt;path d=&quot;M5.5 5 7 2h10l1.5 3&quot;/&gt;&lt;path d=&quot;M5.5 19 7 22h10l1.5-3&quot;/&gt;&lt;path d=&quot;M2 12h20&quot;/&gt;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;6&quot;/&gt;&#039;, &#039;blackAndWhite&#039; =&gt; &#039;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;path d=&quot;M12 2v20&quot;/&gt;&#039;, &#039;ruler&#039; =&gt; &#039;&lt;path d=&quot;M21.3 8.7 8.7 21.3a2.41 2.41 0 0 1-3.4 0l-2.6-2.6a2.41 2.41 0 0 1 0-3.4L15.3 2.7a2.41 2.41 0 0 1 3.4 0l2.6 2.6a2.41 2.41 0 0 1 0 3.4Z&quot;/&gt;&lt;path d=&quot;m7.5 10.5 2 2&quot;/&gt;&lt;path d=&quot;m10.5 7.5 2 2&quot;/&gt;&lt;path d=&quot;m13.5 4.5 2 2&quot;/&gt;&lt;path d=&quot;m4.5 13.5 2 2&quot;/&gt;&#039;, &#039;mask&#039; =&gt; &#039;&lt;path d=&quot;M3 7v8a4 4 0 0 0 4 4h10a4 4 0 0 0 4-4V7a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4z&quot;/&gt;&lt;path d=&quot;M7 11h.01&quot;/&gt;&lt;path d=&quot;M17 11h.01&quot;/&gt;&lt;path d=&quot;M7 15h10&quot;/&gt;&#039;, &#039;mousePointer&#039; =&gt; &#039;&lt;path d=&quot;M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z&quot;/&gt;&lt;path d=&quot;m13 13 6 6&quot;/&gt;&#039;, &#039;mousePointer2&#039; =&gt; &#039;&lt;path d=&quot;M4 4l7.07 17 2.51-7.39 7.39-2.51L4 4z&quot;/&gt;&#039;, &#039;focus&#039; =&gt; &#039;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;3&quot;/&gt;&lt;path d=&quot;M3 7V5a2 2 0 0 1 2-2h2&quot;/&gt;&lt;path d=&quot;M17 3h2a2 2 0 0 1 2 2v2&quot;/&gt;&lt;path d=&quot;M21 17v2a2 2 0 0 1-2 2h-2&quot;/&gt;&lt;path d=&quot;M7 21H5a2 2 0 0 1-2-2v-2&quot;/&gt;&#039;, &#039;volume&#039; =&gt; &#039;&lt;polygon points=&quot;11 5 6 9 2 9 2 15 6 15 11 19 11 5&quot;/&gt;&lt;path d=&quot;M19.07 4.93a10 10 0 0 1 0 14.14&quot;/&gt;&lt;path d=&quot;M15.54 8.46a5 5 0 0 1 0 7.07&quot;/&gt;&#039;, &#039;keyboard&#039; =&gt; &#039;&lt;rect width=&quot;20&quot; height=&quot;16&quot; x=&quot;2&quot; y=&quot;4&quot; rx=&quot;2&quot;/&gt;&lt;path d=&quot;M6 8h.01&quot;/&gt;&lt;path d=&quot;M10 8h.01&quot;/&gt;&lt;path d=&quot;M14 8h.01&quot;/&gt;&lt;path d=&quot;M18 8h.01&quot;/&gt;&lt;path d=&quot;M8 12h.01&quot;/&gt;&lt;path d=&quot;M12 12h.01&quot;/&gt;&lt;path d=&quot;M16 12h.01&quot;/&gt;&lt;path d=&quot;M7 16h10&quot;/&gt;&#039;, &#039;mic&#039; =&gt; &#039;&lt;rect x=&quot;9&quot; y=&quot;2&quot; width=&quot;6&quot; height=&quot;13&quot; rx=&quot;3&quot;/&gt;&lt;path d=&quot;M19 10v2a7 7 0 0 1-14 0v-2&quot;/&gt;&lt;line x1=&quot;12&quot; x2=&quot;12&quot; y1=&quot;19&quot; y2=&quot;22&quot;/&gt;&#039;, &#039;scanFace&#039; =&gt; &#039;&lt;path d=&quot;M3 7V5a2 2 0 0 1 2-2h2&quot;/&gt;&lt;path d=&quot;M17 3h2a2 2 0 0 1 2 2v2&quot;/&gt;&lt;path d=&quot;M21 17v2a2 2 0 0 1-2 2h-2&quot;/&gt;&lt;path d=&quot;M7 21H5a2 2 0 0 1-2-2v-2&quot;/&gt;&lt;path d=&quot;M8 14s1.5 2 4 2 4-2 4-2&quot;/&gt;&lt;path d=&quot;M9 9h.01&quot;/&gt;&lt;path d=&quot;M15 9h.01&quot;/&gt;&#039;, &#039;bell&#039; =&gt; &#039;&lt;path d=&quot;M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9&quot;/&gt;&lt;path d=&quot;M10.3 21a1.94 1.94 0 0 0 3.4 0&quot;/&gt;&#039;, &#039;arrowRight&#039; =&gt; &#039;&lt;line x1=&quot;5&quot; y1=&quot;12&quot; x2=&quot;19&quot; y2=&quot;12&quot;/&gt;&lt;polyline points=&quot;12 5 19 12 12 19&quot;/&gt;&#039;, &#039;dot&#039; =&gt; &#039;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;1.5&quot; fill=&quot;currentColor&quot;/&gt;&#039;, &#039;clock&#039; =&gt; &#039;&lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot;/&gt;&lt;polyline points=&quot;12 6 12 12 16 14&quot;/&gt;&#039;]</span>
+</code>
+
+
+    
+        <section class="phpdocumentor-description"><p>Icon name =&gt; inner SVG markup (path/circle/etc, no outer <svg>).</p>
+</section>
+
+    
+
+        
+    </article>
+            </section>
+
+        
+    <section class="phpdocumentor-properties">
+        <h3 class="phpdocumentor-elements__header" id="properties">
+            Properties
+            <a href="classes/local-a11y-icons.html#properties" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="
+            phpdocumentor-element
+            -property
+            -private
+            -static                                                        "
+>
+    <h4 class="phpdocumentor-element__name" id="property_unaccessibilityinner">
+        $unaccessibilityinner
+        <a href="classes/local-a11y-icons.html#property_unaccessibilityinner" class="headerlink"><i class="fas fa-link"></i></a>
+
+        <span class="phpdocumentor-element__modifiers">
+                                            </span>
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/icons.php"><a href="files/classes-icons.html"><abbr title="classes/icons.php">icons.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">120</span>
+
+    </aside>
+
+    
+    
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+        <span class="phpdocumentor-signature__visibility">private</span>
+        <span class="phpdocumentor-signature__static">static</span>    <span class="phpdocumentor-signature__type">string|null</span>
+    <span class="phpdocumentor-signature__name">$unaccessibilityinner</span>
+     = <span class="phpdocumentor-signature__default-value">null</span></code>
+
+    
+        <section class="phpdocumentor-description"><p>Cached inner markup of pix/accessibility-un.svg (null until first read).</p>
+</section>
+
+    
+
+        
+        
+
+</article>
+            </section>
+
+            <section class="phpdocumentor-methods">
+        <h3 class="phpdocumentor-elements__header" id="methods">
+            Methods
+            <a href="classes/local-a11y-icons.html#methods" class="headerlink"><i class="fas fa-link"></i></a>
+
+        </h3>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_fabicon_svg">
+        fabicon_svg()
+        <a href="classes/local-a11y-icons.html#method_fabicon_svg" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/icons.php"><a href="files/classes-icons.html"><abbr title="classes/icons.php">icons.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">168</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Resolve the admin-configured `local_a11y/fabicon` setting to actual
+rendered markup — shared by the FAB (classes/output/fab.php) and the
+panel header badge (classes/output/panel.php) so both always show the
+*same* icon, per the setting.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">fabicon_svg</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$fabicon</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$size</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">array{svg: string, isun: bool}</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$fabicon</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>raw <code class="prettyprint">appearance['fabicon']</code> value (untrusted -
+falls back to 'un' for anything unrecognised).</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$size</span>
+                : <span class="phpdocumentor-argument-list__argument__type">int</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Width/height in pixels (icon is square).</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">array{svg: string, isun: bool}</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p><code class="prettyprint">isun</code> lets callers apply their
+own un-specific modifier class where needed (e.g. the FAB
+gives it a touch of padding - see local-a11y-fab__icon--un in
+styles.css); the icon itself themes via currentColor like the
+rest of PATHS/svg(), so callers that don't need special
+treatment (e.g. the panel badge) can ignore this flag.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_svg">
+        svg()
+        <a href="classes/local-a11y-icons.html#method_svg" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/icons.php"><a href="files/classes-icons.html"><abbr title="classes/icons.php">icons.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">108</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Render an inline &lt;svg&gt; for the given icon name, matching the
+prototype&#039;s &lt;Icon&gt; component defaults exactly (viewBox 0 0 24 24,
+stroke currentColor, round caps/joins).</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">svg</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$name</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$size</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">18</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">float&nbsp;</span><span class="phpdocumentor-signature__argument__name">$stroke</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">1.75</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$class</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">''</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$name</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Icon key into self::PATHS; unknown names render as empty string.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$size</span>
+                : <span class="phpdocumentor-argument-list__argument__type">int</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">18</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Width/height in pixels (icon is square).</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$stroke</span>
+                : <span class="phpdocumentor-argument-list__argument__type">float</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">1.75</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>SVG stroke-width.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$class</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">''</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>extra CSS class(es)</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Inline <svg>...</svg> markup, or '' if $name is unknown.</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_un_accessibility_svg">
+        un_accessibility_svg()
+        <a href="classes/local-a11y-icons.html#method_un_accessibility_svg" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/icons.php"><a href="files/classes-icons.html"><abbr title="classes/icons.php">icons.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">135</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Render an inline &lt;svg&gt; for the &quot;Accessibility logo (UN)&quot; — themes via
+currentColor like every icon in PATHS/svg() above, but gets its own
+method instead of a PATHS entry because its viewBox (0 0 1000 1000)
+and markup don&#039;t fit svg()&#039;s 24x24 Lucide-style wrapper. Inner markup
+comes straight from pix/accessibility-un.svg (see that file for the
+source/licence — CC BY-SA 4.0, attribution in README.md), read once
+and cached rather than re-parsed on every render.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">un_accessibility_svg</span><span>(</span><span class="phpdocumentor-signature__argument"><span>[</span><span class="phpdocumentor-signature__argument__type">int&nbsp;</span><span class="phpdocumentor-signature__argument__name">$size</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">26</span><span> ]</span></span><span class="phpdocumentor-signature__argument"><span>[</span><span>, </span><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$class</span><span> = </span><span class="phpdocumentor-signature__argument__default-value">''</span><span> ]</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$size</span>
+                : <span class="phpdocumentor-argument-list__argument__type">int</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">26</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Width/height in pixels (icon is square).</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$class</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
+                 = <span class="phpdocumentor-argument-list__argument__default-value">''</span>            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>extra CSS class(es)</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>Inline <svg>...</svg> markup, or '' if the source file is unreadable.</p>
+</section>
+
+            </section>
+
+</article>
+            </section>
+
+        
+    </article>
+                                </section>
+                <section class="phpdocumentor-on-this-page__sidebar">
+                                
+    <section class="phpdocumentor-on-this-page__content">
+        <strong class="phpdocumentor-on-this-page__title">On this page</strong>
+
+        <ul class="phpdocumentor-list -clean">
+            <li class="phpdocumentor-on-this-page-section__title">Table Of Contents</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                        <li><a href="classes/local-a11y-icons.html#toc-constants">Constants</a></li>
+                                                            <li><a href="classes/local-a11y-icons.html#toc-properties">Properties</a></li>
+                                                            <li><a href="classes/local-a11y-icons.html#toc-methods">Methods</a></li>
+                                    </ul>
+            </li>
+                            <li class="phpdocumentor-on-this-page-section__title">Constants</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/local-a11y-icons.html#constant_PATHS">PATHS</a></li>
+                                            </ul>
+                </li>
+            
+                            <li class="phpdocumentor-on-this-page-section__title">Properties</li>
+                <li>
+                    <ul class="phpdocumentor-list -clean">
+                                                    <li class=""><a href="classes/local-a11y-icons.html#property_unaccessibilityinner">$unaccessibilityinner</a></li>
+                                            </ul>
+                </li>
+            
+                        <li class="phpdocumentor-on-this-page-section__title">Methods</li>
+            <li>
+                <ul class="phpdocumentor-list -clean">
+                                            <li class=""><a href="classes/local-a11y-icons.html#method_fabicon_svg">fabicon_svg()</a></li>
+                                            <li class=""><a href="classes/local-a11y-icons.html#method_svg">svg()</a></li>
+                                            <li class=""><a href="classes/local-a11y-icons.html#method_un_accessibility_svg">un_accessibility_svg()</a></li>
+                                    </ul>
+            </li>
+                    </ul>
+    </section>
+
+                </section>
+                            </div>
+            <section data-search-results class="phpdocumentor-search-results phpdocumentor-search-results--hidden">
+    <section class="phpdocumentor-search-results__dialog">
+        <header class="phpdocumentor-search-results__header">
+            <h2 class="phpdocumentor-search-results__title">Search results</h2>
+            <button class="phpdocumentor-search-results__close"><i class="fas fa-times"></i></button>
+        </header>
+        <section class="phpdocumentor-search-results__body">
+            <ul class="phpdocumentor-search-results__entries"></ul>
+        </section>
+    </section>
+</section>
+        </div>
+        <a href="classes/local-a11y-icons.html#top" class="phpdocumentor-back-to-top"><i class="fas fa-chevron-circle-up"></i></a>
+
+    </main>
+
+    <script>
+        cssVars({});
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/plugins/line-highlight/prism-line-highlight.min.js"></script>
+</body>
+</html>
