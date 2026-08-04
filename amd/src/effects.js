@@ -58,10 +58,14 @@ const STEPPER_CLASS_PREFIX_MAP = {
 /**
  * Compute the full list of `a11y-*` classes for a given settings object.
  *
+ * Module-private (dead-code audit: was exported/in the default export
+ * object, but never consumed as Effects.computeClassList anywhere outside
+ * this file - only apply() below, in the same module, ever calls it).
+ *
  * @param {Object} settings The current a11y settings object (boolean/stepper values keyed by option id).
  * @return {String[]} The list of `a11y-*` body classes matching the given settings.
  */
-export const computeClassList = (settings) => {
+const computeClassList = (settings) => {
     const classes = [];
     Object.keys(BOOL_CLASS_MAP).forEach((key) => {
         if (settings[key]) {
@@ -96,6 +100,5 @@ export const apply = (settings) => {
 };
 
 export default {
-    computeClassList,
     apply,
 };

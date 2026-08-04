@@ -33,7 +33,10 @@
 
 import {getUserPreference, setUserPreference} from 'core_user/repository';
 
-export const PREFERENCE_NAME = 'local_a11y_settings';
+// Module-private (dead-code audit: was exported/in the default export
+// object, but never consumed as Storage.PREFERENCE_NAME anywhere outside
+// this file).
+const PREFERENCE_NAME = 'local_a11y_settings';
 
 export const DEFAULT_SETTINGS = {
     readableFont: false,
@@ -78,10 +81,14 @@ const STEPPER_MAX = {
  * clamping stepper values and coercing booleans - the client-side mirror of
  * classes/manager.php::sanitize_settings(). Unknown keys are dropped.
  *
+ * Module-private (dead-code audit: was exported/in the default export
+ * object, but never consumed as Storage.sanitize anywhere outside this
+ * file - only getSettings() below, in the same module, ever calls it).
+ *
  * @param {Object|null} raw The raw, possibly partial/untrusted settings object (or null).
  * @return {Object} A full settings object with every key from DEFAULT_SETTINGS present and sanitized.
  */
-export const sanitize = (raw) => {
+const sanitize = (raw) => {
     const result = {...DEFAULT_SETTINGS};
     if (!raw || typeof raw !== 'object') {
         return result;
@@ -187,9 +194,7 @@ export const saveSettings = async(settings, isLoggedIn) => {
 };
 
 export default {
-    PREFERENCE_NAME,
     DEFAULT_SETTINGS,
-    sanitize,
     getSettings,
     saveSettings,
 };

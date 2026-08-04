@@ -153,6 +153,15 @@ $string['help_fn_4'] = 'Open your mouth (~1 s) or blink both eyes (~1 s) to clic
 $string['help_fn_5'] = 'To scroll the page, move the cursor to the top or bottom edge of the screen';
 $string['opt_facenavigation'] = 'Face Navigation';
 $string['opt_facenavigation_desc'] = 'Control cursor with head movements';
+$string['face_loading'] = 'Loading model…';
+$string['face_camhint'] = 'Look at the camera in a neutral position, then click Calibrate.';
+$string['face_calibrate'] = 'Calibrate';
+$string['face_active'] = 'Camera active';
+$string['face_stop'] = 'Stop';
+$string['face_sens'] = 'Virtual Cursor Speed';
+$string['face_error'] = 'Failed to start';
+$string['face_click'] = 'Click: Open your mouth or blink both eyes';
+$string['face_scroll'] = 'Scroll page: Move the virtual cursor to the top or bottom edge of the page';
 
 // Profiles.
 $string['profile_lowvision'] = 'Low Vision';

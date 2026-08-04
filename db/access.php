@@ -46,12 +46,12 @@ $capabilities = [
         ],
     ],
 
-    // Can change the site-wide plugin configuration (settings.php).
-    'local/a11y:configure' => [
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => [
-            'manager' => CAP_ALLOW,
-        ],
-    ],
+    // DECISÃO: local/a11y:configure removido (dead-code/security audit) -
+    // era declarada aqui mas nunca checada via has_capability() em nenhum
+    // lugar do plugin; settings.php já é protegido pelo mecanismo padrão do
+    // Moodle (admin tree / moodle/site:config), então a capability não
+    // controlava nada e só confundiria um admin que a atribuísse esperando
+    // algum efeito. Ver version.php - o bump de versão aqui é necessário
+    // para o admin/cli/upgrade.php de fato remover a capability órfã do
+    // banco (update_capabilities() só roda no upgrade quando a versão muda).
 ];

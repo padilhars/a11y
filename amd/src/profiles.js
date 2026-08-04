@@ -28,7 +28,10 @@
  * @since      0.1.0
  */
 
-export const PROFILES = {
+// Module-private (dead-code audit: was exported/in the default export
+// object, but never consumed as Profiles.PROFILES anywhere outside this
+// file - only applyProfile() below, in the same module, ever reads it).
+const PROFILES = {
     lowVision: {textSize: 3, contrast: 3, cursor: 1, highlightLinks: true, highlightButtons: true},
     colorBlind: {colorChange: 2, highlightLinks: true, saturation: 1},
     dyslexia: {dyslexicFont: true, textSpacing: 2, lineHeight: 2, readingGuide: true},
@@ -57,6 +60,5 @@ export const applyProfile = (id, defaults) => {
 };
 
 export default {
-    PROFILES,
     applyProfile,
 };
