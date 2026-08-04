@@ -19,9 +19,14 @@ namespace local_a11y;
 /**
  * Tests for manager: defaults, merge, validation, sanitization.
  *
- * @package    local_a11y
- * @copyright  2026 A11y for Moodle project
+ * @description Tests for manager: defaults, merge, validation, sanitization.
+ * @package    Moodle
+ * @subpackage Plugin a11y
+ * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
+ * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @version    0.1.0
+ * @since      0.1.0
  * @covers     \local_a11y\manager
  */
 final class manager_test extends \advanced_testcase {

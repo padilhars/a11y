@@ -27,8 +27,12 @@
  *     element's style — no framework re-render on every frame.
  *
  * @module     local_a11y/face_navigation
- * @copyright  2026 A11y for Moodle project
+ * @description Face Navigation via MediaPipe FaceLandmarker.
+ * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
+ * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @version    0.1.0
+ * @since      0.1.0
  */
 
 const MP_CDN   = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18';

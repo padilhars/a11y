@@ -17,9 +17,14 @@
 /**
  * Capability definitions for local_a11y.
  *
- * @package    local_a11y
- * @copyright  2026 A11y for Moodle project
+ * @description Capability definitions for local_a11y.
+ * @package    Moodle
+ * @subpackage Plugin a11y
+ * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
+ * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @version    0.1.0
+ * @since      0.1.0
  */
 
 defined('MOODLE_INTERNAL') || die();

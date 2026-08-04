@@ -31,8 +31,12 @@
  *   (restarting the animation from frame 0) on stop().
  *
  * @module     local_a11y/pause_media
- * @copyright  2026 A11y for Moodle project
+ * @description Pauses animated GIFs and autoplay <video> while Pausar Animações is active.
+ * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
+ * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @version    0.1.0
+ * @since      0.1.0
  */
 
 let active = false;

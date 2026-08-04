@@ -26,8 +26,12 @@
  * covered `a`/`button` elements with a `title` - see DECISIONS.md D29.
  *
  * @module     local_a11y/tooltips
- * @copyright  2026 A11y for Moodle project
+ * @description Custom tooltips replacing the browser's native title tooltip.
+ * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
+ * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @version    0.1.0
+ * @since      0.1.0
  */
 
 const SELECTOR = '[title], [aria-label], [data-tooltip], img[alt]';

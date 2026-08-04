@@ -23,8 +23,12 @@
  * (lang string vc_hint: "aumentar texto", "alto contraste", "fechar painel").
  *
  * @module     local_a11y/voice_commands
- * @copyright  2026 A11y for Moodle project
+ * @description Voice commands via the Web Speech API's SpeechRecognition.
+ * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
+ * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @version    0.1.0
+ * @since      0.1.0
  */
 
 import {getString} from 'core/str';
