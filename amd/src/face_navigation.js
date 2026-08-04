@@ -35,9 +35,49 @@
  * @since      0.1.0
  */
 
+import {getStrings} from 'core/str';
+
 const MP_CDN   = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18';
 const MP_WASM  = MP_CDN + '/wasm';
 const MP_MODEL = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
+const MP_VISION_BUNDLE = MP_CDN + '/vision_bundle.mjs';
+// SHA-256 of vision_bundle.mjs@0.10.18 (base64), cross-checked against
+// jsDelivr's own published package hash (data.jsdelivr.com/v1/package/npm/
+// @mediapipe/tasks-vision@0.10.18) at the time this was pinned. Security
+// audit finding: this file is `import`-ed from the CDN with no integrity
+// check at all - a supply-chain compromise of the npm package or jsDelivr's
+// infrastructure would execute arbitrary code with full page privileges for
+// any user who enables Face Navigation. The native `integrity` attribute
+// only applies to <script src>/<link>, not to `import` specifiers inside an
+// injected script's textContent (which is how this has to load, to avoid
+// AMD/ES-module conflicts - see module docblock), so this fetch-then-verify
+// gate is the closest equivalent available. Scoped to vision_bundle.mjs
+// only (the one piece that runs as JS with page privileges) - the .wasm/
+// .task loads below are MediaPipe's own internal fetches, out of this
+// module's control, and can't execute arbitrary JS directly even if
+// tampered with. Update this hash whenever MP_CDN's version bumps.
+const MP_VISION_BUNDLE_SHA256 = 'krpgFv0PyLvOI3CG3sYhL3KgOwbQpez9xx3cckzNurs=';
+
+/**
+ * Fetch a URL and verify its SHA-256 digest matches the pinned hash before
+ * the caller is allowed to use it.
+ *
+ * @param {String} url The URL to fetch and verify.
+ * @param {String} expectedSha256Base64 The expected SHA-256 digest, base64-encoded.
+ * @return {Promise<void>} Resolves if the digest matches; rejects otherwise.
+ */
+const verifyIntegrity = async(url, expectedSha256Base64) => {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error('Failed to fetch ' + url + ' (HTTP ' + response.status + ')');
+    }
+    const buffer = await response.arrayBuffer();
+    const digest = await crypto.subtle.digest('SHA-256', buffer);
+    const actual = btoa(String.fromCharCode(...new Uint8Array(digest)));
+    if (actual !== expectedSha256Base64) {
+        throw new Error('Integrity check failed for ' + url);
+    }
+};
 
 // sessionStorage: persists the captured neutral pose (and sensitivity) once
 // the user has calibrated. Navigating to a new page (a fresh document) then
@@ -112,47 +152,53 @@ let jawActive  = false;
 let blinkActive = false;
 let sensitivity = 3;
 
-// ── i18n — inline strings keyed by language ───────────────────────────────────
-const STRINGS = {
-    pt: {
-        loading:  'Carregando modelo…',
-        camHint:  'Olhe para a câmera em posição neutra e clique em Calibrar.',
-        calibrate:'Calibrar',
-        active:   'Câmera ativa',
-        stop:     'Parar',
-        sens:     'Velocidade do Cursor Virtual',
-        error:    'Erro ao iniciar',
-        click:    'Clique: Abrir a boca ou piscar com os dois olhos',
-        scroll:   'Rolar página: Leve o cursor virtual até a borda superior ou inferior da página',
-    },
-    en: {
-        loading:  'Loading model…',
-        camHint:  'Look at the camera in a neutral position, then click Calibrate.',
-        calibrate:'Calibrate',
-        active:   'Camera active',
-        stop:     'Stop',
-        sens:     'Virtual Cursor Speed',
-        error:    'Failed to start',
-        click:    'Click: Open your mouth or blink both eyes',
-        scroll:   'Scroll page: Move the virtual cursor to the top or bottom edge of the page',
-    },
+// ── i18n — Moodle lang strings, resolved once and cached ──────────────────────
+// Security/consistency audit finding: this module used to carry its own
+// hardcoded pt/en string map instead of get_string()/lang files like every
+// other module here - it only ever showed English on any site not
+// configured for pt-BR or en, and duplicated translations that already live
+// in lang/{en,pt_br}/local_a11y.php. Fixed by resolving the real
+// face_* lang strings (via core/str's batch getStrings(), one HTTP request)
+// before the HUD ever renders, same mechanism Moodle uses for its own
+// component strings, so this now respects the site's actual language.
+const STRING_KEYS = ['face_loading', 'face_camhint', 'face_calibrate', 'face_active',
+    'face_stop', 'face_sens', 'face_error', 'face_click', 'face_scroll'];
+
+let cache = null;
+
+/**
+ * Resolve and cache every face_* lang string, once. Idempotent - safe to
+ * call on every start().
+ *
+ * @return {Promise<void>}
+ */
+const preloadStrings = async() => {
+    if (cache) {
+        return;
+    }
+    const resolved = await getStrings(STRING_KEYS.map((key) => ({key, component: 'local_a11y'})));
+    cache = {};
+    STRING_KEYS.forEach((key, i) => {
+        cache[key.replace(/^face_/, '')] = resolved[i];
+    });
 };
 
 /**
- * Resolve an inline i18n string for the current page language (pt/en only).
+ * Look up an already-resolved i18n string. Only valid after preloadStrings()
+ * has resolved - every caller is inside start()'s promise chain, which
+ * always awaits it first.
  *
- * @param {String} key A key from the STRINGS map.
- * @return {String} The resolved string for the current language.
+ * @param {String} key A short key (without the face_ prefix), e.g. "loading".
+ * @return {String} The resolved string for the site's current language.
  */
-const t = (key) => {
-    const lang = (document.documentElement.lang || 'en').startsWith('pt') ? 'pt' : 'en';
-    return (STRINGS[lang] || STRINGS.en)[key];
-};
+const t = (key) => (cache && cache[key]) || '';
 
 // ── MediaPipe loader ──────────────────────────────────────────────────────────
 /**
- * Injects a <script type="module"> that imports FaceLandmarker/FilesetResolver
- * and stores them on window.__mp. Resolves via a DOM event. Idempotent.
+ * Verifies vision_bundle.mjs's integrity (see MP_VISION_BUNDLE_SHA256 above),
+ * then injects a <script type="module"> that imports FaceLandmarker/
+ * FilesetResolver from it and stores them on window.__mp. Resolves via a DOM
+ * event. Idempotent.
  *
  * @return {Promise<Object>} Resolves to `window.__mp` ({FaceLandmarker, FilesetResolver}).
  */
@@ -160,14 +206,14 @@ const loadMediaPipe = () => {
     if (window.__mp) {
         return Promise.resolve(window.__mp);
     }
-    return new Promise((resolve, reject) => {
+    return verifyIntegrity(MP_VISION_BUNDLE, MP_VISION_BUNDLE_SHA256).then(() => new Promise((resolve, reject) => {
         document.addEventListener('__mp_ready', () => resolve(window.__mp), {once: true});
         document.addEventListener('__mp_error', (e) => reject(new Error(e.detail)), {once: true});
         const s = document.createElement('script');
         s.type = 'module';
         s.textContent = [
             "import { FaceLandmarker, FilesetResolver }",
-            "  from '" + MP_CDN + "/vision_bundle.mjs';",
+            "  from '" + MP_VISION_BUNDLE + "';",
             "window.__mp = { FaceLandmarker, FilesetResolver };",
             "document.dispatchEvent(new Event('__mp_ready'));",
         ].join('\n');
@@ -175,7 +221,7 @@ const loadMediaPipe = () => {
             new CustomEvent('__mp_error', {detail: 'Failed to load MediaPipe'})
         );
         document.head.appendChild(s);
-    });
+    }));
 };
 
 // ── Click helper ──────────────────────────────────────────────────────────────
@@ -284,13 +330,23 @@ const renderLoading = () => {
 /**
  * Render the HUD's error state.
  *
- * @param {String} msg The error message to display (HTML-escaped before insertion).
+ * Security audit finding: this used to build the whole thing (including
+ * `msg`, which can carry text from a rejected promise) as one innerHTML
+ * string, escaping `msg` by hand via a `.replace(/</g, '&lt;')` that only
+ * neutralised '<' - safe today only because msg lands in a pure text-node
+ * position, but a single future refactor moving it into an attribute value
+ * would make that same incomplete escaping exploitable. Fixed the same way
+ * every other dynamic-content path in this module/plugin already does it:
+ * static markup via innerHTML, the untrusted part via .textContent (which
+ * needs no escaping logic to get right, incomplete or otherwise).
+ *
+ * @param {String} msg The error message to display.
  * @return {void}
  */
 const renderError = (msg) => {
     hud.innerHTML = '<div style="padding:12px"><div style="font-weight:600;color:#b91c1c;margin-bottom:2px">' +
-        t('error') + '</div><div style="font-size:11px;color:#6b7280;word-break:break-word">' +
-        String(msg).replace(/</g, '&lt;') + '</div></div>';
+        t('error') + '</div><div data-region="error-msg" style="font-size:11px;color:#6b7280;word-break:break-word"></div></div>';
+    hud.querySelector('[data-region="error-msg"]').textContent = String(msg);
 };
 
 /**
@@ -581,16 +637,18 @@ const detect = () => {
 // ── Public API ────────────────────────────────────────────────────────────────
 
 /**
- * Start face navigation: builds the HUD/cursor, loads MediaPipe, requests
- * camera access, and either resumes a saved calibration or shows the
- * Calibrate step. Idempotent.
+ * Start face navigation: resolves lang strings, builds the HUD/cursor,
+ * loads MediaPipe, requests camera access, and either resumes a saved
+ * calibration or shows the Calibrate step. Idempotent.
  *
- * @return {void}
+ * @return {Promise<void>}
  */
-export const start = () => {
+export const start = async() => {
     if (hud) {
         return;
     }
+
+    await preloadStrings();
 
     hud      = buildHud();
     cursorEl = buildCursor();

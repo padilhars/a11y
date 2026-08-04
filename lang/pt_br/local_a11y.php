@@ -153,6 +153,15 @@ $string['help_fn_4'] = 'Abra a boca (~1 s) ou pisque os dois olhos (~1 s) para c
 $string['help_fn_5'] = 'Para rolar a página, leve o cursor até a borda superior ou inferior da tela';
 $string['opt_facenavigation'] = 'Navegação por Face';
 $string['opt_facenavigation_desc'] = 'Controle o cursor com movimentos da cabeça';
+$string['face_loading'] = 'Carregando modelo…';
+$string['face_camhint'] = 'Olhe para a câmera em posição neutra e clique em Calibrar.';
+$string['face_calibrate'] = 'Calibrar';
+$string['face_active'] = 'Câmera ativa';
+$string['face_stop'] = 'Parar';
+$string['face_sens'] = 'Velocidade do Cursor Virtual';
+$string['face_error'] = 'Erro ao iniciar';
+$string['face_click'] = 'Clique: Abrir a boca ou piscar com os dois olhos';
+$string['face_scroll'] = 'Rolar página: Leve o cursor virtual até a borda superior ou inferior da página';
 
 // Profiles.
 $string['profile_lowvision'] = 'Baixa Visão';
