@@ -121,12 +121,33 @@ class config {
             'fabshape' => (string) (get_config('local_a11y', 'fabshape') ?: 'circle'),
             'panelformat' => (string) (get_config('local_a11y', 'panelformat') ?: 'popover'),
             'density' => (string) (get_config('local_a11y', 'density') ?: 'regular'),
-            'accent' => (string) (get_config('local_a11y', 'accent') ?: '#3b82f6'),
+            'accent' => self::valid_hex_color((string) get_config('local_a11y', 'accent'), '#3b82f6'),
             'showprofiles' => (function() {
                 $value = get_config('local_a11y', 'showprofiles');
                 return $value === false ? true : (bool) $value;
             })(),
         ];
+    }
+
+    /**
+     * Security audit finding: unlike the 4 page-effect colours (re-validated
+     * in classes/output/renderer.php::render_effect_color_vars() before
+     * going into raw HTML), 'accent' went from admin_setting_configcolourpicker
+     * straight into templates/fab.mustache and panel.mustache's
+     * `style="--local-a11y-accent: {{accent}};"` with no format check of its
+     * own - Mustache's default HTML-escaping stops it from breaking out of
+     * the style attribute, but a malformed value could still smuggle extra
+     * `property: value;` declarations onto that one element. Site-admin-only
+     * input (same trust tier as the setting itself), so low severity, but
+     * inconsistent with the other 4 - validated here too now, for every
+     * caller of get_appearance() at once.
+     *
+     * @param string $color The raw stored value.
+     * @param string $default Fallback if $color isn't a valid #rgb[a]/#rrggbb[aa] hex colour.
+     * @return string $color if valid, otherwise $default.
+     */
+    private static function valid_hex_color(string $color, string $default): string {
+        return preg_match('/^#[0-9a-fA-F]{3,8}$/', $color) ? $color : $default;
     }
 
     /**
