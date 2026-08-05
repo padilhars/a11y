@@ -37,11 +37,33 @@ let lastFocused = null;
 let cb = {};
 
 /**
+ * Below this breakpoint the panel is always drawer-style, regardless of the
+ * admin-configured local_a11y/panelformat - mirrors the CSS override in
+ * styles.css (Styleguide 5.2.1), which is what actually forces the drawer
+ * geometry; this is only here so the open/close *behaviour* (overlay, FAB
+ * hiding) matches those visuals even when the configured format is popover
+ * or modal. Moodle Boost's own nav-collapse breakpoint, since below that
+ * there isn't room to float a centered/anchored panel either way.
+ *
+ * @type {string}
+ */
+const MOBILE_BREAKPOINT_QUERY = '(max-width: 767.98px)';
+
+/**
  * Whether the panel is currently open (visible).
  *
  * @return {boolean} True if the panel element exists and isn't hidden.
  */
 const isOpen = () => panel && !panel.hidden;
+
+/**
+ * Whether the panel is forced into drawer-style behaviour by the mobile
+ * breakpoint (see MOBILE_BREAKPOINT_QUERY), regardless of which
+ * local_a11y/panelformat class is actually applied to the panel element.
+ *
+ * @return {boolean} True if the viewport is at/below the mobile breakpoint.
+ */
+const isMobileDrawer = () => window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches;
 
 /**
  * Open the panel: unhide it, flip ARIA state, move focus in.
@@ -56,13 +78,14 @@ const open = () => {
     panel.hidden = false;
     panel.setAttribute('aria-hidden', 'false');
     fab.setAttribute('aria-expanded', 'true');
-    // In drawer format the open panel takes the FAB's place: hide the FAB
-    // while the drawer is open (close() restores it).
-    if (panel.classList.contains('local-a11y-panel--drawer')) {
+    // In drawer format - or any format forced into drawer-style layout by
+    // the mobile breakpoint, see isMobileDrawer() - the open panel takes
+    // the FAB's place: hide the FAB while it's open (close() restores it).
+    const isDrawerLike = panel.classList.contains('local-a11y-panel--drawer') || isMobileDrawer();
+    if (isDrawerLike) {
         fab.classList.add('local-a11y-fab--hidden');
     }
-    if (overlay && (panel.classList.contains('local-a11y-panel--modal')
-            || panel.classList.contains('local-a11y-panel--drawer'))) {
+    if (overlay && (panel.classList.contains('local-a11y-panel--modal') || isDrawerLike)) {
         overlay.hidden = false;
     }
     const closeBtn = panel.querySelector('[data-action="close"]');
