@@ -17,13 +17,17 @@
 /**
  * Admin settings for local_a11y.
  *
- * Organised in 4 sections, in the order an admin is likely to want to
- * configure them: Geral (whether/where the plugin runs at all, and which
- * of the 24 options users get), Botão Flutuante (FAB) (the entry point),
- * Painel (the settings surface itself), Cores (every colour the plugin
- * lets an admin customise, grouped together instead of split across a
- * generic "Appearance" section). Every setting has a real description -
- * none are left blank.
+ * Split into 4 separate pages under one admin_category (local_a11y),
+ * instead of one long admin_settingpage - Moodle has no built-in in-page
+ * tab widget for admin_settingpage (confirmed: admin/settings.php's
+ * renderer never uses tabtree/tabobject), so this is the native way to
+ * avoid a single very long settings page: each becomes its own item in
+ * the Site Administration tree (same pattern core uses for e.g. logging -
+ * see admin/tool/log/settings.php). The category node itself is named
+ * 'local_a11y' (matching the component, as is conventional); each page
+ * underneath has its own distinct name (local_a11y_general/_fab/_panel/
+ * _colors) since every part_of_admin_tree node needs a globally unique
+ * name and a page can't share the category's own name.
  *
  * @description Admin settings for local_a11y.
  * @package    Moodle
@@ -38,33 +42,34 @@
 defined('MOODLE_INTERNAL') || die();
 
 if ($hassiteconfig) {
-    $settings = new admin_settingpage('local_a11y', new lang_string('pluginname', 'local_a11y'));
-    $ADMIN->add('localplugins', $settings);
+    $ADMIN->add('localplugins', new admin_category(
+        'local_a11y',
+        new lang_string('pluginname', 'local_a11y')
+    ));
 
     // ── Geral ────────────────────────────────────────────────────────────
     // Whether/where the plugin runs, and which of the 24 options are
     // available to users at all (independent of any one user's own choices).
-    $settings->add(new admin_setting_heading(
-        'local_a11y/general',
-        new lang_string('settings_general', 'local_a11y'),
-        ''
-    ));
+    $generalsettings = new admin_settingpage(
+        'local_a11y_general',
+        new lang_string('settings_general', 'local_a11y')
+    );
 
-    $settings->add(new admin_setting_configcheckbox(
+    $generalsettings->add(new admin_setting_configcheckbox(
         'local_a11y/enabled',
         new lang_string('settings_enabled', 'local_a11y'),
         new lang_string('settings_enabled_desc', 'local_a11y'),
         1
     ));
 
-    $settings->add(new admin_setting_configcheckbox(
+    $generalsettings->add(new admin_setting_configcheckbox(
         'local_a11y/showforguests',
         new lang_string('settings_showforguests', 'local_a11y'),
         new lang_string('settings_showforguests_desc', 'local_a11y'),
         1
     ));
 
-    $settings->add(new admin_setting_configtextarea(
+    $generalsettings->add(new admin_setting_configtextarea(
         'local_a11y/excludedpages',
         new lang_string('settings_excludedpages', 'local_a11y'),
         new lang_string('settings_excludedpages_desc', 'local_a11y'),
@@ -75,7 +80,7 @@ if ($hassiteconfig) {
     foreach (\local_a11y\options::all() as $option) {
         $featurechoices[$option['id']] = new lang_string($option['labelkey'], 'local_a11y');
     }
-    $settings->add(new admin_setting_configmulticheckbox(
+    $generalsettings->add(new admin_setting_configmulticheckbox(
         'local_a11y/enabledfeatures',
         new lang_string('settings_enabledfeatures', 'local_a11y'),
         new lang_string('settings_enabledfeatures_desc', 'local_a11y'),
@@ -83,16 +88,17 @@ if ($hassiteconfig) {
         $featurechoices
     ));
 
+    $ADMIN->add('local_a11y', $generalsettings);
+
     // ── Botão Flutuante (FAB) ───────────────────────────────────────────
     // The entry point rendered on every page: where it sits, what it
     // looks like.
-    $settings->add(new admin_setting_heading(
-        'local_a11y/fabheading',
-        new lang_string('settings_fab', 'local_a11y'),
-        ''
-    ));
+    $fabsettings = new admin_settingpage(
+        'local_a11y_fab',
+        new lang_string('settings_fab', 'local_a11y')
+    );
 
-    $settings->add(new admin_setting_configselect(
+    $fabsettings->add(new admin_setting_configselect(
         'local_a11y/fabposition',
         new lang_string('settings_fabposition', 'local_a11y'),
         new lang_string('settings_fabposition_desc', 'local_a11y'),
@@ -105,7 +111,7 @@ if ($hassiteconfig) {
         ]
     ));
 
-    $settings->add(new admin_setting_configselect(
+    $fabsettings->add(new admin_setting_configselect(
         'local_a11y/fabicon',
         new lang_string('settings_fabicon', 'local_a11y'),
         new lang_string('settings_fabicon_desc', 'local_a11y'),
@@ -118,7 +124,7 @@ if ($hassiteconfig) {
         ]
     ));
 
-    $settings->add(new admin_setting_configselect(
+    $fabsettings->add(new admin_setting_configselect(
         'local_a11y/fabshape',
         new lang_string('settings_fabshape', 'local_a11y'),
         new lang_string('settings_fabshape_desc', 'local_a11y'),
@@ -129,16 +135,17 @@ if ($hassiteconfig) {
         ]
     ));
 
+    $ADMIN->add('local_a11y', $fabsettings);
+
     // ── Painel ───────────────────────────────────────────────────────────
     // The settings surface itself: how it's presented and what it contains
     // beyond the option list.
-    $settings->add(new admin_setting_heading(
-        'local_a11y/panelheading',
-        new lang_string('settings_panel', 'local_a11y'),
-        ''
-    ));
+    $panelsettings = new admin_settingpage(
+        'local_a11y_panel',
+        new lang_string('settings_panel', 'local_a11y')
+    );
 
-    $settings->add(new admin_setting_configselect(
+    $panelsettings->add(new admin_setting_configselect(
         'local_a11y/panelformat',
         new lang_string('settings_panelformat', 'local_a11y'),
         new lang_string('settings_panelformat_desc', 'local_a11y'),
@@ -150,7 +157,7 @@ if ($hassiteconfig) {
         ]
     ));
 
-    $settings->add(new admin_setting_configselect(
+    $panelsettings->add(new admin_setting_configselect(
         'local_a11y/density',
         new lang_string('settings_density', 'local_a11y'),
         new lang_string('settings_density_desc', 'local_a11y'),
@@ -162,20 +169,22 @@ if ($hassiteconfig) {
         ]
     ));
 
-    $settings->add(new admin_setting_configcheckbox(
+    $panelsettings->add(new admin_setting_configcheckbox(
         'local_a11y/showprofiles',
         new lang_string('settings_showprofiles', 'local_a11y'),
         new lang_string('settings_showprofiles_desc', 'local_a11y'),
         1
     ));
 
-    $settings->add(new admin_setting_confightmleditor(
+    $panelsettings->add(new admin_setting_confightmleditor(
         'local_a11y/footertext',
         new lang_string('settings_footertext', 'local_a11y'),
         new lang_string('settings_footertext_desc', 'local_a11y'),
         '',
         PARAM_RAW
     ));
+
+    $ADMIN->add('local_a11y', $panelsettings);
 
     // ── Cores ────────────────────────────────────────────────────────────
     // Every colour the plugin lets an admin customise, grouped in one
@@ -184,44 +193,45 @@ if ($hassiteconfig) {
     // "Guia de Leitura" (each independent, so an admin can match their
     // own branding for each effect instead of one colour doing double
     // duty everywhere).
-    $settings->add(new admin_setting_heading(
-        'local_a11y/colorsheading',
-        new lang_string('settings_colors', 'local_a11y'),
-        ''
-    ));
+    $colorsettings = new admin_settingpage(
+        'local_a11y_colors',
+        new lang_string('settings_colors', 'local_a11y')
+    );
 
-    $settings->add(new admin_setting_configcolourpicker(
+    $colorsettings->add(new admin_setting_configcolourpicker(
         'local_a11y/accent',
         new lang_string('settings_accent', 'local_a11y'),
         new lang_string('settings_accent_desc', 'local_a11y'),
         '#3b82f6'
     ));
 
-    $settings->add(new admin_setting_configcolourpicker(
+    $colorsettings->add(new admin_setting_configcolourpicker(
         'local_a11y/highlighttitlescolor',
         new lang_string('settings_highlighttitlescolor', 'local_a11y'),
         new lang_string('settings_highlighttitlescolor_desc', 'local_a11y'),
         '#eab308'
     ));
 
-    $settings->add(new admin_setting_configcolourpicker(
+    $colorsettings->add(new admin_setting_configcolourpicker(
         'local_a11y/highlightlinkscolor',
         new lang_string('settings_highlightlinkscolor', 'local_a11y'),
         new lang_string('settings_highlightlinkscolor_desc', 'local_a11y'),
         '#3b82f6'
     ));
 
-    $settings->add(new admin_setting_configcolourpicker(
+    $colorsettings->add(new admin_setting_configcolourpicker(
         'local_a11y/highlightbuttonscolor',
         new lang_string('settings_highlightbuttonscolor', 'local_a11y'),
         new lang_string('settings_highlightbuttonscolor_desc', 'local_a11y'),
         '#f97316'
     ));
 
-    $settings->add(new admin_setting_configcolourpicker(
+    $colorsettings->add(new admin_setting_configcolourpicker(
         'local_a11y/readingguidecolor',
         new lang_string('settings_readingguidecolor', 'local_a11y'),
         new lang_string('settings_readingguidecolor_desc', 'local_a11y'),
         '#3b82f6'
     ));
+
+    $ADMIN->add('local_a11y', $colorsettings);
 }
