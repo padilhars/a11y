@@ -1,6 +1,0 @@
-node_modules/
-*.log
-.phpunit.cache/
-behat_*.json
-/local_a11y.zip
-.phpdoc/
