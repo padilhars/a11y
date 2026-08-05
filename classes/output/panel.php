@@ -206,31 +206,37 @@ class panel implements renderable, templatable {
     }
 
     /**
-     * Build the help block HTML for options that declare hashelp.
-     * Content is composed from lang strings so it is translatable.
+     * Build the help block HTML for options that declare hashelp. Content is
+     * composed from lang strings (one '<prefix>intro' string plus a
+     * '<prefix>N' string per list item) so it stays translatable; 'ol' is
+     * used for options that describe a sequence of steps to follow,
+     * 'ul' for options that just describe what happens/what the levels mean.
      *
-     * @param string $optionid Option id; only 'voiceCommands' and 'faceNavigation' produce content.
-     * @return string Safe HTML, or '' for any other option id.
+     * @param string $optionid Option id; any id not in $specs produces no content.
+     * @return string Safe HTML, or '' for any option id without a help spec.
      */
     private function build_help_html(string $optionid): string {
-        if ($optionid === 'voiceCommands') {
-            $intro = get_string('help_vc_intro', 'local_a11y');
-            $items = [];
-            for ($i = 1; $i <= 12; $i++) {
-                $items[] = '<li>' . get_string('help_vc_' . $i, 'local_a11y') . '</li>';
-            }
-            return '<p class="local-a11y-help-intro">' . $intro . '</p>'
-                . '<ul class="local-a11y-help-list">' . implode('', $items) . '</ul>';
+        $specs = [
+            'voiceCommands' => ['prefix' => 'help_vc_', 'count' => 12, 'tag' => 'ul'],
+            'faceNavigation' => ['prefix' => 'help_fn_', 'count' => 5, 'tag' => 'ol'],
+            'screenReader' => ['prefix' => 'help_sr_', 'count' => 4, 'tag' => 'ol'],
+            'virtualKeyboard' => ['prefix' => 'help_vk_', 'count' => 4, 'tag' => 'ol'],
+            'colorChange' => ['prefix' => 'help_cc_', 'count' => 4, 'tag' => 'ul'],
+            'readingGuide' => ['prefix' => 'help_rg_', 'count' => 3, 'tag' => 'ul'],
+            'readingMask' => ['prefix' => 'help_rm_', 'count' => 3, 'tag' => 'ul'],
+        ];
+        if (!isset($specs[$optionid])) {
+            return '';
         }
-        if ($optionid === 'faceNavigation') {
-            $intro = get_string('help_fn_intro', 'local_a11y');
-            $steps = [];
-            for ($i = 1; $i <= 5; $i++) {
-                $steps[] = '<li>' . get_string('help_fn_' . $i, 'local_a11y') . '</li>';
-            }
-            return '<p class="local-a11y-help-intro">' . $intro . '</p>'
-                . '<ol class="local-a11y-help-list">' . implode('', $steps) . '</ol>';
+
+        $spec = $specs[$optionid];
+        $intro = get_string($spec['prefix'] . 'intro', 'local_a11y');
+        $items = [];
+        for ($i = 1; $i <= $spec['count']; $i++) {
+            $items[] = '<li>' . get_string($spec['prefix'] . $i, 'local_a11y') . '</li>';
         }
-        return '';
+        $tag = $spec['tag'];
+        return '<p class="local-a11y-help-intro">' . $intro . '</p>'
+            . '<' . $tag . ' class="local-a11y-help-list">' . implode('', $items) . '</' . $tag . '>';
     }
 }

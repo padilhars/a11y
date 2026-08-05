@@ -67,7 +67,8 @@ class options {
             ['id' => 'invertColors', 'cat' => 'color', 'kind' => 'toggle', 'icon' => 'invertColors',
                 'labelkey' => 'opt_invertcolors', 'desckey' => null],
             ['id' => 'colorChange', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'pipette',
-                'labelkey' => 'opt_colorchange', 'desckey' => 'opt_colorchange_desc', 'levelprefix' => 'colorchangelevel_'],
+                'labelkey' => 'opt_colorchange', 'desckey' => 'opt_colorchange_desc', 'levelprefix' => 'colorchangelevel_',
+                'hashelp' => true],
             ['id' => 'saturation', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'saturation',
                 'labelkey' => 'opt_saturation', 'desckey' => null, 'levelprefix' => 'saturationlevel_'],
 
@@ -81,9 +82,9 @@ class options {
 
             // -- Focus & navigation --
             ['id' => 'readingGuide', 'cat' => 'navigation', 'kind' => 'toggle', 'icon' => 'ruler',
-                'labelkey' => 'opt_readingguide', 'desckey' => null],
+                'labelkey' => 'opt_readingguide', 'desckey' => null, 'hashelp' => true],
             ['id' => 'readingMask', 'cat' => 'navigation', 'kind' => 'toggle', 'icon' => 'mask',
-                'labelkey' => 'opt_readingmask', 'desckey' => null],
+                'labelkey' => 'opt_readingmask', 'desckey' => null, 'hashelp' => true],
             ['id' => 'cursor', 'cat' => 'navigation', 'kind' => 'stepper', 'max' => 2, 'icon' => 'mousePointer',
                 'labelkey' => 'opt_cursor', 'desckey' => null, 'levelprefix' => 'cursorlevel_'],
             ['id' => 'focusMode', 'cat' => 'navigation', 'kind' => 'toggle', 'icon' => 'focus',
@@ -91,9 +92,9 @@ class options {
 
             // -- Advanced --
             ['id' => 'screenReader', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'volume',
-                'labelkey' => 'opt_screenreader', 'desckey' => 'opt_screenreader_desc'],
+                'labelkey' => 'opt_screenreader', 'desckey' => 'opt_screenreader_desc', 'hashelp' => true],
             ['id' => 'virtualKeyboard', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'keyboard',
-                'labelkey' => 'opt_virtualkeyboard', 'desckey' => null],
+                'labelkey' => 'opt_virtualkeyboard', 'desckey' => null, 'hashelp' => true],
             ['id' => 'voiceCommands', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'mic',
                 'labelkey' => 'opt_voicecommands', 'desckey' => null, 'hashelp' => true],
             ['id' => 'faceNavigation', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'scanFace',
