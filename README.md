@@ -7,7 +7,7 @@
 
 Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (FAB) e um painel com **24 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
 
-![Painel aberto mostrando os perfis de acessibilidade](_verification/m2/02-panel-open.png)
+![Painel aberto mostrando os perfis de acessibilidade](.github/screenshots/m2/02-panel-open.png)
 
 ## Autoria
 
@@ -34,12 +34,12 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 
 <table>
 <tr>
-<td width="50%"><img src="_verification/m4/m4-01-profile-dyslexia.png" alt="Perfil de Dislexia ativo: fonte alterada na página e painel mostrando 'Perfil Ativo: Dislexia' com 4 opções ativas"></td>
-<td width="50%"><img src="_verification/bugfix-effects/contrast-dark.png" alt="Modo de contraste escuro aplicado a toda a página, incluindo drawers e navbar"></td>
+<td width="50%"><img src=".github/screenshots/m4/m4-01-profile-dyslexia.png" alt="Perfil de Dislexia ativo: fonte alterada na página e painel mostrando 'Perfil Ativo: Dislexia' com 4 opções ativas"></td>
+<td width="50%"><img src=".github/screenshots/bugfix-effects/contrast-dark.png" alt="Modo de contraste escuro aplicado a toda a página, incluindo drawers e navbar"></td>
 </tr>
 <tr>
-<td width="50%"><img src="_verification/m5/m5-01-virtual-keyboard.png" alt="Teclado virtual em tela aberto na parte inferior da página, com o painel de opções visível simultaneamente"></td>
-<td width="50%"><img src="_verification/bugfix-effects/focus-mode.png" alt="Modo Foco ativo: drawers laterais e abas secundárias ocultos, conteúdo centralizado"></td>
+<td width="50%"><img src=".github/screenshots/m5/m5-01-virtual-keyboard.png" alt="Teclado virtual em tela aberto na parte inferior da página, com o painel de opções visível simultaneamente"></td>
+<td width="50%"><img src=".github/screenshots/bugfix-effects/focus-mode.png" alt="Modo Foco ativo: drawers laterais e abas secundárias ocultos, conteúdo centralizado"></td>
 </tr>
 </table>
 
