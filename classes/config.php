@@ -131,14 +131,17 @@ class config {
     /**
      * Colours for the page-effect options that don't have a fixed one
      * (--local-a11y-accent is FAB/panel-only, see get_appearance() -
-     * these two apply to page content itself): "Destacar títulos/links/
-     * botões" and "Guia de leitura".
+     * these apply to page content itself): "Destacar Títulos", "Destacar
+     * Links", "Destacar Botões" (each independently configurable, not one
+     * shared colour) and "Guia de Leitura".
      *
-     * @return string[] hex colours, keyed 'highlight' and 'readingguide'.
+     * @return string[] hex colours, keyed 'highlighttitles', 'highlightlinks', 'highlightbuttons', 'readingguide'.
      */
     public static function get_effect_colors(): array {
         return [
-            'highlight' => (string) (get_config('local_a11y', 'highlightcolor') ?: '#f97316'),
+            'highlighttitles' => (string) (get_config('local_a11y', 'highlighttitlescolor') ?: '#eab308'),
+            'highlightlinks' => (string) (get_config('local_a11y', 'highlightlinkscolor') ?: '#3b82f6'),
+            'highlightbuttons' => (string) (get_config('local_a11y', 'highlightbuttonscolor') ?: '#f97316'),
             'readingguide' => (string) (get_config('local_a11y', 'readingguidecolor') ?: '#3b82f6'),
         ];
     }

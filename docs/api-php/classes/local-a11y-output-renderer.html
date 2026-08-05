@@ -274,15 +274,16 @@ simulation) stepper, referenced from styles.css via url(#local-a11y-*).</dd>
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd>HTML injected into &lt;head&gt;: a tiny inline &lt;style&gt; defining the two
+<dd>HTML injected into &lt;head&gt;: a tiny inline &lt;style&gt; defining the 4
 admin-configurable page-effect colours (config::get_effect_colors())
-as CSS custom properties on :root - --a11y-highlight-color (Destacar
-títulos/links/botões) and --a11y-guide-color (Guia de leitura),
-consumed by the matching rules in styles.css. Custom-property
-inheritance resolves from wherever they&#039;re declared down through the
-whole DOM regardless of stylesheet load order, so an early &lt;head&gt;
-declaration reaches rules in the (separately loaded, compiled-in)
-plugin stylesheet just fine.</dd>
+as CSS custom properties on :root - --a11y-highlight-titles-color,
+--a11y-highlight-links-color, --a11y-highlight-buttons-color
+(Destacar Títulos/Links/Botões, independently configurable) and
+--a11y-guide-color (Guia de Leitura) - consumed by the matching
+rules in styles.css. Custom-property inheritance resolves from
+wherever they&#039;re declared down through the whole DOM regardless of
+stylesheet load order, so an early &lt;head&gt; declaration reaches rules
+in the (separately loaded, compiled-in) plugin stylesheet just fine.</dd>
 
     </dl>
 
@@ -457,7 +458,7 @@ Keep the two in sync when either one changes.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/output/renderer.php"><a href="files/classes-output-renderer.html"><abbr title="classes/output/renderer.php">renderer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">161</span>
+    <span class="phpdocumentor-element-found-in__line">172</span>
 
     </aside>
 
@@ -504,19 +505,20 @@ for a more accurate simulation; see DECISIONS.md D6.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/output/renderer.php"><a href="files/classes-output-renderer.html"><abbr title="classes/output/renderer.php">renderer.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">145</span>
+    <span class="phpdocumentor-element-found-in__line">146</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">HTML injected into &lt;head&gt;: a tiny inline &lt;style&gt; defining the two
+        <p class="phpdocumentor-summary">HTML injected into &lt;head&gt;: a tiny inline &lt;style&gt; defining the 4
 admin-configurable page-effect colours (config::get_effect_colors())
-as CSS custom properties on :root - --a11y-highlight-color (Destacar
-títulos/links/botões) and --a11y-guide-color (Guia de leitura),
-consumed by the matching rules in styles.css. Custom-property
-inheritance resolves from wherever they&#039;re declared down through the
-whole DOM regardless of stylesheet load order, so an early &lt;head&gt;
-declaration reaches rules in the (separately loaded, compiled-in)
-plugin stylesheet just fine.</p>
+as CSS custom properties on :root - --a11y-highlight-titles-color,
+--a11y-highlight-links-color, --a11y-highlight-buttons-color
+(Destacar Títulos/Links/Botões, independently configurable) and
+--a11y-guide-color (Guia de Leitura) - consumed by the matching
+rules in styles.css. Custom-property inheritance resolves from
+wherever they&#039;re declared down through the whole DOM regardless of
+stylesheet load order, so an early &lt;head&gt; declaration reaches rules
+in the (separately loaded, compiled-in) plugin stylesheet just fine.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>

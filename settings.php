@@ -17,13 +17,13 @@
 /**
  * Admin settings for local_a11y.
  *
- * The prototype's "Tweaks" panel (_design-reference/app.jsx,
- * _design-reference/tweaks-panel.jsx) is a design-tool-only harness, not
- * part of the product - see DECISIONS.md D4. The *values* it edits become
- * site-wide admin settings here instead (brief section 5.4): FAB
- * position/icon/shape, panel format/density, accent colour, whether to
- * show profiles, plus the plugin-wide enable switch, guest visibility,
- * per-option enable list and excluded-page patterns.
+ * Organised in 4 sections, in the order an admin is likely to want to
+ * configure them: Geral (whether/where the plugin runs at all, and which
+ * of the 24 options users get), Botão Flutuante (FAB) (the entry point),
+ * Painel (the settings surface itself), Cores (every colour the plugin
+ * lets an admin customise, grouped together instead of split across a
+ * generic "Appearance" section). Every setting has a real description -
+ * none are left blank.
  *
  * @description Admin settings for local_a11y.
  * @package    Moodle
@@ -41,7 +41,9 @@ if ($hassiteconfig) {
     $settings = new admin_settingpage('local_a11y', new lang_string('pluginname', 'local_a11y'));
     $ADMIN->add('localplugins', $settings);
 
-    // -- General --------------------------------------------------------
+    // ── Geral ────────────────────────────────────────────────────────────
+    // Whether/where the plugin runs, and which of the 24 options are
+    // available to users at all (independent of any one user's own choices).
     $settings->add(new admin_setting_heading(
         'local_a11y/general',
         new lang_string('settings_general', 'local_a11y'),
@@ -81,7 +83,9 @@ if ($hassiteconfig) {
         $featurechoices
     ));
 
-    // -- FAB --------------------------------------------------------------
+    // ── Botão Flutuante (FAB) ───────────────────────────────────────────
+    // The entry point rendered on every page: where it sits, what it
+    // looks like.
     $settings->add(new admin_setting_heading(
         'local_a11y/fabheading',
         new lang_string('settings_fab', 'local_a11y'),
@@ -91,7 +95,7 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configselect(
         'local_a11y/fabposition',
         new lang_string('settings_fabposition', 'local_a11y'),
-        '',
+        new lang_string('settings_fabposition_desc', 'local_a11y'),
         'bottom-right',
         [
             'bottom-right' => new lang_string('position_bottomright', 'local_a11y'),
@@ -104,7 +108,7 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configselect(
         'local_a11y/fabicon',
         new lang_string('settings_fabicon', 'local_a11y'),
-        '',
+        new lang_string('settings_fabicon_desc', 'local_a11y'),
         'un',
         [
             'un' => new lang_string('icon_un', 'local_a11y'),
@@ -117,7 +121,7 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configselect(
         'local_a11y/fabshape',
         new lang_string('settings_fabshape', 'local_a11y'),
-        '',
+        new lang_string('settings_fabshape_desc', 'local_a11y'),
         'circle',
         [
             'circle' => new lang_string('shape_circle', 'local_a11y'),
@@ -125,7 +129,9 @@ if ($hassiteconfig) {
         ]
     ));
 
-    // -- Panel ------------------------------------------------------------
+    // ── Painel ───────────────────────────────────────────────────────────
+    // The settings surface itself: how it's presented and what it contains
+    // beyond the option list.
     $settings->add(new admin_setting_heading(
         'local_a11y/panelheading',
         new lang_string('settings_panel', 'local_a11y'),
@@ -135,7 +141,7 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configselect(
         'local_a11y/panelformat',
         new lang_string('settings_panelformat', 'local_a11y'),
-        '',
+        new lang_string('settings_panelformat_desc', 'local_a11y'),
         'popover',
         [
             'popover' => new lang_string('format_popover', 'local_a11y'),
@@ -147,7 +153,7 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configselect(
         'local_a11y/density',
         new lang_string('settings_density', 'local_a11y'),
-        '',
+        new lang_string('settings_density_desc', 'local_a11y'),
         'regular',
         [
             'compact' => new lang_string('density_compact', 'local_a11y'),
@@ -171,24 +177,44 @@ if ($hassiteconfig) {
         PARAM_RAW
     ));
 
-    // -- Appearance ---------------------------------------------------------
+    // ── Cores ────────────────────────────────────────────────────────────
+    // Every colour the plugin lets an admin customise, grouped in one
+    // place: the FAB/panel's own accent, plus the 4 page-effect colours
+    // used by "Destacar Títulos", "Destacar Links", "Destacar Botões" and
+    // "Guia de Leitura" (each independent, so an admin can match their
+    // own branding for each effect instead of one colour doing double
+    // duty everywhere).
     $settings->add(new admin_setting_heading(
-        'local_a11y/appearanceheading',
-        new lang_string('settings_appearance', 'local_a11y'),
+        'local_a11y/colorsheading',
+        new lang_string('settings_colors', 'local_a11y'),
         ''
     ));
 
     $settings->add(new admin_setting_configcolourpicker(
         'local_a11y/accent',
         new lang_string('settings_accent', 'local_a11y'),
-        '',
+        new lang_string('settings_accent_desc', 'local_a11y'),
         '#3b82f6'
     ));
 
     $settings->add(new admin_setting_configcolourpicker(
-        'local_a11y/highlightcolor',
-        new lang_string('settings_highlightcolor', 'local_a11y'),
-        new lang_string('settings_highlightcolor_desc', 'local_a11y'),
+        'local_a11y/highlighttitlescolor',
+        new lang_string('settings_highlighttitlescolor', 'local_a11y'),
+        new lang_string('settings_highlighttitlescolor_desc', 'local_a11y'),
+        '#eab308'
+    ));
+
+    $settings->add(new admin_setting_configcolourpicker(
+        'local_a11y/highlightlinkscolor',
+        new lang_string('settings_highlightlinkscolor', 'local_a11y'),
+        new lang_string('settings_highlightlinkscolor_desc', 'local_a11y'),
+        '#3b82f6'
+    ));
+
+    $settings->add(new admin_setting_configcolourpicker(
+        'local_a11y/highlightbuttonscolor',
+        new lang_string('settings_highlightbuttonscolor', 'local_a11y'),
+        new lang_string('settings_highlightbuttonscolor_desc', 'local_a11y'),
         '#f97316'
     ));
 

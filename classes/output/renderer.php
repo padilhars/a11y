@@ -124,15 +124,16 @@ JS;
     }
 
     /**
-     * HTML injected into <head>: a tiny inline <style> defining the two
+     * HTML injected into <head>: a tiny inline <style> defining the 4
      * admin-configurable page-effect colours (config::get_effect_colors())
-     * as CSS custom properties on :root - --a11y-highlight-color (Destacar
-     * títulos/links/botões) and --a11y-guide-color (Guia de leitura),
-     * consumed by the matching rules in styles.css. Custom-property
-     * inheritance resolves from wherever they're declared down through the
-     * whole DOM regardless of stylesheet load order, so an early <head>
-     * declaration reaches rules in the (separately loaded, compiled-in)
-     * plugin stylesheet just fine.
+     * as CSS custom properties on :root - --a11y-highlight-titles-color,
+     * --a11y-highlight-links-color, --a11y-highlight-buttons-color
+     * (Destacar Títulos/Links/Botões, independently configurable) and
+     * --a11y-guide-color (Guia de Leitura) - consumed by the matching
+     * rules in styles.css. Custom-property inheritance resolves from
+     * wherever they're declared down through the whole DOM regardless of
+     * stylesheet load order, so an early <head> declaration reaches rules
+     * in the (separately loaded, compiled-in) plugin stylesheet just fine.
      *
      * admin_setting_configcolourpicker already validates hex on save, but
      * re-validated here too before it goes into raw HTML - defence in
@@ -145,9 +146,19 @@ JS;
     private function render_effect_color_vars(): string {
         $colors = config::get_effect_colors();
         $hex = '/^#[0-9a-fA-F]{3,8}$/';
-        $highlight = preg_match($hex, $colors['highlight']) ? $colors['highlight'] : '#f97316';
-        $readingguide = preg_match($hex, $colors['readingguide']) ? $colors['readingguide'] : '#3b82f6';
-        return '<style>:root{--a11y-highlight-color:' . $highlight . ';--a11y-guide-color:' . $readingguide . ';}</style>';
+        $valid = function(string $color, string $default) use ($hex): string {
+            return preg_match($hex, $color) ? $color : $default;
+        };
+        $titles = $valid($colors['highlighttitles'], '#eab308');
+        $links = $valid($colors['highlightlinks'], '#3b82f6');
+        $buttons = $valid($colors['highlightbuttons'], '#f97316');
+        $readingguide = $valid($colors['readingguide'], '#3b82f6');
+        return '<style>:root{'
+            . '--a11y-highlight-titles-color:' . $titles . ';'
+            . '--a11y-highlight-links-color:' . $links . ';'
+            . '--a11y-highlight-buttons-color:' . $buttons . ';'
+            . '--a11y-guide-color:' . $readingguide . ';'
+            . '}</style>';
     }
 
     /**
