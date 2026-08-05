@@ -609,6 +609,17 @@ Styleguide 5.6.
   background: var(--a11y-surface); border: 1px solid var(--a11y-border); border-radius: 4px;
   padding: 1px 4px;
 }
+/* Stepper options with a help block (option_stepper.mustache): the toggle
+   button/block can't nest inside the stepper row itself (it's its own
+   role="button"), so they render as siblings after it inside this wrapper
+   instead - see the template comment. A single child (no help) behaves
+   exactly like no wrapper at all. */
+.local-a11y-option-group { display: flex; flex-direction: column; gap: 4px; }
+.local-a11y-help-btn--standalone {
+  width: auto; height: auto; border-radius: 999px; align-self: flex-start;
+  margin: 0 12px; padding: 3px 10px; gap: 4px; font-size: 11px;
+}
+.local-a11y-option-group > .local-a11y-help-block { margin: 0 12px 2px; }
 .local-a11y-option__icon {
   width: 32px; height: 32px; border-radius: 8px; background: var(--a11y-surface-subtle); color: var(--a11y-text-secondary);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 150ms ease;

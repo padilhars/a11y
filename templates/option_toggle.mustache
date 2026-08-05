@@ -52,12 +52,12 @@
         <span class="local-a11y-option__label">{{label}}</span>
         {{#desc}}<span class="local-a11y-option__desc">{{desc}}</span>{{/desc}}
     </span>
-    {{#hashelp}}<button type="button" class="local-a11y-help-btn" data-action="toggle-help" aria-expanded="false" aria-label="{{helplabel}}">?</button>{{/hashelp}}
+    {{#hashelp}}<button type="button" class="local-a11y-help-btn" data-action="toggle-help" data-option-id="{{id}}" aria-expanded="false" aria-label="{{helplabel}}">?</button>{{/hashelp}}
     <button type="button" class="local-a11y-switch" data-region="switch" aria-pressed="{{pressed}}" aria-label="{{label}}">
         <span class="local-a11y-switch__thumb"></span>
     </button>
     {{#hashelp}}
-    <div class="local-a11y-help-block" data-region="help-block" hidden>
+    <div class="local-a11y-help-block" data-region="help-block" data-option-id="{{id}}" hidden>
         {{{helphtml}}}
     </div>
     {{/hashelp}}

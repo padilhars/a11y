@@ -352,8 +352,16 @@ const registerEventListeners = () => {
         }
         const helpBtn = e.target.closest('[data-action="toggle-help"]');
         if (helpBtn) {
-            const row = helpBtn.closest('[data-region="option"]');
-            const block = row ? row.querySelector('[data-region="help-block"]') : null;
+            // Looked up by data-option-id rather than DOM nesting: toggle
+            // rows nest the help button/block inside their [data-region=
+            // "option"] (safe - that row has no role="button" of its own),
+            // but stepper rows are themselves role="button" containers, so
+            // their help button/block are siblings after the row instead
+            // (nesting a real <button> inside a role="button" div would be
+            // an axe "nested-interactive" violation) - see
+            // option_stepper.mustache.
+            const optionId = helpBtn.dataset.optionId;
+            const block = panel.querySelector(`[data-region="help-block"][data-option-id="${optionId}"]`);
             if (block) {
                 const wasHidden = block.hidden;
                 block.hidden = !wasHidden;
