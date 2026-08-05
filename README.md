@@ -101,7 +101,7 @@ O plugin implementa a Privacy API do Moodle (`classes/privacy/provider.php`): a 
 
 ## Desenvolvimento
 
-Ver [`docs/`](docs/README.md) para a documentação de API completa (phpDocumentor para PHP, JSDoc para os módulos AMD e um style guide KSS navegável para `styles.css`).
+Ver [`docs/`](docs/README.md) para a documentação de API completa (phpDocumentor para PHP, JSDoc para os módulos AMD e um style guide KSS navegável para `styles.css`) e `CHANGELOG.md` para o histórico de versões.
 
 ```bash
 # Recompilar AMD após editar amd/src/*.js
