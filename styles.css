@@ -321,11 +321,31 @@ Styleguide 5.2.
   border-radius: 18px;
 }
 
-/* Density */
-.local-a11y-panel--density-compact .local-a11y-option { padding: 8px 10px; }
+/* Density (local_a11y/density admin setting).
+   The original prototype's density only ever changed row padding by 3px
+   (8/10 -> 11/12 -> 14/12) plus a 1px row-gap and hiding descriptions in
+   Compact - real, but subtle enough that admins reported "changing it
+   doesn't seem to do anything" (QA feedback). Widened to also scale icon
+   size, the gap between rows and the label/description font-size, so all
+   3 levels read as clearly different panels, not just a few px of
+   padding. */
+.local-a11y-panel--density-compact .local-a11y-option { padding: 6px 10px; }
 .local-a11y-panel--density-regular .local-a11y-option { padding: 11px 12px; }
-.local-a11y-panel--density-comfortable .local-a11y-option { padding: 14px 12px; }
+.local-a11y-panel--density-comfortable .local-a11y-option { padding: 16px 14px; }
 .local-a11y-panel--density-compact .local-a11y-option__desc { display: none; }
+
+.local-a11y-panel--density-compact .local-a11y-category__body { gap: 0; }
+.local-a11y-panel--density-regular .local-a11y-category__body { gap: 2px; }
+.local-a11y-panel--density-comfortable .local-a11y-category__body { gap: 6px; }
+
+.local-a11y-panel--density-compact .local-a11y-option__icon { width: 26px; height: 26px; border-radius: 7px; }
+.local-a11y-panel--density-regular .local-a11y-option__icon { width: 32px; height: 32px; border-radius: 8px; }
+.local-a11y-panel--density-comfortable .local-a11y-option__icon { width: 38px; height: 38px; border-radius: 10px; }
+
+.local-a11y-panel--density-compact .local-a11y-option__label { font-size: 12.5px; }
+.local-a11y-panel--density-regular .local-a11y-option__label { font-size: 13.5px; }
+.local-a11y-panel--density-comfortable .local-a11y-option__label { font-size: 14.5px; }
+.local-a11y-panel--density-comfortable .local-a11y-option__desc { font-size: 12px; }
 
 /* ===========================================================================
    PANEL — header
@@ -820,24 +840,26 @@ body.a11y-dyslexic-font footer#page-footer, body.a11y-dyslexic-font footer#page-
    .local-a11y-panel already declares its own font-size, which breaks that
    inheritance chain before it reaches any panel descendant. */
 /* Highlights (Titles/Links/Buttons)
-   Admin-configurable via local_a11y/highlightcolor (--a11y-highlight-color,
-   set on :root by renderer.php::render_head_html()). Text colour is never
-   derived from it (only background tint/underline/outline) - forcing a
-   readable text colour against a background tint would need to know
-   whether the admin's chosen colour is light or dark, which a plain hex
-   admin setting can't tell us; leaving the page's own text colour alone
-   sidesteps that contrast risk entirely, on a plugin whose whole point is
-   accessibility. */
+   Each independently admin-configurable (local_a11y/highlighttitlescolor,
+   /highlightlinkscolor, /highlightbuttonscolor - three separate
+   --a11y-highlight-{titles,links,buttons}-color custom properties, set on
+   :root by renderer.php::render_head_html()), not one colour doing triple
+   duty. Text colour is never derived from any of them (only background
+   tint/underline/outline) - forcing a readable text colour against a
+   background tint would need to know whether the admin's chosen colour is
+   light or dark, which a plain hex admin setting can't tell us; leaving
+   the page's own text colour alone sidesteps that contrast risk entirely,
+   on a plugin whose whole point is accessibility. */
 
 /*
-Highlight Titles/Links/Buttons (admin-configurable colour).
+Highlight Titles/Links/Buttons (independently admin-configurable colours).
 
 Styleguide 10.2.
 */
 body.a11y-highlight-titles #page h1:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-titles #page h2:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *) {
-  background: linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--a11y-highlight-color, #f97316) 55%, transparent) 60%) !important;
+  background: linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--a11y-highlight-titles-color, #eab308) 55%, transparent) 60%) !important;
   padding: 0.05em 0.2em !important;
   border-radius: 3px !important;
   box-decoration-break: clone !important;
@@ -847,10 +869,10 @@ body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *) {
 body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-links .navbar a {
   text-decoration: underline !important;
-  text-decoration-color: var(--a11y-highlight-color, #f97316) !important;
+  text-decoration-color: var(--a11y-highlight-links-color, #3b82f6) !important;
   text-decoration-thickness: 2px !important;
   text-underline-offset: 2px !important;
-  background-color: color-mix(in srgb, var(--a11y-highlight-color, #f97316) 16%, transparent) !important;
+  background-color: color-mix(in srgb, var(--a11y-highlight-links-color, #3b82f6) 16%, transparent) !important;
   padding: 0 2px !important;
   border-radius: 2px !important;
   font-weight: 600 !important;
@@ -859,7 +881,7 @@ body.a11y-highlight-links .navbar a {
 body.a11y-highlight-buttons #page button:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-buttons #page .btn:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-buttons #page [role="button"]:not(.local-a11y-root, .local-a11y-root *) {
-  outline: 3px solid var(--a11y-highlight-color, #f97316) !important;
+  outline: 3px solid var(--a11y-highlight-buttons-color, #f97316) !important;
   outline-offset: 2px !important;
   box-shadow: 0 0 0 1px white inset !important;
 }
