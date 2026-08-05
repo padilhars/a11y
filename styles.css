@@ -471,11 +471,22 @@ Panel sections and profile preset cards.
 Styleguide 5.5.
 */
 .local-a11y-panel__section { padding: 6px 20px 4px; }
-.local-a11y-panel__section-heading { padding: 10px 0 8px; display: flex; align-items: center; gap: 10px; }
+/* A <button> (see amd/src/panel.js toggleProfiles) - reset its native
+   button chrome the same way .local-a11y-category__header does, on top of
+   the section heading's own existing layout below. */
+.local-a11y-panel__section-heading {
+  width: 100%; background: transparent; border: 0; cursor: pointer; font-family: inherit;
+  padding: 10px 0 8px; display: flex; align-items: center; gap: 10px; text-align: left;
+}
 .local-a11y-panel__section-heading-icon { color: var(--a11y-text-secondary); display: flex; }
 .local-a11y-panel__section-heading-text { flex: 1; min-width: 0; }
 .local-a11y-panel__section-heading-label { display: block; font-size: 11.5px; font-weight: 600; color: var(--a11y-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
 .local-a11y-panel__section-heading-sublabel { display: block; font-size: 11.5px; color: var(--a11y-text-muted); margin-top: 1px; }
+/* Chevron rotation, same mechanic/markup as .local-a11y-category__chevron
+   (reused class) - just keyed off this heading's own aria-expanded instead
+   of the category header's. */
+.local-a11y-panel__section-heading[aria-expanded="true"] .local-a11y-category__chevron { transform: rotate(0deg); }
+.local-a11y-panel__section-heading[aria-expanded="false"] .local-a11y-category__chevron { transform: rotate(-90deg); }
 
 .local-a11y-profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
 .local-a11y-profile-card {

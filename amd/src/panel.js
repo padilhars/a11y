@@ -145,6 +145,28 @@ const toggleCategory = (header) => {
 };
 
 /**
+ * Expand/collapse the profiles section, same mechanics as toggleCategory()
+ * but scoped to [data-region="profiles-section"]/"profiles-body" instead of
+ * "category"/"category-body" - the profiles section isn't an option
+ * category (no active-option count, no search-time forced-open state, see
+ * filterOptions()), so it gets its own small pair of data-regions rather
+ * than overloading the category ones.
+ *
+ * @param {HTMLElement} header The profiles section header element (holds aria-expanded).
+ * @return {void}
+ */
+const toggleProfiles = (header) => {
+    const expanded = header.getAttribute('aria-expanded') === 'true';
+    const section = header.closest('[data-region="profiles-section"]');
+    const body = section ? section.querySelector('[data-region="profiles-body"]') : null;
+    if (!body) {
+        return;
+    }
+    header.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    body.hidden = expanded;
+};
+
+/**
  * Re-render a single option row (toggle switch or stepper) to match `value`.
  *
  * @param {String} id The option id.
@@ -352,14 +374,12 @@ const registerEventListeners = () => {
         }
         const helpBtn = e.target.closest('[data-action="toggle-help"]');
         if (helpBtn) {
-            // Looked up by data-option-id rather than DOM nesting: toggle
-            // rows nest the help button/block inside their [data-region=
-            // "option"] (safe - that row has no role="button" of its own),
-            // but stepper rows are themselves role="button" containers, so
-            // their help button/block are siblings after the row instead
-            // (nesting a real <button> inside a role="button" div would be
-            // an axe "nested-interactive" violation) - see
-            // option_stepper.mustache.
+            // Looked up by data-option-id rather than DOM nesting (both the
+            // button and its help block carry it, see option_toggle.mustache)
+            // so this doesn't depend on the block always being a descendant
+            // of the button - stepper rows are role="button" containers of
+            // their own, so a help block nested inside one the way toggle
+            // rows do it would be an axe "nested-interactive" violation.
             const optionId = helpBtn.dataset.optionId;
             const block = panel.querySelector(`[data-region="help-block"][data-option-id="${optionId}"]`);
             if (block) {
@@ -372,6 +392,11 @@ const registerEventListeners = () => {
         const categoryHeader = e.target.closest('[data-action="toggle-category"]');
         if (categoryHeader) {
             toggleCategory(categoryHeader);
+            return;
+        }
+        const profilesHeader = e.target.closest('[data-action="toggle-profiles"]');
+        if (profilesHeader) {
+            toggleProfiles(profilesHeader);
             return;
         }
         const clearSearch = e.target.closest('[data-action="clear-search"]');

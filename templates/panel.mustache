@@ -17,10 +17,10 @@
 {{!
     @template local_a11y/panel
 
-    The accessibility panel: header, search, profile presets, collapsible
-    option categories and footer. Rendered hidden (closed); amd/src/panel.js
-    handles open/close, search filtering, category collapse and applying
-    the user's saved settings.
+    The accessibility panel: header, search, collapsible profile presets
+    section, collapsible option categories and footer. Rendered hidden
+    (closed); amd/src/panel.js handles open/close, search filtering,
+    section/category collapse and applying the user's saved settings.
 
     @description The accessibility panel: header, search, profiles, option categories, footer.
     @package    Moodle
@@ -107,14 +107,17 @@
 
         {{#showprofiles}}
         <section class="local-a11y-panel__section" data-region="profiles-section">
-            <div class="local-a11y-panel__section-heading">
+            <button type="button" class="local-a11y-panel__section-heading" data-action="toggle-profiles" aria-expanded="true">
                 <span class="local-a11y-panel__section-heading-icon">{{{sparklesiconsvg}}}</span>
                 <span class="local-a11y-panel__section-heading-text">
                     <span class="local-a11y-panel__section-heading-label">{{profilestitle}}</span>
                     <span class="local-a11y-panel__section-heading-sublabel">{{profilessubtitle}}</span>
                 </span>
-            </div>
-            <div class="local-a11y-profile-grid">
+                <span class="local-a11y-category__chevron" data-region="profiles-chevron">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </span>
+            </button>
+            <div class="local-a11y-profile-grid" data-region="profiles-body">
                 {{#profiles}}
                 {{> local_a11y/profile_card}}
                 {{/profiles}}
