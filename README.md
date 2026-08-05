@@ -63,7 +63,9 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 ### Botão flutuante + painel
 
 - Botão circular (ou quadrado) fixo, canto configurável, com contador de opções ativas.
-- Painel com busca, perfis de acessibilidade, categorias colapsáveis e rodapé com atalho de teclado.
+- Painel com busca, seção de perfis de acessibilidade e categorias de opções — todas colapsáveis individualmente, para não virar uma lista extensa de rolagem.
+- Em telas de desktop, o formato do painel é configurável (popover ancorado no botão, gaveta lateral ou modal centralizado); em celulares e tablets pequenos, o painel sempre abre no estilo gaveta, independente dessa configuração — não há espaço de tela suficiente para um popover ou modal flutuante funcionar bem.
+- 6 das opções com mais nuances (Comandos por Voz, Navegação por Face, Leitor de Tela, Teclado Virtual, Guia de Leitura, Máscara de Leitura) têm um botão de ajuda "?" com instruções de uso, além da descrição curta que já acompanha cada opção.
 - **Atalho global `Alt + A`** abre/fecha o painel de qualquer página.
 - Focus trap (WCAG 2.2), `Esc` fecha e devolve o foco ao botão, `aria-live` no contador de opções ativas.
 
@@ -89,11 +91,12 @@ Baixa Visão, Daltonismo, Dislexia, TDAH/Foco, Idoso/Sênior, Epilepsia, Defici�
 
 ## Configuração (administrador)
 
-**Administração do site → Plugins → Plugins locais → Acessibilidade (A11y)**:
+**Administração do site → Plugins → Plugins locais → Acessibilidade (A11y)**, organizada em 4 seções — todas com descrição em cada campo, explicando o que ele faz:
 
-- Ativar/desativar o plugin globalmente; mostrar (ou não) para visitantes; padrões de URL a excluir.
-- Quais das 24 opções ficam disponíveis para os usuários.
-- Posição/ícone/forma do botão flutuante; formato do painel (popover/gaveta/modal); densidade; mostrar perfis; texto do rodapé do painel; cor de acento.
+- **Geral** — ativar/desativar o plugin globalmente; mostrar (ou não) para visitantes; padrões de URL a excluir; quais das 24 opções ficam disponíveis para os usuários.
+- **Botão Flutuante (FAB)** — posição na tela, ícone e forma (círculo/quadrado).
+- **Painel** — formato em telas de desktop (popover/gaveta/modal — em celulares e tablets pequenos o painel sempre abre no estilo gaveta, veja acima); densidade (compacta/regular/confortável); mostrar ou não a seção de perfis; texto do rodapé do painel.
+- **Cores** — 5 cores independentes: acento do botão/painel, e as cores de "Destacar Títulos", "Destacar Links", "Destacar Botões" e "Guia de Leitura" (cada uma configurável separadamente, para não depender de uma única cor cumprindo vários papéis).
 
 ## Privacidade
 
