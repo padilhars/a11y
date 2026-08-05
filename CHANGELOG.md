@@ -17,7 +17,7 @@ Initial release.
 - Locally-packaged Atkinson Hyperlegible and Lexend web fonts (no external CDN dependency).
 - SVG colour-blindness simulation filters (protanopia/deuteranopia/tritanopia).
 - Site administration settings: enable switch, guest visibility, excluded-page patterns, per-option enable list, FAB position/icon/shape, panel format/density, accent colour.
-- Capabilities `local/a11y:view` and `local/a11y:configure`.
+- Capability `local/a11y:view`.
 - Privacy API provider (user preference only, no database tables).
 - PHPUnit tests for the settings manager and privacy provider; Behat feature file; axe-core accessibility regression scan (0 critical/serious violations).
 

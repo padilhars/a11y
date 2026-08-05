@@ -55,7 +55,7 @@ class renderer extends \plugin_renderer_base {
      * This duplicates a small slice of the class-name logic in
      * amd/src/effects.js by necessity: this has to run synchronously before
      * the AMD loader is even available, so it cannot import that module.
-     * Keep the two in sync (see CLAUDE.md).
+     * Keep the two in sync when either one changes.
      *
      * @return string A <script>...</script> tag, ready for raw (unescaped) output.
      */

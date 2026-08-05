@@ -9,13 +9,26 @@ Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (F
 
 ![Painel aberto mostrando os perfis de acessibilidade](_verification/m2/02-panel-open.png)
 
+## Autoria
+
+Desenvolvido por dois servidores públicos federais da Universidade Federal de Pelotas (UFPel):
+
+- **Rodrigo Padilha Silveira** — <padilhars@gmail.com>
+- **Jerônimo Medina Madruga** — <jeronimo.madruga@gmail.com>
+
+## Motivação
+
+O Moodle não oferece, nativamente, um conjunto abrangente e granular de ferramentas de acessibilidade que o próprio usuário final possa ativar e ajustar em qualquer página, independentemente do tema instalado. Como instituição pública federal, a UFPel tem a responsabilidade — reforçada pela Lei Brasileira de Inclusão (Lei nº 13.146/2015) e pelo eMAG (Modelo de Acessibilidade em Governo Eletrônico) — de garantir que seu ambiente virtual de aprendizagem seja utilizável pela maior parcela possível da comunidade acadêmica, incluindo pessoas com deficiência visual, auditiva, motora e cognitiva.
+
+O `local_a11y` nasceu para preencher essa lacuna: uma camada de personalização de acessibilidade nativa do Moodle, sob controle do próprio usuário, sem depender de extensões de navegador de terceiros ou de temas customizados que exigiriam manutenção contínua e nem sempre cobririam todas as páginas e plugins instalados.
+
 ## Por que usar
 
 - **Sem dependências externas em tempo de execução** — nenhum script, fonte ou API de terceiro é carregado do navegador do usuário final (as duas exceções — CDN do MediaPipe para Navegação por Face e o ícone ONU — estão documentadas e a primeira passa por verificação de integridade SHA-256 antes de ser executada).
-- **23 opções reais, não uma lista de marketing** — cada uma foi implementada, testada em auditoria de segurança e código morto, e documentada (PHPDoc/JSDoc/KSS completos, ver [`docs/`](docs/README.md)).
+- **24 opções reais, não uma lista de marketing** — cada uma foi implementada, testada em auditoria de segurança e código morto, e documentada (PHPDoc/JSDoc/KSS completos, ver [`docs/`](docs/README.md)).
 - **Zero FOUC**: as preferências do usuário são aplicadas antes da primeira pintura da página, via script inline síncrono.
 - **Privacidade real**: nenhuma tabela própria, nenhum dado compartilhado com terceiros — só a Privacy API padrão do Moodle.
-- **Feito para produção**: controle de acesso via capabilities do Moodle (`local/a11y:view`), Hooks API (não callbacks legados), auditoria de segurança e código morto registrada em `DECISIONS.md`.
+- **Feito para produção**: controle de acesso via capabilities do Moodle (`local/a11y:view`), Hooks API (não callbacks legados), auditado quanto a segurança e código morto antes de cada publicação.
 
 ## Capturas de tela
 
@@ -54,7 +67,7 @@ Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (F
 - **Atalho global `Alt + A`** abre/fecha o painel de qualquer página.
 - Focus trap (WCAG 2.2), `Esc` fecha e devolve o foco ao botão, `aria-live` no contador de opções ativas.
 
-### As 23 opções (5 categorias)
+### As 24 opções (5 categorias)
 
 | Categoria | Opções |
 |---|---|
@@ -62,7 +75,7 @@ Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (F
 | Cores e Contraste | Contraste (4 níveis), Inverter Cores, Mudar Cores (filtros de daltonismo via SVG), Saturação |
 | Mídia e Animação | Ocultar Imagens, Pausar Animações, Dicas de Ferramentas |
 | Foco e Navegação | Guia de Leitura, Máscara de Leitura, Cursor (3 níveis), Modo Foco |
-| Recursos Avançados | Leitor de Tela (texto-para-fala), Teclado Virtual, Comandos por Voz |
+| Recursos Avançados | Leitor de Tela (texto-para-fala), Teclado Virtual, Comandos por Voz, Navegação por Face |
 
 ### Os 9 perfis
 
@@ -79,7 +92,7 @@ Baixa Visão, Daltonismo, Dislexia, TDAH/Foco, Idoso/Sênior, Epilepsia, Defici�
 **Administração do site → Plugins → Plugins locais → Acessibilidade (A11y)**:
 
 - Ativar/desativar o plugin globalmente; mostrar (ou não) para visitantes; padrões de URL a excluir.
-- Quais das 23 opções ficam disponíveis para os usuários.
+- Quais das 24 opções ficam disponíveis para os usuários.
 - Posição/ícone/forma do botão flutuante; formato do painel (popover/gaveta/modal); densidade; mostrar perfis; texto do rodapé do painel; cor de acento.
 
 ## Privacidade
@@ -88,7 +101,7 @@ O plugin implementa a Privacy API do Moodle (`classes/privacy/provider.php`): a 
 
 ## Desenvolvimento
 
-Ver `CLAUDE.md` para convenções e comandos, `PLAN.md`/`PROGRESS.md` para o histórico de marcos, `DECISIONS.md` para decisões de arquitetura, `ENVIRONMENT.md` para reproduzir o ambiente de desenvolvimento/testes, e [`docs/`](docs/README.md) para a documentação de API gerada (phpDocumentor, JSDoc e um style guide KSS navegável).
+Ver [`docs/`](docs/README.md) para a documentação de API completa (phpDocumentor para PHP, JSDoc para os módulos AMD e um style guide KSS navegável para `styles.css`) e `CHANGELOG.md` para o histórico de versões.
 
 ```bash
 # Recompilar AMD após editar amd/src/*.js
