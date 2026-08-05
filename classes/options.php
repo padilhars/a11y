@@ -67,8 +67,7 @@ class options {
             ['id' => 'invertColors', 'cat' => 'color', 'kind' => 'toggle', 'icon' => 'invertColors',
                 'labelkey' => 'opt_invertcolors', 'desckey' => null],
             ['id' => 'colorChange', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'pipette',
-                'labelkey' => 'opt_colorchange', 'desckey' => 'opt_colorchange_desc', 'levelprefix' => 'colorchangelevel_',
-                'hashelp' => true],
+                'labelkey' => 'opt_colorchange', 'desckey' => 'opt_colorchange_desc', 'levelprefix' => 'colorchangelevel_'],
             ['id' => 'saturation', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'saturation',
                 'labelkey' => 'opt_saturation', 'desckey' => null, 'levelprefix' => 'saturationlevel_'],
 

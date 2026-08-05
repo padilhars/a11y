@@ -37,9 +37,6 @@
     * levelprefix - lang string prefix used by JS to relabel on cycle
     * currentlabel - text label for the current level
     * levels - array of {index, active}
-    * hashelp - whether this option has an expandable help block (optional)
-    * helplabel - help toggle button's accessible label (required if hashelp)
-    * helphtml - raw help block HTML (required if hashelp)
 
     Example context (json):
     {
@@ -56,37 +53,19 @@
         ]
     }
 }}
-{{! The option row itself is role="button"/tabindex="0" (the whole row
-    cycles the stepper on click/Enter/Space), so a help toggle can't be
-    nested inside it like option_toggle.mustache's is - that would be a
-    div[role=button] wrapping a real <button>, an axe/WCAG
-    "nested-interactive" violation. Instead, when hashelp is set, the help
-    button/block render as siblings right after the row, both inside this
-    shared wrapper; amd/src/panel.js looks the block up by data-option-id
-    rather than DOM nesting, so it doesn't matter that they're not
-    descendants of [data-region="option"] here. With no hashelp (the common
-    case) this wrapper has a single child and is visually a no-op. }}
-<div class="local-a11y-option-group">
-    <div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}" data-region="option" data-option-id="{{id}}" data-kind="stepper"
-        data-max="{{max}}" data-levelprefix="{{levelprefix}}" data-value="{{currentvalue}}" role="button" tabindex="0">
-        <span class="local-a11y-option__icon">{{{iconsvg}}}</span>
-        <span class="local-a11y-option__text">
-            <span class="local-a11y-option__label">{{label}}</span>
-            {{#desc}}<span class="local-a11y-option__desc">{{desc}}</span>{{/desc}}
+<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}" data-region="option" data-option-id="{{id}}" data-kind="stepper"
+    data-max="{{max}}" data-levelprefix="{{levelprefix}}" data-value="{{currentvalue}}" role="button" tabindex="0">
+    <span class="local-a11y-option__icon">{{{iconsvg}}}</span>
+    <span class="local-a11y-option__text">
+        <span class="local-a11y-option__label">{{label}}</span>
+        {{#desc}}<span class="local-a11y-option__desc">{{desc}}</span>{{/desc}}
+    </span>
+    <span class="local-a11y-stepper">
+        <span class="local-a11y-stepper__label" data-region="stepper-label">{{currentlabel}}</span>
+        <span class="local-a11y-stepper__dots" data-region="stepper-dots">
+            {{#levels}}
+            <span class="local-a11y-stepper__dot{{#active}} local-a11y-stepper__dot--active{{/active}}" data-index="{{index}}"></span>
+            {{/levels}}
         </span>
-        <span class="local-a11y-stepper">
-            <span class="local-a11y-stepper__label" data-region="stepper-label">{{currentlabel}}</span>
-            <span class="local-a11y-stepper__dots" data-region="stepper-dots">
-                {{#levels}}
-                <span class="local-a11y-stepper__dot{{#active}} local-a11y-stepper__dot--active{{/active}}" data-index="{{index}}"></span>
-                {{/levels}}
-            </span>
-        </span>
-    </div>
-    {{#hashelp}}
-    <button type="button" class="local-a11y-help-btn local-a11y-help-btn--standalone" data-action="toggle-help" data-option-id="{{id}}" aria-expanded="false" aria-label="{{helplabel}}">{{helplabel}}</button>
-    <div class="local-a11y-help-block" data-region="help-block" data-option-id="{{id}}" hidden>
-        {{{helphtml}}}
-    </div>
-    {{/hashelp}}
+    </span>
 </div>

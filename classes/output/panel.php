@@ -221,7 +221,6 @@ class panel implements renderable, templatable {
             'faceNavigation' => ['prefix' => 'help_fn_', 'count' => 5, 'tag' => 'ol'],
             'screenReader' => ['prefix' => 'help_sr_', 'count' => 4, 'tag' => 'ol'],
             'virtualKeyboard' => ['prefix' => 'help_vk_', 'count' => 4, 'tag' => 'ol'],
-            'colorChange' => ['prefix' => 'help_cc_', 'count' => 4, 'tag' => 'ul'],
             'readingGuide' => ['prefix' => 'help_rg_', 'count' => 3, 'tag' => 'ul'],
             'readingMask' => ['prefix' => 'help_rm_', 'count' => 3, 'tag' => 'ul'],
         ];
