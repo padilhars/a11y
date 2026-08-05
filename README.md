@@ -1,11 +1,11 @@
-# local_a11y — A11y for Moodle
+# A11Y for Moodle - Plugin de Acessibilidade para Moodle
 
 [![Licença: GPL v3+](https://img.shields.io/badge/licença-GPL%20v3%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![Moodle](https://img.shields.io/badge/Moodle-5.0%2B-orange.svg)](https://moodle.org)
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4.svg)](https://www.php.net)
 [![Documentação](https://img.shields.io/badge/docs-phpDocumentor%20%7C%20JSDoc%20%7C%20KSS-6f42c1.svg)](docs/README.md)
 
-Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (FAB) e um painel com **23 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. Réplica fiel do protótipo criado no Claude Design (`_design-reference/`, mantido no repositório apenas como referência somente-leitura, nunca enviado para produção), com uma opção adicional além do protótipo (Alinhamento do Texto — ver DECISIONS.md D30).
+Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (FAB) e um painel com **23 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
 
 ![Painel aberto mostrando os perfis de acessibilidade](_verification/m2/02-panel-open.png)
 
