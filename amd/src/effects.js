@@ -14,11 +14,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Applies a settings object as `a11y-*` classes on <body>, matching
- * _design-reference/app.jsx's own effect exactly (same class names, same
- * excluded keys). Mirrors the boolean/stepper class maps embedded by
- * classes/output/renderer.php::render_nofouc_script() - keep both in sync,
- * see CLAUDE.md.
+ * Applies a settings object as `a11y-*` classes on <body>. Mirrors the
+ * boolean/stepper class maps embedded by
+ * classes/output/renderer.php::render_nofouc_script() - keep both in sync
+ * when either one changes.
  *
  * @module     local_a11y/effects
  * @description Applies a settings object as a11y-* classes on <body>.
