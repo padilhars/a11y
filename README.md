@@ -20,7 +20,7 @@ Desenvolvido por dois servidores públicos federais da Universidade Federal de P
 
 O Moodle não oferece, nativamente, um conjunto abrangente e granular de ferramentas de acessibilidade que o próprio usuário final possa ativar e ajustar em qualquer página, independentemente do tema instalado. Como instituição pública federal, a UFPel tem a responsabilidade — reforçada pela Lei Brasileira de Inclusão (Lei nº 13.146/2015) e pelo eMAG (Modelo de Acessibilidade em Governo Eletrônico) — de garantir que seu ambiente virtual de aprendizagem seja utilizável pela maior parcela possível da comunidade acadêmica, incluindo pessoas com deficiência visual, auditiva, motora e cognitiva.
 
-O `local_a11y` nasceu para preencher essa lacuna: uma camada de personalização de acessibilidade nativa do Moodle, sob controle do próprio usuário, sem depender de extensões de navegador de terceiros ou de temas customizados que exigiriam manutenção contínua e nem sempre cobririam todas as páginas e plugins instalados.
+Este plugin nasceu para preencher essa lacuna: uma camada de personalização de acessibilidade nativa do Moodle, sob controle do próprio usuário, sem depender de extensões de navegador de terceiros ou de temas customizados que exigiriam manutenção contínua e nem sempre cobririam todas as páginas e plugins instalados.
 
 ## Por que usar
 
