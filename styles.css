@@ -306,7 +306,7 @@ Styleguide 5.2.
 /* Drawer format */
 .local-a11y-panel--drawer {
   top: 0; right: 0; bottom: 0;
-  width: 400px;
+  width: min(400px, 100vw);
   max-height: 100vh;
   border-radius: 0;
   border-top: 0; border-right: 0; border-bottom: 0;
@@ -319,6 +319,38 @@ Styleguide 5.2.
   width: min(520px, calc(100vw - 32px));
   max-height: calc(100vh - 64px);
   border-radius: 18px;
+}
+
+/*
+Mobile: the panel is always drawer-style, regardless of the admin-configured
+local_a11y/panelformat (popover/drawer/modal is a desktop-only choice -
+below Moodle Boost's own nav-collapse breakpoint there isn't room to float
+a centered/anchored panel). !important is needed because this has to beat
+the more specific popover position-variant selectors above
+(.local-a11y-panel--popover.local-a11y-panel--bottom-right etc.), which
+would otherwise outrank a single-class rule regardless of source order;
+amd/src/panel.js mirrors this same breakpoint so the open/close behaviour
+(overlay, FAB hiding) matches the visuals here even when the configured
+format is popover or modal.
+
+Styleguide 5.2.1.
+*/
+@media (max-width: 767.98px) {
+  .local-a11y-panel--popover,
+  .local-a11y-panel--modal {
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: auto !important;
+    width: min(400px, 100vw) !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    border-top: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 0 !important;
+    transform: none !important;
+    transform-origin: initial !important;
+  }
 }
 
 /* Density (local_a11y/density admin setting).
