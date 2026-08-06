@@ -110,7 +110,7 @@ Uma linha de opção de acessibilidade booleana (controle switch).
 
 **Arquivo:** `templates/panel.mustache`
 
-O painel de acessibilidade: cabeçalho, busca, perfis predefinidos, categorias de opções colapsáveis e rodapé. Renderizado oculto (fechado); `amd/src/panel.js` cuida de abrir/fechar, filtro de busca, colapso de categoria e aplicação das configurações salvas do usuário.
+O painel de acessibilidade: cabeçalho, busca, seção de perfis predefinidos colapsável, categorias de opções colapsáveis e rodapé. Renderizado oculto (fechado); `amd/src/panel.js` cuida de abrir/fechar, filtro de busca, colapso de seção/categoria e aplicação das configurações salvas do usuário.
 
 **Variáveis de contexto:** ver `classes/output/panel.php` (contexto complexo, gerado programaticamente — inclui título, subtítulo, ícones, lista de perfis, lista de categorias/opções, classes de formato/posição/densidade e cor de acento).
 
