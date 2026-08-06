@@ -888,12 +888,16 @@ body.a11y-dyslexic-font footer#page-footer, body.a11y-dyslexic-font footer#page-
    /highlightlinkscolor, /highlightbuttonscolor - three separate
    --a11y-highlight-{titles,links,buttons}-color custom properties, set on
    :root by renderer.php::render_head_html()), not one colour doing triple
-   duty. Text colour is never derived from any of them (only background
-   tint/underline/outline) - forcing a readable text colour against a
+   duty. Titles/Buttons never derive text colour from theirs (only
+   background tint/outline) - forcing a readable text colour against a
    background tint would need to know whether the admin's chosen colour is
-   light or dark, which a plain hex admin setting can't tell us; leaving
-   the page's own text colour alone sidesteps that contrast risk entirely,
-   on a plugin whose whole point is accessibility. */
+   light or dark, which a plain hex admin setting can't tell us. Links is
+   the one exception (explicit product decision): its colour *is* the link
+   text colour too, same as the underline - there's no background tint
+   sitting behind the text in the constant (non-hover) state here, so the
+   light/dark contrast risk above doesn't apply the same way; only the
+   :hover/:focus-visible background tint could still clash with it on an
+   unlucky admin colour choice. */
 
 /*
 Highlight Titles/Links/Buttons (independently admin-configurable colours).
@@ -912,19 +916,18 @@ body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *) {
 
 body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-links .navbar a {
+  color: var(--a11y-highlight-links-color, #3b82f6) !important;
   text-decoration: underline !important;
   text-decoration-color: var(--a11y-highlight-links-color, #3b82f6) !important;
   text-decoration-thickness: 1.5px !important;
   text-underline-offset: 2px !important;
-  font-weight: 700 !important;
-  padding: 0 2px !important;
-  border-radius: 2px !important;
+  font-weight: 500 !important;
   transition: background-color 120ms ease !important;
 }
 /* Background tint only on interaction (hover, or keyboard focus so
    Tab-only users get the same affordance mouse users do) - the constant
-   state is just the thin coloured underline + bold weight, not an always-on
-   solid box. */
+   state is just the thin coloured underline + coloured text, not an
+   always-on solid box. */
 body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *):hover,
 body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *):focus-visible,
 body.a11y-highlight-links .navbar a:hover,
