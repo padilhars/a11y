@@ -908,7 +908,6 @@ body.a11y-highlight-titles #page h1:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-titles #page h2:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *) {
   background: linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--a11y-highlight-titles-color, #eab308) 55%, transparent) 60%) !important;
-  padding: 0.05em 0.2em !important;
   border-radius: 3px !important;
   box-decoration-break: clone !important;
   -webkit-box-decoration-break: clone !important;
