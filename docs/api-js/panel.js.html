@@ -50,6 +50,7 @@
  * @module     local_a11y/panel
  * @description Panel DOM ownership: open/close, category collapse, option row rendering.
  * @author     Rodrigo Padilha Silveira &lt;padilhars@gmail.com>
+ * @author     Jerônimo Medina Madruga &lt;jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @version    0.1.0
@@ -65,11 +66,33 @@ let lastFocused = null;
 let cb = {};
 
 /**
+ * Below this breakpoint the panel is always drawer-style, regardless of the
+ * admin-configured local_a11y/panelformat - mirrors the CSS override in
+ * styles.css (Styleguide 5.2.1), which is what actually forces the drawer
+ * geometry; this is only here so the open/close *behaviour* (overlay, FAB
+ * hiding) matches those visuals even when the configured format is popover
+ * or modal. Moodle Boost's own nav-collapse breakpoint, since below that
+ * there isn't room to float a centered/anchored panel either way.
+ *
+ * @type {string}
+ */
+const MOBILE_BREAKPOINT_QUERY = '(max-width: 767.98px)';
+
+/**
  * Whether the panel is currently open (visible).
  *
  * @return {boolean} True if the panel element exists and isn't hidden.
  */
 const isOpen = () => panel &amp;&amp; !panel.hidden;
+
+/**
+ * Whether the panel is forced into drawer-style behaviour by the mobile
+ * breakpoint (see MOBILE_BREAKPOINT_QUERY), regardless of which
+ * local_a11y/panelformat class is actually applied to the panel element.
+ *
+ * @return {boolean} True if the viewport is at/below the mobile breakpoint.
+ */
+const isMobileDrawer = () => window.matchMedia(MOBILE_BREAKPOINT_QUERY).matches;
 
 /**
  * Open the panel: unhide it, flip ARIA state, move focus in.
@@ -84,13 +107,14 @@ const open = () => {
     panel.hidden = false;
     panel.setAttribute('aria-hidden', 'false');
     fab.setAttribute('aria-expanded', 'true');
-    // In drawer format the open panel takes the FAB's place: hide the FAB
-    // while the drawer is open (close() restores it).
-    if (panel.classList.contains('local-a11y-panel--drawer')) {
+    // In drawer format - or any format forced into drawer-style layout by
+    // the mobile breakpoint, see isMobileDrawer() - the open panel takes
+    // the FAB's place: hide the FAB while it's open (close() restores it).
+    const isDrawerLike = panel.classList.contains('local-a11y-panel--drawer') || isMobileDrawer();
+    if (isDrawerLike) {
         fab.classList.add('local-a11y-fab--hidden');
     }
-    if (overlay &amp;&amp; (panel.classList.contains('local-a11y-panel--modal')
-            || panel.classList.contains('local-a11y-panel--drawer'))) {
+    if (overlay &amp;&amp; (panel.classList.contains('local-a11y-panel--modal') || isDrawerLike)) {
         overlay.hidden = false;
     }
     const closeBtn = panel.querySelector('[data-action="close"]');
@@ -142,6 +166,28 @@ const toggleCategory = (header) => {
     const expanded = header.getAttribute('aria-expanded') === 'true';
     const category = header.closest('[data-region="category"]');
     const body = category ? category.querySelector('[data-region="category-body"]') : null;
+    if (!body) {
+        return;
+    }
+    header.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    body.hidden = expanded;
+};
+
+/**
+ * Expand/collapse the profiles section, same mechanics as toggleCategory()
+ * but scoped to [data-region="profiles-section"]/"profiles-body" instead of
+ * "category"/"category-body" - the profiles section isn't an option
+ * category (no active-option count, no search-time forced-open state, see
+ * filterOptions()), so it gets its own small pair of data-regions rather
+ * than overloading the category ones.
+ *
+ * @param {HTMLElement} header The profiles section header element (holds aria-expanded).
+ * @return {void}
+ */
+const toggleProfiles = (header) => {
+    const expanded = header.getAttribute('aria-expanded') === 'true';
+    const section = header.closest('[data-region="profiles-section"]');
+    const body = section ? section.querySelector('[data-region="profiles-body"]') : null;
     if (!body) {
         return;
     }
@@ -357,8 +403,14 @@ const registerEventListeners = () => {
         }
         const helpBtn = e.target.closest('[data-action="toggle-help"]');
         if (helpBtn) {
-            const row = helpBtn.closest('[data-region="option"]');
-            const block = row ? row.querySelector('[data-region="help-block"]') : null;
+            // Looked up by data-option-id rather than DOM nesting (both the
+            // button and its help block carry it, see option_toggle.mustache)
+            // so this doesn't depend on the block always being a descendant
+            // of the button - stepper rows are role="button" containers of
+            // their own, so a help block nested inside one the way toggle
+            // rows do it would be an axe "nested-interactive" violation.
+            const optionId = helpBtn.dataset.optionId;
+            const block = panel.querySelector(`[data-region="help-block"][data-option-id="${optionId}"]`);
             if (block) {
                 const wasHidden = block.hidden;
                 block.hidden = !wasHidden;
@@ -369,6 +421,11 @@ const registerEventListeners = () => {
         const categoryHeader = e.target.closest('[data-action="toggle-category"]');
         if (categoryHeader) {
             toggleCategory(categoryHeader);
+            return;
+        }
+        const profilesHeader = e.target.closest('[data-action="toggle-profiles"]');
+        if (profilesHeader) {
+            toggleProfiles(profilesHeader);
             return;
         }
         const clearSearch = e.target.closest('[data-action="clear-search"]');
@@ -518,7 +575,7 @@ export default {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Aug 05 2026 10:26:57 GMT-0300 (Brasilia Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Wed Aug 05 2026 20:40:46 GMT-0300 (Brasilia Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

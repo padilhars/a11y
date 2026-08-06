@@ -36,6 +36,11 @@ Search.appendIndex(
             "summary": "Reads\u0020the\u0020FAB\/panel\u0020appearance\u0020admin\u0020settings\u0020with\u0020defaults\u0020applied.",
             "url": "classes/local-a11y-config.html#method_get_appearance"
         },                {
+            "fqsen": "\\local_a11y\\config\u003A\u003Avalid_hex_color\u0028\u0029",
+            "name": "valid_hex_color",
+            "summary": "Security\u0020audit\u0020finding\u003A\u0020unlike\u0020the\u00204\u0020page\u002Deffect\u0020colours\u0020\u0028re\u002Dvalidated\nin\u0020classes\/output\/renderer.php\u003A\u003Arender_effect_color_vars\u0028\u0029\u0020before\ngoing\u0020into\u0020raw\u0020HTML\u0029,\u0020\u0027accent\u0027\u0020went\u0020from\u0020admin_setting_configcolourpicker\nstraight\u0020into\u0020templates\/fab.mustache\u0020and\u0020panel.mustache\u0027s\n\u0060style\u003D\u0022\u002D\u002Dlocal\u002Da11y\u002Daccent\u003A\u0020\u007B\u007Baccent\u007D\u007D\u003B\u0022\u0060\u0020with\u0020no\u0020format\u0020check\u0020of\u0020its\nown\u0020\u002D\u0020Mustache\u0027s\u0020default\u0020HTML\u002Descaping\u0020stops\u0020it\u0020from\u0020breaking\u0020out\u0020of\nthe\u0020style\u0020attribute,\u0020but\u0020a\u0020malformed\u0020value\u0020could\u0020still\u0020smuggle\u0020extra\n\u0060property\u003A\u0020value\u003B\u0060\u0020declarations\u0020onto\u0020that\u0020one\u0020element.\u0020Site\u002Dadmin\u002Donly\ninput\u0020\u0028same\u0020trust\u0020tier\u0020as\u0020the\u0020setting\u0020itself\u0029,\u0020so\u0020low\u0020severity,\u0020but\ninconsistent\u0020with\u0020the\u0020other\u00204\u0020\u002D\u0020validated\u0020here\u0020too\u0020now,\u0020for\u0020every\ncaller\u0020of\u0020get_appearance\u0028\u0029\u0020at\u0020once.",
+            "url": "classes/local-a11y-config.html#method_valid_hex_color"
+        },                {
             "fqsen": "\\local_a11y\\config\u003A\u003Aget_effect_colors\u0028\u0029",
             "name": "get_effect_colors",
             "summary": "Colours\u0020for\u0020the\u0020page\u002Deffect\u0020options\u0020that\u0020don\u0027t\u0020have\u0020a\u0020fixed\u0020one\n\u0028\u002D\u002Dlocal\u002Da11y\u002Daccent\u0020is\u0020FAB\/panel\u002Donly,\u0020see\u0020get_appearance\u0028\u0029\u0020\u002D\nthese\u0020apply\u0020to\u0020page\u0020content\u0020itself\u0029\u003A\u0020\u0022Destacar\u0020T\u00EDtulos\u0022,\u0020\u0022Destacar\nLinks\u0022,\u0020\u0022Destacar\u0020Bot\u00F5es\u0022\u0020\u0028each\u0020independently\u0020configurable,\u0020not\u0020one\nshared\u0020colour\u0029\u0020and\u0020\u0022Guia\u0020de\u0020Leitura\u0022.",
@@ -198,7 +203,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\local_a11y\\output\\panel\u003A\u003Abuild_help_html\u0028\u0029",
             "name": "build_help_html",
-            "summary": "Build\u0020the\u0020help\u0020block\u0020HTML\u0020for\u0020options\u0020that\u0020declare\u0020hashelp.",
+            "summary": "Build\u0020the\u0020help\u0020block\u0020HTML\u0020for\u0020options\u0020that\u0020declare\u0020hashelp.\u0020Content\u0020is\ncomposed\u0020from\u0020lang\u0020strings\u0020\u0028one\u0020\u0027\u003Cprefix\u003Eintro\u0027\u0020string\u0020plus\u0020a\n\u0027\u003Cprefix\u003EN\u0027\u0020string\u0020per\u0020list\u0020item\u0029\u0020so\u0020it\u0020stays\u0020translatable\u003B\u0020\u0027ol\u0027\u0020is\nused\u0020for\u0020options\u0020that\u0020describe\u0020a\u0020sequence\u0020of\u0020steps\u0020to\u0020follow,\n\u0027ul\u0027\u0020for\u0020options\u0020that\u0020just\u0020describe\u0020what\u0020happens\/what\u0020the\u0020levels\u0020mean.",
             "url": "classes/local-a11y-output-panel.html#method_build_help_html"
         },                {
             "fqsen": "\\local_a11y\\output\\renderer",

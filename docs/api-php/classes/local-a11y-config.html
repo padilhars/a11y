@@ -135,7 +135,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">34</span>
+    <span class="phpdocumentor-element-found-in__line">35</span>
 
     </aside>
 
@@ -174,6 +174,11 @@ minimal).</p>
             </dt>
                             <dd class="phpdocumentor-tag-list__definition">
                                                                                                             <section class="phpdocumentor-description"><p>Rodrigo Padilha Silveira <a href="mailto:padilhars@gmail.com">padilhars@gmail.com</a></p>
+</section>
+
+                                    </dd>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Jerônimo Medina Madruga <a href="mailto:jeronimo.madruga@gmail.com">jeronimo.madruga@gmail.com</a></p>
 </section>
 
                                     </dd>
@@ -308,6 +313,23 @@ shared colour) and &quot;Guia de Leitura&quot;.</dd>
 </dt>
 <dd>Whether the plugin should be shown to not-logged-in/guest users.</dd>
 
+            <dt class="phpdocumentor-table-of-contents__entry -method -private">
+    <a class="" href="classes/local-a11y-config.html#method_valid_hex_color">valid_hex_color()</a>
+    <span>
+                                &nbsp;: string    </span>
+</dt>
+<dd>Security audit finding: unlike the 4 page-effect colours (re-validated
+in classes/output/renderer.php::render_effect_color_vars() before
+going into raw HTML), &#039;accent&#039; went from admin_setting_configcolourpicker
+straight into templates/fab.mustache and panel.mustache&#039;s
+`style=&quot;--local-a11y-accent: {{accent}};&quot;` with no format check of its
+own - Mustache&#039;s default HTML-escaping stops it from breaking out of
+the style attribute, but a malformed value could still smuggle extra
+`property: value;` declarations onto that one element. Site-admin-only
+input (same trust tier as the setting itself), so low severity, but
+inconsistent with the other 4 - validated here too now, for every
+caller of get_appearance() at once.</dd>
+
     </dl>
 
 
@@ -336,7 +358,7 @@ shared colour) and &quot;Guia de Leitura&quot;.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">62</span>
+    <span class="phpdocumentor-element-found-in__line">63</span>
 
     </aside>
 
@@ -380,7 +402,7 @@ show_for_guests(), logged-in users by the local/a11y:view capability.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">90</span>
+    <span class="phpdocumentor-element-found-in__line">91</span>
 
     </aside>
 
@@ -423,7 +445,7 @@ show_for_guests(), logged-in users by the local/a11y:view capability.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">154</span>
+    <span class="phpdocumentor-element-found-in__line">176</span>
 
     </aside>
 
@@ -466,7 +488,7 @@ show_for_guests(), logged-in users by the local/a11y:view capability.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">79</span>
+    <span class="phpdocumentor-element-found-in__line">80</span>
 
     </aside>
 
@@ -509,7 +531,7 @@ show_for_guests(), logged-in users by the local/a11y:view capability.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">175</span>
+    <span class="phpdocumentor-element-found-in__line">197</span>
 
     </aside>
 
@@ -560,7 +582,7 @@ Moodle core.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">116</span>
+    <span class="phpdocumentor-element-found-in__line">117</span>
 
     </aside>
 
@@ -603,7 +625,7 @@ Moodle core.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">140</span>
+    <span class="phpdocumentor-element-found-in__line">162</span>
 
     </aside>
 
@@ -650,7 +672,7 @@ shared colour) and &quot;Guia de Leitura&quot;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">41</span>
+    <span class="phpdocumentor-element-found-in__line">42</span>
 
     </aside>
 
@@ -693,7 +715,7 @@ shared colour) and &quot;Guia de Leitura&quot;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">51</span>
+    <span class="phpdocumentor-element-found-in__line">52</span>
 
     </aside>
 
@@ -717,6 +739,80 @@ shared colour) and &quot;Guia de Leitura&quot;.</p>
         <span class="phpdocumentor-signature__response_type">bool</span>
                     &mdash;
                 <section class="phpdocumentor-description"><p>True if shown to guests (default when the setting is unset).</p>
+</section>
+
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -private
+                                    -static                    "
+>
+    <h4 class="phpdocumentor-element__name" id="method_valid_hex_color">
+        valid_hex_color()
+        <a href="classes/local-a11y-config.html#method_valid_hex_color" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">149</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Security audit finding: unlike the 4 page-effect colours (re-validated
+in classes/output/renderer.php::render_effect_color_vars() before
+going into raw HTML), &#039;accent&#039; went from admin_setting_configcolourpicker
+straight into templates/fab.mustache and panel.mustache&#039;s
+`style=&quot;--local-a11y-accent: {{accent}};&quot;` with no format check of its
+own - Mustache&#039;s default HTML-escaping stops it from breaking out of
+the style attribute, but a malformed value could still smuggle extra
+`property: value;` declarations onto that one element. Site-admin-only
+input (same trust tier as the setting itself), so low severity, but
+inconsistent with the other 4 - validated here too now, for every
+caller of get_appearance() at once.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">private</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">valid_hex_color</span><span>(</span><span class="phpdocumentor-signature__argument"><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$color</span></span><span class="phpdocumentor-signature__argument"><span>, </span><span class="phpdocumentor-signature__argument__type">string&nbsp;</span><span class="phpdocumentor-signature__argument__name">$default</span></span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">string</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+        <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
+    <dl class="phpdocumentor-argument-list">
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$color</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>The raw stored value.</p>
+</section>
+
+            </dd>
+                    <dt class="phpdocumentor-argument-list__entry">
+                <span class="phpdocumentor-argument-list__argument__name">$default</span>
+                : <span class="phpdocumentor-argument-list__argument__type">string</span>
+                            </dt>
+            <dd class="phpdocumentor-argument-list__definition">
+                    <section class="phpdocumentor-description"><p>Fallback if $color isn't a valid #rgb[a]/#rrggbb[aa] hex colour.</p>
+</section>
+
+            </dd>
+            </dl>
+
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">string</span>
+                    &mdash;
+                <section class="phpdocumentor-description"><p>$color if valid, otherwise $default.</p>
 </section>
 
             </section>
@@ -753,6 +849,7 @@ shared colour) and &quot;Guia de Leitura&quot;.</p>
                                             <li class=""><a href="classes/local-a11y-config.html#method_get_effect_colors">get_effect_colors()</a></li>
                                             <li class=""><a href="classes/local-a11y-config.html#method_is_enabled">is_enabled()</a></li>
                                             <li class=""><a href="classes/local-a11y-config.html#method_show_for_guests">show_for_guests()</a></li>
+                                            <li class=""><a href="classes/local-a11y-config.html#method_valid_hex_color">valid_hex_color()</a></li>
                                     </ul>
             </li>
                     </ul>

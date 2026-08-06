@@ -139,7 +139,7 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/output/panel.php"><a href="files/classes-output-panel.html"><abbr title="classes/output/panel.php">panel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">46</span>
+    <span class="phpdocumentor-element-found-in__line">47</span>
 
     </aside>
 
@@ -180,6 +180,11 @@ correct, accessible markup.</p>
             </dt>
                             <dd class="phpdocumentor-tag-list__definition">
                                                                                                             <section class="phpdocumentor-description"><p>Rodrigo Padilha Silveira <a href="mailto:padilhars@gmail.com">padilhars@gmail.com</a></p>
+</section>
+
+                                    </dd>
+                            <dd class="phpdocumentor-tag-list__definition">
+                                                                                                            <section class="phpdocumentor-description"><p>Jerônimo Medina Madruga <a href="mailto:jeronimo.madruga@gmail.com">jeronimo.madruga@gmail.com</a></p>
 </section>
 
                                     </dd>
@@ -258,7 +263,11 @@ preset cards, and every enabled option grouped into its category.</dd>
     <span>
                                 &nbsp;: string    </span>
 </dt>
-<dd>Build the help block HTML for options that declare hashelp.</dd>
+<dd>Build the help block HTML for options that declare hashelp. Content is
+composed from lang strings (one &#039;&lt;prefix&gt;intro&#039; string plus a
+&#039;&lt;prefix&gt;N&#039; string per list item) so it stays translatable; &#039;ol&#039; is
+used for options that describe a sequence of steps to follow,
+&#039;ul&#039; for options that just describe what happens/what the levels mean.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -private">
     <a class="" href="classes/local-a11y-output-panel.html#method_export_option">export_option()</a>
@@ -296,7 +305,7 @@ or templates/option_stepper.mustache, chosen client-side via istoggle/isstepper)
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/output/panel.php"><a href="files/classes-output-panel.html"><abbr title="classes/output/panel.php">panel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">55</span>
+    <span class="phpdocumentor-element-found-in__line">56</span>
 
     </aside>
 
@@ -352,11 +361,15 @@ preset cards, and every enabled option grouped into its category.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/output/panel.php"><a href="files/classes-output-panel.html"><abbr title="classes/output/panel.php">panel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">215</span>
+    <span class="phpdocumentor-element-found-in__line">219</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Build the help block HTML for options that declare hashelp.</p>
+        <p class="phpdocumentor-summary">Build the help block HTML for options that declare hashelp. Content is
+composed from lang strings (one &#039;&lt;prefix&gt;intro&#039; string plus a
+&#039;&lt;prefix&gt;N&#039; string per list item) so it stays translatable; &#039;ol&#039; is
+used for options that describe a sequence of steps to follow,
+&#039;ul&#039; for options that just describe what happens/what the levels mean.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">private</span>
@@ -365,9 +378,7 @@ preset cards, and every enabled option grouped into its category.</p>
     <div class="phpdocumentor-label-line">
         </div>
     
-        <section class="phpdocumentor-description"><p>Content is composed from lang strings so it is translatable.</p>
-</section>
-
+    
         <h5 class="phpdocumentor-argument-list__heading">Parameters</h5>
     <dl class="phpdocumentor-argument-list">
                     <dt class="phpdocumentor-argument-list__entry">
@@ -375,7 +386,7 @@ preset cards, and every enabled option grouped into its category.</p>
                 : <span class="phpdocumentor-argument-list__argument__type">string</span>
                             </dt>
             <dd class="phpdocumentor-argument-list__definition">
-                    <section class="phpdocumentor-description"><p>Option id; only 'voiceCommands' and 'faceNavigation' produce content.</p>
+                    <section class="phpdocumentor-description"><p>Option id; any id not in $specs produces no content.</p>
 </section>
 
             </dd>
@@ -389,7 +400,7 @@ preset cards, and every enabled option grouped into its category.</p>
         <h5 class="phpdocumentor-return-value__heading">Return values</h5>
         <span class="phpdocumentor-signature__response_type">string</span>
                     &mdash;
-                <section class="phpdocumentor-description"><p>Safe HTML, or '' for any other option id.</p>
+                <section class="phpdocumentor-description"><p>Safe HTML, or '' for any option id without a help spec.</p>
 </section>
 
             </section>
@@ -409,7 +420,7 @@ preset cards, and every enabled option grouped into its category.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/output/panel.php"><a href="files/classes-output-panel.html"><abbr title="classes/output/panel.php">panel.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">175</span>
+    <span class="phpdocumentor-element-found-in__line">176</span>
 
     </aside>
 
