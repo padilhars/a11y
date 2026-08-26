@@ -56,7 +56,7 @@ $string['search'] = 'Buscar opção…';
 $string['searchclear'] = 'Limpar busca';
 $string['on'] = 'Ativo';
 $string['off'] = 'Inativo';
-$string['savetitle'] = 'Desenvolvido com ❤️ pela <strong>CPTED</strong> para você.';
+$string['savetitle'] = 'Desenvolvido com ❤️ pela <strong>UFPel</strong> para você.';
 $string['keyboardhint'] = 'Atalho: Alt + A';
 
 // Categories.
@@ -243,7 +243,7 @@ $string['settings_density_desc'] = 'Quanto espaço cada linha de opção ocupa n
 $string['settings_showprofiles'] = 'Mostrar perfis';
 $string['settings_showprofiles_desc'] = 'Mostrar a seção de perfis de acessibilidade no painel.';
 $string['settings_footertext'] = 'Texto do rodapé do painel';
-$string['settings_footertext_desc'] = 'Mensagem customizada exibida no rodapé do painel, abaixo das categorias de opções. Deixe em branco para usar a mensagem padrão ("Desenvolvido com ❤️ pela CPTED para você.").';
+$string['settings_footertext_desc'] = 'Mensagem customizada exibida no rodapé do painel, abaixo das categorias de opções. Deixe em branco para usar a mensagem padrão ("Desenvolvido com ❤️ pela UFPel para você.").';
 $string['settings_colors'] = 'Cores';
 $string['settings_accent'] = 'Cor de acento';
 $string['settings_accent_desc'] = 'Cor principal do botão flutuante, do painel e dos indicadores de opção ativa.';
