@@ -28,8 +28,8 @@ namespace local_a11y;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @version    0.1.0
  * @since      0.1.0
- * @covers     \local_a11y\manager
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(manager::class)]
 final class manager_test extends \advanced_testcase {
 
     /**
@@ -43,12 +43,12 @@ final class manager_test extends \advanced_testcase {
     }
 
     /**
-     * Default settings must have exactly the 23 known keys, all "off".
+     * Default settings must have exactly the 24 known keys, all "off".
      * @return void
      */
     public function test_get_default_settings_shape(): void {
         $defaults = manager::get_default_settings();
-        $this->assertCount(23, $defaults);
+        $this->assertCount(24, $defaults);
         foreach ($defaults as $key => $value) {
             $this->assertContains($value, [false, 0], "Default for '$key' should be false or 0");
         }
@@ -135,11 +135,11 @@ final class manager_test extends \advanced_testcase {
     /**
      * count_active() must count exactly the options that differ from default.
      *
-     * @dataProvider count_active_provider
      * @param array $settings Raw settings payload to sanitize and count.
      * @param int $expected Expected count_active() result.
      * @return void
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('count_active_provider')]
     public function test_count_active(array $settings, int $expected): void {
         $this->assertSame($expected, manager::count_active(manager::sanitize_settings($settings)));
     }
