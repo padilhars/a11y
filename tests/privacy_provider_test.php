@@ -31,8 +31,8 @@ use core_privacy\local\request\writer;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @version    0.1.0
  * @since      0.1.0
- * @covers     \local_a11y\privacy\provider
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(\local_a11y\privacy\provider::class)]
 final class privacy_provider_test extends \advanced_testcase {
 
     /**
