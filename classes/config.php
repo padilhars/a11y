@@ -183,7 +183,7 @@ class config {
 
     /**
      * The panel footer message (below the option categories, above the
-     * Alt+A hint) - "Made with <3 by CPTED, for you" by default (the
+     * Alt+A hint) - "Made with <3 by UFPel, for you" by default (the
      * 'savetitle' lang string), customisable per-site since D34. Admin
      * input is rich text (admin_setting_confightmleditor) so the same kind
      * of inline emphasis the default already uses (a <strong> tag) stays

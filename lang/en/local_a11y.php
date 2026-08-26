@@ -56,7 +56,7 @@ $string['search'] = 'Search option…';
 $string['searchclear'] = 'Clear search';
 $string['on'] = 'On';
 $string['off'] = 'Off';
-$string['savetitle'] = 'Made with ❤️ by <strong>CPTED</strong>, for you.';
+$string['savetitle'] = 'Made with ❤️ by <strong>UFPel</strong>, for you.';
 $string['keyboardhint'] = 'Shortcut: Alt + A';
 
 // Categories.
@@ -243,7 +243,7 @@ $string['settings_density_desc'] = 'How much space each option row takes up in t
 $string['settings_showprofiles'] = 'Show profiles';
 $string['settings_showprofiles_desc'] = 'Show the accessibility profile presets section in the panel.';
 $string['settings_footertext'] = 'Panel footer text';
-$string['settings_footertext_desc'] = 'Custom message shown at the bottom of the panel, below the option categories. Leave empty to use the default message ("Made with ❤️ by CPTED, for you.").';
+$string['settings_footertext_desc'] = 'Custom message shown at the bottom of the panel, below the option categories. Leave empty to use the default message ("Made with ❤️ by UFPel, for you.").';
 $string['settings_colors'] = 'Colors';
 $string['settings_accent'] = 'Accent color';
 $string['settings_accent_desc'] = 'Main color of the floating button, the panel, and active-option indicators.';
