@@ -35,6 +35,7 @@ $string['pluginname'] = 'Acessibilidade (A11y)';
 // Capabilities.
 $string['a11y:view'] = 'Usar o painel de acessibilidade';
 $string['a11y:configure'] = 'Configurar o plugin de acessibilidade';
+$string['a11y:viewstats'] = 'Ver o relatório agregado de estatísticas de uso da acessibilidade';
 
 // Privacy.
 $string['privacy:metadata:preference:local_a11y_settings'] = 'As opções de acessibilidade escolhidas pelo usuário (tamanho do texto, contraste, perfil ativo, etc).';
@@ -299,6 +300,18 @@ $string['format_modal'] = 'Modal';
 $string['density_compact'] = 'Compacta';
 $string['density_regular'] = 'Regular';
 $string['density_comfortable'] = 'Confortável';
+
+// Estatísticas (D47 - contadores de uso agregados e anônimos).
+$string['settings_stats'] = 'Estatísticas';
+$string['settings_collectstats'] = 'Coletar estatísticas de uso';
+$string['settings_collectstats_desc'] = 'Quando ativado, toda vez que qualquer usuário (inclusive visitantes) ativa uma opção de acessibilidade, um contador agregado e único dessa opção específica é incrementado, para o site inteiro. Só três coisas são armazenadas por opção: seu identificador, um contador total acumulado, e quando foi atualizado pela última vez — nada mais. Nenhum identificador de usuário, sessão, curso ou IP é registrado, e não é mantido nenhum registro de data/hora por evento individual, então não é possível reconstruir o comportamento de nenhuma pessoa específica a partir desses dados. Desativado por padrão. Veja o relatório em Administração do site → Plugins → Plugins locais → Acessibilidade (A11y) → Estatísticas de uso.';
+$string['statstitle'] = 'Estatísticas de uso';
+$string['statsintro'] = 'Contagens de ativação agregadas e anônimas por opção de acessibilidade — um total acumulado por opção, para o site inteiro. Nenhum dado de usuário, sessão, curso ou IP é coletado.';
+$string['statsdisabled'] = 'A coleta de estatísticas de uso está desativada no momento ("Coletar estatísticas de uso" nas configurações do plugin) — os números abaixo, se houver, são de quando ela esteve ativada anteriormente.';
+$string['statsempty'] = 'Nenhuma estatística de uso registrada ainda.';
+$string['statscol_feature'] = 'Opção';
+$string['statscol_counter'] = 'Ativações';
+$string['statscol_lastupdated'] = 'Última atualização';
 
 // Errors.
 $string['error_invalidsettings'] = 'Payload de configurações de acessibilidade inválido.';

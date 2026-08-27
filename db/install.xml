@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/a11y/db" VERSION="20260827300" COMMENT="XMLDB file for Moodle local/a11y"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="local_a11y_stats" COMMENT="Aggregated, anonymous usage counters per accessibility option (D47) - one row per option id. No userid, courseid, sessionid, IP or per-event timestamp: nothing here can be used to reconstruct an individual's behaviour.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="featureid" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Accessibility option id, e.g. readableFont - matches classes/options.php ids."/>
+        <FIELD NAME="counter" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Total number of times this option was activated site-wide."/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Unix timestamp of the last increment for this row."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="featureid" UNIQUE="true" FIELDS="featureid"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>

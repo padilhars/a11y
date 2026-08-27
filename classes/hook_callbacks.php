@@ -81,6 +81,9 @@ class hook_callbacks {
         global $PAGE;
         $renderer = $PAGE->get_renderer('local_a11y');
         $hook->add_html($renderer->render_footer_html());
-        $PAGE->requires->js_call_amd('local_a11y/main', 'init', [isloggedin() && !isguestuser()]);
+        $PAGE->requires->js_call_amd('local_a11y/main', 'init', [
+            isloggedin() && !isguestuser(),
+            config::collect_stats_enabled(),
+        ]);
     }
 }

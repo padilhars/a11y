@@ -27,7 +27,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 - **Sem dependências externas em tempo de execução** — nenhum script, fonte ou API de terceiro é carregado do navegador do usuário final (as duas exceções — CDN do MediaPipe para Navegação por Face e o ícone ONU — estão documentadas e a primeira passa por verificação de integridade SHA-256 antes de ser executada).
 - **28 opções reais, não uma lista de marketing** — cada uma foi implementada, testada em auditoria de segurança e código morto, e documentada (PHPDoc/JSDoc/KSS completos, ver [`docs/`](docs/README.md)).
 - **Zero FOUC**: as preferências do usuário são aplicadas antes da primeira pintura da página, via script inline síncrono.
-- **Privacidade real**: nenhuma tabela própria, nenhum dado compartilhado com terceiros — só a Privacy API padrão do Moodle.
+- **Privacidade real**: a única informação pessoal armazenada é a preferência de acessibilidade do próprio usuário; a única tabela própria do plugin é 100% agregada e anônima (opcional, desligada por padrão — ver "Estatísticas de uso" abaixo); nada é compartilhado com terceiros.
 - **Feito para produção**: controle de acesso via capabilities do Moodle (`local/a11y:view`), Hooks API (não callbacks legados), auditado quanto a segurança e código morto antes de cada publicação.
 
 ## Capturas de tela
@@ -91,16 +91,21 @@ Baixa Visão, Daltonismo, Dislexia, TDAH/Foco, Idoso/Sênior, Epilepsia, Defici�
 
 ## Configuração (administrador)
 
-**Administração do site → Plugins → Plugins locais → Acessibilidade (A11y)**, organizada em 4 seções — todas com descrição em cada campo, explicando o que ele faz:
+**Administração do site → Plugins → Plugins locais → Acessibilidade (A11y)**, organizada em 5 seções — todas com descrição em cada campo, explicando o que ele faz:
 
 - **Geral** — ativar/desativar o plugin globalmente; mostrar (ou não) para visitantes; padrões de URL a excluir; quais das 28 opções ficam disponíveis para os usuários.
 - **Botão Flutuante (FAB)** — posição na tela, ícone e forma (círculo/quadrado).
 - **Painel** — formato em telas de desktop (popover/gaveta/modal — em celulares e tablets pequenos o painel sempre abre no estilo gaveta, veja acima); densidade (compacta/regular/confortável); mostrar ou não a seção de perfis; texto do rodapé do painel.
 - **Cores** — 5 cores independentes: acento do botão/painel, e as cores de "Destacar Títulos", "Destacar Links", "Destacar Botões" e "Guia de Leitura" (cada uma configurável separadamente, para não depender de uma única cor cumprindo vários papéis).
+- **Estatísticas** — liga/desliga a coleta de contadores de uso agregados e anônimos (desligada por padrão); ver [Estatísticas de uso](#estatísticas-de-uso-opcional-desligada-por-padrão) abaixo.
 
 ## Privacidade
 
-O plugin implementa a Privacy API do Moodle (`classes/privacy/provider.php`): a única informação pessoal armazenada é a preferência `local_a11y_settings` do próprio usuário (suas opções de acessibilidade escolhidas). Nenhuma tabela de banco de dados própria; nada é compartilhado com terceiros. Visitantes usam apenas `localStorage` do navegador, fora do alcance do Moodle.
+O plugin implementa a Privacy API do Moodle (`classes/privacy/provider.php`): a única informação pessoal armazenada é a preferência `local_a11y_settings` do próprio usuário (suas opções de acessibilidade escolhidas). Nada é compartilhado com terceiros. Visitantes usam apenas `localStorage` do navegador, fora do alcance do Moodle.
+
+### Estatísticas de uso (opcional, desligada por padrão)
+
+O plugin pode manter, opcionalmente, uma única tabela própria (`local_a11y_stats`) com contadores agregados de uso — quantas vezes cada opção de acessibilidade foi ativada, no site inteiro. Por linha, só existem três informações: o identificador da opção, um contador total e a data da última atualização. **Nenhum identificador de usuário, sessão, curso ou IP é armazenado**, e não há registro de data/hora por evento individual — não é possível reconstruir o comportamento de nenhuma pessoa específica a partir desses dados. Desativada por padrão; ative em **Administração do site → Plugins → Plugins locais → Acessibilidade (A11y) → Estatísticas**, seção "Coletar estatísticas de uso". O relatório fica em **Administração do site → Plugins → Plugins locais → Acessibilidade (A11y) → Estatísticas de uso**, protegido pela capability `local/a11y:viewstats` (concedida por padrão só ao arquétipo `manager`). Ver DECISIONS.md D47 para a justificativa completa da abordagem agregada.
 
 ## Desenvolvimento
 

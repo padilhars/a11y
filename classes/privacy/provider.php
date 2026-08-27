@@ -22,12 +22,23 @@ use core_privacy\local\request\writer;
 /**
  * Privacy provider for local_a11y.
  *
- * The plugin stores exactly one piece of personal data: the
+ * The plugin stores exactly one piece of PERSONAL data: the
  * `local_a11y_settings` user preference (a JSON blob of the user's chosen
- * accessibility options). No database tables, no data shared with other
- * users or systems. Not-logged-in/guest users' settings live in the
+ * accessibility options). Not-logged-in/guest users' settings live in the
  * browser's localStorage only, which Moodle's privacy subsystem has no
  * visibility into (and nothing to export/delete server-side for).
+ *
+ * Since D47 the plugin also has one database table, `local_a11y_stats`
+ * (optional, off by default - see `local_a11y/collectstats`) - it is
+ * DELIBERATELY NOT declared anywhere below via `add_database_table()`
+ * (the method for describing tables that *do* hold personal data),
+ * because it holds none: one row per accessibility option (a global
+ * counter and a last-modified timestamp), no userid/courseid/sessionid/
+ * IP/per-event timestamp column at all, so there is nothing in it to
+ * export or delete for any individual user, and no code path in this
+ * plugin ever queries it by user. See DECISIONS.md D47 for the full
+ * schema rationale and classes/stats.php for the only code that writes
+ * to it.
  *
  * @description Privacy provider for local_a11y.
  * @package    Moodle
@@ -44,7 +55,12 @@ class provider implements
     \core_privacy\local\request\user_preference_provider {
 
     /**
-     * Declares the one piece of personal data this plugin stores.
+     * Declares the one piece of personal data this plugin stores. Does
+     * NOT declare `local_a11y_stats` (D47): that table is fully aggregate
+     * (one counter per accessibility option, site-wide) and contains no
+     * column that identifies a user, session, course or individual
+     * request - there is nothing personal in it to declare. See the class
+     * docblock above for the full reasoning.
      *
      * @param collection $items The metadata collection to add to.
      * @return collection The updated metadata collection.
