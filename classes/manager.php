@@ -52,14 +52,17 @@ class manager {
             'hideImages' => false,
             'tooltips' => false,
             'pauseAnimations' => false,
+            'silenceMedia' => false,
             'textSize' => 0,
             'lineHeight' => 0,
             'textSpacing' => 0,
+            'wordSpacing' => 0,
             'textAlign' => 0,
             'contrast' => 0,
             'invertColors' => false,
             'colorChange' => 0,
             'saturation' => 0,
+            'blueLightFilter' => 0,
             'readingGuide' => false,
             'readingMask' => false,
             'cursor' => 0,
@@ -81,10 +84,12 @@ class manager {
             'textSize' => 4,
             'lineHeight' => 3,
             'textSpacing' => 3,
+            'wordSpacing' => 3,
             'textAlign' => 4,
             'contrast' => 3,
             'colorChange' => 3,
             'saturation' => 3,
+            'blueLightFilter' => 3,
             'cursor' => 2,
         ];
     }
@@ -96,9 +101,12 @@ class manager {
      * readingGuide, readingMask, screenReader, virtualKeyboard,
      * voiceCommands and (since D29 - the prototype itself does still map
      * it to a body class, but a real browser's native title tooltip can
-     * only be suppressed from JS, not CSS) tooltips: those 6 booleans do
+     * only be suppressed from JS, not CSS) tooltips: those booleans do
      * NOT drive a body class here, they gate always-mounted JS overlay
      * components instead (see amd/src/reading_guide.js etc., M5; D29).
+     * silenceMedia joins this exclusion too (D40): it has no CSS effect of
+     * its own - muting/pausing media and posting messages to embed iframes
+     * is 100% behavioural, handled entirely by amd/src/silence_media.js.
      *
      * @return array<string, string>
      */
@@ -129,9 +137,11 @@ class manager {
             'textSize' => 'a11y-text-size-',
             'lineHeight' => 'a11y-line-height-',
             'textSpacing' => 'a11y-text-spacing-',
+            'wordSpacing' => 'a11y-word-spacing-',
             'textAlign' => 'a11y-text-align-',
             'contrast' => 'a11y-contrast-',
             'saturation' => 'a11y-saturation-',
+            'blueLightFilter' => 'a11y-bluelight-',
             'colorChange' => 'a11y-color-',
             'cursor' => 'a11y-cursor-',
         ];

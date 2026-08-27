@@ -17,13 +17,13 @@
 namespace local_a11y;
 
 /**
- * The 23 accessibility options — a PHP port of OPTIONS in
+ * The 27 accessibility options — a PHP port of OPTIONS in
  * _design-reference/a11y-data.jsx (same ids, same grouping, same order),
- * plus one addition beyond the prototype: 'textAlign' (see DECISIONS.md
- * D30). Labels/descriptions are resolved via get_string() instead of the
- * prototype's inline pt-BR/en literals.
+ * plus four additions beyond the prototype: 'textAlign' (D30), 'silenceMedia',
+ * 'wordSpacing' and 'blueLightFilter' (D40). Labels/descriptions are resolved
+ * via get_string() instead of the prototype's inline pt-BR/en literals.
  *
- * @description The 23 accessibility options (PHP port of OPTIONS).
+ * @description The 27 accessibility options (PHP port of OPTIONS).
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
@@ -59,6 +59,8 @@ class options {
                 'labelkey' => 'opt_lineheight', 'desckey' => null, 'levelprefix' => 'lineheightlevel_'],
             ['id' => 'textSpacing', 'cat' => 'typography', 'kind' => 'stepper', 'max' => 3, 'icon' => 'textSpacing',
                 'labelkey' => 'opt_textspacing', 'desckey' => null, 'levelprefix' => 'spacinglevel_'],
+            ['id' => 'wordSpacing', 'cat' => 'typography', 'kind' => 'stepper', 'max' => 3, 'icon' => 'moveHorizontal',
+                'labelkey' => 'opt_wordspacing', 'desckey' => null, 'levelprefix' => 'wordspacinglevel_'],
             ['id' => 'textAlign', 'cat' => 'typography', 'kind' => 'stepper', 'max' => 4, 'icon' => 'textAlign',
                 'labelkey' => 'opt_textalign', 'desckey' => null, 'levelprefix' => 'alignlevel_'],
 
@@ -71,12 +73,16 @@ class options {
                 'labelkey' => 'opt_colorchange', 'desckey' => 'opt_colorchange_desc', 'levelprefix' => 'colorchangelevel_'],
             ['id' => 'saturation', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'saturation',
                 'labelkey' => 'opt_saturation', 'desckey' => null, 'levelprefix' => 'saturationlevel_'],
+            ['id' => 'blueLightFilter', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'moon',
+                'labelkey' => 'opt_bluelightfilter', 'desckey' => null, 'levelprefix' => 'bluelightlevel_'],
 
             // -- Media & motion --
             ['id' => 'hideImages', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'imageOff',
                 'labelkey' => 'opt_hideimages', 'desckey' => null],
             ['id' => 'pauseAnimations', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'pause',
                 'labelkey' => 'opt_pauseanimations', 'desckey' => null],
+            ['id' => 'silenceMedia', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'volumeX',
+                'labelkey' => 'opt_silencemedia', 'desckey' => 'opt_silencemedia_desc', 'hashelp' => true],
             ['id' => 'tooltips', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'tooltip',
                 'labelkey' => 'opt_tooltips', 'desckey' => null],
 

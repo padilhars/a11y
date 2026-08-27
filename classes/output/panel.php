@@ -224,6 +224,7 @@ class panel implements renderable, templatable {
             'virtualKeyboard' => ['prefix' => 'help_vk_', 'count' => 4, 'tag' => 'ol'],
             'readingGuide' => ['prefix' => 'help_rg_', 'count' => 3, 'tag' => 'ul'],
             'readingMask' => ['prefix' => 'help_rm_', 'count' => 3, 'tag' => 'ul'],
+            'silenceMedia' => ['prefix' => 'help_sm_', 'count' => 4, 'tag' => 'ul'],
         ];
         if (!isset($specs[$optionid])) {
             return '';

@@ -30,7 +30,8 @@
  */
 
 // Verbatim port of classes/manager.php::get_boolean_class_map(). tooltips is
-// handled by amd/src/tooltips.js instead (D29), not a body class.
+// handled by amd/src/tooltips.js instead (D29), not a body class. silenceMedia
+// joins this exclusion too (D40) - purely behavioural, no CSS effect.
 const BOOL_CLASS_MAP = {
     readableFont: 'a11y-readable-font',
     dyslexicFont: 'a11y-dyslexic-font',
@@ -48,9 +49,11 @@ const STEPPER_CLASS_PREFIX_MAP = {
     textSize: 'a11y-text-size-',
     lineHeight: 'a11y-line-height-',
     textSpacing: 'a11y-text-spacing-',
+    wordSpacing: 'a11y-word-spacing-',
     textAlign: 'a11y-text-align-',
     contrast: 'a11y-contrast-',
     saturation: 'a11y-saturation-',
+    blueLightFilter: 'a11y-bluelight-',
     colorChange: 'a11y-color-',
     cursor: 'a11y-cursor-',
 };
