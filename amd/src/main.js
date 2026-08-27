@@ -36,6 +36,7 @@ import Profiles from 'local_a11y/profiles';
 import FabLift from 'local_a11y/fab_lift';
 import ReadingGuide from 'local_a11y/reading_guide';
 import ReadingMask from 'local_a11y/reading_mask';
+import Magnifier from 'local_a11y/magnifier';
 import ScreenReader from 'local_a11y/screen_reader';
 import VirtualKeyboard from 'local_a11y/virtual_keyboard';
 import VoiceCommands from 'local_a11y/voice_commands';
@@ -118,6 +119,7 @@ const navigateTo = (path) => {
 const syncAdvancedFeatures = () => {
     ReadingGuide.sync(Boolean(settings.readingGuide));
     ReadingMask.sync(Boolean(settings.readingMask));
+    Magnifier.sync(Boolean(settings.magnifier));
     ScreenReader.sync(Boolean(settings.screenReader));
     VirtualKeyboard.sync(Boolean(settings.virtualKeyboard));
     VoiceCommands.sync(Boolean(settings.voiceCommands), voiceCallbacks);
@@ -546,6 +548,15 @@ export const init = async(loggedIn) => {
     document.addEventListener('local_a11y/face-disable', () => {
         if (settings.faceNavigation) {
             onToggle('faceNavigation', false);
+        }
+    });
+
+    // Esc turns the magnifier off (amd/src/magnifier.js dispatches this
+    // instead of mutating settings directly, so the panel switch/storage
+    // stay in sync too) - same self-disable pattern as face-disable above.
+    document.addEventListener('local_a11y/magnifier-disable', () => {
+        if (settings.magnifier) {
+            onToggle('magnifier', false);
         }
     });
 };

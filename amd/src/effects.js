@@ -31,7 +31,8 @@
 
 // Verbatim port of classes/manager.php::get_boolean_class_map(). tooltips is
 // handled by amd/src/tooltips.js instead (D29), not a body class. silenceMedia
-// joins this exclusion too (D40) - purely behavioural, no CSS effect.
+// (D40) and magnifier (D42) join this exclusion too - purely behavioural,
+// no CSS effect (magnifier's lens is entirely amd/src/magnifier.js).
 const BOOL_CLASS_MAP = {
     readableFont: 'a11y-readable-font',
     dyslexicFont: 'a11y-dyslexic-font',

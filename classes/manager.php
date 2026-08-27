@@ -65,6 +65,7 @@ class manager {
             'blueLightFilter' => 0,
             'readingGuide' => false,
             'readingMask' => false,
+            'magnifier' => false,
             'cursor' => 0,
             'focusMode' => false,
             'screenReader' => false,
@@ -106,6 +107,9 @@ class manager {
      * components instead (see amd/src/reading_guide.js etc., M5; D29).
      * silenceMedia joins this exclusion too (D40): it has no CSS effect of
      * its own - muting/pausing media and posting messages to embed iframes
+     * is 100% behavioural, handled entirely by amd/src/silence_media.js.
+     * magnifier joins it as well (D42): its lens is built and positioned
+     * entirely by amd/src/magnifier.js, no body class involved.
      * is 100% behavioural, handled entirely by amd/src/silence_media.js.
      *
      * @return array<string, string>

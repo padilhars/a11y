@@ -1605,3 +1605,47 @@ body.a11y-focus-mode #region-main-box {
   margin: 0 auto !important;
 }
 
+/* ===========================================================================
+   MAGNIFIER (amd/src/magnifier.js)
+   A circular window (this element) clipping a cloned, transform-scaled copy
+   of #page (its one child, .local-a11y-magnifier__content) - see D42 for
+   the full technique and the coordinate-mapping math amd/src/magnifier.js
+   uses to keep the point under the pointer centred in the lens.
+
+   z-index 99987, deliberately between the overlay (99988) and sr-pill
+   (99986): above Reading Guide/Mask (99985/99984) so neither one's line/
+   dimming band visibly crosses through the magnified content (which would
+   look broken - the whole point of the lens is a clear, accurate zoomed
+   view), but below the FAB/panel/overlay stack (99988-99990) so opening
+   the panel is never obscured by the lens chasing the pointer nearby -
+   same reasoning D38 already applied to Reading Guide/Mask's own z-index.
+
+   Not `.local-a11y-root` (see amd/src/magnifier.js::start() for why) -
+   aria-hidden + `inert` (set in JS) cover the "decorative, invisible to
+   the accessibility tree" requirement directly instead. pointer-events:
+   none throughout, same as Reading Guide/Mask, so clicks/hover always
+   reach the real page underneath - including "Cursor" (big cursor): with
+   nothing here to intercept the pointer, the browser resolves `cursor`
+   from whatever real element is under it, so a custom big cursor already
+   shows through the lens with no extra rule needed here. */
+
+/*
+Magnifier lens and its clipped, scaled content.
+
+Styleguide 12.
+*/
+.local-a11y-magnifier {
+  position: fixed; top: 0; left: 0; width: 220px; height: 220px;
+  border-radius: 50%; overflow: hidden; pointer-events: none;
+  border: 3px solid var(--a11y-border-strong, #d1d5db);
+  box-shadow: 0 10px 30px -6px rgba(0,0,0,0.35), 0 0 0 2px rgba(255,255,255,0.6) inset;
+  background: var(--a11y-bg, #fff);
+  z-index: 99987;
+  will-change: transform;
+}
+.local-a11y-magnifier__content {
+  position: absolute; top: 0; left: 0;
+  transform-origin: 0 0;
+  will-change: transform, filter;
+}
+
