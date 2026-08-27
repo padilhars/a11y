@@ -964,7 +964,7 @@ body.a11y-highlight-buttons #page [role="button"]:not(.local-a11y-root, .local-a
    .navbar/.drawer-*, so nothing here needs excluding them. */
 
 /*
-Text Size, Line Height and Text Spacing effects.
+Text Size, Line Height, Text Spacing and Word Spacing effects.
 
 Styleguide 10.3.
 */
@@ -1010,6 +1010,35 @@ body.a11y-text-spacing-3 .navbar, body.a11y-text-spacing-3 .navbar p, body.a11y-
 body.a11y-text-spacing-3 .drawer-left, body.a11y-text-spacing-3 .drawer-left p, body.a11y-text-spacing-3 .drawer-left span,
 body.a11y-text-spacing-3 .drawer-right, body.a11y-text-spacing-3 .drawer-right p, body.a11y-text-spacing-3 .drawer-right span {
   letter-spacing: 0.18em !important; word-spacing: 0.35em !important;
+}
+
+/* Word Spacing - independent of Text Spacing above (word-spacing only, no
+   letter-spacing); same selector shape, same 3 numeric steps (0.1/0.2/0.35em)
+   as Text Spacing's own word-spacing component, so the two feel consistent
+   if a user tries both. word-spacing is already one of the 6 inherited
+   properties sealed on .local-a11y-root (see the PANEL/FAB design-token
+   block near the top of this file, D26/D30) - no extra opt-out rule needed
+   here. */
+body.a11y-word-spacing-1 #page, body.a11y-word-spacing-1 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-word-spacing-1 #page span:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-word-spacing-1 #page h1, body.a11y-word-spacing-1 #page h2, body.a11y-word-spacing-1 #page h3,
+body.a11y-word-spacing-1 .navbar, body.a11y-word-spacing-1 .navbar p, body.a11y-word-spacing-1 .navbar span,
+body.a11y-word-spacing-1 .drawer-left, body.a11y-word-spacing-1 .drawer-left p, body.a11y-word-spacing-1 .drawer-left span,
+body.a11y-word-spacing-1 .drawer-right, body.a11y-word-spacing-1 .drawer-right p, body.a11y-word-spacing-1 .drawer-right span {
+  word-spacing: 0.1em !important;
+}
+body.a11y-word-spacing-2 #page, body.a11y-word-spacing-2 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-word-spacing-2 #page span:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-word-spacing-2 #page h1, body.a11y-word-spacing-2 #page h2, body.a11y-word-spacing-2 #page h3,
+body.a11y-word-spacing-2 .navbar, body.a11y-word-spacing-2 .navbar p, body.a11y-word-spacing-2 .navbar span,
+body.a11y-word-spacing-2 .drawer-left, body.a11y-word-spacing-2 .drawer-left p, body.a11y-word-spacing-2 .drawer-left span,
+body.a11y-word-spacing-2 .drawer-right, body.a11y-word-spacing-2 .drawer-right p, body.a11y-word-spacing-2 .drawer-right span {
+  word-spacing: 0.2em !important;
+}
+body.a11y-word-spacing-3 #page, body.a11y-word-spacing-3 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-word-spacing-3 #page span:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-word-spacing-3 #page h1, body.a11y-word-spacing-3 #page h2, body.a11y-word-spacing-3 #page h3,
+body.a11y-word-spacing-3 .navbar, body.a11y-word-spacing-3 .navbar p, body.a11y-word-spacing-3 .navbar span,
+body.a11y-word-spacing-3 .drawer-left, body.a11y-word-spacing-3 .drawer-left p, body.a11y-word-spacing-3 .drawer-left span,
+body.a11y-word-spacing-3 .drawer-right, body.a11y-word-spacing-3 .drawer-right p, body.a11y-word-spacing-3 .drawer-right span {
+  word-spacing: 0.35em !important;
 }
 
 /* Text Alignment
@@ -1434,7 +1463,8 @@ body.a11y-contrast-3 .local-a11y-root {
       inverted/saturated/colour-shifted exactly as before. */
 
 /*
-Invert Colours, Saturation and colour-blindness simulation filters.
+Invert Colours, Saturation, colour-blindness simulation and Blue Light
+Filter effects.
 
 Styleguide 11.4.
 */
@@ -1445,6 +1475,23 @@ body.a11y-saturation-3 #page, body.a11y-saturation-3 .navbar, body.a11y-saturati
 body.a11y-color-1 #page, body.a11y-color-1 .navbar, body.a11y-color-1 .drawer, body.a11y-color-1 .local-a11y-root { --a11y-filter-color: url(#local-a11y-protanopia); }
 body.a11y-color-2 #page, body.a11y-color-2 .navbar, body.a11y-color-2 .drawer, body.a11y-color-2 .local-a11y-root { --a11y-filter-color: url(#local-a11y-deuteranopia); }
 body.a11y-color-3 #page, body.a11y-color-3 .navbar, body.a11y-color-3 .drawer, body.a11y-color-3 .local-a11y-root { --a11y-filter-color: url(#local-a11y-tritanopia); }
+/* D40: Blue Light Filter (warm/amber tint) joins the same composition, as a
+   4th independent term - it does NOT interact with Contraste (recolours via
+   design-token overrides on specific elements, not `filter` - see D37's
+   "Contraste" half), so no ordering question exists there; visually,
+   whatever colour Contraste already painted still gets warmed by this
+   filter afterwards, same as any other #page content - expected, not a
+   conflict. It DOES interact with Inverter Cores/Mudar Cores/Saturação
+   (all `filter`-based, same composition): deliberately placed LAST in the
+   chain below so the amber tint is always the final transform applied to
+   the already-inverted/desaturated/colour-simulated pixels, mirroring how
+   OS-level night-light/blue-light tools apply their warmth as the very
+   last stage before the screen regardless of whatever the app underneath
+   is rendering - putting it first instead would let a later invert()
+   partially cancel the warm shift, defeating the point of the option. */
+body.a11y-bluelight-1 #page, body.a11y-bluelight-1 .navbar, body.a11y-bluelight-1 .drawer, body.a11y-bluelight-1 .local-a11y-root { --a11y-filter-bluelight: sepia(0.25) saturate(1.1) brightness(0.98); }
+body.a11y-bluelight-2 #page, body.a11y-bluelight-2 .navbar, body.a11y-bluelight-2 .drawer, body.a11y-bluelight-2 .local-a11y-root { --a11y-filter-bluelight: sepia(0.45) saturate(1.15) brightness(0.95); }
+body.a11y-bluelight-3 #page, body.a11y-bluelight-3 .navbar, body.a11y-bluelight-3 .drawer, body.a11y-bluelight-3 .local-a11y-root { --a11y-filter-bluelight: sepia(0.65) saturate(1.2) brightness(0.9); }
 /* D37: .local-a11y-root joins this composition too (see the PANEL OPT-OUT
    comment above) - every element carrying that class (FAB, panel,
    overlay, reading-guide/mask, vk, sr-pill, tooltip bubble) is a
@@ -1456,14 +1503,16 @@ body.a11y-color-3 #page, body.a11y-color-3 .navbar, body.a11y-color-3 .drawer, b
   filter:
     var(--a11y-filter-invert, )
     var(--a11y-filter-saturate, )
-    var(--a11y-filter-color, );
+    var(--a11y-filter-color, )
+    var(--a11y-filter-bluelight, );
 }
 /* Defensive backstop kept from D27 even though per-element filtering (D31)
    fixes the actual cause of the horizontal-scroll bug (see above) - cheap
    insurance in case some other still-fixed element we haven't found yet
    reacts the same way. */
 body.a11y-invert, body.a11y-saturation-1, body.a11y-saturation-2, body.a11y-saturation-3,
-body.a11y-color-1, body.a11y-color-2, body.a11y-color-3 {
+body.a11y-color-1, body.a11y-color-2, body.a11y-color-3,
+body.a11y-bluelight-1, body.a11y-bluelight-2, body.a11y-bluelight-3 {
   overflow-x: hidden;
 }
 
@@ -1486,7 +1535,8 @@ body.a11y-color-1, body.a11y-color-2, body.a11y-color-3 {
    FAB/panel/navbar/drawer/sticky-footer fixes above. */
 body.a11y-invert #page, body.a11y-saturation-1 #page, body.a11y-saturation-2 #page,
 body.a11y-saturation-3 #page, body.a11y-color-1 #page, body.a11y-color-2 #page,
-body.a11y-color-3 #page {
+body.a11y-color-3 #page, body.a11y-bluelight-1 #page, body.a11y-bluelight-2 #page,
+body.a11y-bluelight-3 #page {
   background-color: #fff;
 }
 

@@ -42,6 +42,7 @@ import VoiceCommands from 'local_a11y/voice_commands';
 import Tooltips from 'local_a11y/tooltips';
 import FaceNavigation from 'local_a11y/face_navigation';
 import PauseMedia from 'local_a11y/pause_media';
+import SilenceMedia from 'local_a11y/silence_media';
 import HideImages from 'local_a11y/hide_images';
 
 let settings = {...Storage.DEFAULT_SETTINGS};
@@ -123,6 +124,7 @@ const syncAdvancedFeatures = () => {
     Tooltips.sync(Boolean(settings.tooltips));
     FaceNavigation.sync(Boolean(settings.faceNavigation));
     PauseMedia.sync(Boolean(settings.pauseAnimations));
+    SilenceMedia.sync(Boolean(settings.silenceMedia));
     HideImages.sync(Boolean(settings.hideImages));
 };
 
