@@ -173,6 +173,22 @@ Styleguide 3.
 .local-a11y-root [role="button"] {
   cursor: pointer !important;
 }
+/* D41: toggle-option rows (templates/option_toggle.mustache) are clickable
+   across their whole area via event delegation in amd/src/panel.js, but the
+   outer row deliberately carries no role="button" of its own (would be an
+   axe "nested-interactive" violation - it already wraps a real <button>,
+   the switch). That left every point of the row except the two actual
+   <button>s (switch, help "?") falling through to the `.local-a11y-root *`
+   reset above and showing the default arrow cursor, even though clicking
+   there does toggle the option. Restoring the pointer here is a pure
+   `cursor` fix - it adds no `role`/`tabindex`, so it doesn't reintroduce
+   that a11y violation; stepper rows (which DO carry role="button" directly
+   on `.local-a11y-option`) already got this via the rule above and are
+   just redundantly covered here too. */
+.local-a11y-root .local-a11y-option,
+.local-a11y-root .local-a11y-option * {
+  cursor: pointer !important;
+}
 
 /* ===========================================================================
    FAB
