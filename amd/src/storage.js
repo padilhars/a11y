@@ -61,6 +61,7 @@ export const DEFAULT_SETTINGS = {
     blueLightFilter: 0,
     readingGuide: false,
     readingMask: false,
+    magnifier: false,
     cursor: 0,
     focusMode: false,
     screenReader: false,

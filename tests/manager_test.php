@@ -43,12 +43,12 @@ final class manager_test extends \advanced_testcase {
     }
 
     /**
-     * Default settings must have exactly the 27 known keys, all "off".
+     * Default settings must have exactly the 28 known keys, all "off".
      * @return void
      */
     public function test_get_default_settings_shape(): void {
         $defaults = manager::get_default_settings();
-        $this->assertCount(27, $defaults);
+        $this->assertCount(28, $defaults);
         foreach ($defaults as $key => $value) {
             $this->assertContains($value, [false, 0], "Default for '$key' should be false or 0");
         }
@@ -161,15 +161,15 @@ final class manager_test extends \advanced_testcase {
     /**
      * The boolean/stepper -> CSS class maps must never target the
      * always-JS-overlay booleans (readingGuide, readingMask, screenReader,
-     * virtualKeyboard, voiceCommands, tooltips, silenceMedia) - see
-     * DECISIONS.md D29 / D40 / app.jsx parity.
+     * virtualKeyboard, voiceCommands, tooltips, silenceMedia, magnifier) -
+     * see DECISIONS.md D29 / D40 / D42 / app.jsx parity.
      * @return void
      */
     public function test_boolean_class_map_excludes_overlay_only_options(): void {
         $map = manager::get_boolean_class_map();
         $overlayonly = [
             'readingGuide', 'readingMask', 'screenReader', 'virtualKeyboard', 'voiceCommands',
-            'tooltips', 'silenceMedia',
+            'tooltips', 'silenceMedia', 'magnifier',
         ];
         foreach ($overlayonly as $key) {
             $this->assertArrayNotHasKey($key, $map);

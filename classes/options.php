@@ -17,13 +17,14 @@
 namespace local_a11y;
 
 /**
- * The 27 accessibility options — a PHP port of OPTIONS in
+ * The 28 accessibility options — a PHP port of OPTIONS in
  * _design-reference/a11y-data.jsx (same ids, same grouping, same order),
- * plus four additions beyond the prototype: 'textAlign' (D30), 'silenceMedia',
- * 'wordSpacing' and 'blueLightFilter' (D40). Labels/descriptions are resolved
- * via get_string() instead of the prototype's inline pt-BR/en literals.
+ * plus five additions beyond the prototype: 'textAlign' (D30), 'silenceMedia',
+ * 'wordSpacing' and 'blueLightFilter' (D40), and 'magnifier' (D42).
+ * Labels/descriptions are resolved via get_string() instead of the
+ * prototype's inline pt-BR/en literals.
  *
- * @description The 27 accessibility options (PHP port of OPTIONS).
+ * @description The 28 accessibility options (PHP port of OPTIONS).
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
@@ -91,6 +92,8 @@ class options {
                 'labelkey' => 'opt_readingguide', 'desckey' => null, 'hashelp' => true],
             ['id' => 'readingMask', 'cat' => 'navigation', 'kind' => 'toggle', 'icon' => 'mask',
                 'labelkey' => 'opt_readingmask', 'desckey' => null, 'hashelp' => true],
+            ['id' => 'magnifier', 'cat' => 'navigation', 'kind' => 'toggle', 'icon' => 'zoomIn',
+                'labelkey' => 'opt_magnifier', 'desckey' => null, 'hashelp' => true],
             ['id' => 'cursor', 'cat' => 'navigation', 'kind' => 'stepper', 'max' => 2, 'icon' => 'mousePointer',
                 'labelkey' => 'opt_cursor', 'desckey' => null, 'levelprefix' => 'cursorlevel_'],
             ['id' => 'focusMode', 'cat' => 'navigation', 'kind' => 'toggle', 'icon' => 'focus',
