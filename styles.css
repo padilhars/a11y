@@ -1077,42 +1077,25 @@ body.a11y-text-align-3 #page *:not(.local-a11y-root, .local-a11y-root *) { text-
 body.a11y-text-align-4 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: justify !important; }
 
 /* Hide Images
-   Reserves the image's own layout space (no jump) without painting
-   anything itself - visibility:hidden hides an element's own background
-   too, so the striped placeholder + label actually shown while hidden is
-   .local-a11y-hidden-image-wrap/-badge below (amd/src/hide_images.js
-   wraps each <img>/<video> to host them - a void/replaced element can't
-   have children of its own to paint them). */
+   D44: fully hidden, no placeholder - a pedido do usuário. An earlier
+   version kept the image's layout space reserved (visibility:hidden) and
+   filled the gap with a striped background + "Imagem oculta" badge (via
+   amd/src/hide_images.js, since visibility:hidden on the image itself
+   also hides whatever it would have painted, and a void/replaced element
+   like <img>/<video> can't host children of its own to paint instead).
+   display:none removes the element - and its reserved space - entirely,
+   so there is no gap left to explain and no JS wrapping needed any more;
+   this is purely a body-class CSS rule now, same as any other simple
+   toggle effect. */
 
 /*
-Hide Images effect and its placeholder badge.
+Hide Images effect.
 
 Styleguide 10.5.
 */
 body.a11y-hide-images #page img,
 body.a11y-hide-images #page video {
-  visibility: hidden !important;
-}
-.local-a11y-hidden-image-wrap {
-  position: relative;
-  max-width: 100%;
-}
-.local-a11y-hidden-image-badge {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 6px;
-  text-align: center;
-  background-image: repeating-linear-gradient(45deg, #e5e7eb, #e5e7eb 8px, #f3f4f6 8px, #f3f4f6 16px);
-  background-color: #e5e7eb;
-  color: #57534e;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.3;
-  pointer-events: none;
+  display: none !important;
 }
 
 /* Pause Animations */
