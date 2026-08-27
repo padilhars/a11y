@@ -14,18 +14,27 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * "Silenciar Mídia" mutes and pauses audio/video that plays without the
- * user explicitly starting it. A sibling of amd/src/pause_media.js rather
- * than an extension of it (see DECISIONS.md D40): the two options are
+ * "Silenciar Mídia" silences audio/video that plays without the user
+ * explicitly starting it. A sibling of amd/src/pause_media.js rather than
+ * an extension of it (see DECISIONS.md D40): the two options are
  * independently toggleable, target overlapping element types but have
  * incompatible stop() semantics (pause_media.js resumes what it paused;
  * this module deliberately never re-enables sound - see stop() below), and
  * this module additionally has to reach into cross-origin <iframe> embeds,
  * which pause_media.js has no reason to touch.
  *
+ * <video> is only ever muted here, never paused (D46 - it used to pause
+ * too, which duplicated exactly what "Pausar Animações" already does to
+ * <video>, with no benefit: a muted video makes no sound whether it's
+ * playing or not). <audio> has no visual/motion dimension for
+ * pause_media.js to ever cover, so it keeps the original mute+pause
+ * treatment - nothing else in this plugin stops it otherwise. A user who
+ * wants autoplaying video both silent *and* stopped turns both options on;
+ * they already coexist fine (idempotent, independent state).
+ *
  * Coverage, three complementary mechanisms:
  * - Native <audio>/<video> already in the page when the option is turned
- *   on: one sweep at start(), muting+pausing anything with `autoplay` or
+ *   on: one sweep at start(), silencing anything with `autoplay` or
  *   already playing.
  * - Native <audio>/<video> that starts playing *later* while the option is
  *   still on - whether it has `autoplay` or is started by a script/user
@@ -51,7 +60,7 @@
  * without any special-case code.
  *
  * @module     local_a11y/silence_media
- * @description Mutes/pauses autoplaying audio, video and YouTube/Vimeo embeds.
+ * @description Mutes autoplaying audio/video (pausing audio only) and YouTube/Vimeo embeds.
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
@@ -74,13 +83,15 @@ let observer = null;
  * common in custom course-content video players).
  *
  * @param {HTMLMediaElement} el The <audio> or <video> element to check.
- * @return {Boolean} True if the element should be muted/paused.
+ * @return {Boolean} True if the element should be silenced.
  */
 const shouldSilence = (el) => el.autoplay || !el.paused;
 
 /**
- * Mute and pause a single <audio>/<video> element, if it meets
- * shouldSilence(). Idempotent.
+ * Silence a single <audio>/<video> element, if it meets shouldSilence().
+ * <video> is muted only, left playing - see the module docblock (D46) for
+ * why pausing it too would just duplicate Pausar Animações. <audio> is
+ * muted and paused: nothing else in this plugin ever stops it. Idempotent.
  *
  * @param {HTMLMediaElement} el The <audio> or <video> element to silence.
  * @return {void}
@@ -90,7 +101,9 @@ const silenceNative = (el) => {
         return;
     }
     el.muted = true;
-    el.pause();
+    if (el.tagName === 'AUDIO') {
+        el.pause();
+    }
 };
 
 /**
@@ -232,7 +245,9 @@ export const start = () => {
 
     playHandler = (e) => {
         const el = e.target;
-        if ((el.tagName === 'AUDIO' || el.tagName === 'VIDEO') && el.closest('#page')) {
+        if (el.tagName === 'VIDEO' && el.closest('#page')) {
+            el.muted = true;
+        } else if (el.tagName === 'AUDIO' && el.closest('#page')) {
             el.muted = true;
             el.pause();
         }

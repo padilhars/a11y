@@ -81,7 +81,7 @@ class options {
             ['id' => 'hideImages', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'imageOff',
                 'labelkey' => 'opt_hideimages', 'desckey' => null],
             ['id' => 'pauseAnimations', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'pause',
-                'labelkey' => 'opt_pauseanimations', 'desckey' => null],
+                'labelkey' => 'opt_pauseanimations', 'desckey' => null, 'hashelp' => true],
             ['id' => 'silenceMedia', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'volumeX',
                 'labelkey' => 'opt_silencemedia', 'desckey' => 'opt_silencemedia_desc', 'hashelp' => true],
             ['id' => 'tooltips', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'tooltip',

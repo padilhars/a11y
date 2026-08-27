@@ -32,8 +32,10 @@
  * centred in the lens - see DECISIONS.md D42 for the full derivation and
  * for why this needed its own decision (id-stripping to avoid colliding
  * with sibling modules' `#page`-scoped queries, why iframe/video/audio are
- * dropped from the clone, and how it stays in sync with Inverter Cores/
- * Mudar Cores/Saturação/Filtro de Luz Azul without ever re-cloning).
+ * replaced with same-size placeholders in the clone rather than shown or
+ * dropped outright (D42, refined by D45), and how it stays in sync with
+ * Inverter Cores/Mudar Cores/Saturação/Filtro de Luz Azul without ever
+ * re-cloning).
  *
  * Zoom (2x/3x/4x) is a toggle-internal control, not a separate panel
  * stepper - see D42 for why. `+`/`-` cycle it; arrow keys move the lens;
@@ -121,15 +123,22 @@ const zoomBy = (direction) => {
 /**
  * (Re)build the magnified clone from the live #page: strips the id (so
  * this plugin's own `#page`-scoped queries elsewhere - silence_media.js's
- * MutationObserver target, pause_media.js/hide_images.js/silence_media.js's
- * `#page audio/video/img` selectors - can never match anything inside this
- * inert copy) and drops <iframe>/<video>/<audio> (cloneNode does not carry
- * over their live playback/embed state - a cloned video shows a blank
- * frame and a cloned iframe would independently reload its src, wasting
- * bandwidth for a magnified view that would look wrong anyway; better to
- * show nothing there than something misleading). Everything else - text,
- * images, tables, SVGs, form control values - clones faithfully. Nested
- * ids are deliberately left untouched: Contraste's recolouring targets
+ * MutationObserver target, pause_media.js/silence_media.js's `#page audio/
+ * video` selectors - can never match anything inside this inert copy) and
+ * replaces every <iframe>/<video>/<audio> with a same-size, empty <div>
+ * (cloneNode does not carry over their live playback/embed state - a
+ * cloned video shows a blank frame and a cloned iframe would independently
+ * reload its src, wasting bandwidth for a magnified view that would look
+ * wrong anyway; better to show nothing there than something misleading).
+ * Sized, not just removed outright (D45 - an earlier version did that):
+ * dropping the element collapses the layout space it occupied, shifting
+ * everything below it in the clone relative to the real page and breaking
+ * render()'s pointer-to-content coordinate mapping for any content below
+ * one - a page with, say, an embedded video partway down would show
+ * content ~however-tall-that-video-was off from where the pointer
+ * actually is for everything past it. Everything else - text, images,
+ * tables, SVGs, form control values - clones faithfully. Nested ids are
+ * deliberately left untouched: Contraste's recolouring targets
  * `#region-main` and friends by id, and preserving those lets it "just
  * work" inside the magnified view for free (see D42).
  *
@@ -146,7 +155,15 @@ const buildClone = () => {
     }
     const clone = source.cloneNode(true);
     clone.removeAttribute('id');
-    clone.querySelectorAll('iframe, video, audio').forEach((el) => el.remove());
+
+    const liveEls = source.querySelectorAll('iframe, video, audio');
+    clone.querySelectorAll('iframe, video, audio').forEach((el, i) => {
+        const rect = liveEls[i].getBoundingClientRect();
+        const placeholder = document.createElement('div');
+        placeholder.style.cssText = `display:inline-block;width:${rect.width}px;height:${rect.height}px`;
+        el.replaceWith(placeholder);
+    });
+
     pageRect = source.getBoundingClientRect();
     clone.style.width = pageRect.width + 'px';
     contentEl.replaceChildren(clone);
