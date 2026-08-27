@@ -35,6 +35,7 @@ $string['pluginname'] = 'Accessibility (A11y)';
 // Capabilities.
 $string['a11y:view'] = 'Use the accessibility panel';
 $string['a11y:configure'] = 'Configure the accessibility plugin';
+$string['a11y:viewstats'] = 'View the aggregate accessibility usage-stats report';
 
 // Privacy.
 $string['privacy:metadata:preference:local_a11y_settings'] = 'The accessibility options the user has chosen (text size, contrast, active profile, etc).';
@@ -299,6 +300,18 @@ $string['format_modal'] = 'Modal';
 $string['density_compact'] = 'Compact';
 $string['density_regular'] = 'Regular';
 $string['density_comfortable'] = 'Comfortable';
+
+// Statistics (D47 - aggregate, anonymous usage counters).
+$string['settings_stats'] = 'Statistics';
+$string['settings_collectstats'] = 'Collect usage statistics';
+$string['settings_collectstats_desc'] = 'When enabled, every time any user (including guests) turns an accessibility option on, an aggregate, site-wide counter for that specific option is incremented. Only three things are ever stored per option: its id, a running total count, and when it was last updated - nothing else. No user, session, course or IP identifier is ever recorded, and no per-event timestamp is kept, so it is not possible to reconstruct any individual\'s behaviour from this data. Disabled by default. See the report at Site administration → Plugins → Local plugins → Accessibility (A11y) → Usage statistics.';
+$string['statstitle'] = 'Usage statistics';
+$string['statsintro'] = 'Aggregate, anonymous activation counts per accessibility option - one running total per option, site-wide. No user, session, course or IP data is ever collected.';
+$string['statsdisabled'] = 'Usage-statistics collection is currently disabled ("Collect usage statistics" in the plugin settings) - the numbers below, if any, are from when it was previously enabled.';
+$string['statsempty'] = 'No usage statistics recorded yet.';
+$string['statscol_feature'] = 'Option';
+$string['statscol_counter'] = 'Activations';
+$string['statscol_lastupdated'] = 'Last updated';
 
 // Errors.
 $string['error_invalidsettings'] = 'Invalid accessibility settings payload.';

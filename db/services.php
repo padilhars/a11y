@@ -15,9 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version information for local_a11y.
+ * Web service definitions for local_a11y.
  *
- * @description Plugin version information for local_a11y.
+ * @description Web service definitions for local_a11y.
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
@@ -30,11 +30,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_a11y';
-$plugin->version   = 2026082700;
-// Approximate branching version for the Moodle 5.0 release on this timeline
-// (this install is already on branch 502 / 2026042001.07 — see DECISIONS.md D2).
-// Any value at or below the site's current $version satisfies "5.0+" support.
-$plugin->requires  = 2025041500;
-$plugin->maturity  = MATURITY_ALPHA;
-$plugin->release   = '0.1.0';
+$functions = [
+    'local_a11y_record_activation' => [
+        'classname'     => 'local_a11y\external\record_activation',
+        'classpath'     => '',
+        'description'   => 'Records one aggregate, anonymous activation of an accessibility option '
+            . '(no-ops if usage-stat collection is disabled or the id is unknown).',
+        'type'          => 'write',
+        'ajax'          => true,
+        'capabilities'  => 'local/a11y:view',
+    ],
+];

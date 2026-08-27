@@ -2,6 +2,24 @@
 
 All notable changes to `local_a11y` are documented here.
 
+## [Unreleased]
+
+### Added
+
+- 4 new accessibility options: Silence Media, Word Spacing, Blue Light Filter, Magnifier (24 → 28 options total).
+- Optional, off-by-default aggregate usage-statistics counters (`local_a11y_stats` table - one row per option, no user/session/course/IP data ever recorded), a new admin setting ("Collect usage statistics") and a report page (`admin/stats.php`) protected by the new `local/a11y:viewstats` capability (manager archetype by default). See DECISIONS.md D47.
+
+### Changed
+
+- Hide Images now hides fully (`display: none`), no reserved-space placeholder badge.
+- Silence Media no longer pauses `<video>` (only mutes it) - Pause Animations already does that; the two no longer duplicate each other.
+- Privacy: the plugin now has one database table (see "Added" above) - it is 100% aggregate/anonymous, so the Privacy API declaration is unaffected (nothing personal to declare).
+
+### Fixed
+
+- Toggle-option rows now show a pointer cursor across their whole clickable area, not just the switch.
+- Magnifier: fixed a pointer/content misalignment caused by removing (instead of same-size-placeholding) `<iframe>`/`<video>`/`<audio>` elements from its internal clone.
+
 ## [0.1.0] - 2026-07-24
 
 Initial release.

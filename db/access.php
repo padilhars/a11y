@@ -55,4 +55,18 @@ $capabilities = [
     // algum efeito. Ver version.php - o bump de versão aqui é necessário
     // para o admin/cli/upgrade.php de fato remover a capability órfã do
     // banco (update_capabilities() só roda no upgrade quando a versão muda).
+
+    // Can view the aggregate usage-stats report (admin/stats.php, D47).
+    // Deliberately narrower than moodle/site:config: a pedido explícito,
+    // concedida por padrão só ao arquétipo 'manager' - nem editingteacher
+    // nem admin aparecem aqui de propósito (site admins sempre passam em
+    // has_capability() de qualquer forma, via is_siteadmin(), então não
+    // precisam de entrada própria).
+    'local/a11y:viewstats' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+    ],
 ];

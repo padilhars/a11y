@@ -44,9 +44,17 @@ import Tooltips from 'local_a11y/tooltips';
 import FaceNavigation from 'local_a11y/face_navigation';
 import PauseMedia from 'local_a11y/pause_media';
 import SilenceMedia from 'local_a11y/silence_media';
+import Stats from 'local_a11y/stats';
 
 let settings = {...Storage.DEFAULT_SETTINGS};
 let isLoggedIn = false;
+// Whether aggregate usage-stat collection is on (classes/config.php::
+// collect_stats_enabled(), passed in via init() below) - checked before
+// ever calling Stats.recordActivation(), purely to skip a pointless
+// network request on the (default) common case where it's off; the
+// server re-checks this itself regardless (see D47), so this flag is
+// never a security boundary, only an optimisation.
+let statsEnabled = false;
 // Which profile preset (if any) is currently applied. Ephemeral (not
 // persisted) - matches the prototype's own local component state, which
 // also resets on reload; only the resulting `settings` values persist.
@@ -62,6 +70,31 @@ let optionMeta = {};
  * @return {Boolean|Number} The option's default value.
  */
 const defaultOf = (id) => Storage.DEFAULT_SETTINGS[id];
+
+/**
+ * Report one aggregate activation (D47) for every option that just
+ * transitioned from inactive (default) to active (non-default), by
+ * comparing old vs new settings - covers a single toggle/stepper change
+ * as well as a whole profile preset turning several options on at once.
+ * No-ops entirely when statsEnabled is off, without even building the
+ * comparison. Fire-and-forget: never awaited, never blocks the UI.
+ *
+ * @param {Object} oldSettings Settings before the change.
+ * @param {Object} newSettings Settings after the change.
+ * @return {void}
+ */
+const recordNewActivations = (oldSettings, newSettings) => {
+    if (!statsEnabled) {
+        return;
+    }
+    Object.keys(newSettings).forEach((id) => {
+        const wasActive = oldSettings[id] !== defaultOf(id);
+        const isActive = newSettings[id] !== defaultOf(id);
+        if (!wasActive && isActive) {
+            Stats.recordActivation(id);
+        }
+    });
+};
 
 /**
  * Recompute and render every category's active-option badge.
@@ -163,7 +196,9 @@ const onToggle = (id, value) => {
     if (!(id in optionMeta)) {
         return;
     }
+    const oldSettings = settings;
     settings = {...settings, [id]: value};
+    recordNewActivations(oldSettings, settings);
     activeProfileId = null;
     Panel.renderActiveProfile(null);
     commit(id);
@@ -181,7 +216,9 @@ const setStepperValue = (id, value) => {
     if (!meta) {
         return;
     }
+    const oldSettings = settings;
     settings = {...settings, [id]: Math.max(0, Math.min(meta.max, value))};
+    recordNewActivations(oldSettings, settings);
     activeProfileId = null;
     Panel.renderActiveProfile(null);
     commit(id);
@@ -230,7 +267,9 @@ const onProfileSelect = (id) => {
     if (!applied) {
         return;
     }
+    const oldSettings = settings;
     settings = applied;
+    recordNewActivations(oldSettings, settings);
     activeProfileId = id;
     Panel.renderActiveProfile(id);
     commit();
@@ -348,9 +387,11 @@ const buildOptionMeta = (panelEl) => {
  * Entry point.
  *
  * @param {Boolean} loggedIn True for a real (non-guest) logged-in user.
+ * @param {Boolean} collectStatsEnabled classes/config.php::collect_stats_enabled() -
+ *        whether to ever call the usage-stats external function at all (D47).
  * @return {Promise<void>}
  */
-export const init = async(loggedIn) => {
+export const init = async(loggedIn, collectStatsEnabled) => {
     const fab = document.getElementById('local-a11y-fab');
     const panelEl = document.getElementById('local-a11y-panel');
     if (!fab || !panelEl) {
@@ -511,6 +552,7 @@ export const init = async(loggedIn) => {
     });
 
     isLoggedIn = Boolean(loggedIn);
+    statsEnabled = Boolean(collectStatsEnabled);
     optionMeta = buildOptionMeta(panelEl);
     settings = await Storage.getSettings(isLoggedIn);
 

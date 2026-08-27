@@ -225,4 +225,28 @@ if ($hassiteconfig) {
         new lang_string('settings_readingguidecolor_desc', 'local_a11y'),
         '#3b82f6'
     ));
+
+    // ── Estatísticas ─────────────────────────────────────────────────────
+    // Contadores de uso agregados e anônimos (D47) - desligado por padrão;
+    // o admin precisa optar explicitamente. Ver classes/stats.php e
+    // admin/stats.php (relatório, protegido por local/a11y:viewstats).
+    $settings->add(new admin_setting_heading(
+        'local_a11y/statsheading',
+        new lang_string('settings_stats', 'local_a11y'),
+        ''
+    ));
+
+    $settings->add(new admin_setting_configcheckbox(
+        'local_a11y/collectstats',
+        new lang_string('settings_collectstats', 'local_a11y'),
+        new lang_string('settings_collectstats_desc', 'local_a11y'),
+        0
+    ));
+
+    $ADMIN->add('localplugins', new admin_externalpage(
+        'local_a11y_stats',
+        new lang_string('statstitle', 'local_a11y'),
+        new moodle_url('/local/a11y/admin/stats.php'),
+        'local/a11y:viewstats'
+    ));
 }

@@ -201,4 +201,20 @@ class config {
         }
         return format_text($custom, FORMAT_HTML, ['context' => \context_system::instance(), 'para' => false]);
     }
+
+    /**
+     * Whether aggregate, anonymous usage-stat collection (D47) is turned
+     * on. Off by default - the site admin must opt in explicitly via
+     * `local_a11y/collectstats`. This is the single source of truth both
+     * the server (classes/stats.php::record_activation(), which re-checks
+     * this itself rather than trusting any client-supplied flag) and the
+     * client (classes/hook_callbacks.php passes this to amd/src/main.js's
+     * init(), purely so it can skip a pointless network call when off -
+     * never a security boundary on its own) rely on.
+     *
+     * @return bool
+     */
+    public static function collect_stats_enabled(): bool {
+        return (bool) get_config('local_a11y', 'collectstats');
+    }
 }
