@@ -649,6 +649,19 @@ Styleguide 5.6.
   background: var(--a11y-surface); border: 1px solid var(--a11y-border); border-radius: 4px;
   padding: 1px 4px;
 }
+/* D52: a row forced active by another option (hideImages while focusMode
+   is at level 3) - switch stays visibly "on" (its [aria-pressed="true"]
+   background rule further down still applies) but disabled, with a
+   one-line explanatory note on its own line, same wrap mechanism as the
+   help block above but its own class: overloading --has-help for a row
+   that has no help button would be a misleading class name to read later. */
+.local-a11y-option--forced { cursor: default; }
+.local-a11y-option--has-note { flex-wrap: wrap; }
+.local-a11y-switch:disabled { cursor: not-allowed; opacity: 0.7; }
+.local-a11y-option__forced-note {
+  flex: 0 0 100%; font-size: 11.5px; font-style: italic; color: var(--a11y-text-muted);
+  margin-top: 2px; line-height: 1.3;
+}
 .local-a11y-option__icon {
   width: 32px; height: 32px; border-radius: 8px; background: var(--a11y-surface-subtle); color: var(--a11y-text-secondary);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 150ms ease;
@@ -1553,39 +1566,131 @@ body.a11y-cursor-2 #page, body.a11y-cursor-2 #page * {
   cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23fff' stroke='%23000' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
 }
 
-/* Focus Mode
-   Hide as much non-essential Moodle chrome as possible,
-   keeping only the top navbar and the content area (as requested): left
-   course-index drawer, right blocks drawer (#theme_boost-drawers-blocks -
-   the id theme_boost/drawers.mustache actually renders it with; the id
-   this rule used before, #theme_boost-drawers-primary, is a *different*
-   drawer - the small-screen main-nav one - left in the list below too,
-   but it was never the blocks drawer, so the real one was never hidden by
-   id on the standard drawers.mustache layout, only incidentally on the
-   columns2/secure layouts via [data-region="blocks-column"]), mobile
-   primary-nav drawer, secondary course tabs, drawer toggle buttons,
-   breadcrumb, and the site footer - centring the remaining content. */
+/* Focus Mode - D52: converted from a toggle into a 3-level stepper (see
+   DECISIONS.md D52 for why a stepper instead of leaving it a toggle and
+   adding new options alongside it). Each level accumulates the previous
+   one's rules - since only one `a11y-focus-mode-N` class is ever applied
+   at a time (same single-active-class stepper mechanism as contrast/
+   textSize/etc., see amd/src/effects.js::computeClassList()), "accumulate"
+   here means level 2's and level 3's selector lists *repeat* level 1's
+   (and, for level 3, level 2's) rules via :is() groups rather than relying
+   on multiple classes being present together - there is always exactly one.
+
+   Level 1 (unchanged from the original toggle's behaviour): hide as much
+   non-essential Moodle chrome as possible, keeping only the top navbar and
+   the content area - left course-index drawer, right blocks drawer
+   (#theme_boost-drawers-blocks - the id theme_boost/drawers.mustache
+   actually renders it with; the id this rule used before,
+   #theme_boost-drawers-primary, is a *different* drawer - the small-screen
+   main-nav one - left in the list below too, but it was never the blocks
+   drawer, so the real one was never hidden by id on the standard
+   drawers.mustache layout, only incidentally on the columns2/secure
+   layouts via [data-region="blocks-column"]), mobile primary-nav drawer,
+   secondary course tabs, drawer toggle buttons, breadcrumb, and the site
+   footer - centring the remaining content to a plain 900px column.
+
+   Level 2 ("Leitura confortável"/"Comfortable reading") adds: strip the
+   card look Boost's own CSS puts on .main-inner (#topofscroll) - solid
+   white background, 8px border-radius - so the content blends into the
+   page instead of floating on it as a distinct box (confirmed live this
+   is the *only* real card/shadow surface Boost itself renders here -
+   individual sections/activities carry no background/border/shadow of
+   their own on this theme); the same for any Bootstrap .card/.alert/.box/
+   .well a course page's own content might use. Replaces level 1's crude
+   900px cap with an actual reading-width limit in `ch` (character) units -
+   the unit meant exactly for this, staying correct regardless of what
+   font-size another active option (Tamanho do Texto, etc.) has already
+   set - plus a bit of vertical breathing room now that the white card
+   background is gone (was previously provided "for free" by the card's
+   own padding reading like margin).
+
+   Level 3 ("Somente texto"/"Text only") adds on top of level 1+2: hides
+   <img>/<video>/<iframe> and any element marked decorative
+   (`aria-hidden="true"`) that is not itself, and is not inside, an
+   interactive control (a decorative aria-hidden icon glued to a real link
+   is fine to hide; an icon-only *button* would become invisible and
+   unusable if hidden, so those are excluded) - leaving text and links.
+   This never touches, under any circumstance: this plugin's own panel/FAB
+   (already true for free - both mount directly on <body>, never inside
+   #page, see D51) and virtual keyboard (same - see amd/src/
+   virtual_keyboard.js); any <form> or mod_quiz question block (`.que`,
+   covers both an in-progress attempt and a finished review, whichever the
+   response controls happen to be, plus anything else in the question's own
+   text/media - hiding part of a question or its answer would be a serious
+   bug in an assessment context, so the whole block is excluded rather than
+   trying to be clever about exactly which part is the "response"); the
+   Atto/TinyMCE text editor; and MathJax's rendered output (`.MathJax`/
+   `mjx-container` - neither actually contains an <img>/<video>/<iframe>
+   today, so only the aria-hidden sweep could ever reach into one, but it's
+   excluded explicitly rather than relying on that happening to stay true).
+
+   D52 also settles a conflict with Ocultar Imagens (hideImages): level 3
+   already hides images by itself, so hideImages becomes redundant at that
+   point - level 3 always wins (this rule here doesn't need to know or care
+   whether hideImages is separately on), and the panel is kept honest about
+   it by amd/src/main.js::isHideImagesForced() / classes/output/panel.php's
+   $hideimagesforced, which render hideImages as active-but-disabled with
+   an explanatory note instead of letting it claim to be "off" while images
+   are still visibly hidden. */
 
 /*
-Focus mode (hides non-essential chrome).
+Focus mode level 1 (hides non-essential chrome, centres content).
 
-Styleguide 11.6.
+Styleguide 11.6.1.
 */
-body.a11y-focus-mode #theme_boost-drawers-courseindex,
-body.a11y-focus-mode #theme_boost-drawers-blocks,
-body.a11y-focus-mode #theme_boost-drawers-primary,
-body.a11y-focus-mode .secondary-navigation,
-body.a11y-focus-mode .drawertoggle,
-body.a11y-focus-mode [data-region="blocks-column"],
-body.a11y-focus-mode #page-content .breadcrumb,
-body.a11y-focus-mode footer#page-footer,
-body.a11y-focus-mode .navbar .nav-item:not(:first-child) {
+body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) #theme_boost-drawers-courseindex,
+body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) #theme_boost-drawers-blocks,
+body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) #theme_boost-drawers-primary,
+body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) .secondary-navigation,
+body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) .drawertoggle,
+body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) [data-region="blocks-column"],
+body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) #page-content .breadcrumb,
+body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) footer#page-footer,
+body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) .navbar .nav-item:not(:first-child) {
   display: none !important;
 }
-body.a11y-focus-mode #region-main,
-body.a11y-focus-mode #region-main-box {
+body.a11y-focus-mode-1 #region-main,
+body.a11y-focus-mode-1 #region-main-box {
   max-width: 900px !important;
   margin: 0 auto !important;
+}
+
+/*
+Focus mode level 2 (adds: strips card decoration, ~70ch reading width).
+
+Styleguide 11.6.2.
+*/
+body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) .main-inner,
+body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main .card,
+body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main .card-body,
+body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main .box,
+body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main .well {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main,
+body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main-box {
+  max-width: 70ch !important;
+  margin: 32px auto !important;
+}
+
+/*
+Focus mode level 3 (adds: hides images/video/iframes/decorative elements).
+
+Styleguide 11.6.3.
+*/
+body.a11y-focus-mode-3 #page img:not(:is(form, .que, .editor_atto, .tox-tinymce) *),
+body.a11y-focus-mode-3 #page video:not(:is(form, .que, .editor_atto, .tox-tinymce) *),
+body.a11y-focus-mode-3 #page iframe:not(:is(form, .que, .editor_atto, .tox-tinymce) *) {
+  display: none !important;
+}
+body.a11y-focus-mode-3 #page [aria-hidden="true"]:not(
+  :is(a, button, [role="button"], form, .que, .editor_atto, .tox-tinymce, .MathJax, mjx-container),
+  :is(a, button, [role="button"], form, .que, .editor_atto, .tox-tinymce, .MathJax, mjx-container) *
+) {
+  display: none !important;
 }
 
 /* ===========================================================================

@@ -110,6 +110,10 @@ $string['bluelightlevel_0'] = 'Desligado';
 $string['bluelightlevel_1'] = 'Sutil';
 $string['bluelightlevel_2'] = 'Médio';
 $string['bluelightlevel_3'] = 'Forte';
+$string['focusmodelevel_0'] = 'Padrão';
+$string['focusmodelevel_1'] = 'Sem distrações';
+$string['focusmodelevel_2'] = 'Leitura confortável';
+$string['focusmodelevel_3'] = 'Somente texto';
 
 // Options — labels.
 $string['opt_readablefont'] = 'Fonte Legível';
@@ -131,6 +135,7 @@ $string['opt_colorchange_desc'] = 'Filtros para daltonismo';
 $string['opt_saturation'] = 'Saturação';
 $string['opt_bluelightfilter'] = 'Filtro de Luz Azul';
 $string['opt_hideimages'] = 'Ocultar Imagens';
+$string['hideimages_forcednote'] = 'Ativado automaticamente pelo Modo Foco (nível 3 — Somente texto)';
 $string['opt_pauseanimations'] = 'Pausar Animações';
 $string['opt_silencemedia'] = 'Silenciar Mídia';
 $string['opt_silencemedia_desc'] = 'Silencia mídia com reprodução automática';
@@ -140,7 +145,7 @@ $string['opt_readingmask'] = 'Máscara de Leitura';
 $string['opt_magnifier'] = 'Lupa';
 $string['opt_cursor'] = 'Cursor';
 $string['opt_focusmode'] = 'Modo Foco';
-$string['opt_focusmode_desc'] = 'Esconde elementos não essenciais';
+$string['opt_focusmode_desc'] = 'Simplifica a página em 3 níveis progressivos';
 $string['opt_screenreader'] = 'Leitor de Tela';
 $string['opt_screenreader_desc'] = 'Texto para fala';
 $string['opt_virtualkeyboard'] = 'Teclado Virtual';

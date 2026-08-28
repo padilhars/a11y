@@ -33,6 +33,8 @@
 // handled by amd/src/tooltips.js instead (D29), not a body class. silenceMedia
 // (D40) and magnifier (D42) join this exclusion too - purely behavioural,
 // no CSS effect (magnifier's lens is entirely amd/src/magnifier.js).
+// focusMode left this map for STEPPER_CLASS_PREFIX_MAP below (D52 - toggle
+// to 3-level stepper).
 const BOOL_CLASS_MAP = {
     readableFont: 'a11y-readable-font',
     dyslexicFont: 'a11y-dyslexic-font',
@@ -42,7 +44,6 @@ const BOOL_CLASS_MAP = {
     hideImages: 'a11y-hide-images',
     pauseAnimations: 'a11y-pause-animations',
     invertColors: 'a11y-invert',
-    focusMode: 'a11y-focus-mode',
 };
 
 // Verbatim port of classes/manager.php::get_stepper_class_prefix_map().
@@ -57,6 +58,7 @@ const STEPPER_CLASS_PREFIX_MAP = {
     blueLightFilter: 'a11y-bluelight-',
     colorChange: 'a11y-color-',
     cursor: 'a11y-cursor-',
+    focusMode: 'a11y-focus-mode-',
 };
 
 /**

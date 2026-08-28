@@ -60,5 +60,37 @@ function xmldb_local_a11y_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026082700, 'local', 'a11y');
     }
 
+    if ($oldversion < 2026082800) {
+        // D52: focusMode went from a toggle to a 3-level stepper. Every
+        // stored user preference is a JSON blob, one row per user in
+        // {user_preferences} (name = manager::PREFERENCE_NAME) - a legacy
+        // 'focusMode' key there can be JSON true/false rather than an
+        // integer. Reading is already safe either way (manager::
+        // sanitize_settings() does (int) on it, and PHP casts true -> 1,
+        // false -> 0 natively - see the comment on that cast) - this loop
+        // normalises the value at rest instead, so the stored JSON matches
+        // what every other stepper key has always looked like. A
+        // recordset (not get_records) because this table can be large on
+        // a real site; updating the row currently being iterated is safe
+        // (Moodle upgrade scripts do this routinely), inserting new ones
+        // while iterating would not be.
+        $rs = $DB->get_recordset('user_preferences', ['name' => 'local_a11y_settings']);
+        foreach ($rs as $pref) {
+            $settings = json_decode($pref->value, true);
+            if (!is_array($settings) || !array_key_exists('focusMode', $settings)) {
+                continue;
+            }
+            if (!is_bool($settings['focusMode'])) {
+                continue;
+            }
+            $settings['focusMode'] = $settings['focusMode'] ? 1 : 0;
+            $pref->value = json_encode($settings);
+            $DB->update_record('user_preferences', $pref);
+        }
+        $rs->close();
+
+        upgrade_plugin_savepoint(true, 2026082800, 'local', 'a11y');
+    }
+
     return true;
 }

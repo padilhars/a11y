@@ -56,7 +56,9 @@ class profiles {
             [
                 'id' => 'adhd', 'icon' => 'zap', 'tone' => 'pink',
                 'labelkey' => 'profile_adhd', 'desckey' => 'profile_adhd_desc',
-                'apply' => ['readingMask' => true, 'focusMode' => true, 'pauseAnimations' => true],
+                // focusMode => 2 ("Leitura confortável"), not just on/off,
+                // since D52 - see DECISIONS.md D52.
+                'apply' => ['readingMask' => true, 'focusMode' => 2, 'pauseAnimations' => true],
             ],
             [
                 'id' => 'senior', 'icon' => 'user', 'tone' => 'green',
@@ -71,12 +73,14 @@ class profiles {
             [
                 'id' => 'motor', 'icon' => 'hand', 'tone' => 'cyan',
                 'labelkey' => 'profile_motor', 'desckey' => 'profile_motor_desc',
-                'apply' => ['cursor' => 1, 'highlightButtons' => true, 'tooltips' => true, 'focusMode' => false],
+                'apply' => ['cursor' => 1, 'highlightButtons' => true, 'tooltips' => true, 'focusMode' => 0],
             ],
             [
                 'id' => 'cognitive', 'icon' => 'brain', 'tone' => 'teal',
                 'labelkey' => 'profile_cognitive', 'desckey' => 'profile_cognitive_desc',
-                'apply' => ['focusMode' => true, 'pauseAnimations' => true, 'readableFont' => true, 'lineHeight' => 2, 'hideImages' => false],
+                // focusMode => 2 ("Leitura confortável"), not just on/off,
+                // since D52 - see DECISIONS.md D52.
+                'apply' => ['focusMode' => 2, 'pauseAnimations' => true, 'readableFont' => true, 'lineHeight' => 2, 'hideImages' => false],
             ],
             [
                 'id' => 'night', 'icon' => 'moon', 'tone' => 'slate',
