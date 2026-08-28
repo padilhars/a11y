@@ -5,7 +5,7 @@
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4.svg)](https://www.php.net)
 [![Documentação](https://img.shields.io/badge/docs-phpDocumentor%20%7C%20JSDoc%20%7C%20KSS-6f42c1.svg)](docs/README.md)
 
-Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (FAB) e um painel com **28 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
+Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (FAB) e um painel com **29 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
 
 ![Painel aberto mostrando os perfis de acessibilidade](.github/screenshots/m2/02-panel-open.png)
 
@@ -25,7 +25,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 ## Por que usar
 
 - **Sem dependências externas em tempo de execução** — nenhum script, fonte ou API de terceiro é carregado do navegador do usuário final (as duas exceções — CDN do MediaPipe para Navegação por Face e o ícone ONU — estão documentadas e a primeira passa por verificação de integridade SHA-256 antes de ser executada).
-- **28 opções reais, não uma lista de marketing** — cada uma foi implementada, testada em auditoria de segurança e código morto, e documentada (PHPDoc/JSDoc/KSS completos, ver [`docs/`](docs/README.md)).
+- **29 opções reais, não uma lista de marketing** — cada uma foi implementada, testada em auditoria de segurança e código morto, e documentada (PHPDoc/JSDoc/KSS completos, ver [`docs/`](docs/README.md)).
 - **Zero FOUC**: as preferências do usuário são aplicadas antes da primeira pintura da página, via script inline síncrono.
 - **Privacidade real**: a única informação pessoal armazenada é a preferência de acessibilidade do próprio usuário; a única tabela própria do plugin é 100% agregada e anônima (opcional, desligada por padrão — ver "Estatísticas de uso" abaixo); nada é compartilhado com terceiros.
 - **Feito para produção**: controle de acesso via capabilities do Moodle (`local/a11y:view`), Hooks API (não callbacks legados), auditado quanto a segurança e código morto antes de cada publicação.
@@ -69,11 +69,11 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 - **Atalho global `Alt + A`** abre/fecha o painel de qualquer página.
 - Focus trap (WCAG 2.2), `Esc` fecha e devolve o foco ao botão, `aria-live` no contador de opções ativas.
 
-### As 28 opções (5 categorias)
+### As 29 opções (5 categorias)
 
 | Categoria | Opções |
 |---|---|
-| Texto e Tipografia | Fonte Legível, Fonte para Dislexia, Destacar Títulos/Links/Botões, Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Espaçamento entre Palavras, Alinhamento do Texto |
+| Texto e Tipografia | Fonte Legível, Fonte para Dislexia, Destacar Títulos/Links/Botões, Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Espaçamento entre Palavras, Alinhamento do Texto, Leitura Biônica |
 | Cores e Contraste | Contraste (4 níveis), Inverter Cores, Mudar Cores (filtros de daltonismo via SVG), Saturação, Filtro de Luz Azul |
 | Mídia e Animação | Ocultar Imagens, Pausar Animações, Silenciar Mídia, Dicas de Ferramentas |
 | Foco e Navegação | Guia de Leitura, Máscara de Leitura, Lupa, Cursor (3 níveis), Modo Foco (4 níveis) |
@@ -93,7 +93,7 @@ Baixa Visão, Daltonismo, Dislexia, TDAH/Foco, Idoso/Sênior, Epilepsia, Defici�
 
 **Administração do site → Plugins → Plugins locais → Acessibilidade (A11y)**, organizada em 5 seções — todas com descrição em cada campo, explicando o que ele faz:
 
-- **Geral** — ativar/desativar o plugin globalmente; mostrar (ou não) para visitantes; padrões de URL a excluir; quais das 28 opções ficam disponíveis para os usuários.
+- **Geral** — ativar/desativar o plugin globalmente; mostrar (ou não) para visitantes; padrões de URL a excluir; quais das 29 opções ficam disponíveis para os usuários.
 - **Botão Flutuante (FAB)** — posição na tela, ícone e forma (círculo/quadrado).
 - **Painel** — formato em telas de desktop (popover/gaveta/modal — em celulares e tablets pequenos o painel sempre abre no estilo gaveta, veja acima); densidade (compacta/regular/confortável); mostrar ou não a seção de perfis; texto do rodapé do painel.
 - **Cores** — 5 cores independentes: acento do botão/painel, e as cores de "Destacar Títulos", "Destacar Links", "Destacar Botões" e "Guia de Leitura" (cada uma configurável separadamente, para não depender de uma única cor cumprindo vários papéis).

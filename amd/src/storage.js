@@ -54,6 +54,7 @@ export const DEFAULT_SETTINGS = {
     textSpacing: 0,
     wordSpacing: 0,
     textAlign: 0,
+    bionicReading: false,
     contrast: 0,
     invertColors: false,
     colorChange: 0,

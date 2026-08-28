@@ -57,6 +57,7 @@ class manager {
             'textSpacing' => 0,
             'wordSpacing' => 0,
             'textAlign' => 0,
+            'bionicReading' => false,
             'contrast' => 0,
             'invertColors' => false,
             'colorChange' => 0,
@@ -111,7 +112,10 @@ class manager {
      * magnifier joins it as well (D42): its lens is built and positioned
      * entirely by amd/src/magnifier.js, no body class involved. focusMode
      * left this map for get_stepper_class_prefix_map() below (D52 - it grew
-     * from a toggle into a 3-level stepper, see DECISIONS.md).
+     * from a toggle into a 3-level stepper, see DECISIONS.md). bionicReading
+     * joins the behavioural-only group too (D53): it splits each word's own
+     * text into a bold/plain DOM structure, which a body class alone cannot
+     * do - handled entirely by amd/src/bionic_reading.js.
      * is 100% behavioural, handled entirely by amd/src/silence_media.js.
      *
      * @return array<string, string>

@@ -63,6 +63,14 @@ class options {
                 'labelkey' => 'opt_wordspacing', 'desckey' => null, 'levelprefix' => 'wordspacinglevel_'],
             ['id' => 'textAlign', 'cat' => 'typography', 'kind' => 'stepper', 'max' => 4, 'icon' => 'textAlign',
                 'labelkey' => 'opt_textalign', 'desckey' => null, 'levelprefix' => 'alignlevel_'],
+            ['id' => 'bionicReading', 'cat' => 'typography', 'kind' => 'toggle', 'icon' => 'bold',
+                // No desckey (unlike some other hashelp options) - the help
+                // block (help_br_1) already covers the mechanism, and a
+                // one-line desc here just duplicated it verbatim; matches
+                // the majority of hashelp options in this file (readingGuide,
+                // readingMask, magnifier, pauseAnimations, ...), which don't
+                // carry a desc either.
+                'labelkey' => 'opt_bionicreading', 'desckey' => null, 'hashelp' => true],
 
             // -- Color & contrast --
             ['id' => 'contrast', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'contrast',

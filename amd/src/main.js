@@ -44,6 +44,7 @@ import Tooltips from 'local_a11y/tooltips';
 import FaceNavigation from 'local_a11y/face_navigation';
 import PauseMedia from 'local_a11y/pause_media';
 import SilenceMedia from 'local_a11y/silence_media';
+import BionicReading from 'local_a11y/bionic_reading';
 import Stats from 'local_a11y/stats';
 
 let settings = {...Storage.DEFAULT_SETTINGS};
@@ -159,6 +160,7 @@ const syncAdvancedFeatures = () => {
     FaceNavigation.sync(Boolean(settings.faceNavigation));
     PauseMedia.sync(Boolean(settings.pauseAnimations));
     SilenceMedia.sync(Boolean(settings.silenceMedia));
+    BionicReading.sync(Boolean(settings.bionicReading));
     // hideImages needs no JS module (D44) - display:none on a body-class
     // rule alone hides images/video fully, no reserved space to paint.
 };
