@@ -20,6 +20,7 @@ All notable changes to `local_a11y` are documented here.
 
 - Toggle-option rows now show a pointer cursor across their whole clickable area, not just the switch.
 - Magnifier: fixed a pointer/content misalignment caused by removing (instead of same-size-placeholding) `<iframe>`/`<video>`/`<audio>` elements from its internal clone.
+- Magnifier: fixed the *actual* root cause of a pointer/content misalignment that the previous fix only partly addressed - `#page`'s own padding (varies per page/layout) wasn't being copied onto the internal clone, so every magnified point was off by exactly that padding, horizontally or vertically depending on the page. See DECISIONS.md D49.
 - `tests/behat/local_a11y.feature`: fixed two bugs found the first time this scenario was actually executed against a real browser (it never had been before) - a stray click that closed the already-open Typography category before trying to click an option inside it, and an assertion hardcoded to a Portuguese string ("Médio") against a test site whose default language is English ("Medium"). Both scenarios now pass for real.
 
 ### Testing / docs

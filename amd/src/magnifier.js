@@ -164,6 +164,30 @@ const buildClone = () => {
         el.replaceWith(placeholder);
     });
 
+    // D49: #page's own padding/border - not just its width - has to be
+    // copied onto the clone explicitly too. Boost applies #page's padding
+    // via an id selector (varies per page/layout - seen "0 16px 0 48px" on
+    // the dashboard), and the clone lost its id (buildClone() above,
+    // D42/D45) so that rule never reaches it; the clone rendered with
+    // zero padding while render()'s coordinate math still measured
+    // distances from the real #page's padded (border-)box edge, throwing
+    // every mapped point off by exactly the missing padding - horizontally
+    // or vertically depending on which side a given page's padding falls
+    // on. Copying the 4 box-model properties that can shift where content
+    // starts inside the box (padding, border, box-sizing) fixes this for
+    // any page's padding, not just the one this was caught on.
+    const sourceStyle = getComputedStyle(source);
+    clone.style.boxSizing = sourceStyle.boxSizing;
+    clone.style.paddingTop = sourceStyle.paddingTop;
+    clone.style.paddingRight = sourceStyle.paddingRight;
+    clone.style.paddingBottom = sourceStyle.paddingBottom;
+    clone.style.paddingLeft = sourceStyle.paddingLeft;
+    clone.style.borderTopWidth = sourceStyle.borderTopWidth;
+    clone.style.borderRightWidth = sourceStyle.borderRightWidth;
+    clone.style.borderBottomWidth = sourceStyle.borderBottomWidth;
+    clone.style.borderLeftWidth = sourceStyle.borderLeftWidth;
+    clone.style.borderStyle = sourceStyle.borderStyle;
+
     pageRect = source.getBoundingClientRect();
     clone.style.width = pageRect.width + 'px';
     contentEl.replaceChildren(clone);
