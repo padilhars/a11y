@@ -34,7 +34,6 @@ use core_privacy\local\request\writer;
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\local_a11y\privacy\provider::class)]
 final class privacy_provider_test extends \advanced_testcase {
-
     /**
      * PHPUnit fixture setup: resets the Moodle test environment after each test.
      *

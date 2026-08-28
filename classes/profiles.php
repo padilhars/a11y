@@ -31,7 +31,6 @@ namespace local_a11y;
  * @since      0.1.0
  */
 class profiles {
-
     /**
      * Returns the full list of accessibility profile preset definitions.
      *
@@ -86,5 +85,4 @@ class profiles {
             ],
         ];
     }
-
 }

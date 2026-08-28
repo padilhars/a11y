@@ -31,7 +31,6 @@ namespace local_a11y;
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(manager::class)]
 final class manager_test extends \advanced_testcase {
-
     /**
      * PHPUnit fixture setup: resets the Moodle test environment after each test.
      *

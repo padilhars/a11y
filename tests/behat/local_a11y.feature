@@ -14,14 +14,16 @@ Feature: Accessibility panel
 
   Scenario: Changing the text size persists after reloading the page
     Given I click on "#local-a11y-fab" "css_element"
-    And I click on "#local-a11y-panel [data-category-id='typography'] [data-action='toggle-category']" "css_element"
+    # Texto e Tipografia is open by default (classes/options.php::category_default_open())
+    # - no toggle-category click needed/wanted here; clicking it would close an
+    # already-open category and make the option row underneath un-interactable.
     And I click on "#local-a11y-panel [data-option-id='textSize']" "css_element"
     And I click on "#local-a11y-panel [data-option-id='textSize']" "css_element"
-    Then I should see "Médio" in the "#local-a11y-panel [data-option-id='textSize']" "css_element"
+    Then I should see "Medium" in the "#local-a11y-panel [data-option-id='textSize']" "css_element"
     And "body.a11y-text-size-2" "css_element" should exist
     When I reload the page
     And I click on "#local-a11y-fab" "css_element"
-    Then I should see "Médio" in the "#local-a11y-panel [data-option-id='textSize']" "css_element"
+    Then I should see "Medium" in the "#local-a11y-panel [data-option-id='textSize']" "css_element"
     And "body.a11y-text-size-2" "css_element" should exist
 
   Scenario: Applying the Dyslexia profile marks the card active, colours the reset button and sets body classes

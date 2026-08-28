@@ -31,7 +31,6 @@ namespace local_a11y;
  * @since      0.1.0
  */
 class manager {
-
     /** @var string User preference name storing the JSON-encoded settings blob. */
     const PREFERENCE_NAME = 'local_a11y_settings';
 

@@ -33,7 +33,6 @@ namespace local_a11y;
  * @since      0.1.0
  */
 class config {
-
     /**
      * Whether the plugin is enabled site-wide.
      *
@@ -122,7 +121,7 @@ class config {
             'panelformat' => (string) (get_config('local_a11y', 'panelformat') ?: 'popover'),
             'density' => (string) (get_config('local_a11y', 'density') ?: 'regular'),
             'accent' => self::valid_hex_color((string) get_config('local_a11y', 'accent'), '#3b82f6'),
-            'showprofiles' => (function() {
+            'showprofiles' => (function () {
                 $value = get_config('local_a11y', 'showprofiles');
                 return $value === false ? true : (bool) $value;
             })(),

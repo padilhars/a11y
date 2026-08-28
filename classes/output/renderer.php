@@ -33,7 +33,6 @@ use local_a11y\manager;
  * @since      0.1.0
  */
 class renderer extends \plugin_renderer_base {
-
     /**
      * HTML injected into <head>: just the colour-blindness SVG filter defs.
      * The no-FOUC bootstrap itself has to run from the *top of body* (see
@@ -147,7 +146,7 @@ JS;
     private function render_effect_color_vars(): string {
         $colors = config::get_effect_colors();
         $hex = '/^#[0-9a-fA-F]{3,8}$/';
-        $valid = function(string $color, string $default) use ($hex): string {
+        $valid = function (string $color, string $default) use ($hex): string {
             return preg_match($hex, $color) ? $color : $default;
         };
         $titles = $valid($colors['highlighttitles'], '#eab308');

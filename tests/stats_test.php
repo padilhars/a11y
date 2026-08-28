@@ -31,7 +31,6 @@ namespace local_a11y;
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(stats::class)]
 final class stats_test extends \advanced_testcase {
-
     /**
      * PHPUnit fixture setup: resets the Moodle test environment after each test.
      *

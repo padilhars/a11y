@@ -35,7 +35,6 @@ namespace local_a11y;
  * @since      0.1.0
  */
 class options {
-
     /**
      * Returns the full list of accessibility option definitions.
      *
@@ -134,5 +133,4 @@ class options {
             'advanced' => false,
         ];
     }
-
 }

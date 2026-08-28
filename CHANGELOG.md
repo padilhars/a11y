@@ -6,7 +6,8 @@ All notable changes to `local_a11y` are documented here.
 
 ### Added
 
-- 4 new accessibility options: Silence Media, Word Spacing, Blue Light Filter, Magnifier (24 → 28 options total).
+- Text Alignment (D30) and Face Navigation (head-tracking virtual cursor) shipped after 0.1.0 but were never logged here: 22 → 24 options. Face Navigation is part of the original prototype's option set (`_design-reference/a11y-data.jsx` has always had 23 entries) but wasn't implemented yet at the 0.1.0 cut; Text Alignment has no prototype equivalent at all - the first fully-new option beyond the prototype's 23.
+- 4 more new accessibility options this round: Silence Media, Word Spacing, Blue Light Filter, Magnifier (24 → 28 options total).
 - Optional, off-by-default aggregate usage-statistics counters (`local_a11y_stats` table - one row per option, no user/session/course/IP data ever recorded), a new admin setting ("Collect usage statistics") and a report page (`admin/stats.php`) protected by the new `local/a11y:viewstats` capability (manager archetype by default). See DECISIONS.md D47.
 
 ### Changed
@@ -19,6 +20,13 @@ All notable changes to `local_a11y` are documented here.
 
 - Toggle-option rows now show a pointer cursor across their whole clickable area, not just the switch.
 - Magnifier: fixed a pointer/content misalignment caused by removing (instead of same-size-placeholding) `<iframe>`/`<video>`/`<audio>` elements from its internal clone.
+- `tests/behat/local_a11y.feature`: fixed two bugs found the first time this scenario was actually executed against a real browser (it never had been before) - a stray click that closed the already-open Typography category before trying to click an option inside it, and an assertion hardcoded to a Portuguese string ("Médio") against a test site whose default language is English ("Medium"). Both scenarios now pass for real.
+
+### Testing / docs
+
+- Full suite run: PHPUnit (20/20), Behat (`@local_a11y`, 2/2, first successful real-browser run - the Selenium/chromedriver environment from initial development was never completed), `moodlehq/moodle-cs` phpcs (`moodle` standard - 20 auto-fixable whitespace/brace errors fixed; pervasive `@description`/`@version` docblock tags and the lang files' by-section string ordering are known, deliberate deviations from the Moodle standard, left as-is), and an axe-core scan (0 violations with the panel open and every category expanded; combined-effects scan with Magnifier/Silence Media/Blue Light Filter/Word Spacing/Contrast level 3 active found one pre-existing serious color-contrast finding on Moodle core's own dashboard "course overview" block under Contrast level 3 - not part of this plugin's own UI, not fixed here, same class of issue as D35/D36).
+- Regenerated phpDocumentor/JSDoc/KSS docs under `docs/`.
+- Corrected a long-standing option-count inconsistency: this file said 22 for 0.1.0 while README/panel/lang already said 24 - see the "Added" entries above for the full 22 → 24 → 28 trail, and DECISIONS.md D30's correction (it had mis-stated the prototype's own option count).
 
 ## [0.1.0] - 2026-07-24
 

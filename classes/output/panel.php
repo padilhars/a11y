@@ -45,7 +45,6 @@ use renderer_base;
  * @since      0.1.0
  */
 class panel implements renderable, templatable {
-
     /**
      * Builds the full panel Mustache context: header/status text, profile
      * preset cards, and every enabled option grouped into its category.
