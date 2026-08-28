@@ -173,20 +173,31 @@ const toggleProfiles = (header) => {
  * @param {String} id The option id.
  * @param {Boolean|Number} value The option's current value.
  * @param {Boolean|Number} defaultValue The option's default value (used to derive the active state).
+ * @param {Boolean} forced Whether another option is currently forcing this one's visible effect
+ *     regardless of its own value (D52 - hideImages when focusMode is at level 3: the panel must
+ *     never show a toggle as off while its effect is still visibly on). Toggle-only; steppers never
+ *     receive this. Disables the switch (there is nothing a click could meaningfully change while
+ *     forced) and reveals the row's forced-note element, if it has one (see templates/option_toggle.mustache).
  * @return {Promise<void>}
  */
-const renderOption = async(id, value, defaultValue) => {
+const renderOption = async(id, value, defaultValue, forced = false) => {
     const row = panel.querySelector(`[data-region="option"][data-option-id="${id}"]`);
     if (!row) {
         return;
     }
-    const isActive = value !== defaultValue;
+    const isActive = forced || value !== defaultValue;
     row.classList.toggle('local-a11y-option--active', isActive);
 
     if (row.dataset.kind === 'toggle') {
+        row.classList.toggle('local-a11y-option--forced', forced);
         const switchEl = row.querySelector('[data-region="switch"]');
         if (switchEl) {
-            switchEl.setAttribute('aria-pressed', value ? 'true' : 'false');
+            switchEl.setAttribute('aria-pressed', (forced || value) ? 'true' : 'false');
+            switchEl.disabled = forced;
+        }
+        const noteEl = row.querySelector('[data-region="forced-note"]');
+        if (noteEl) {
+            noteEl.hidden = !forced;
         }
         return;
     }
@@ -422,6 +433,17 @@ const registerEventListeners = () => {
             const id = option.dataset.optionId;
             if (option.dataset.kind === 'toggle') {
                 const switchEl = option.querySelector('[data-region="switch"]');
+                // A forced-active row (D52 - e.g. hideImages while
+                // focusMode is at level 3) is disabled on the switch
+                // itself, which already blocks a direct click on it - but
+                // the whole row is clickable via this same delegated
+                // handler (label text, icon, anywhere), so it needs its
+                // own explicit guard too, or clicking beside the switch
+                // would still flip a setting whose effect can't actually
+                // change right now.
+                if (switchEl && switchEl.disabled) {
+                    return;
+                }
                 const pressed = switchEl && switchEl.getAttribute('aria-pressed') === 'true';
                 if (cb.onToggle) {
                     cb.onToggle(id, !pressed);

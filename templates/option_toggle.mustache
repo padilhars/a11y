@@ -34,27 +34,36 @@
     * iconsvg - raw inline <svg> markup
     * label - option label text
     * desc - option description text or null
+    * forced - (D52) true if another option's current value is forcing this
+      one's visible effect on regardless of its own value (only hideImages,
+      when focusMode is at level 3, uses this today) - disables the switch
+      and forces isactive/pressed on, so the row never claims to be "off"
+      while its effect is still visibly on.
+    * forcednote - explanatory text shown (only) while forced is true, or
+      null for every option that can never be forced
 
     Example context (json):
     {
         "id": "readableFont",
         "iconsvg": "<svg></svg>",
         "label": "Readable Font",
-        "desc": "Applies Atkinson Hyperlegible"
+        "desc": "Applies Atkinson Hyperlegible",
+        "forced": false,
+        "forcednote": null
     }
 }}
 {{! No role/tabindex here: the nested <button> below is the sole focusable
     control (WCAG/axe "nested-interactive" forbids a div[role=button]
     wrapping a real <button>). Clicking anywhere on the row still works via
     event delegation in amd/src/panel.js. }}
-<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}{{#hashelp}} local-a11y-option--has-help{{/hashelp}}" data-region="option" data-option-id="{{id}}" data-kind="toggle">
+<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}{{#forced}} local-a11y-option--forced{{/forced}}{{#hashelp}} local-a11y-option--has-help{{/hashelp}}{{#forcednote}} local-a11y-option--has-note{{/forcednote}}" data-region="option" data-option-id="{{id}}" data-kind="toggle">
     <span class="local-a11y-option__icon">{{{iconsvg}}}</span>
     <span class="local-a11y-option__text">
         <span class="local-a11y-option__label">{{label}}</span>
         {{#desc}}<span class="local-a11y-option__desc">{{desc}}</span>{{/desc}}
     </span>
     {{#hashelp}}<button type="button" class="local-a11y-help-btn" data-action="toggle-help" data-option-id="{{id}}" aria-expanded="false" aria-label="{{helplabel}}">?</button>{{/hashelp}}
-    <button type="button" class="local-a11y-switch" data-region="switch" aria-pressed="{{pressed}}" aria-label="{{label}}">
+    <button type="button" class="local-a11y-switch" data-region="switch" aria-pressed="{{pressed}}" aria-label="{{label}}"{{#forced}} disabled{{/forced}}>
         <span class="local-a11y-switch__thumb"></span>
     </button>
     {{#hashelp}}
@@ -62,4 +71,7 @@
         {{{helphtml}}}
     </div>
     {{/hashelp}}
+    {{#forcednote}}
+    <span class="local-a11y-option__forced-note" data-region="forced-note"{{^forced}} hidden{{/forced}}>{{forcednote}}</span>
+    {{/forcednote}}
 </div>

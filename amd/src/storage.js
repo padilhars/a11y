@@ -63,7 +63,7 @@ export const DEFAULT_SETTINGS = {
     readingMask: false,
     magnifier: false,
     cursor: 0,
-    focusMode: false,
+    focusMode: 0,
     screenReader: false,
     virtualKeyboard: false,
     voiceCommands: false,
@@ -81,6 +81,7 @@ const STEPPER_MAX = {
     saturation: 3,
     blueLightFilter: 3,
     cursor: 2,
+    focusMode: 3,
 };
 
 /**
@@ -105,7 +106,19 @@ const sanitize = (raw) => {
             return;
         }
         if (key in STEPPER_MAX) {
-            const value = parseInt(raw[key], 10) || 0;
+            // A guest's localStorage (the only place this sanitize() ever
+            // runs against untrusted data - see getSettings() below) can
+            // hold a legacy boolean for a key that used to be a toggle and
+            // became a stepper (focusMode, D52). parseInt(true, 10)
+            // stringifies to "true" and returns NaN -> the `|| 0` fallback
+            // below would silently turn a legacy "on" into level 0 (off)
+            // instead of preserving it. Coerce true/false to 1/0 first, so
+            // any future toggle-to-stepper migration gets this for free too.
+            let rawValue = raw[key];
+            if (typeof rawValue === 'boolean') {
+                rawValue = rawValue ? 1 : 0;
+            }
+            const value = parseInt(rawValue, 10) || 0;
             result[key] = Math.max(0, Math.min(STEPPER_MAX[key], value));
         } else {
             result[key] = Boolean(raw[key]);

@@ -36,11 +36,12 @@ const PROFILES = {
     lowVision: {textSize: 3, contrast: 3, cursor: 1, highlightLinks: true, highlightButtons: true},
     colorBlind: {colorChange: 2, highlightLinks: true, saturation: 1},
     dyslexia: {dyslexicFont: true, textSpacing: 2, lineHeight: 2, readingGuide: true},
-    adhd: {readingMask: true, focusMode: true, pauseAnimations: true},
+    // focusMode: 2 ("Leitura confortável"), not just on/off, since D52.
+    adhd: {readingMask: true, focusMode: 2, pauseAnimations: true},
     senior: {readableFont: true, textSize: 2, highlightButtons: true, cursor: 1, lineHeight: 1},
     epilepsy: {pauseAnimations: true, saturation: 2, contrast: 1},
-    motor: {cursor: 1, highlightButtons: true, tooltips: true, focusMode: false},
-    cognitive: {focusMode: true, pauseAnimations: true, readableFont: true, lineHeight: 2, hideImages: false},
+    motor: {cursor: 1, highlightButtons: true, tooltips: true, focusMode: 0},
+    cognitive: {focusMode: 2, pauseAnimations: true, readableFont: true, lineHeight: 2, hideImages: false},
     night: {contrast: 1, saturation: 2},
 };
 

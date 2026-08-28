@@ -110,6 +110,10 @@ $string['bluelightlevel_0'] = 'Off';
 $string['bluelightlevel_1'] = 'Subtle';
 $string['bluelightlevel_2'] = 'Medium';
 $string['bluelightlevel_3'] = 'Strong';
+$string['focusmodelevel_0'] = 'Default';
+$string['focusmodelevel_1'] = 'Distraction-free';
+$string['focusmodelevel_2'] = 'Comfortable reading';
+$string['focusmodelevel_3'] = 'Text only';
 
 // Options — labels.
 $string['opt_readablefont'] = 'Readable Font';
@@ -131,6 +135,7 @@ $string['opt_colorchange_desc'] = 'Color-blindness filters';
 $string['opt_saturation'] = 'Saturation';
 $string['opt_bluelightfilter'] = 'Blue Light Filter';
 $string['opt_hideimages'] = 'Hide Images';
+$string['hideimages_forcednote'] = 'Automatically enabled by Focus Mode (level 3 — Text only)';
 $string['opt_pauseanimations'] = 'Pause Animations';
 $string['opt_silencemedia'] = 'Silence Media';
 $string['opt_silencemedia_desc'] = 'Mutes autoplaying media';
@@ -140,7 +145,7 @@ $string['opt_readingmask'] = 'Reading Mask';
 $string['opt_magnifier'] = 'Magnifier';
 $string['opt_cursor'] = 'Cursor';
 $string['opt_focusmode'] = 'Focus Mode';
-$string['opt_focusmode_desc'] = 'Hide non-essential UI';
+$string['opt_focusmode_desc'] = 'Simplifies the page in 3 progressive levels';
 $string['opt_screenreader'] = 'Screen Reader';
 $string['opt_screenreader_desc'] = 'Text-to-speech';
 $string['opt_virtualkeyboard'] = 'Virtual Keyboard';

@@ -29,13 +29,13 @@
  * only two `transform` values are written (never top/left, never anything
  * that forces layout): one to move the lens window to the pointer, one to
  * translate+scale the clone so the point directly under the pointer stays
- * centred in the lens - see DECISIONS.md D42 for the full derivation and
- * for why this needed its own decision (id-stripping to avoid colliding
- * with sibling modules' `#page`-scoped queries, why iframe/video/audio are
- * replaced with same-size placeholders in the clone rather than shown or
- * dropped outright (D42, refined by D45), and how it stays in sync with
- * Inverter Cores/Mudar Cores/Saturação/Filtro de Luz Azul without ever
- * re-cloning).
+ * centred in the lens - see DECISIONS.md D42 for the full derivation, D45
+ * for why iframe/video/audio are replaced with same-size placeholders in
+ * the clone rather than shown or dropped outright, and D51 for why the
+ * clone keeps `id="page"` (D42 originally stripped it; turned out the
+ * theme's own layout CSS needs it, see buildClone() below) - and how it
+ * stays in sync with Inverter Cores/Mudar Cores/Saturação/Filtro de Luz
+ * Azul without ever re-cloning.
  *
  * Zoom (2x/3x/4x) is a toggle-internal control, not a separate panel
  * stepper - see D42 for why. `+`/`-` cycle it; arrow keys move the lens;
@@ -121,26 +121,56 @@ const zoomBy = (direction) => {
 };
 
 /**
- * (Re)build the magnified clone from the live #page: strips the id (so
+ * (Re)build the magnified clone from the live #page, and replaces every
+ * <iframe>/<video>/<audio> with a same-size, empty <div> (cloneNode does
+ * not carry over their live playback/embed state - a cloned video shows a
+ * blank frame and a cloned iframe would independently reload its src,
+ * wasting bandwidth for a magnified view that would look wrong anyway;
+ * better to show nothing there than something misleading). Sized, not
+ * just removed outright (D45 - an earlier version did that): dropping the
+ * element collapses the layout space it occupied, shifting everything
+ * below it in the clone relative to the real page and breaking render()'s
+ * pointer-to-content coordinate mapping for any content below one - a
+ * page with, say, an embedded video partway down would show content
+ * ~however-tall-that-video-was off from where the pointer actually is for
+ * everything past it. Everything else - text, images, tables, SVGs, form
+ * control values - clones faithfully.
+ *
+ * The clone keeps its `id="page"` (D42 originally stripped it to keep
  * this plugin's own `#page`-scoped queries elsewhere - silence_media.js's
- * MutationObserver target, pause_media.js/silence_media.js's `#page audio/
- * video` selectors - can never match anything inside this inert copy) and
- * replaces every <iframe>/<video>/<audio> with a same-size, empty <div>
- * (cloneNode does not carry over their live playback/embed state - a
- * cloned video shows a blank frame and a cloned iframe would independently
- * reload its src, wasting bandwidth for a magnified view that would look
- * wrong anyway; better to show nothing there than something misleading).
- * Sized, not just removed outright (D45 - an earlier version did that):
- * dropping the element collapses the layout space it occupied, shifting
- * everything below it in the clone relative to the real page and breaking
- * render()'s pointer-to-content coordinate mapping for any content below
- * one - a page with, say, an embedded video partway down would show
- * content ~however-tall-that-video-was off from where the pointer
- * actually is for everything past it. Everything else - text, images,
- * tables, SVGs, form control values - clones faithfully. Nested ids are
- * deliberately left untouched: Contraste's recolouring targets
- * `#region-main` and friends by id, and preserving those lets it "just
- * work" inside the magnified view for free (see D42).
+ * MutationObserver target, pause_media.js/silence_media.js's `#page
+ * audio/video` selectors, virtual_keyboard.js's `#page input` selector -
+ * from ever matching anything inside this inert copy). D51: keeping it
+ * turned out to matter more than that risk - Boost's own layout CSS
+ * requires the id (`#page.drawers .main-inner { width: 100%; ... }` is
+ * what actually constrains the reading column's width; strip the id and
+ * that rule stops matching *only* inside the clone, so the cloned column
+ * renders far wider than the real one, wraps its text differently, and
+ * silently drifts out of sync with the real page's layout the further
+ * down you go - reproduced live: the lens showed a paragraph's worth of
+ * content displaced from the real page by hundreds of pixels, confirmed
+ * by comparing exact source/clone element widths (830px real vs 1571px
+ * cloned for the same element) and by restoring the id as a one-line test
+ * (width snapped back to 830px immediately). This is exactly the kind of
+ * theme-CSS rule D49's manual padding/border copy was already patching
+ * around one property at a time - restoring the id fixes the general
+ * case instead of the next one of these to be discovered. The residual
+ * risk this reopens (`#page img`/`#page input` in this plugin's own other
+ * modules now also matching the clone's copies, since ids are technically
+ * duplicated in the document once the clone exists) is real but low:
+ * `getElementById`/`querySelector` single-match calls always resolve to
+ * the real #page regardless (it exists earlier in document order, and
+ * DOM lookups return the first match), and the clone lives inside
+ * `lensEl`, which has `inert` set in start() below - inert already blocks
+ * scripted `.focus()` on any descendant, so virtual_keyboard.js can never
+ * actually interact with a clone's `<input>` even if its selector matches
+ * one; pause_media.js's GIF-freeze matching a clone's `<img>` too is
+ * harmless (freezing an already-inert decorative copy) and arguably more
+ * consistent, not less. Nested ids were already left untouched before
+ * this fix (Contraste's recolouring targets `#region-main` and friends by
+ * id - see D42) - this just extends the same accepted trade-off to the
+ * outermost id too, for the same reason: the theme "just works" inside
+ * the magnified view for free when its own id-scoped CSS can see it.
  *
  * The clone is forced to #page's current on-screen width so it reflows
  * identically (same text wrapping, same table layout) - required for the
@@ -154,7 +184,6 @@ const buildClone = () => {
         return;
     }
     const clone = source.cloneNode(true);
-    clone.removeAttribute('id');
 
     const liveEls = source.querySelectorAll('iframe, video, audio');
     clone.querySelectorAll('iframe, video, audio').forEach((el, i) => {
@@ -258,8 +287,23 @@ const render = () => {
     lensEl.style.transform = `translate(${cx - LENS_RADIUS}px, ${cy - LENS_RADIUS}px)`;
 
     if (pageRect) {
-        const lx = cx - pageRect.left;
-        const ly = cy - pageRect.top;
+        // D50: clamp the sampled point to #page's own box before mapping it
+        // through the zoom transform. The pointer/lens can sit over chrome
+        // that is not part of the clone at all - the course-index drawer,
+        // the navbar, this plugin's own panel - and #page itself shifts
+        // right when that drawer opens (its left edge moves from 0 to the
+        // drawer's width). Unclamped, a pointer left of #page's new left
+        // edge produces a *negative* lx, translating the whole clone far
+        // outside the lens window and leaving it blank (nothing to sample
+        // out there) - reproduced live: opening the course-index drawer and
+        // hovering it showed an empty lens, confirmed via screenshot, not
+        // just the ~150px-off symptom D45/D49 fixed. Clamping to
+        // [0, pageRect.width]/[0, pageRect.height] means hovering chrome
+        // outside #page now shows the nearest frozen edge of real page
+        // content instead of blank space - consistent with this module's
+        // stated scope of magnifying #page content specifically.
+        const lx = Math.max(0, Math.min(pageRect.width, cx - pageRect.left));
+        const ly = Math.max(0, Math.min(pageRect.height, cy - pageRect.top));
         const ox = LENS_RADIUS - (zoom * lx);
         const oy = LENS_RADIUS - (zoom * ly);
         contentEl.style.transform = `translate(${ox}px, ${oy}px) scale(${zoom})`;

@@ -31,7 +31,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_a11y';
-$plugin->version   = 2026082700;
+$plugin->version   = 2026082800;
 // Approximate branching version for the Moodle 5.0 release on this timeline
 // (this install is already on branch 502 / 2026042001.07 — see DECISIONS.md D2).
 // Any value at or below the site's current $version satisfies "5.0+" support.

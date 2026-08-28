@@ -95,8 +95,8 @@ class options {
                 'labelkey' => 'opt_magnifier', 'desckey' => null, 'hashelp' => true],
             ['id' => 'cursor', 'cat' => 'navigation', 'kind' => 'stepper', 'max' => 2, 'icon' => 'mousePointer',
                 'labelkey' => 'opt_cursor', 'desckey' => null, 'levelprefix' => 'cursorlevel_'],
-            ['id' => 'focusMode', 'cat' => 'navigation', 'kind' => 'toggle', 'icon' => 'focus',
-                'labelkey' => 'opt_focusmode', 'desckey' => 'opt_focusmode_desc'],
+            ['id' => 'focusMode', 'cat' => 'navigation', 'kind' => 'stepper', 'max' => 3, 'icon' => 'focus',
+                'labelkey' => 'opt_focusmode', 'desckey' => 'opt_focusmode_desc', 'levelprefix' => 'focusmodelevel_'],
 
             // -- Advanced --
             ['id' => 'screenReader', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'volume',

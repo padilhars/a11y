@@ -88,6 +88,16 @@ class panel implements renderable, templatable {
             $bycategory[$option['cat']][] = $option;
         }
 
+        // D52: hideImages' switch must never render as "off" while
+        // focusMode's level 3 ("Somente texto") is already hiding images
+        // itself - computed once here (from the real current settings, not
+        // just a client-side afterthought) so the *first* server-rendered
+        // paint already gets this right, matching this plugin's usual
+        // no-FOUC standard; amd/src/panel.js re-derives the same thing
+        // client-side (main.js::isHideImagesForced()) for every render
+        // after that.
+        $hideimagesforced = (int) ($settings['focusMode'] ?? 0) === 3;
+
         $categories = [];
         foreach (options::category_order() as $catid) {
             if (empty($bycategory[$catid])) {
@@ -96,7 +106,8 @@ class panel implements renderable, templatable {
             $rows = [];
             $catactivecount = 0;
             foreach ($bycategory[$catid] as $option) {
-                $row = $this->export_option($option, $settings[$option['id']], $defaults[$option['id']]);
+                $forced = $option['id'] === 'hideImages' && $hideimagesforced;
+                $row = $this->export_option($option, $settings[$option['id']], $defaults[$option['id']], $forced);
                 if ($row['isactive']) {
                     $catactivecount++;
                 }
@@ -170,11 +181,15 @@ class panel implements renderable, templatable {
      * @param array<string, mixed> $option Option definition, from options::all().
      * @param bool|int $value Current value for this option (already sanitized).
      * @param bool|int $defaultvalue This option's default value, used to compute isactive.
+     * @param bool $forced (D52) True if another option is forcing this one's visible
+     *     effect on regardless of its own value - see export_for_template()'s
+     *     $hideimagesforced. Toggle-only; never true for a stepper row.
      * @return array<string, mixed> Row context, keyed by the option's id.
      */
-    private function export_option(array $option, $value, $defaultvalue): array {
-        $isactive = $value !== $defaultvalue;
+    private function export_option(array $option, $value, $defaultvalue, bool $forced = false): array {
+        $isactive = $forced || $value !== $defaultvalue;
         $hashelp  = !empty($option['hashelp']);
+        $forcednotekey = $option['id'] === 'hideImages' ? 'hideimages_forcednote' : null;
         $row = [
             'id' => $option['id'],
             'datakey' => $option['id'],
@@ -184,7 +199,9 @@ class panel implements renderable, templatable {
             'istoggle' => $option['kind'] === 'toggle',
             'isstepper' => $option['kind'] === 'stepper',
             'isactive' => $isactive,
-            'pressed' => $option['kind'] === 'toggle' && $value ? 'true' : 'false',
+            'pressed' => $option['kind'] === 'toggle' && ($forced || $value) ? 'true' : 'false',
+            'forced' => $forced,
+            'forcednote' => $forcednotekey ? get_string($forcednotekey, 'local_a11y') : null,
             'hashelp' => $hashelp,
             'helplabel' => $hashelp ? get_string('helpbtn', 'local_a11y') : null,
             'helphtml' => $hashelp ? $this->build_help_html($option['id']) : null,

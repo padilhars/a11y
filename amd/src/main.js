@@ -164,6 +164,29 @@ const syncAdvancedFeatures = () => {
 };
 
 /**
+ * Whether hideImages' own value is currently moot because focusMode's level
+ * 3 ("Somente texto") already hides images itself (D52). The panel must
+ * never show hideImages as off while images are still visibly hidden by
+ * focusMode - see DECISIONS.md D52 for the full precedence rationale
+ * (focusMode level 3 always wins; hideImages' own switch is disabled and
+ * shown active while this is true).
+ *
+ * @return {Boolean}
+ */
+const isHideImagesForced = () => Number(settings.focusMode) === 3;
+
+/**
+ * Render one option row, resolving the D52 hideImages/focusMode "forced"
+ * state for it along the way.
+ *
+ * @param {String} id The option id.
+ * @return {Promise<void>}
+ */
+const renderOptionRow = (id) => Panel.renderOption(
+    id, settings[id], defaultOf(id), id === 'hideImages' && isHideImagesForced()
+);
+
+/**
  * Apply the in-memory `settings` object everywhere: page effects, DOM
  * (single option, or all of them), counts, and persist it.
  *
@@ -174,11 +197,17 @@ const commit = async(onlyId = null) => {
     Effects.apply(settings);
     syncAdvancedFeatures();
     if (onlyId) {
-        await Panel.renderOption(onlyId, settings[onlyId], defaultOf(onlyId));
+        // hideImages' displayed "forced" state depends on focusMode (D52),
+        // so whenever either one changes, both rows need a re-render - not
+        // just whichever one was actually acted on - or the other one's row
+        // would show a stale forced/active state until something else
+        // happened to touch it.
+        const ids = (onlyId === 'focusMode' || onlyId === 'hideImages')
+            ? ['focusMode', 'hideImages']
+            : [onlyId];
+        await Promise.all(ids.filter((id) => id in optionMeta).map(renderOptionRow));
     } else {
-        await Promise.all(Object.keys(optionMeta).map(
-            (id) => Panel.renderOption(id, settings[id], defaultOf(id))
-        ));
+        await Promise.all(Object.keys(optionMeta).map(renderOptionRow));
     }
     renderCategoryCounts();
     await renderHeaderCount();
@@ -340,7 +369,14 @@ voiceCallbacks = {
     // Focus & navigation tools
     toggleReadingGuide: () => onToggle('readingGuide', !settings.readingGuide),
     toggleReadingMask: () => onToggle('readingMask', !settings.readingMask),
-    toggleFocusMode: () => onToggle('focusMode', !settings.focusMode),
+    // focusMode is a stepper since D52 (was a plain toggle) - onToggle()
+    // would write a raw JS boolean into a settings key everything else
+    // expects to be an integer level, breaking the row's own re-render and
+    // Effects.apply()'s parseInt(). The voice phrase itself ("modo foco")
+    // is still an on/off toggle by design, so keep it one: off -> level 1
+    // (the level that preserves this option's original toggle-only
+    // behaviour), anything already on -> off.
+    toggleFocusMode: () => setStepperValue('focusMode', settings.focusMode > 0 ? 0 : 1),
     toggleScreenReader: () => onToggle('screenReader', !settings.screenReader),
     toggleVirtualKeyboard: () => onToggle('virtualKeyboard', !settings.virtualKeyboard),
 

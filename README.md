@@ -76,7 +76,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 | Texto e Tipografia | Fonte Legível, Fonte para Dislexia, Destacar Títulos/Links/Botões, Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Espaçamento entre Palavras, Alinhamento do Texto |
 | Cores e Contraste | Contraste (4 níveis), Inverter Cores, Mudar Cores (filtros de daltonismo via SVG), Saturação, Filtro de Luz Azul |
 | Mídia e Animação | Ocultar Imagens, Pausar Animações, Silenciar Mídia, Dicas de Ferramentas |
-| Foco e Navegação | Guia de Leitura, Máscara de Leitura, Lupa, Cursor (3 níveis), Modo Foco |
+| Foco e Navegação | Guia de Leitura, Máscara de Leitura, Lupa, Cursor (3 níveis), Modo Foco (4 níveis) |
 | Recursos Avançados | Leitor de Tela (texto-para-fala), Teclado Virtual, Comandos por Voz, Navegação por Face |
 
 ### Os 9 perfis

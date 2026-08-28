@@ -91,7 +91,19 @@ class renderer extends \plugin_renderer_base {
             }
         });
         Object.keys(stepperMap).forEach(function(key) {
-            var value = parseInt(settings[key], 10) || 0;
+            // A guest's localStorage can still hold a pre-D52 legacy
+            // boolean for a key that has since become a stepper (focusMode:
+            // true/false) - this path never goes through sanitize_settings()
+            // server-side (guests have no server record), so it has to
+            // guard for itself. parseInt(true, 10) stringifies to "true"
+            // first and returns NaN -> the `|| 0` fallback would silently
+            // turn a legacy "on" into level 0 (off) instead of preserving
+            // it - coerce true/false to 1/0 before parseInt ever runs.
+            var raw = settings[key];
+            if (typeof raw === 'boolean') {
+                raw = raw ? 1 : 0;
+            }
+            var value = parseInt(raw, 10) || 0;
             if (value > 0) {
                 classes.push(stepperMap[key] + value);
             }

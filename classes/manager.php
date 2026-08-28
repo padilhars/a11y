@@ -66,7 +66,7 @@ class manager {
             'readingMask' => false,
             'magnifier' => false,
             'cursor' => 0,
-            'focusMode' => false,
+            'focusMode' => 0,
             'screenReader' => false,
             'virtualKeyboard' => false,
             'voiceCommands' => false,
@@ -91,6 +91,7 @@ class manager {
             'saturation' => 3,
             'blueLightFilter' => 3,
             'cursor' => 2,
+            'focusMode' => 3,
         ];
     }
 
@@ -108,7 +109,9 @@ class manager {
      * its own - muting/pausing media and posting messages to embed iframes
      * is 100% behavioural, handled entirely by amd/src/silence_media.js.
      * magnifier joins it as well (D42): its lens is built and positioned
-     * entirely by amd/src/magnifier.js, no body class involved.
+     * entirely by amd/src/magnifier.js, no body class involved. focusMode
+     * left this map for get_stepper_class_prefix_map() below (D52 - it grew
+     * from a toggle into a 3-level stepper, see DECISIONS.md).
      * is 100% behavioural, handled entirely by amd/src/silence_media.js.
      *
      * @return array<string, string>
@@ -123,7 +126,6 @@ class manager {
             'hideImages' => 'a11y-hide-images',
             'pauseAnimations' => 'a11y-pause-animations',
             'invertColors' => 'a11y-invert',
-            'focusMode' => 'a11y-focus-mode',
         ];
     }
 
@@ -132,6 +134,10 @@ class manager {
      * appended, e.g. 'textSize' level 2 -> "a11y-text-size-2"), a verbatim
      * port of the equivalent lines in _design-reference/app.jsx. Note
      * colorChange maps to the "a11y-color-" prefix, not "a11y-color-change-".
+     * focusMode is the one entry here with no prototype equivalent at all
+     * (D52): it was a plain toggle through 0.1.0, converted to a 3-level
+     * stepper the same way textSize/cursor/etc. already work - see
+     * DECISIONS.md D52 for why a stepper instead of a new option.
      *
      * @return array<string, string>
      */
@@ -147,6 +153,7 @@ class manager {
             'blueLightFilter' => 'a11y-bluelight-',
             'colorChange' => 'a11y-color-',
             'cursor' => 'a11y-cursor-',
+            'focusMode' => 'a11y-focus-mode-',
         ];
     }
 
@@ -203,6 +210,11 @@ class manager {
                 continue;
             }
             if (isset($steppermax[$key])) {
+                // (int) is safe for a legacy boolean here (D52 - focusMode
+                // moved from toggle to stepper): PHP casts true -> 1, false
+                // -> 0 natively, unlike JS's parseInt(), which needs an
+                // explicit guard - see amd/src/storage.js::sanitize() and
+                // render_nofouc_script() for the client-side equivalent.
                 $value = (int) $raw[$key];
                 $result[$key] = max(0, min($steppermax[$key], $value));
             } else {
