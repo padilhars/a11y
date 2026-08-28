@@ -1127,6 +1127,58 @@ body.a11y-pause-animations #page *::before, body.a11y-pause-animations #page *::
   transition-delay: 0s !important;
 }
 
+/* Bionic Reading (amd/src/bionic_reading.js)
+   Two elements live inside each processed text node's `.local-a11y-br`
+   wrapper - see DECISIONS.md D53 for the full accessibility investigation:
+   a `[aria-hidden="true"]` span holding the decorative bold/plain visual
+   copy (never reaches the accessibility tree, so a screen reader can never
+   see a word split across two elements), and a `.local-a11y-br-original`
+   span holding a visually-hidden-but-audible copy of the exact original
+   text (clip-based, not display:none, so it stays IN the accessibility
+   tree) - a screen reader reads precisely what it would have read without
+   this option ever running. `.local-a11y-br` itself needs no display rule
+   of its own: a plain <span>'s default `inline` is exactly right here: any
+   other value would change the page's own line-wrapping.
+
+   The <b> weight fight: Fonte para Dislexia (Styleguide 10.1) sets
+   `font-weight: 500 !important` on a `#page *` wildcard - specificity
+   (1 id, 2 classes, 1 type) - which would otherwise beat a plain
+   `b { font-weight: 700 }` and flatten the bold prefix back down whenever
+   both options are active together. Anchoring this rule at `#page` too
+   (not just `.local-a11y-br b` on its own) gives it the same ID-level
+   specificity as that wildcard, plus its own extra class+type on top, so
+   it always wins regardless of declaration order - (1 id, 2 classes,
+   2 types) beats (1 id, 2 classes, 1 type). Separately: Lexend (the font
+   Fonte para Dislexia switches to) is registered as a *variable* font
+   whose @font-face (Styleguide 1) only spans weight 400-600 - asking it
+   for 700 gets silently clamped, so the rule for when that option is also
+   active asks for 600 (Lexend's real maximum) instead, so the bold prefix
+   still reads meaningfully heavier than the surrounding 500-weight text
+   instead of requesting a weight the font can't actually produce. */
+
+/*
+Bionic Reading effect (bold word-prefix + screen-reader-safe original text).
+
+Styleguide 10.7.
+*/
+.local-a11y-br-original {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+#page .local-a11y-br b {
+  font-weight: 700 !important;
+}
+body.a11y-dyslexic-font #page .local-a11y-br b {
+  font-weight: 600 !important;
+}
+
 /* ===========================================================================
    CONTRAST & COLOUR FILTERS
 

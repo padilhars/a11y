@@ -243,6 +243,7 @@ class panel implements renderable, templatable {
             'silenceMedia' => ['prefix' => 'help_sm_', 'count' => 5, 'tag' => 'ul'],
             'magnifier' => ['prefix' => 'help_mag_', 'count' => 4, 'tag' => 'ul'],
             'pauseAnimations' => ['prefix' => 'help_pa_', 'count' => 4, 'tag' => 'ul'],
+            'bionicReading' => ['prefix' => 'help_br_', 'count' => 4, 'tag' => 'ul'],
         ];
         if (!isset($specs[$optionid])) {
             return '';
