@@ -13,7 +13,7 @@ Documentação gerada a partir do código-fonte e dos comentários (PHPDoc, JSDo
 |---|---|---|
 | [API PHP](api-php/index.html) | phpDocumentor 3 | `classes/`, `lib.php`, `settings.php`, `version.php`, `db/`, `lang/` — todas as classes, métodos, `@param`/`@return`/`@throws` |
 | [API JavaScript](api-js/index.html) | JSDoc 4 | `amd/src/*.js` — todos os módulos AMD e suas funções (exportadas e internas) |
-| [Style Guide (CSS)](styleguide/index.html) | KSS-node | `styles.css` — 30 seções: design tokens, componentes do FAB/painel, efeitos de página (`body.a11y-*`), contraste e filtros de cor |
+| [Style Guide (CSS)](styleguide/index.html) | KSS-node | `styles.css` — 33 seções: design tokens, componentes do FAB/painel, efeitos de página (`body.a11y-*`), contraste e filtros de cor, lupa |
 | [Templates Mustache](templates.md) | Referência manual | `templates/*.mustache` — as 5 templates e suas variáveis de contexto |
 
 ## Como regenerar

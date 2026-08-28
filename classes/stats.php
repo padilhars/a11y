@@ -33,7 +33,6 @@ namespace local_a11y;
  * @since      0.1.0
  */
 class stats {
-
     /** @var string The table this class reads/writes - see db/install.xml. */
     const TABLE = 'local_a11y_stats';
 

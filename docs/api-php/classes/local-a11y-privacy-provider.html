@@ -64,6 +64,10 @@
 </h4>
     <ul class="phpdocumentor-list">
                     <li>
+                <a href="namespaces/local-a11y-external.html" class="">external</a>
+                
+            </li>
+                    <li>
                 <a href="namespaces/local-a11y-output.html" class="">output</a>
                 
             </li>
@@ -139,19 +143,29 @@
         <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/privacy/provider.php"><a href="files/classes-privacy-provider.html"><abbr title="classes/privacy/provider.php">provider.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">42</span>
+    <span class="phpdocumentor-element-found-in__line">53</span>
 
     </aside>
 
             <p class="phpdocumentor-summary">Privacy provider for local_a11y.</p>
 
 
-    <section class="phpdocumentor-description"><p>The plugin stores exactly one piece of personal data: the
+    <section class="phpdocumentor-description"><p>The plugin stores exactly one piece of PERSONAL data: the
 <code class="prettyprint">local_a11y_settings</code> user preference (a JSON blob of the user's chosen
-accessibility options). No database tables, no data shared with other
-users or systems. Not-logged-in/guest users' settings live in the
+accessibility options). Not-logged-in/guest users' settings live in the
 browser's localStorage only, which Moodle's privacy subsystem has no
 visibility into (and nothing to export/delete server-side for).</p>
+<p>Since D47 the plugin also has one database table, <code class="prettyprint">local_a11y_stats</code>
+(optional, off by default - see <code class="prettyprint">local_a11y/collectstats</code>) - it is
+DELIBERATELY NOT declared anywhere below via <code class="prettyprint">add_database_table()</code>
+(the method for describing tables that <em>do</em> hold personal data),
+because it holds none: one row per accessibility option (a global
+counter and a last-modified timestamp), no userid/courseid/sessionid/
+IP/per-event timestamp column at all, so there is nothing in it to
+export or delete for any individual user, and no code path in this
+plugin ever queries it by user. See DECISIONS.md D47 for the full
+schema rationale and classes/stats.php for the only code that writes
+to it.</p>
 </section>
 
 
@@ -264,7 +278,12 @@ visibility into (and nothing to export/delete server-side for).</p>
     <span>
                                 &nbsp;: <abbr title="\core_privacy\local\metadata\collection">collection</abbr>    </span>
 </dt>
-<dd>Declares the one piece of personal data this plugin stores.</dd>
+<dd>Declares the one piece of personal data this plugin stores. Does
+NOT declare `local_a11y_stats` (D47): that table is fully aggregate
+(one counter per accessibility option, site-wide) and contains no
+column that identifies a user, session, course or individual
+request - there is nothing personal in it to declare. See the class
+docblock above for the full reasoning.</dd>
 
     </dl>
 
@@ -294,7 +313,7 @@ visibility into (and nothing to export/delete server-side for).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/privacy/provider.php"><a href="files/classes-privacy-provider.html"><abbr title="classes/privacy/provider.php">provider.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">66</span>
+    <span class="phpdocumentor-element-found-in__line">81</span>
 
     </aside>
 
@@ -341,11 +360,16 @@ visibility into (and nothing to export/delete server-side for).</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/privacy/provider.php"><a href="files/classes-privacy-provider.html"><abbr title="classes/privacy/provider.php">provider.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">52</span>
+    <span class="phpdocumentor-element-found-in__line">67</span>
 
     </aside>
 
-        <p class="phpdocumentor-summary">Declares the one piece of personal data this plugin stores.</p>
+        <p class="phpdocumentor-summary">Declares the one piece of personal data this plugin stores. Does
+NOT declare `local_a11y_stats` (D47): that table is fully aggregate
+(one counter per accessibility option, site-wide) and contains no
+column that identifies a user, session, course or individual
+request - there is nothing personal in it to declare. See the class
+docblock above for the full reasoning.</p>
 
     <code class="phpdocumentor-code phpdocumentor-signature ">
     <span class="phpdocumentor-signature__visibility">public</span>

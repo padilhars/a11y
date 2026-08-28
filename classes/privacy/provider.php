@@ -53,7 +53,6 @@ use core_privacy\local\request\writer;
 class provider implements
     \core_privacy\local\metadata\provider,
     \core_privacy\local\request\user_preference_provider {
-
     /**
      * Declares the one piece of personal data this plugin stores. Does
      * NOT declare `local_a11y_stats` (D47): that table is fully aggregate

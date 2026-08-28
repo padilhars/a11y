@@ -32,7 +32,6 @@ namespace local_a11y;
  * @since      0.1.0
  */
 class icons {
-
     /** @var array<string,string> Icon name => inner SVG markup (path/circle/etc, no outer <svg>). */
     const PATHS = [
         'accessibility' => '<circle cx="12" cy="4" r="2"/><path d="M19 13v-2a7 7 0 0 0-14 0v2"/><path d="m12 12 4 10"/><path d="m12 12-4 10"/><path d="M8 16h8"/>',

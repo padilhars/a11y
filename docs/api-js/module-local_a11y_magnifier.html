@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: local_a11y/magnifier</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: local_a11y/magnifier</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">A circular lens that follows the pointer/keyboard and magnifies real #page content.</div>
+        
+
+        
+
+
+<dl class="details">
+
+    
+    <dt class="tag-version">Version:</dt>
+    <dd class="tag-version"><ul class="dummy"><li>0.1.0</li></ul></dd>
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>0.1.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li><a href="mailto:padilhars@gmail.com">Rodrigo Padilha Silveira</a></li>
+        
+            <li><a href="mailto:jeronimo.madruga@gmail.com">Jerônimo Medina Madruga</a></li>
+        </ul>
+    </dd>
+    
+
+    
+    <dt class="tag-copyright">Copyright:</dt>
+    <dd class="tag-copyright"><ul class="dummy"><li>Universidade Federal de Pelotas - UFPel</li></ul></dd>
+    
+
+    
+    <dt class="tag-license">License:</dt>
+    <dd class="tag-license"><ul class="dummy"><li>http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later</li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="magnifier.js.html">magnifier.js</a>, <a href="magnifier.js.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id=".start"><span class="type-signature">(static, constant) </span>start<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Start the magnifier: build the lens/clone, wire pointer + keyboard
+input, watch #page for content changes, and kick off render(). Idempotent.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="magnifier.js.html">magnifier.js</a>, <a href="magnifier.js.html#line253">line 253</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".stop"><span class="type-signature">(static, constant) </span>stop<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Stop the magnifier: cancel the render loop, disconnect the observer,
+remove every listener this module added, and remove the lens. No
+listener/observer/rAF is left behind. Idempotent.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="magnifier.js.html">magnifier.js</a>, <a href="magnifier.js.html#line350">line 350</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id=".sync"><span class="type-signature">(static, constant) </span>sync<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Toggle the magnifier on/off.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="magnifier.js.html">magnifier.js</a>, <a href="magnifier.js.html#line381">line 381</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~buildClone"><span class="type-signature">(inner) </span>buildClone<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    (Re)build the magnified clone from the live #page: strips the id (so
+this plugin's own `#page`-scoped queries elsewhere - silence_media.js's
+MutationObserver target, pause_media.js/silence_media.js's `#page audio/
+video` selectors - can never match anything inside this inert copy) and
+replaces every <iframe>/<video>/<audio> with a same-size, empty <div>
+(cloneNode does not carry over their live playback/embed state - a
+cloned video shows a blank frame and a cloned iframe would independently
+reload its src, wasting bandwidth for a magnified view that would look
+wrong anyway; better to show nothing there than something misleading).
+Sized, not just removed outright (D45 - an earlier version did that):
+dropping the element collapses the layout space it occupied, shifting
+everything below it in the clone relative to the real page and breaking
+render()'s pointer-to-content coordinate mapping for any content below
+one - a page with, say, an embedded video partway down would show
+content ~however-tall-that-video-was off from where the pointer
+actually is for everything past it. Everything else - text, images,
+tables, SVGs, form control values - clones faithfully. Nested ids are
+deliberately left untouched: Contraste's recolouring targets
+`#region-main` and friends by id, and preserving those lets it "just
+work" inside the magnified view for free (see D42).
+
+The clone is forced to #page's current on-screen width so it reflows
+identically (same text wrapping, same table layout) - required for the
+pointer-to-content coordinate mapping in render() to line up.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="magnifier.js.html">magnifier.js</a>, <a href="magnifier.js.html#line151">line 151</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~clampTarget"><span class="type-signature">(inner) </span>clampTarget<span class="signature">(x, y)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Clamp a target lens-centre coordinate so the lens circle never goes
+partially off-screen (mouse can already never leave the viewport; this
+matters for the arrow-key path, which otherwise has no such limit).
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>x</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The unclamped horizontal target.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>y</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The unclamped vertical target.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="magnifier.js.html">magnifier.js</a>, <a href="magnifier.js.html#line105">line 105</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The clamped target.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~isTypingContext"><span class="type-signature">(inner) </span>isTypingContext<span class="signature">()</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Whether the user is currently typing/selecting in a form control - arrow
+keys and +/- must behave normally there (move the text cursor, type a
+literal "+"/"-", etc.) instead of being hijacked to move the lens/zoom,
+same courtesy voice_commands.js and virtual_keyboard.js extend to text
+entry elsewhere in this plugin.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="magnifier.js.html">magnifier.js</a>, <a href="magnifier.js.html#line84">line 84</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    True if the currently focused element accepts text input.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~render"><span class="type-signature">(inner) </span>render<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Per-frame render loop (requestAnimationFrame while active). Reads
+#page's current rect and computed `filter` (cheap reads; nothing this
+module writes beforehand is layout-affecting, so neither read forces
+extra synchronous layout beyond what the frame needed anyway), then
+writes exactly two `transform` values and, only when it actually
+changed, one `filter` value - never `top`/`left`, never anything else,
+so there is no reflow caused by this loop itself:
+
+- lensEl gets translated so its centre sits on the (clamped) target.
+- contentEl gets translated+scaled so the page point under the target
+  stays centred in the lens: with the clone's own top-left as the
+  transform-origin, a page point that is (lx, ly) away from #page's
+  current top-left must land on the lens's local centre (R, R) after
+  scaling by `zoom` - solving `zoom * (lx, ly) + (ox, oy) = (R, R)` for
+  the translate gives `(ox, oy) = (R - zoom*lx, R - zoom*ly)`.
+- contentEl's `filter` is kept identical to #page's own computed filter,
+  so Inverter Cores/Mudar Cores/Saturação/Filtro de Luz Azul (all
+  `filter`-based - see D31/D37/D40) stay visually in sync inside the
+  magnified view even though the clone lost #page's id (see buildClone
+  docblock) and so can no longer be reached by the `#page`-selector
+  rules that apply those filters directly.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="magnifier.js.html">magnifier.js</a>, <a href="magnifier.js.html#line218">line 218</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~scheduleRefresh"><span class="type-signature">(inner) </span>scheduleRefresh<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Coalesce MutationObserver callbacks into at most one re-clone per
+animation frame, however many mutations fired in between - re-cloning is
+the one part of this module that does force a layout (appending a whole
+#page copy), so it must never run on the render() hot path itself.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="magnifier.js.html">magnifier.js</a>, <a href="magnifier.js.html#line180">line 180</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~zoomBy"><span class="type-signature">(inner) </span>zoomBy<span class="signature">(direction)</span><span class="type-signature"> &rarr; {void}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Move the zoom level by one step (+1 = zoom in, -1 = zoom out), clamped to
+ZOOM_LEVELS - does not wrap.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>direction</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">+1 to zoom in, -1 to zoom out.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="magnifier.js.html">magnifier.js</a>, <a href="magnifier.js.html#line117">line 117</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">void</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-local_a11y_effects.html">local_a11y/effects</a></li><li><a href="module-local_a11y_fab_lift.html">local_a11y/fab_lift</a></li><li><a href="module-local_a11y_face_navigation.html">local_a11y/face_navigation</a></li><li><a href="module-local_a11y_magnifier.html">local_a11y/magnifier</a></li><li><a href="module-local_a11y_main.html">local_a11y/main</a></li><li><a href="module-local_a11y_panel.html">local_a11y/panel</a></li><li><a href="module-local_a11y_pause_media.html">local_a11y/pause_media</a></li><li><a href="module-local_a11y_profiles.html">local_a11y/profiles</a></li><li><a href="module-local_a11y_reading_guide.html">local_a11y/reading_guide</a></li><li><a href="module-local_a11y_reading_mask.html">local_a11y/reading_mask</a></li><li><a href="module-local_a11y_screen_reader.html">local_a11y/screen_reader</a></li><li><a href="module-local_a11y_silence_media.html">local_a11y/silence_media</a></li><li><a href="module-local_a11y_stats.html">local_a11y/stats</a></li><li><a href="module-local_a11y_storage.html">local_a11y/storage</a></li><li><a href="module-local_a11y_tooltips.html">local_a11y/tooltips</a></li><li><a href="module-local_a11y_virtual_keyboard.html">local_a11y/virtual_keyboard</a></li><li><a href="module-local_a11y_voice_commands.html">local_a11y/voice_commands</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Aug 27 2026 23:29:42 GMT-0300 (Brasilia Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

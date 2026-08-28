@@ -31,7 +31,6 @@ namespace local_a11y;
  * @since      0.1.0
  */
 class tone_colors {
-
     /** @var array<string, array<string, string>> */
     const COLORS = [
         'blue'   => ['bg' => '#eff6ff', 'text' => '#1d4ed8', 'icon' => '#3b82f6', 'border' => '#dbeafe'],

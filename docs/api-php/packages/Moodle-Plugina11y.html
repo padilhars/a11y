@@ -64,6 +64,10 @@
 </h4>
     <ul class="phpdocumentor-list">
                     <li>
+                <a href="namespaces/local-a11y-external.html" class="">external</a>
+                
+            </li>
+                    <li>
                 <a href="namespaces/local-a11y-output.html" class="">output</a>
                 
             </li>
@@ -133,15 +137,19 @@
                     <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-config.html"><abbr title="\local_a11y\config">config</abbr></a></dt><dd>Reads admin settings (settings.php) with sane defaults, so the rest of the
 plugin never has to know a setting might not exist yet (fresh install
 before cache warm-up, or M1-M5 milestones where settings.php is still
-minimal).</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-hook-callbacks.html"><abbr title="\local_a11y\hook_callbacks">hook_callbacks</abbr></a></dt><dd>Hook callbacks for local_a11y.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-icons.html"><abbr title="\local_a11y\icons">icons</abbr></a></dt><dd>Inline SVG icon registry — a verbatim PHP port of ICON_PATHS in
+minimal).</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-external-record-activation.html"><abbr title="\local_a11y\external\record_activation">record_activation</abbr></a></dt><dd>External function: records one aggregate activation of an accessibility
+option (D47). Called from amd/src/stats.js whenever an option
+transitions from inactive to default-changed in amd/src/main.js.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-hook-callbacks.html"><abbr title="\local_a11y\hook_callbacks">hook_callbacks</abbr></a></dt><dd>Hook callbacks for local_a11y.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-icons.html"><abbr title="\local_a11y\icons">icons</abbr></a></dt><dd>Inline SVG icon registry — a verbatim PHP port of ICON_PATHS in
 _design-reference/a11y-data.jsx (Lucide icons @ 0.453, stroke 1.75), so
 the plugin renders pixel-identical icons without a JS icon library.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-manager.html"><abbr title="\local_a11y\manager">manager</abbr></a></dt><dd>Central place for defaults, activation checks, merge/validate/sanitize
-logic for local_a11y settings.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-options.html"><abbr title="\local_a11y\options">options</abbr></a></dt><dd>The 23 accessibility options — a PHP port of OPTIONS in
+logic for local_a11y settings.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-options.html"><abbr title="\local_a11y\options">options</abbr></a></dt><dd>The 28 accessibility options — a PHP port of OPTIONS in
 _design-reference/a11y-data.jsx (same ids, same grouping, same order),
-plus one addition beyond the prototype: &#039;textAlign&#039; (see DECISIONS.md
-D30). Labels/descriptions are resolved via get_string() instead of the
-prototype&#039;s inline pt-BR/en literals.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-output-fab.html"><abbr title="\local_a11y\output\fab">fab</abbr></a></dt><dd>The floating action button (FAB).</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-output-panel.html"><abbr title="\local_a11y\output\panel">panel</abbr></a></dt><dd>The accessibility panel (profiles grid + collapsible option categories).</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-output-renderer.html"><abbr title="\local_a11y\output\renderer">renderer</abbr></a></dt><dd>Renderer for local_a11y.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-privacy-provider.html"><abbr title="\local_a11y\privacy\provider">provider</abbr></a></dt><dd>Privacy provider for local_a11y.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-profiles.html"><abbr title="\local_a11y\profiles">profiles</abbr></a></dt><dd>The 9 accessibility profiles — a verbatim PHP port of PROFILES in
-_design-reference/a11y-data.jsx (same ids, same `apply` presets, same order).</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-tone-colors.html"><abbr title="\local_a11y\tone_colors">tone_colors</abbr></a></dt><dd>Profile &quot;tone&quot; colour chips — a verbatim PHP port of TONE_COLORS in
+plus five additions beyond the prototype: &#039;textAlign&#039; (D30), &#039;silenceMedia&#039;,
+&#039;wordSpacing&#039; and &#039;blueLightFilter&#039; (D40), and &#039;magnifier&#039; (D42).</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-output-fab.html"><abbr title="\local_a11y\output\fab">fab</abbr></a></dt><dd>The floating action button (FAB).</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-output-panel.html"><abbr title="\local_a11y\output\panel">panel</abbr></a></dt><dd>The accessibility panel (profiles grid + collapsible option categories).</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-output-renderer.html"><abbr title="\local_a11y\output\renderer">renderer</abbr></a></dt><dd>Renderer for local_a11y.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-privacy-provider.html"><abbr title="\local_a11y\privacy\provider">provider</abbr></a></dt><dd>Privacy provider for local_a11y.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-profiles.html"><abbr title="\local_a11y\profiles">profiles</abbr></a></dt><dd>The 9 accessibility profiles — a verbatim PHP port of PROFILES in
+_design-reference/a11y-data.jsx (same ids, same `apply` presets, same order).</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-stats.html"><abbr title="\local_a11y\stats">stats</abbr></a></dt><dd>Aggregate, anonymous usage-stat storage (D47): one row per accessibility
+option, a running total counter and a last-modified timestamp - nothing
+that identifies a user, session, course or request. See DECISIONS.md D47
+for why this shape was chosen over per-event telemetry.</dd>            <dt class="phpdocumentor-table-of-contents__entry -class"><a href="classes/local-a11y-tone-colors.html"><abbr title="\local_a11y\tone_colors">tone_colors</abbr></a></dt><dd>Profile &quot;tone&quot; colour chips — a verbatim PHP port of TONE_COLORS in
 _design-reference/a11y-data.jsx.</dd>    </dl>
 
 

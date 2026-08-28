@@ -64,6 +64,10 @@
 </h4>
     <ul class="phpdocumentor-list">
                     <li>
+                <a href="namespaces/local-a11y-external.html" class="">external</a>
+                
+            </li>
+                    <li>
                 <a href="namespaces/local-a11y-output.html" class="">output</a>
                 
             </li>
@@ -246,6 +250,20 @@ minimal).</p>
 show_for_guests(), logged-in users by the local/a11y:view capability.</dd>
 
             <dt class="phpdocumentor-table-of-contents__entry -method -public">
+    <a class="" href="classes/local-a11y-config.html#method_collect_stats_enabled">collect_stats_enabled()</a>
+    <span>
+                                &nbsp;: bool    </span>
+</dt>
+<dd>Whether aggregate, anonymous usage-stat collection (D47) is turned
+on. Off by default - the site admin must opt in explicitly via
+`local_a11y/collectstats`. This is the single source of truth both
+the server (classes/stats.php::record_activation(), which re-checks
+this itself rather than trusting any client-supplied flag) and the
+client (classes/hook_callbacks.php passes this to amd/src/main.js&#039;s
+init(), purely so it can skip a pointless network call when off -
+never a security boundary on its own) rely on.</dd>
+
+            <dt class="phpdocumentor-table-of-contents__entry -method -public">
     <a class="" href="classes/local-a11y-config.html#method_current_page_excluded">current_page_excluded()</a>
     <span>
                                 &nbsp;: bool    </span>
@@ -272,7 +290,7 @@ show_for_guests(), logged-in users by the local/a11y:view capability.</dd>
                                 &nbsp;: string    </span>
 </dt>
 <dd>The panel footer message (below the option categories, above the
-Alt+A hint) - &quot;Made with &lt;3 by CPTED, for you&quot; by default (the
+Alt+A hint) - &quot;Made with &lt;3 by UFPel, for you&quot; by default (the
 &#039;savetitle&#039; lang string), customisable per-site since D34. Admin
 input is rich text (admin_setting_confightmleditor) so the same kind
 of inline emphasis the default already uses (a &lt;strong&gt; tag) stays
@@ -358,7 +376,7 @@ caller of get_appearance() at once.</dd>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">63</span>
+    <span class="phpdocumentor-element-found-in__line">62</span>
 
     </aside>
 
@@ -394,6 +412,52 @@ show_for_guests(), logged-in users by the local/a11y:view capability.</p>
             -public
                                     -static                    "
 >
+    <h4 class="phpdocumentor-element__name" id="method_collect_stats_enabled">
+        collect_stats_enabled()
+        <a href="classes/local-a11y-config.html#method_collect_stats_enabled" class="headerlink"><i class="fas fa-link"></i></a>
+
+    </h4>
+    <aside class="phpdocumentor-element-found-in">
+    <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
+    :
+    <span class="phpdocumentor-element-found-in__line">216</span>
+
+    </aside>
+
+        <p class="phpdocumentor-summary">Whether aggregate, anonymous usage-stat collection (D47) is turned
+on. Off by default - the site admin must opt in explicitly via
+`local_a11y/collectstats`. This is the single source of truth both
+the server (classes/stats.php::record_activation(), which re-checks
+this itself rather than trusting any client-supplied flag) and the
+client (classes/hook_callbacks.php passes this to amd/src/main.js&#039;s
+init(), purely so it can skip a pointless network call when off -
+never a security boundary on its own) rely on.</p>
+
+    <code class="phpdocumentor-code phpdocumentor-signature ">
+    <span class="phpdocumentor-signature__visibility">public</span>
+            <span class="phpdocumentor-signature__static">static</span>        <span class="phpdocumentor-signature__name">collect_stats_enabled</span><span>(</span><span>)</span><span> : </span><span class="phpdocumentor-signature__response_type">bool</span></code>
+
+    <div class="phpdocumentor-label-line">
+        </div>
+    
+    
+    
+    
+
+        
+    
+            <section>
+        <h5 class="phpdocumentor-return-value__heading">Return values</h5>
+        <span class="phpdocumentor-signature__response_type">bool</span>
+            </section>
+
+</article>
+                    <article
+        class="phpdocumentor-element
+            -method
+            -public
+                                    -static                    "
+>
     <h4 class="phpdocumentor-element__name" id="method_current_page_excluded">
         current_page_excluded()
         <a href="classes/local-a11y-config.html#method_current_page_excluded" class="headerlink"><i class="fas fa-link"></i></a>
@@ -402,7 +466,7 @@ show_for_guests(), logged-in users by the local/a11y:view capability.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">91</span>
+    <span class="phpdocumentor-element-found-in__line">90</span>
 
     </aside>
 
@@ -445,7 +509,7 @@ show_for_guests(), logged-in users by the local/a11y:view capability.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">176</span>
+    <span class="phpdocumentor-element-found-in__line">175</span>
 
     </aside>
 
@@ -488,7 +552,7 @@ show_for_guests(), logged-in users by the local/a11y:view capability.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">80</span>
+    <span class="phpdocumentor-element-found-in__line">79</span>
 
     </aside>
 
@@ -531,12 +595,12 @@ show_for_guests(), logged-in users by the local/a11y:view capability.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">197</span>
+    <span class="phpdocumentor-element-found-in__line">196</span>
 
     </aside>
 
         <p class="phpdocumentor-summary">The panel footer message (below the option categories, above the
-Alt+A hint) - &quot;Made with &lt;3 by CPTED, for you&quot; by default (the
+Alt+A hint) - &quot;Made with &lt;3 by UFPel, for you&quot; by default (the
 &#039;savetitle&#039; lang string), customisable per-site since D34. Admin
 input is rich text (admin_setting_confightmleditor) so the same kind
 of inline emphasis the default already uses (a &lt;strong&gt; tag) stays
@@ -582,7 +646,7 @@ Moodle core.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">117</span>
+    <span class="phpdocumentor-element-found-in__line">116</span>
 
     </aside>
 
@@ -625,7 +689,7 @@ Moodle core.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">162</span>
+    <span class="phpdocumentor-element-found-in__line">161</span>
 
     </aside>
 
@@ -672,7 +736,7 @@ shared colour) and &quot;Guia de Leitura&quot;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">42</span>
+    <span class="phpdocumentor-element-found-in__line">41</span>
 
     </aside>
 
@@ -715,7 +779,7 @@ shared colour) and &quot;Guia de Leitura&quot;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">52</span>
+    <span class="phpdocumentor-element-found-in__line">51</span>
 
     </aside>
 
@@ -758,7 +822,7 @@ shared colour) and &quot;Guia de Leitura&quot;.</p>
     <aside class="phpdocumentor-element-found-in">
     <abbr class="phpdocumentor-element-found-in__file" title="classes/config.php"><a href="files/classes-config.html"><abbr title="classes/config.php">config.php</abbr></a></abbr>
     :
-    <span class="phpdocumentor-element-found-in__line">149</span>
+    <span class="phpdocumentor-element-found-in__line">148</span>
 
     </aside>
 
@@ -841,6 +905,7 @@ caller of get_appearance() at once.</p>
             <li>
                 <ul class="phpdocumentor-list -clean">
                                             <li class=""><a href="classes/local-a11y-config.html#method_allowed_for_current_user">allowed_for_current_user()</a></li>
+                                            <li class=""><a href="classes/local-a11y-config.html#method_collect_stats_enabled">collect_stats_enabled()</a></li>
                                             <li class=""><a href="classes/local-a11y-config.html#method_current_page_excluded">current_page_excluded()</a></li>
                                             <li class=""><a href="classes/local-a11y-config.html#method_enabled_features">enabled_features()</a></li>
                                             <li class=""><a href="classes/local-a11y-config.html#method_excluded_page_patterns">excluded_page_patterns()</a></li>

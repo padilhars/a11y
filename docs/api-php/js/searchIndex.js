@@ -53,8 +53,33 @@ Search.appendIndex(
         },                {
             "fqsen": "\\local_a11y\\config\u003A\u003Afooter_text\u0028\u0029",
             "name": "footer_text",
-            "summary": "The\u0020panel\u0020footer\u0020message\u0020\u0028below\u0020the\u0020option\u0020categories,\u0020above\u0020the\nAlt\u002BA\u0020hint\u0029\u0020\u002D\u0020\u0022Made\u0020with\u0020\u003C3\u0020by\u0020CPTED,\u0020for\u0020you\u0022\u0020by\u0020default\u0020\u0028the\n\u0027savetitle\u0027\u0020lang\u0020string\u0029,\u0020customisable\u0020per\u002Dsite\u0020since\u0020D34.\u0020Admin\ninput\u0020is\u0020rich\u0020text\u0020\u0028admin_setting_confightmleditor\u0029\u0020so\u0020the\u0020same\u0020kind\nof\u0020inline\u0020emphasis\u0020the\u0020default\u0020already\u0020uses\u0020\u0028a\u0020\u003Cstrong\u003E\u0020tag\u0029\u0020stays\npossible,\u0020but\u0020it\u0027s\u0020run\u0020through\u0020format_text\u0028\u0029\u0020\u002D\u0020never\u0020trusted\/output\nverbatim\u0020\u002D\u0020exactly\u0020like\u0020any\u0020other\u0020admin\u002Dauthored\u0020HTML\u0020snippet\n\u0028frontpage\u0020summary,\u0020additional\u0020HTML\u0020footer,\u0020etc.\u0029\u0020elsewhere\u0020in\nMoodle\u0020core.",
+            "summary": "The\u0020panel\u0020footer\u0020message\u0020\u0028below\u0020the\u0020option\u0020categories,\u0020above\u0020the\nAlt\u002BA\u0020hint\u0029\u0020\u002D\u0020\u0022Made\u0020with\u0020\u003C3\u0020by\u0020UFPel,\u0020for\u0020you\u0022\u0020by\u0020default\u0020\u0028the\n\u0027savetitle\u0027\u0020lang\u0020string\u0029,\u0020customisable\u0020per\u002Dsite\u0020since\u0020D34.\u0020Admin\ninput\u0020is\u0020rich\u0020text\u0020\u0028admin_setting_confightmleditor\u0029\u0020so\u0020the\u0020same\u0020kind\nof\u0020inline\u0020emphasis\u0020the\u0020default\u0020already\u0020uses\u0020\u0028a\u0020\u003Cstrong\u003E\u0020tag\u0029\u0020stays\npossible,\u0020but\u0020it\u0027s\u0020run\u0020through\u0020format_text\u0028\u0029\u0020\u002D\u0020never\u0020trusted\/output\nverbatim\u0020\u002D\u0020exactly\u0020like\u0020any\u0020other\u0020admin\u002Dauthored\u0020HTML\u0020snippet\n\u0028frontpage\u0020summary,\u0020additional\u0020HTML\u0020footer,\u0020etc.\u0029\u0020elsewhere\u0020in\nMoodle\u0020core.",
             "url": "classes/local-a11y-config.html#method_footer_text"
+        },                {
+            "fqsen": "\\local_a11y\\config\u003A\u003Acollect_stats_enabled\u0028\u0029",
+            "name": "collect_stats_enabled",
+            "summary": "Whether\u0020aggregate,\u0020anonymous\u0020usage\u002Dstat\u0020collection\u0020\u0028D47\u0029\u0020is\u0020turned\non.\u0020Off\u0020by\u0020default\u0020\u002D\u0020the\u0020site\u0020admin\u0020must\u0020opt\u0020in\u0020explicitly\u0020via\n\u0060local_a11y\/collectstats\u0060.\u0020This\u0020is\u0020the\u0020single\u0020source\u0020of\u0020truth\u0020both\nthe\u0020server\u0020\u0028classes\/stats.php\u003A\u003Arecord_activation\u0028\u0029,\u0020which\u0020re\u002Dchecks\nthis\u0020itself\u0020rather\u0020than\u0020trusting\u0020any\u0020client\u002Dsupplied\u0020flag\u0029\u0020and\u0020the\nclient\u0020\u0028classes\/hook_callbacks.php\u0020passes\u0020this\u0020to\u0020amd\/src\/main.js\u0027s\ninit\u0028\u0029,\u0020purely\u0020so\u0020it\u0020can\u0020skip\u0020a\u0020pointless\u0020network\u0020call\u0020when\u0020off\u0020\u002D\nnever\u0020a\u0020security\u0020boundary\u0020on\u0020its\u0020own\u0029\u0020rely\u0020on.",
+            "url": "classes/local-a11y-config.html#method_collect_stats_enabled"
+        },                {
+            "fqsen": "\\local_a11y\\external\\record_activation",
+            "name": "record_activation",
+            "summary": "External\u0020function\u003A\u0020records\u0020one\u0020aggregate\u0020activation\u0020of\u0020an\u0020accessibility\noption\u0020\u0028D47\u0029.\u0020Called\u0020from\u0020amd\/src\/stats.js\u0020whenever\u0020an\u0020option\ntransitions\u0020from\u0020inactive\u0020to\u0020default\u002Dchanged\u0020in\u0020amd\/src\/main.js.",
+            "url": "classes/local-a11y-external-record-activation.html"
+        },                {
+            "fqsen": "\\local_a11y\\external\\record_activation\u003A\u003Aexecute_parameters\u0028\u0029",
+            "name": "execute_parameters",
+            "summary": "Webservice\u0020parameters.",
+            "url": "classes/local-a11y-external-record-activation.html#method_execute_parameters"
+        },                {
+            "fqsen": "\\local_a11y\\external\\record_activation\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "Record\u0020one\u0020activation\u0020of\u0020\u0024featureid,\u0020if\u0020usage\u002Dstat\u0020collection\u0020is\u0020on\nand\u0020\u0024featureid\u0020is\u0020a\u0020real,\u0020known\u0020option\u0020id\u0020\u0028silently\u0020ignoring\nanything\u0020else\u0020\u002D\u0020an\u0020unknown\u0020id\u0020is\u0020either\u0020a\u0020stale\u0020client\u0020or\u0020a\nmalformed\u0020request,\u0020neither\u0020worth\u0020an\u0020error\u0020for\u0020a\u0020best\u002Deffort\u0020stat\u0029.",
+            "url": "classes/local-a11y-external-record-activation.html#method_execute"
+        },                {
+            "fqsen": "\\local_a11y\\external\\record_activation\u003A\u003Aexecute_returns\u0028\u0029",
+            "name": "execute_returns",
+            "summary": "Webservice\u0020return\u0020value.",
+            "url": "classes/local-a11y-external-record-activation.html#method_execute_returns"
         },                {
             "fqsen": "\\local_a11y\\hook_callbacks",
             "name": "hook_callbacks",
@@ -123,7 +148,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\local_a11y\\manager\u003A\u003Aget_boolean_class_map\u0028\u0029",
             "name": "get_boolean_class_map",
-            "summary": "Boolean\u0020settings\u0020key\u0020\u002D\u003E\u0020body\u0020CSS\u0020class\u0020name,\u0020a\u0020verbatim\u0020port\u0020of\u0020the\n\u0060if\u0020\u0028settings.x\u0029\u0020body.classList.add\u0028\u0027a11y\u002Dy\u0027\u0029\u0060\u0020lines\u0020in\n_design\u002Dreference\/app.jsx.\u0020Note\u0020this\u0020intentionally\u0020excludes\nreadingGuide,\u0020readingMask,\u0020screenReader,\u0020virtualKeyboard,\nvoiceCommands\u0020and\u0020\u0028since\u0020D29\u0020\u002D\u0020the\u0020prototype\u0020itself\u0020does\u0020still\u0020map\nit\u0020to\u0020a\u0020body\u0020class,\u0020but\u0020a\u0020real\u0020browser\u0027s\u0020native\u0020title\u0020tooltip\u0020can\nonly\u0020be\u0020suppressed\u0020from\u0020JS,\u0020not\u0020CSS\u0029\u0020tooltips\u003A\u0020those\u00206\u0020booleans\u0020do\nNOT\u0020drive\u0020a\u0020body\u0020class\u0020here,\u0020they\u0020gate\u0020always\u002Dmounted\u0020JS\u0020overlay\ncomponents\u0020instead\u0020\u0028see\u0020amd\/src\/reading_guide.js\u0020etc.,\u0020M5\u003B\u0020D29\u0029.",
+            "summary": "Boolean\u0020settings\u0020key\u0020\u002D\u003E\u0020body\u0020CSS\u0020class\u0020name,\u0020a\u0020verbatim\u0020port\u0020of\u0020the\n\u0060if\u0020\u0028settings.x\u0029\u0020body.classList.add\u0028\u0027a11y\u002Dy\u0027\u0029\u0060\u0020lines\u0020in\n_design\u002Dreference\/app.jsx.\u0020Note\u0020this\u0020intentionally\u0020excludes\nreadingGuide,\u0020readingMask,\u0020screenReader,\u0020virtualKeyboard,\nvoiceCommands\u0020and\u0020\u0028since\u0020D29\u0020\u002D\u0020the\u0020prototype\u0020itself\u0020does\u0020still\u0020map\nit\u0020to\u0020a\u0020body\u0020class,\u0020but\u0020a\u0020real\u0020browser\u0027s\u0020native\u0020title\u0020tooltip\u0020can\nonly\u0020be\u0020suppressed\u0020from\u0020JS,\u0020not\u0020CSS\u0029\u0020tooltips\u003A\u0020those\u0020booleans\u0020do\nNOT\u0020drive\u0020a\u0020body\u0020class\u0020here,\u0020they\u0020gate\u0020always\u002Dmounted\u0020JS\u0020overlay\ncomponents\u0020instead\u0020\u0028see\u0020amd\/src\/reading_guide.js\u0020etc.,\u0020M5\u003B\u0020D29\u0029.",
             "url": "classes/local-a11y-manager.html#method_get_boolean_class_map"
         },                {
             "fqsen": "\\local_a11y\\manager\u003A\u003Aget_stepper_class_prefix_map\u0028\u0029",
@@ -158,7 +183,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\local_a11y\\options",
             "name": "options",
-            "summary": "The\u002023\u0020accessibility\u0020options\u0020\u2014\u0020a\u0020PHP\u0020port\u0020of\u0020OPTIONS\u0020in\n_design\u002Dreference\/a11y\u002Ddata.jsx\u0020\u0028same\u0020ids,\u0020same\u0020grouping,\u0020same\u0020order\u0029,\nplus\u0020one\u0020addition\u0020beyond\u0020the\u0020prototype\u003A\u0020\u0027textAlign\u0027\u0020\u0028see\u0020DECISIONS.md\nD30\u0029.\u0020Labels\/descriptions\u0020are\u0020resolved\u0020via\u0020get_string\u0028\u0029\u0020instead\u0020of\u0020the\nprototype\u0027s\u0020inline\u0020pt\u002DBR\/en\u0020literals.",
+            "summary": "The\u002028\u0020accessibility\u0020options\u0020\u2014\u0020a\u0020PHP\u0020port\u0020of\u0020OPTIONS\u0020in\n_design\u002Dreference\/a11y\u002Ddata.jsx\u0020\u0028same\u0020ids,\u0020same\u0020grouping,\u0020same\u0020order\u0029,\nplus\u0020five\u0020additions\u0020beyond\u0020the\u0020prototype\u003A\u0020\u0027textAlign\u0027\u0020\u0028D30\u0029,\u0020\u0027silenceMedia\u0027,\n\u0027wordSpacing\u0027\u0020and\u0020\u0027blueLightFilter\u0027\u0020\u0028D40\u0029,\u0020and\u0020\u0027magnifier\u0027\u0020\u0028D42\u0029.",
             "url": "classes/local-a11y-options.html"
         },                {
             "fqsen": "\\local_a11y\\options\u003A\u003Aall\u0028\u0029",
@@ -243,7 +268,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\local_a11y\\privacy\\provider\u003A\u003Aget_metadata\u0028\u0029",
             "name": "get_metadata",
-            "summary": "Declares\u0020the\u0020one\u0020piece\u0020of\u0020personal\u0020data\u0020this\u0020plugin\u0020stores.",
+            "summary": "Declares\u0020the\u0020one\u0020piece\u0020of\u0020personal\u0020data\u0020this\u0020plugin\u0020stores.\u0020Does\nNOT\u0020declare\u0020\u0060local_a11y_stats\u0060\u0020\u0028D47\u0029\u003A\u0020that\u0020table\u0020is\u0020fully\u0020aggregate\n\u0028one\u0020counter\u0020per\u0020accessibility\u0020option,\u0020site\u002Dwide\u0029\u0020and\u0020contains\u0020no\ncolumn\u0020that\u0020identifies\u0020a\u0020user,\u0020session,\u0020course\u0020or\u0020individual\nrequest\u0020\u002D\u0020there\u0020is\u0020nothing\u0020personal\u0020in\u0020it\u0020to\u0020declare.\u0020See\u0020the\u0020class\ndocblock\u0020above\u0020for\u0020the\u0020full\u0020reasoning.",
             "url": "classes/local-a11y-privacy-provider.html#method_get_metadata"
         },                {
             "fqsen": "\\local_a11y\\privacy\\provider\u003A\u003Aexport_user_preferences\u0028\u0029",
@@ -261,6 +286,31 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020full\u0020list\u0020of\u0020accessibility\u0020profile\u0020preset\u0020definitions.",
             "url": "classes/local-a11y-profiles.html#method_all"
         },                {
+            "fqsen": "\\local_a11y\\stats",
+            "name": "stats",
+            "summary": "Aggregate,\u0020anonymous\u0020usage\u002Dstat\u0020storage\u0020\u0028D47\u0029\u003A\u0020one\u0020row\u0020per\u0020accessibility\noption,\u0020a\u0020running\u0020total\u0020counter\u0020and\u0020a\u0020last\u002Dmodified\u0020timestamp\u0020\u002D\u0020nothing\nthat\u0020identifies\u0020a\u0020user,\u0020session,\u0020course\u0020or\u0020request.\u0020See\u0020DECISIONS.md\u0020D47\nfor\u0020why\u0020this\u0020shape\u0020was\u0020chosen\u0020over\u0020per\u002Devent\u0020telemetry.",
+            "url": "classes/local-a11y-stats.html"
+        },                {
+            "fqsen": "\\local_a11y\\stats\u003A\u003Arecord_activation\u0028\u0029",
+            "name": "record_activation",
+            "summary": "Record\u0020one\u0020activation\u0020of\u0020the\u0020given\u0020option,\u0020incrementing\u0020its\nsite\u002Dwide\u0020counter\u0020by\u00201\u0020\u0028creating\u0020the\u0020row\u0020on\u0020first\u0020activation\u0029.\u0020A\nsilent\u0020no\u002Dop\u0020\u002D\u0020returns\u0020false,\u0020touches\u0020nothing\u0020\u002D\u0020whenever\u0020collection\nis\u0020off\u0020\u0028config\u003A\u003Acollect_stats_enabled\u0028\u0029\u0029\u003B\u0020the\u0020caller\u0020\u0028classes\/\nexternal\/record_activation.php\u0029\u0020never\u0020has\u0020to\u0020check\u0020this\u0020itself,\nkeeping\u0020the\u0020\u0022off\u0020by\u0020default,\u0020server\u0020is\u0020the\u0020source\u0020of\u0020truth\u0022\nguarantee\u0020in\u0020exactly\u0020one\u0020place.",
+            "url": "classes/local-a11y-stats.html#method_record_activation"
+        },                {
+            "fqsen": "\\local_a11y\\stats\u003A\u003Aincrement\u0028\u0029",
+            "name": "increment",
+            "summary": "Atomically\u0020increment\u0020one\u0020featureid\u0027s\u0020counter\u0020by\u00201\u0020in\u0020a\u0020single\u0020UPDATE\n\u0028avoids\u0020a\u0020separate\u0020read\u002Dmodify\u002Dwrite\u0020race\u0020for\u0020the\u0020common\u0020\u0022row\nalready\u0020exists\u0022\u0020case\u0029.",
+            "url": "classes/local-a11y-stats.html#method_increment"
+        },                {
+            "fqsen": "\\local_a11y\\stats\u003A\u003Aget_all\u0028\u0029",
+            "name": "get_all",
+            "summary": "Every\u0020recorded\u0020row,\u0020most\u002Dactivated\u0020option\u0020first\u0020\u002D\u0020used\u0020by\nadmin\/stats.php\u0020to\u0020render\u0020the\u0020report.",
+            "url": "classes/local-a11y-stats.html#method_get_all"
+        },                {
+            "fqsen": "\\local_a11y\\stats\u003A\u003ATABLE",
+            "name": "TABLE",
+            "summary": "",
+            "url": "classes/local-a11y-stats.html#constant_TABLE"
+        },                {
             "fqsen": "\\local_a11y\\tone_colors",
             "name": "tone_colors",
             "summary": "Profile\u0020\u0022tone\u0022\u0020colour\u0020chips\u0020\u2014\u0020a\u0020verbatim\u0020PHP\u0020port\u0020of\u0020TONE_COLORS\u0020in\n_design\u002Dreference\/a11y\u002Ddata.jsx.",
@@ -276,6 +326,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/local-a11y-tone-colors.html#constant_COLORS"
         },                {
+            "fqsen": "\\xmldb_local_a11y_upgrade\u0028\u0029",
+            "name": "xmldb_local_a11y_upgrade",
+            "summary": "Applies\u0020incremental\u0020schema\u0020changes\u0020for\u0020local_a11y.\u0020install.xml\u0020only\ntakes\u0020effect\u0020on\u0020a\u0020brand\u002Dnew\u0020install\u0020of\u0020the\u0020plugin\u0020\u002D\u0020this\u0020site\u0020already\nhas\u0020local_a11y\u0020installed,\u0020so\u0020the\u0020D47\u0020usage\u002Dstats\u0020table\u0020has\u0020to\u0020be\ncreated\u0020here\u0020too,\u0020or\u0020upgrade.php\u0020would\u0020bump\u0020\u0024plugin\u002D\u003Eversion\u0020with\nnothing\u0020actually\u0020creating\u0020the\u0020table.",
+            "url": "namespaces/default.html#function_xmldb_local_a11y_upgrade"
+        },                {
             "fqsen": "\\local_a11y_user_preferences\u0028\u0029",
             "name": "local_a11y_user_preferences",
             "summary": "Registers\u0020the\u0020local_a11y_settings\u0020user\u0020preference\u0020so\u0020it\u0020can\u0020be\u0020read\/written\nthrough\u0020the\u0020core_user\u0020preferences\u0020REST\u0020route\u0020\u0028core_user\/repository\u0020AMD\nmodule\u0029.\u0020This\u0020is\u0020the\u0020replacement\u0020for\u0020the\u0020removed\nuser_preference_allow_ajax_update\u0028\u0029\u0020whitelist\u0020\u002D\u0020see\u0020DECISIONS.md.",
@@ -290,6 +345,11 @@ Search.appendIndex(
             "name": "local_a11y",
             "summary": "",
             "url": "namespaces/local-a11y.html"
+        },                {
+            "fqsen": "\\local_a11y\\external",
+            "name": "external",
+            "summary": "",
+            "url": "namespaces/local-a11y-external.html"
         },                {
             "fqsen": "\\local_a11y\\output",
             "name": "output",

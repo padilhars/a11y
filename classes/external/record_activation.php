@@ -48,7 +48,6 @@ use core_external\external_value;
  * @since      0.1.0
  */
 class record_activation extends external_api {
-
     /**
      * Webservice parameters.
      *

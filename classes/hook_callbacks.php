@@ -30,7 +30,6 @@ namespace local_a11y;
  * @since      0.1.0
  */
 class hook_callbacks {
-
     /**
      * Injects the plugin's CSS, web fonts, colour-blindness SVG filters and
      * the inline no-FOUC bootstrap snippet into the page <head>.

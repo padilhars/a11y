@@ -37,7 +37,6 @@ use renderer_base;
  * @since      0.1.0
  */
 class fab implements renderable, templatable {
-
     /**
      * Builds the FAB's Mustache context: position/shape/icon, accent colour,
      * and the current active-option count badge.
