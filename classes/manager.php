@@ -42,7 +42,7 @@ class manager {
      * @return array<string, bool|int>
      */
     public static function get_default_settings(): array {
-        return [
+        $defaults = [
             'readableFont' => false,
             'dyslexicFont' => false,
             'highlightTitles' => false,
@@ -73,6 +73,19 @@ class manager {
             'voiceCommands' => false,
             'faceNavigation' => false,
         ];
+
+        // signLanguage (D54) mirrors options::all()'s own condition exactly
+        // - this is the mechanism the orphaned-preference requirement
+        // relies on: sanitize_settings() below only ever looks at keys
+        // present in this array, so a stored `signLanguage` value left
+        // over from when the integration was on gets silently skipped
+        // (not an error, not touched in the database) the moment the
+        // integration goes away, with no special-case code needed for it.
+        if (\local_a11y\integration\vlibras::is_integrated()) {
+            $defaults['signLanguage'] = false;
+        }
+
+        return $defaults;
     }
 
     /**
@@ -130,6 +143,17 @@ class manager {
             'hideImages' => 'a11y-hide-images',
             'pauseAnimations' => 'a11y-pause-animations',
             'invertColors' => 'a11y-invert',
+            // signLanguage (D54) is listed unconditionally here, unlike its
+            // entry in get_default_settings() above - safe even when the
+            // local_vlibras integration isn't currently on, because the CSS
+            // rule that actually reveals VLibras' widget requires *both*
+            // this class and the separate admin-controlled
+            // 'a11y-vlibras-integrated' body class (see styles.css) to be
+            // present together. An orphaned true value for this key (e.g.
+            // stale guest localStorage from when the integration used to
+            // be on) can add this class on its own, but that alone matches
+            // no rule and changes nothing on screen.
+            'signLanguage' => 'a11y-sign-language',
         ];
     }
 

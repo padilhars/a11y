@@ -35,6 +35,16 @@ defined('MOODLE_INTERNAL') || die();
 
 $callbacks = [
     [
+        // Fires at the very top of core_renderer::header(), before $PAGE's
+        // state moves past STATE_BEFORE_HEADER - the only hook this plugin
+        // uses where moodle_page::add_body_class() is still legal to call.
+        // See classes/hook_callbacks.php::before_http_headers()'s own
+        // docblock for the coding_exception this replaced.
+        'hook' => \core\hook\output\before_http_headers::class,
+        'callback' => \local_a11y\hook_callbacks::class . '::before_http_headers',
+        'priority' => 0,
+    ],
+    [
         'hook' => \core\hook\output\before_standard_head_html_generation::class,
         'callback' => \local_a11y\hook_callbacks::class . '::before_standard_head_html_generation',
         'priority' => 0,

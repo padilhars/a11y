@@ -47,6 +47,16 @@ export const DEFAULT_SETTINGS = {
     highlightButtons: false,
     hideImages: false,
     tooltips: false,
+    // signLanguage (D54): always present here, unconditionally, unlike
+    // its entry in classes/manager.php::get_default_settings() (which IS
+    // conditional on the local_vlibras integration being on) - this file
+    // can't ask core_plugin_manager anything, it just needs a safe shape.
+    // A stale true value here (e.g. guest localStorage from when the
+    // integration used to be on) only ever adds the 'a11y-sign-language'
+    // body class on its own, which matches no CSS rule by itself - see
+    // classes/manager.php's own comment on get_boolean_class_map() for the
+    // full reasoning.
+    signLanguage: false,
     pauseAnimations: false,
     silenceMedia: false,
     textSize: 0,

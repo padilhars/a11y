@@ -42,6 +42,10 @@ const BOOL_CLASS_MAP = {
     highlightLinks: 'a11y-highlight-links',
     highlightButtons: 'a11y-highlight-buttons',
     hideImages: 'a11y-hide-images',
+    // signLanguage (D54) - see classes/manager.php::get_boolean_class_map()
+    // for why this is safe to list unconditionally (the reveal CSS rule
+    // needs a second, admin-controlled body class too - see styles.css).
+    signLanguage: 'a11y-sign-language',
     pauseAnimations: 'a11y-pause-animations',
     invertColors: 'a11y-invert',
 };
@@ -88,9 +92,28 @@ const computeClassList = (settings) => {
 };
 
 /**
+ * Classes this module must never touch, in either direction - added
+ * server-side from admin config, not derived from any user setting, so
+ * they don't belong to computeClassList()'s output and must survive the
+ * wipe below untouched. Currently just the one: a real bug, not
+ * hypothetical - 'a11y-vlibras-integrated' (classes/hook_callbacks.php,
+ * D54) was getting silently stripped within moments of every page load,
+ * the instant main.js's first commit() ran, because it starts with
+ * 'a11y-' like every class this module *does* own, and this function used
+ * to remove every 'a11y-' class indiscriminately before re-adding only
+ * what settings called for. Confirmed live: curl (no JS) showed the class
+ * in the raw HTML; the same page through a real browser did not, seconds
+ * later.
+ *
+ * @type {String[]}
+ */
+const EXTERNALLY_MANAGED_CLASSES = ['a11y-vlibras-integrated'];
+
+/**
  * Apply a settings object to <body>: remove every class this plugin may
  * have previously added, then add back only the ones the current settings
- * call for. Idempotent - safe to call on every change.
+ * call for. Idempotent - safe to call on every change. Never touches
+ * EXTERNALLY_MANAGED_CLASSES above, in either direction.
  *
  * @param {Object} settings The current a11y settings object to apply to <body>.
  * @return {void}
@@ -98,7 +121,7 @@ const computeClassList = (settings) => {
 export const apply = (settings) => {
     const body = document.body;
     Array.from(body.classList).forEach((cls) => {
-        if (cls.startsWith('a11y-')) {
+        if (cls.startsWith('a11y-') && !EXTERNALLY_MANAGED_CLASSES.includes(cls)) {
             body.classList.remove(cls);
         }
     });
