@@ -41,7 +41,7 @@ class options {
      * @return array<int, array<string, mixed>> Option definitions, in display order.
      */
     public static function all(): array {
-        return [
+        $options = [
             // -- Typography --
             ['id' => 'readableFont', 'cat' => 'typography', 'kind' => 'toggle', 'icon' => 'type',
                 'labelkey' => 'opt_readablefont', 'desckey' => 'opt_readablefont_desc'],
@@ -116,6 +116,21 @@ class options {
             ['id' => 'faceNavigation', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'scanFace',
                 'labelkey' => 'opt_facenavigation', 'desckey' => 'opt_facenavigation_desc', 'hashelp' => true],
         ];
+
+        // signLanguage (D54) only exists at all while the local_vlibras
+        // integration is actually usable - see
+        // classes/integration/vlibras.php::is_integrated(). This is the
+        // one option in this array that isn't a fixed, always-present
+        // entry; every caller of options::all() (panel rendering, the
+        // "active options" admin setting, sanitize_settings() by way of
+        // manager::get_default_settings() mirroring this same condition)
+        // has to tolerate it appearing/disappearing between page loads.
+        if (\local_a11y\integration\vlibras::is_integrated()) {
+            $options[] = ['id' => 'signLanguage', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'hand',
+                'labelkey' => 'opt_signlanguage', 'desckey' => null, 'hashelp' => true];
+        }
+
+        return $options;
     }
 
     /**

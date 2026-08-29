@@ -1789,3 +1789,78 @@ Styleguide 12.
   will-change: transform, filter;
 }
 
+/* ===========================================================================
+   VLIBRAS INTEGRATION (D54, selector corrected in D56)
+   Hides the third-party local_vlibras plugin's own floating button with
+   pure CSS - never touches its DOM (see DECISIONS.md D54 for why: its
+   widget keeps its own JS state/listeners once revealed, which a
+   display:none/block toggle can never disturb the way removing or
+   re-parenting a node would).
+
+   `#vlibras-access-wrapper` is the one selector this relies on - and it
+   took a second try to get right (D56): the original guess, `[vw]`, is
+   real (local_vlibras's own hardcoded PHP shell) but turned out to be
+   irrelevant - the actual, visible, interactive VLibras button is built
+   entirely inside an **open shadow root** attached to
+   `#vlibras-access-wrapper`, a separate element the *remote*
+   vlibras-plugin.js script creates directly under <body>, unrelated to
+   `[vw]`. Confirmed live (not assumed): `el.shadowRoot !== null` from
+   ordinary page script only returns non-null for an *open* shadow root,
+   and its innerHTML showed `<div id="vlibras-access">` wrapping
+   `<button id="vlibras-button">`, styled by a <style> tag that also lives
+   *inside* the shadow root - completely unreachable by any selector in
+   this stylesheet, by spec, not a bug on either side. Hiding still works
+   with a plain selector, though: CSS can't select *into* an open shadow
+   tree, but hiding the *host* element (`display: none` right here) hides
+   everything nested in its shadow tree too, the same as it would for
+   ordinary light-DOM children.
+
+   classes/integration/vlibras.php::WIDGET_SELECTOR is the single source
+   of truth for this exact string; amd/src/vlibras_integration.js checks
+   the same selector at runtime (with a delay, since - unlike `[vw]` -
+   this element is built by a remote script asynchronously, not present
+   in the initial HTML) and logs a developer-only warning if it ever stops
+   matching anything - update all three if this ever needs to change
+   again. If the selector doesn't match anything, these two rules simply
+   do nothing, which is the correct, already-safe CSS behaviour: worst
+   case both floating buttons show up, never a broken page.
+
+   Two body classes, both required together to *reveal* the widget:
+   - `a11y-vlibras-integrated` - admin-controlled (classes/hook_callbacks.php),
+     same on every request regardless of who's viewing the page. On its own
+     it only ever hides.
+   - `a11y-sign-language` - the normal per-user toggle, added the same way
+     every other boolean option's class is (Effects.apply(), classes/
+     manager.php::get_boolean_class_map()). On its own (say, a stale value
+     from before the integration was ever turned on) it matches no rule at
+     all and changes nothing.
+
+   D57 added a second host, `#vlibras-app-root` - VLibras' own avatar/
+   interpreter UI, which amd/src/vlibras_integration.js now opens with a
+   simulated click on the button inside #vlibras-access-wrapper's shadow
+   root (see classes/integration/vlibras.php::OPEN_BUTTON_ID) rather than
+   through CSS alone (CSS cannot dispatch a click). The rule below is a
+   backstop, not the primary close mechanism: that same JS module also
+   simulates a click on VLibras' own "Fechar" button when signLanguage
+   turns off, but if that ever fails (its own docblock explains when/why -
+   classes/integration/vlibras.php::CLOSE_BUTTON_ARIA_LABEL not matching
+   anything any more), this rule still guarantees the avatar disappears
+   visually the instant the integration class or the per-user class is
+   gone, the same safety guarantee #vlibras-access-wrapper's own hiding
+   rule above already relies on. */
+
+/*
+VLibras integration (hide by default, reveal via the signLanguage toggle).
+
+Styleguide 13.
+*/
+body.a11y-vlibras-integrated #vlibras-access-wrapper {
+  display: none !important;
+}
+body.a11y-vlibras-integrated.a11y-sign-language #vlibras-access-wrapper {
+  display: block !important;
+}
+body.a11y-vlibras-integrated:not(.a11y-sign-language) #vlibras-app-root {
+  display: none !important;
+}
+

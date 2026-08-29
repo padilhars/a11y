@@ -45,6 +45,7 @@ import FaceNavigation from 'local_a11y/face_navigation';
 import PauseMedia from 'local_a11y/pause_media';
 import SilenceMedia from 'local_a11y/silence_media';
 import BionicReading from 'local_a11y/bionic_reading';
+import VlibrasIntegration from 'local_a11y/vlibras_integration';
 import Stats from 'local_a11y/stats';
 
 let settings = {...Storage.DEFAULT_SETTINGS};
@@ -115,11 +116,22 @@ const renderCategoryCounts = () => {
 /**
  * Recompute the total active-option count and render the header/badge.
  *
+ * Iterates optionMeta (DOM-derived), not Storage.DEFAULT_SETTINGS, matching
+ * renderCategoryCounts() above - the two used to be interchangeable sources
+ * of "every option id that exists" since every option was always rendered,
+ * but that stopped being true the moment signLanguage became conditional
+ * (D54): Storage.DEFAULT_SETTINGS always has a signLanguage key regardless
+ * of whether the integration is on (see its own comment for why), but
+ * optionMeta only has one when the server actually rendered that row. Using
+ * DEFAULT_SETTINGS here would have counted a settings.signLanguage value
+ * that differs from its default even when there is no row for it to show
+ * as active in the panel.
+ *
  * @return {void}
  */
 const renderHeaderCount = () => {
-    const count = Object.keys(Storage.DEFAULT_SETTINGS)
-        .filter((id) => settings[id] !== Storage.DEFAULT_SETTINGS[id]).length;
+    const count = Object.keys(optionMeta)
+        .filter((id) => settings[id] !== defaultOf(id)).length;
     Panel.renderHeader(count);
 };
 
@@ -163,6 +175,11 @@ const syncAdvancedFeatures = () => {
     BionicReading.sync(Boolean(settings.bionicReading));
     // hideImages needs no JS module (D44) - display:none on a body-class
     // rule alone hides images/video fully, no reserved space to paint.
+    // signLanguage's own reveal/hide is CSS-only (styles.css), same as
+    // hideImages - but D57 added an actual open/close *action* on top of
+    // that (a real click, not just a display toggle), which is why this
+    // one still needs a module call here unlike hideImages.
+    VlibrasIntegration.sync(Boolean(settings.signLanguage));
 };
 
 /**
@@ -591,6 +608,11 @@ export const init = async(loggedIn, collectStatsEnabled) => {
 
     isLoggedIn = Boolean(loggedIn);
     statsEnabled = Boolean(collectStatsEnabled);
+    // One-shot, not tied to whether signLanguage ends up in optionMeta or
+    // to its toggle state - see amd/src/vlibras_integration.js's own
+    // docblock for why this runs unconditionally here but only ever does
+    // anything when the admin-level integration is actually on.
+    VlibrasIntegration.checkAvailability();
     optionMeta = buildOptionMeta(panelEl);
     settings = await Storage.getSettings(isLoggedIn);
 
@@ -637,6 +659,17 @@ export const init = async(loggedIn, collectStatsEnabled) => {
     document.addEventListener('local_a11y/magnifier-disable', () => {
         if (settings.magnifier) {
             onToggle('magnifier', false);
+        }
+    });
+
+    // Closing VLibras' avatar through its own UI (not through this plugin)
+    // dispatches this instead of mutating settings directly (amd/src/
+    // vlibras_integration.js) - same self-disable pattern as magnifier/
+    // face-disable above, added in D58 after the panel switch was found to
+    // stay on indefinitely once the user closed VLibras' own window.
+    document.addEventListener('local_a11y/vlibras-disable', () => {
+        if (settings.signLanguage) {
+            onToggle('signLanguage', false);
         }
     });
 };
