@@ -20,8 +20,7 @@
  * Uses the Hooks API (Moodle 4.4+) instead of the deprecated legacy
  * callbacks local_a11y_before_footer_html_generation() / before_standard_html_head().
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel

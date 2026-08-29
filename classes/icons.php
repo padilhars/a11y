@@ -21,8 +21,7 @@ namespace local_a11y;
  * _design-reference/a11y-data.jsx (Lucide icons @ 0.453, stroke 1.75), so
  * the plugin renders pixel-identical icons without a JS icon library.
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel

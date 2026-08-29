@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<libraries>
+  <library>
+    <location>fonts/atkinson-hyperlegible-400.woff2</location>
+    <name>Atkinson Hyperlegible</name>
+    <description>Typeface designed for maximum legibility for readers with low vision, used by the "Fonte Legível" option. Packaged locally (WOFF2, Regular weight, Latin subset) instead of loaded from Google Fonts, for institutional CDN-blocking/privacy reasons - see DECISIONS.md. License text: fonts/OFL-atkinson-hyperlegible.txt.</description>
+    <version>Regular (400)</version>
+    <license>SIL Open Font License, Version 1.1</license>
+    <repository>https://github.com/googlefonts/atkinson-hyperlegible</repository>
+    <copyrights>
+      <copyright>2020 Braille Institute of America, Inc.</copyright>
+    </copyrights>
+    <customised/>
+  </library>
+  <library>
+    <location>fonts/atkinson-hyperlegible-700.woff2</location>
+    <name>Atkinson Hyperlegible</name>
+    <description>Typeface designed for maximum legibility for readers with low vision, used by the "Fonte Legível" option. Packaged locally (WOFF2, Bold weight, Latin subset) instead of loaded from Google Fonts, for institutional CDN-blocking/privacy reasons - see DECISIONS.md. License text: fonts/OFL-atkinson-hyperlegible.txt.</description>
+    <version>Bold (700)</version>
+    <license>SIL Open Font License, Version 1.1</license>
+    <repository>https://github.com/googlefonts/atkinson-hyperlegible</repository>
+    <copyrights>
+      <copyright>2020 Braille Institute of America, Inc.</copyright>
+    </copyrights>
+    <customised/>
+  </library>
+  <library>
+    <location>fonts/lexend-variable.woff2</location>
+    <name>Lexend</name>
+    <description>Variable-weight typeface researched to improve reading fluency, used by the "Fonte para Dislexia" option. Packaged locally (WOFF2, variable, Latin subset) instead of loaded from Google Fonts, for institutional CDN-blocking/privacy reasons - see DECISIONS.md. License text: fonts/OFL-lexend.txt.</description>
+    <license>SIL Open Font License, Version 1.1</license>
+    <repository>https://github.com/googlefonts/lexend</repository>
+    <copyrights>
+      <copyright>2018 The Lexend Project Authors, with Reserved Font Name "RevReading Lexend"</copyright>
+    </copyrights>
+    <customised/>
+  </library>
+  <library>
+    <location>pix/accessibility-default.svg</location>
+    <name>Ionicons - accessibility icon</name>
+    <description>Generic accessibility figure icon, used as the default FAB icon since D60. Downloaded via svgrepo.com (listed as "Ionicons Filled Interface Icons", author "Ionicons"); confirmed against the upstream Ionicons repository. Re-exported with fill="#000000" replaced by fill="currentColor" so the icon themes like every other icon in classes/icons.php. Path geometry unchanged from the source.</description>
+    <license>MIT</license>
+    <repository>https://github.com/ionic-team/ionicons</repository>
+    <copyrights>
+      <copyright>2015-present Ionic (http://ionic.io/)</copyright>
+    </copyrights>
+    <customised/>
+  </library>
+  <library>
+    <location>pix/accessibility-un.svg</location>
+    <name>Accessibility logo (UN)</name>
+    <description>International accessibility symbol, used as one of the FAB icon options ("Logo de acessibilidade da ONU"). Re-exported with the original &lt;style&gt;/CSS-class block replaced by equivalent inline presentation attributes so it can be safely inlined into a Moodle page; path/circle geometry unchanged from the source. Full attribution in README.md.</description>
+    <license>CC BY-SA 4.0 (Creative Commons Attribution-ShareAlike 4.0 International)</license>
+    <repository>https://commons.wikimedia.org/wiki/File:Accessibility_logo.svg</repository>
+    <copyrights>
+      <copyright>United Nations, Graphic Design Unit (original design)</copyright>
+      <copyright>Pablo Busatto (vectorization)</copyright>
+    </copyrights>
+    <customised/>
+  </library>
+</libraries>

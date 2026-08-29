@@ -32,8 +32,7 @@ namespace local_a11y;
  * to compare exactly what each file itself declares, not what Moodle's
  * lookup chain resolves to.
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel

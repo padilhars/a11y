@@ -23,8 +23,7 @@
  * which also handles require_login()/context/breadcrumbs, matching how
  * the rest of Moodle's own admin report pages are built.
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel

@@ -22,8 +22,7 @@ namespace local_a11y;
  * before cache warm-up, or M1-M5 milestones where settings.php is still
  * minimal).
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel

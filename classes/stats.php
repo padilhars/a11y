@@ -22,8 +22,7 @@ namespace local_a11y;
  * that identifies a user, session, course or request. See DECISIONS.md D47
  * for why this shape was chosen over per-event telemetry.
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel

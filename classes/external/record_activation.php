@@ -38,8 +38,7 @@ use core_external\external_value;
  * argument can never do anything but increment a known option's own
  * counter by exactly 1, regardless of what a tampered client sends.
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel

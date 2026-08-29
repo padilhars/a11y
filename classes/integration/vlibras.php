@@ -31,8 +31,7 @@ namespace local_a11y\integration;
  * (`local_a11y/integratevlibras`) is also on. All three, not just presence -
  * see is_integrated() below for why each one matters independently.
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel

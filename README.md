@@ -121,14 +121,18 @@ vendor/bin/phpunit --configuration local/a11y/phpunit.xml
 
 ## Licença
 
-GNU GPL v3 ou posterior — ver `COPYING.txt` do Moodle.
+GNU GPL v3 ou posterior — ver `LICENSE` (texto integral) nesta pasta. Bibliotecas/
+assets de terceiros empacotados junto (fontes, ícones) estão listados em
+`thirdpartylibs.xml`, conforme exigido pelo Moodle Plugins Directory; ver também a
+seção abaixo.
 
 ### Atribuição de terceiros
 
 `pix/accessibility-un.svg` (uma das opções de ícone do botão flutuante — "Logo de
 acessibilidade da ONU") é uma cópia local de
 ["Accessibility logo (UN)"](https://commons.wikimedia.org/wiki/File:Accessibility_logo.svg),
-Wikimedia Commons, licenciado sob
+Wikimedia Commons — design original de **United Nations, Graphic Design Unit**,
+vetorização de **Pablo Busatto** — licenciado sob
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) (Creative Commons
 Attribution-ShareAlike 4.0 International). A geometria (paths/circles) é idêntica ao
 arquivo original; o único ajuste foi substituir o bloco `<style>`/classes CSS do
@@ -137,11 +141,17 @@ nos elementos, para que o SVG possa ser inserido com segurança inline na págin
 Moodle (sem depender de nomes de classe CSS globais que poderiam colidir com outros
 elementos da página). Ver `classes/icons.php::un_accessibility_svg()`.
 
-`pix/accessibility-default.svg` (ícone padrão do botão flutuante desde D60) foi
-fornecido diretamente pelo autor do plugin, originalmente baixado de svgrepo.com. O
-arquivo de origem só credita "SVG Repo Mixer Tools" no cabeçalho e não declara uma
-licença específica — **isso ainda precisa ser confirmado/documentado com uma licença
-de verdade antes de qualquer distribuição pública do plugin** (ver `docs/PUBLISHING.md`
-e `DECISIONS.md` D60). O único ajuste feito na geometria original foi trocar
-`fill="#000000"` por `fill="currentColor"`, para o ícone tematizar como todos os
-outros do plugin. Ver `classes/icons.php::default_accessibility_svg()`.
+`fonts/atkinson-hyperlegible-*.woff2` (Atkinson Hyperlegible, Braille Institute of
+America) e `fonts/lexend-variable.woff2` (Lexend, The Lexend Project Authors) são
+licenciadas sob a SIL Open Font License 1.1 — texto completo em
+`fonts/OFL-atkinson-hyperlegible.txt` e `fonts/OFL-lexend.txt`, respectivamente.
+
+`pix/accessibility-default.svg` (ícone padrão do botão flutuante desde D60) é do
+conjunto de ícones [Ionicons](https://github.com/ionic-team/ionicons) (Ionic),
+baixado via [svgrepo.com](https://www.svgrepo.com/svg/327598/accessibility) —
+licenciado sob **MIT** (Copyright (c) 2015-present Ionic, http://ionic.io/; texto
+completo em `thirdpartylibs.xml` e no
+[repositório oficial](https://github.com/ionic-team/ionicons/blob/main/LICENSE)).
+O único ajuste feito na geometria original foi trocar `fill="#000000"` por
+`fill="currentColor"`, para o ícone tematizar como todos os outros do plugin. Ver
+`classes/icons.php::default_accessibility_svg()` e `DECISIONS.md` D61.
