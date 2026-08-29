@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  "Accessibility (default)" — generic accessibility figure icon, provided by
-  the plugin author (originally downloaded from svgrepo.com; the source file
-  itself only credits "SVG Repo Mixer Tools" and does not state a specific
-  licence - confirm the exact licence/attribution requirement on svgrepo.com
-  before public redistribution, same as any other third-party asset in this
-  plugin - see README.md for how pix/accessibility-un.svg's licence is
-  documented as a comparison). Re-exported here with `fill="#000000"`
+  "Accessibility (default)" — generic accessibility figure icon, from the
+  Ionicons icon set (Ionic, https://github.com/ionic-team/ionicons),
+  downloaded via svgrepo.com (https://www.svgrepo.com/svg/327598/accessibility,
+  listed there under "Ionicons Filled Interface Icons", author "Ionicons").
+  Licence: MIT (Copyright (c) 2015-present Ionic, http://ionic.io/) - full
+  text in thirdpartylibs.xml and https://github.com/ionic-team/ionicons/blob/main/LICENSE.
+  Re-exported here with `fill="#000000"`
   replaced by `fill="currentColor"` (the original hardcoded black to a fixed
   colour) so the icon themes like every other icon in classes/icons.php -
   see classes/icons.php::default_accessibility_svg(). The path geometry

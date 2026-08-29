@@ -24,8 +24,7 @@ namespace local_a11y;
  * Labels/descriptions are resolved via get_string() instead of the
  * prototype's inline pt-BR/en literals.
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel

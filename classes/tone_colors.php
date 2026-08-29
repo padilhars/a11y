@@ -20,8 +20,7 @@ namespace local_a11y;
  * Profile "tone" colour chips — a verbatim PHP port of TONE_COLORS in
  * _design-reference/a11y-data.jsx.
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel

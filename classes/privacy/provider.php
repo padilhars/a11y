@@ -40,8 +40,7 @@ use core_privacy\local\request\writer;
  * schema rationale and classes/stats.php for the only code that writes
  * to it.
  *
- * @package    Moodle
- * @subpackage Plugin a11y
+ * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
