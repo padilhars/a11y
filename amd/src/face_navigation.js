@@ -44,30 +44,51 @@ const MP_MODEL = 'https://storage.googleapis.com/mediapipe-models/face_landmarke
 const MP_VISION_BUNDLE = MP_CDN + '/vision_bundle.mjs';
 // SHA-256 of vision_bundle.mjs@0.10.18 (base64), cross-checked against
 // jsDelivr's own published package hash (data.jsdelivr.com/v1/package/npm/
-// @mediapipe/tasks-vision@0.10.18) at the time this was pinned. Security
-// audit finding: this file is `import`-ed from the CDN with no integrity
-// check at all - a supply-chain compromise of the npm package or jsDelivr's
-// infrastructure would execute arbitrary code with full page privileges for
-// any user who enables Face Navigation. The native `integrity` attribute
-// only applies to <script src>/<link>, not to `import` specifiers inside an
-// injected script's textContent (which is how this has to load, to avoid
-// AMD/ES-module conflicts - see module docblock), so this fetch-then-verify
-// gate is the closest equivalent available. Scoped to vision_bundle.mjs
-// only (the one piece that runs as JS with page privileges) - the .wasm/
-// .task loads below are MediaPipe's own internal fetches, out of this
-// module's control, and can't execute arbitrary JS directly even if
-// tampered with. Update this hash whenever MP_CDN's version bumps.
+// @mediapipe/tasks-vision@0.10.18) at the time this was pinned.
+//
+// Security audit finding, fixed: this used to be a fetch-then-verify check
+// whose result was immediately discarded - the bytes hashed here were never
+// the bytes that actually ran, because the <script type="module"> below
+// re-imported MP_VISION_BUNDLE *by its original CDN URL*, triggering a
+// SECOND, entirely independent HTTP request that never went through this
+// check at all (classic time-of-check-to-time-of-use gap: a CDN able to
+// serve different content to the two requests - e.g. by the `Sec-Fetch-Dest`
+// header, `empty` for a plain fetch() vs `script` for a module import -
+// would sail straight through). fetchVerified() below now returns a
+// same-origin blob: URL built from the *exact* bytes it just hashed, and
+// loadMediaPipe() imports THAT blob: URL instead of the CDN URL - no second
+// network request happens for this file at all, so the code that runs is
+// cryptographically guaranteed to be the code that was verified. Confirmed
+// (by downloading and inspecting vision_bundle.mjs@0.10.18 directly) that it
+// has no internal `import`/`import.meta`/relative-URL construction of its
+// own - it is a fully self-contained bundle - so importing it from a blob:
+// URL instead of its real CDN URL changes nothing about its behaviour.
+//
+// Scoped to vision_bundle.mjs only (the one piece that runs as JS with page
+// privileges) - the .wasm/.task loads below are MediaPipe's own internal
+// fetches, made from *inside* FilesetResolver/FaceLandmarker with no hook
+// this module can intercept without re-implementing MediaPipe's own loader.
+// That remains an accepted residual risk: mitigated only by pinning this
+// exact package version and by HTTPS transport, not by a hash check like
+// this one, for lack of any exposed way to do better than that today.
+// Update MP_VISION_BUNDLE_SHA256 whenever MP_CDN's version bumps.
 const MP_VISION_BUNDLE_SHA256 = 'krpgFv0PyLvOI3CG3sYhL3KgOwbQpez9xx3cckzNurs=';
 
 /**
- * Fetch a URL and verify its SHA-256 digest matches the pinned hash before
- * the caller is allowed to use it.
+ * Fetch a URL, verify its SHA-256 digest matches the pinned hash, and return
+ * the verified bytes as a same-origin blob: URL - so a caller that
+ * imports/executes THAT url (instead of fetching the original one a second
+ * time) is cryptographically guaranteed to run exactly the bytes that were
+ * just hashed here, closing the time-of-check-to-time-of-use gap a plain
+ * "verify, then separately re-fetch and use" sequence would otherwise leave
+ * open (see MP_VISION_BUNDLE_SHA256's comment above for the full story).
  *
  * @param {String} url The URL to fetch and verify.
  * @param {String} expectedSha256Base64 The expected SHA-256 digest, base64-encoded.
- * @return {Promise<void>} Resolves if the digest matches; rejects otherwise.
+ * @param {String} mimeType MIME type to give the returned blob: URL (must be a JS type for a module import to accept it).
+ * @return {Promise<String>} Resolves to a blob: URL of the verified bytes; rejects if the digest doesn't match.
  */
-const verifyIntegrity = async(url, expectedSha256Base64) => {
+const fetchVerified = async(url, expectedSha256Base64, mimeType) => {
     const response = await fetch(url);
     if (!response.ok) {
         throw new Error('Failed to fetch ' + url + ' (HTTP ' + response.status + ')');
@@ -78,6 +99,7 @@ const verifyIntegrity = async(url, expectedSha256Base64) => {
     if (actual !== expectedSha256Base64) {
         throw new Error('Integrity check failed for ' + url);
     }
+    return URL.createObjectURL(new Blob([buffer], {type: mimeType}));
 };
 
 // sessionStorage: persists the captured neutral pose (and sensitivity) once
@@ -196,10 +218,11 @@ const t = (key) => (cache && cache[key]) || '';
 
 // ── MediaPipe loader ──────────────────────────────────────────────────────────
 /**
- * Verifies vision_bundle.mjs's integrity (see MP_VISION_BUNDLE_SHA256 above),
- * then injects a <script type="module"> that imports FaceLandmarker/
- * FilesetResolver from it and stores them on window.__mp. Resolves via a DOM
- * event. Idempotent.
+ * Verifies vision_bundle.mjs's integrity and gets back a blob: URL of the
+ * exact verified bytes (see MP_VISION_BUNDLE_SHA256 above), then injects a
+ * <script type="module"> that imports FaceLandmarker/FilesetResolver from
+ * THAT blob: URL - never the original CDN URL again - and stores them on
+ * window.__mp. Resolves via a DOM event. Idempotent.
  *
  * @return {Promise<Object>} Resolves to `window.__mp` ({FaceLandmarker, FilesetResolver}).
  */
@@ -207,22 +230,31 @@ const loadMediaPipe = () => {
     if (window.__mp) {
         return Promise.resolve(window.__mp);
     }
-    return verifyIntegrity(MP_VISION_BUNDLE, MP_VISION_BUNDLE_SHA256).then(() => new Promise((resolve, reject) => {
-        document.addEventListener('__mp_ready', () => resolve(window.__mp), {once: true});
-        document.addEventListener('__mp_error', (e) => reject(new Error(e.detail)), {once: true});
-        const s = document.createElement('script');
-        s.type = 'module';
-        s.textContent = [
-            "import { FaceLandmarker, FilesetResolver }",
-            "  from '" + MP_VISION_BUNDLE + "';",
-            "window.__mp = { FaceLandmarker, FilesetResolver };",
-            "document.dispatchEvent(new Event('__mp_ready'));",
-        ].join('\n');
-        s.onerror = () => document.dispatchEvent(
-            new CustomEvent('__mp_error', {detail: 'Failed to load MediaPipe'})
-        );
-        document.head.appendChild(s);
-    }));
+    return fetchVerified(MP_VISION_BUNDLE, MP_VISION_BUNDLE_SHA256, 'text/javascript').then(
+        (blobUrl) => new Promise((resolve, reject) => {
+            const cleanup = () => URL.revokeObjectURL(blobUrl);
+            document.addEventListener('__mp_ready', () => {
+                cleanup();
+                resolve(window.__mp);
+            }, {once: true});
+            document.addEventListener('__mp_error', (e) => {
+                cleanup();
+                reject(new Error(e.detail));
+            }, {once: true});
+            const s = document.createElement('script');
+            s.type = 'module';
+            s.textContent = [
+                "import { FaceLandmarker, FilesetResolver }",
+                "  from '" + blobUrl + "';",
+                "window.__mp = { FaceLandmarker, FilesetResolver };",
+                "document.dispatchEvent(new Event('__mp_ready'));",
+            ].join('\n');
+            s.onerror = () => document.dispatchEvent(
+                new CustomEvent('__mp_error', {detail: 'Failed to load MediaPipe'})
+            );
+            document.head.appendChild(s);
+        })
+    );
 };
 
 // ── Click helper ──────────────────────────────────────────────────────────────

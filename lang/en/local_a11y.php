@@ -35,6 +35,8 @@ $string['a11y:viewstats'] = 'View the aggregate accessibility usage-stats report
 
 // Privacy.
 $string['privacy:metadata:preference:local_a11y_settings'] = 'The accessibility options the user has chosen (text size, contrast, active profile, etc).';
+$string['privacy:metadata:speechrecognitionservice'] = 'When "Voice Commands" is active, some browsers (e.g. Chrome) send the microphone audio to their own remote speech-recognition service to transcribe it into text. This plugin has no control over that service, and never itself sends, receives or stores this audio or its transcription - see README.md.';
+$string['privacy:metadata:speechrecognitionservice:audio'] = 'Microphone audio captured by the browser while "Voice Commands" is active, for as long as needed to recognise a command.';
 
 // Panel chrome.
 $string['fabopen'] = 'Open accessibility panel';
@@ -252,6 +254,7 @@ $string['vk_textfield'] = 'text field';
 // Voice commands.
 $string['vc_listening'] = 'Listening…';
 $string['vc_notsupported'] = 'Voice commands are not supported in this browser.';
+$string['vc_privacynotice'] = 'In this browser, activating Voice Commands sends the audio captured by your microphone to a remote speech-recognition service (not operated by this site) to convert it into text. Continue?';
 
 // Admin settings.
 $string['settings_general'] = 'General';

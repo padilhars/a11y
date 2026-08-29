@@ -324,6 +324,14 @@ const onProfileSelect = (id) => {
 };
 
 voiceCallbacks = {
+    // Called by amd/src/voice_commands.js::start() if the user declines its
+    // one-time privacy notice (security/privacy audit finding) - turns the
+    // panel's own toggle back off, exactly as if the user had clicked it,
+    // so the switch never shows "on" for a feature that didn't actually
+    // start. Safe to call even if voiceCommands is already false somehow -
+    // onToggle()/commit() are idempotent for a value that doesn't change.
+    declineActivation: () => onToggle('voiceCommands', false),
+
     // Panel
     openPanel: () => Panel.open(),
     closePanel: () => Panel.close(),

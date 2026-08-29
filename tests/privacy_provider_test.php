@@ -42,7 +42,9 @@ final class privacy_provider_test extends \advanced_testcase {
     }
 
     /**
-     * Metadata must declare exactly the local_a11y_settings user preference.
+     * Metadata must declare exactly the local_a11y_settings user preference
+     * and, since D62, the external speech-recognition-service disclosure
+     * (Voice Commands, browser-dependent - see classes/privacy/provider.php).
      * @return void
      */
     public function test_get_metadata_declares_the_preference(): void {
@@ -50,10 +52,11 @@ final class privacy_provider_test extends \advanced_testcase {
         $result = provider::get_metadata($collection);
 
         $items = $result->get_collection();
-        $this->assertCount(1, $items);
+        $this->assertCount(2, $items);
 
-        $item = reset($items);
-        $this->assertSame(\local_a11y\manager::PREFERENCE_NAME, $item->get_name());
+        $names = array_map(fn($item) => $item->get_name(), $items);
+        $this->assertContains(\local_a11y\manager::PREFERENCE_NAME, $names);
+        $this->assertContains('speechrecognitionservice', $names);
     }
 
     /**

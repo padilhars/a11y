@@ -63,10 +63,21 @@ class renderer extends \plugin_renderer_base {
         // Only trust the server-rendered value when we actually know it
         // (logged-in user); otherwise emit null so the script reads
         // localStorage itself, matching amd/src/storage.js's own fallback.
-        $serversettings = $isloggedin ? json_encode($settings) : 'null';
-        $preferencename = json_encode(manager::PREFERENCE_NAME);
-        $boolmap = json_encode(manager::get_boolean_class_map());
-        $steppermap = json_encode(manager::get_stepper_class_prefix_map());
+        //
+        // Security audit finding (defence in depth, not exploitable today):
+        // every value below is guaranteed bool/int (manager::sanitize_settings())
+        // or a hardcoded PHP string/array, never user-supplied free text, so
+        // none of them can contain `</script>` as things stand. That safety
+        // depends entirely on that invariant holding forever, though - the
+        // JSON_HEX_* flags make it true unconditionally instead, at zero cost,
+        // so a future settings key that happens to hold a string can never
+        // break out of this inline <script> even if sanitize_settings() isn't
+        // updated to match.
+        $jsonflags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT;
+        $serversettings = $isloggedin ? json_encode($settings, $jsonflags) : 'null';
+        $preferencename = json_encode(manager::PREFERENCE_NAME, $jsonflags);
+        $boolmap = json_encode(manager::get_boolean_class_map(), $jsonflags);
+        $steppermap = json_encode(manager::get_stepper_class_prefix_map(), $jsonflags);
 
         $js = <<<JS
 (function() {
