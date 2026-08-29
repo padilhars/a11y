@@ -22,14 +22,12 @@ namespace local_a11y;
  * that identifies a user, session, course or request. See DECISIONS.md D47
  * for why this shape was chosen over per-event telemetry.
  *
- * @description Aggregate, anonymous usage-stat storage - one row per option, no per-user data.
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version    0.1.0
  * @since      0.1.0
  */
 class stats {

@@ -20,14 +20,12 @@ namespace local_a11y;
  * The 9 accessibility profiles — a verbatim PHP port of PROFILES in
  * _design-reference/a11y-data.jsx (same ids, same `apply` presets, same order).
  *
- * @description The 9 accessibility profiles (PHP port of PROFILES).
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version    0.1.0
  * @since      0.1.0
  */
 class profiles {
@@ -56,8 +54,8 @@ class profiles {
             [
                 'id' => 'adhd', 'icon' => 'zap', 'tone' => 'pink',
                 'labelkey' => 'profile_adhd', 'desckey' => 'profile_adhd_desc',
-                // focusMode => 2 ("Leitura confortável"), not just on/off,
-                // since D52 - see DECISIONS.md D52.
+                // The focusMode value is set to 2 ("Leitura confortável"), not
+                // just on/off, since D52 - see DECISIONS.md D52.
                 'apply' => ['readingMask' => true, 'focusMode' => 2, 'pauseAnimations' => true],
             ],
             [
@@ -78,9 +76,12 @@ class profiles {
             [
                 'id' => 'cognitive', 'icon' => 'brain', 'tone' => 'teal',
                 'labelkey' => 'profile_cognitive', 'desckey' => 'profile_cognitive_desc',
-                // focusMode => 2 ("Leitura confortável"), not just on/off,
-                // since D52 - see DECISIONS.md D52.
-                'apply' => ['focusMode' => 2, 'pauseAnimations' => true, 'readableFont' => true, 'lineHeight' => 2, 'hideImages' => false],
+                // The focusMode value is set to 2 ("Leitura confortável"), not
+                // just on/off, since D52 - see DECISIONS.md D52.
+                'apply' => [
+                    'focusMode' => 2, 'pauseAnimations' => true, 'readableFont' => true,
+                    'lineHeight' => 2, 'hideImages' => false,
+                ],
             ],
             [
                 'id' => 'night', 'icon' => 'moon', 'tone' => 'slate',

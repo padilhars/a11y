@@ -34,6 +34,10 @@
     * iconsvg - raw inline <svg> markup
     * label - option label text
     * desc - option description text or null
+    * isactive - true if this option's current value differs from its default
+    * pressed - "true"/"false" string (not a JS boolean - fed straight into
+      the aria-pressed attribute), matching classes/output/panel.php::
+      export_option()'s own 'true'/'false' string, not a raw boolean
     * forced - (D52) true if another option's current value is forcing this
       one's visible effect on regardless of its own value (only hideImages,
       when focusMode is at level 3, uses this today) - disables the switch
@@ -41,6 +45,9 @@
       while its effect is still visibly on.
     * forcednote - explanatory text shown (only) while forced is true, or
       null for every option that can never be forced
+    * hashelp - true if this option has an inline help block
+    * helplabel - accessible label for the help toggle button, or null if !hashelp
+    * helphtml - raw help block HTML, or null if !hashelp
 
     Example context (json):
     {
@@ -48,8 +55,13 @@
         "iconsvg": "<svg></svg>",
         "label": "Readable Font",
         "desc": "Applies Atkinson Hyperlegible",
+        "isactive": false,
+        "pressed": "false",
         "forced": false,
-        "forcednote": null
+        "forcednote": null,
+        "hashelp": false,
+        "helplabel": null,
+        "helphtml": null
     }
 }}
 {{! No role/tabindex here: the nested <button> below is the sole focusable

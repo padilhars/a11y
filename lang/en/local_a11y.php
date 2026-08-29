@@ -17,14 +17,12 @@
 /**
  * English strings for local_a11y (canonical language file).
  *
- * @description English strings for local_a11y (canonical language file).
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version    0.1.0
  * @since      0.1.0
  */
 
@@ -34,16 +32,13 @@ $string['pluginname'] = 'Accessibility (A11y)';
 
 // Capabilities.
 $string['a11y:view'] = 'Use the accessibility panel';
-$string['a11y:configure'] = 'Configure the accessibility plugin';
 $string['a11y:viewstats'] = 'View the aggregate accessibility usage-stats report';
 
 // Privacy.
 $string['privacy:metadata:preference:local_a11y_settings'] = 'The accessibility options the user has chosen (text size, contrast, active profile, etc).';
 
 // Panel chrome.
-$string['panelname'] = 'Accessibility';
 $string['fabopen'] = 'Open accessibility panel';
-$string['fabclose'] = 'Close accessibility panel';
 $string['paneltitle'] = 'Accessibility';
 $string['panelsubtitle'] = 'Customize your experience';
 $string['profilestitle'] = 'Accessibility Profiles';
@@ -55,13 +50,10 @@ $string['reset'] = 'Reset all';
 $string['close'] = 'Close';
 $string['search'] = 'Search option…';
 $string['searchclear'] = 'Clear search';
-$string['on'] = 'On';
-$string['off'] = 'Off';
 $string['savetitle'] = 'Made with ❤️ by <strong>UFPel</strong>, for you.';
-$string['keyboardhint'] = 'Shortcut: Alt + A';
+$string['keyboardhint'] = 'Alt+A';
 
 // Categories.
-$string['cat_profiles'] = 'Profiles';
 $string['cat_typography'] = 'Text & Typography';
 $string['cat_color'] = 'Color & Contrast';
 $string['cat_media'] = 'Media & Motion';
@@ -254,7 +246,6 @@ $string['sr_reading'] = 'Reading…';
 $string['sr_stop'] = 'Stop';
 
 // Virtual keyboard.
-$string['vk_typinginto'] = 'Typing into';
 $string['vk_none'] = 'Click a text field';
 $string['vk_space'] = 'space';
 $string['vk_textfield'] = 'text field';
@@ -262,7 +253,6 @@ $string['vk_textfield'] = 'text field';
 // Voice commands.
 $string['vc_listening'] = 'Listening…';
 $string['vc_notsupported'] = 'Voice commands are not supported in this browser.';
-$string['vc_hint'] = 'Say a command, e.g. "increase text", "high contrast", "close panel"';
 
 // Admin settings.
 $string['settings_general'] = 'General';
@@ -309,10 +299,8 @@ $string['position_bottomright'] = 'Bottom right';
 $string['position_bottomleft'] = 'Bottom left';
 $string['position_middleright'] = 'Middle right';
 $string['position_middleleft'] = 'Middle left';
+$string['icon_default'] = 'Accessibility (default)';
 $string['icon_un'] = 'UN accessibility logo';
-$string['icon_accessibility'] = 'Accessibility';
-$string['icon_sparkles'] = 'Sparkles';
-$string['icon_user'] = 'User';
 $string['shape_circle'] = 'Circle';
 $string['shape_square'] = 'Square';
 $string['format_popover'] = 'Popover';
@@ -335,6 +323,3 @@ $string['statscol_counter'] = 'Activations';
 $string['statscol_lastupdated'] = 'Last updated';
 
 // Errors.
-$string['error_invalidsettings'] = 'Invalid accessibility settings payload.';
-$string['error_invalidkey'] = 'Unknown accessibility setting: {$a}';
-$string['error_invalidvalue'] = 'Invalid value for accessibility setting {$a}.';

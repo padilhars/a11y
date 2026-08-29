@@ -22,14 +22,12 @@ namespace local_a11y;
  * before cache warm-up, or M1-M5 milestones where settings.php is still
  * minimal).
  *
- * @description Reads admin settings (settings.php) with sane defaults.
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version    0.1.0
  * @since      0.1.0
  */
 class config {
@@ -116,7 +114,7 @@ class config {
     public static function get_appearance(): array {
         return [
             'fabposition' => (string) (get_config('local_a11y', 'fabposition') ?: 'bottom-right'),
-            'fabicon' => (string) (get_config('local_a11y', 'fabicon') ?: 'un'),
+            'fabicon' => (string) (get_config('local_a11y', 'fabicon') ?: 'default'),
             'fabshape' => (string) (get_config('local_a11y', 'fabshape') ?: 'circle'),
             'panelformat' => (string) (get_config('local_a11y', 'panelformat') ?: 'popover'),
             'density' => (string) (get_config('local_a11y', 'density') ?: 'regular'),

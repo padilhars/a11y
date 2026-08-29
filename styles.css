@@ -1,3 +1,20 @@
+/*
+This file is part of Moodle - http://moodle.org/
+
+Moodle is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Moodle is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 /**
  * local_a11y styles.css
  *
@@ -13,6 +30,19 @@
  * Moodle loads this file automatically for every installed plugin — no
  * manual <link> needed for it, only for the inline no-FOUC/font-preload
  * snippet emitted by classes/output/renderer.php.
+ *
+ * `!important` throughout (moodle-plugin-ci's stylelint run flags every one
+ * of them, `declaration-no-important` - deliberately not "fixed" here, nor
+ * suppressed rule-by-rule): this plugin exists specifically to override
+ * Moodle core/theme styling from outside it, on every page, regardless of
+ * theme - and Moodle's own compiled CSS hardcodes colours/backgrounds on
+ * structural regions (#region-main, .main-inner, .moremenu, ...) with a
+ * specificity this plugin cannot out-rank any other way (see DECISIONS.md
+ * D14, which is the investigation that first established this). Removing
+ * `!important` here would silently stop the majority of this plugin's own
+ * effects (contrast, colour-blindness filters, hide-images, focus mode,
+ * ...) from actually doing anything on a real Moodle page - not a style
+ * nit, a functional regression.
  *
  * Styleguide local_a11y.
  *
@@ -37,25 +67,27 @@ Fonts
 Styleguide 1.
 */
 @font-face {
-  font-family: 'Atkinson Hyperlegible';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url([[font:local_a11y|atkinson-hyperlegible-400.woff2]]) format('woff2');
+    font-family: 'Atkinson Hyperlegible';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url([[font:local_a11y|atkinson-hyperlegible-400.woff2]]) format('woff2');
 }
+
 @font-face {
-  font-family: 'Atkinson Hyperlegible';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url([[font:local_a11y|atkinson-hyperlegible-700.woff2]]) format('woff2');
+    font-family: 'Atkinson Hyperlegible';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url([[font:local_a11y|atkinson-hyperlegible-700.woff2]]) format('woff2');
 }
+
 @font-face {
-  font-family: 'Lexend';
-  font-style: normal;
-  font-weight: 400 600;
-  font-display: swap;
-  src: url([[font:local_a11y|lexend-variable.woff2]]) format('woff2');
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400 600;
+    font-display: swap;
+    src: url([[font:local_a11y|lexend-variable.woff2]]) format('woff2');
 }
 
 /* ===========================================================================
@@ -68,41 +100,41 @@ Design tokens (--a11y-* custom properties).
 Styleguide 2.
 */
 .local-a11y-root {
-  --a11y-bg: #f4f5f7;
-  --a11y-surface: #ffffff;
-  --a11y-border: #e5e7eb;
-  --a11y-border-strong: #d1d5db;
-  --a11y-text: #18181b;
-  --a11y-text-muted: #6b7280;
-  --a11y-text-hint: #9ca3af;
-  --a11y-accent: #3b82f6;
-  --a11y-accent-hover: #2563eb;
-  --a11y-accent-soft: #eff6ff;
-  --a11y-success: #10b981;
-  --a11y-warning: #f59e0b;
-  --a11y-danger: #ef4444;
-  --a11y-shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-  --a11y-shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
-  --a11y-shadow-lg: 0 20px 50px -12px rgba(0,0,0,0.18), 0 10px 24px -8px rgba(0,0,0,0.08);
-  /* D37: a handful of neutral tones the FAB/panel/vk/sr-pill CSS below
+    --a11y-bg: #f4f5f7;
+    --a11y-surface: #fff;
+    --a11y-border: #e5e7eb;
+    --a11y-border-strong: #d1d5db;
+    --a11y-text: #18181b;
+    --a11y-text-muted: #6b7280;
+    --a11y-text-hint: #9ca3af;
+    --a11y-accent: #3b82f6;
+    --a11y-accent-hover: #2563eb;
+    --a11y-accent-soft: #eff6ff;
+    --a11y-success: #10b981;
+    --a11y-warning: #f59e0b;
+    --a11y-danger: #ef4444;
+    --a11y-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --a11y-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+    --a11y-shadow-lg: 0 20px 50px -12px rgba(0, 0, 0, 0.18), 0 10px 24px -8px rgba(0, 0, 0, 0.08);
+    /* D37: a handful of neutral tones the FAB/panel/vk/sr-pill CSS below
      used as plain hex instead of a token (header/footer/search bar
      backgrounds, hover backgrounds, category/section-heading label
      colours) - added here (same literal values, so nothing about the
      default look changes) purely so Contraste (D37) has something to
      override; every occurrence of these exact hex values further down
      was swapped for the matching var(). */
-  --a11y-surface-subtle: #f4f4f5;
-  --a11y-surface-hover: #fafafa;
-  --a11y-text-secondary: #52525b;
-  --a11y-text-tertiary: #3f3f46;
-  --a11y-radius-sm: 6px;
-  --a11y-radius: 10px;
-  --a11y-radius-lg: 14px;
-  --a11y-radius-xl: 20px;
-  --a11y-radius-full: 9999px;
-  --a11y-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  font-family: var(--a11y-font);
-  /* Several a11y-*-N typography effects (further down this file) set one
+    --a11y-surface-subtle: #f4f4f5;
+    --a11y-surface-hover: #fafafa;
+    --a11y-text-secondary: #52525b;
+    --a11y-text-tertiary: #3f3f46;
+    --a11y-radius-sm: 6px;
+    --a11y-radius: 10px;
+    --a11y-radius-lg: 14px;
+    --a11y-radius-xl: 20px;
+    --a11y-radius-full: 9999px;
+    --a11y-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-family: var(--a11y-font);
+    /* Several a11y-*-N typography effects (further down this file) set one
      of these !important on some ancestor of the panel/FAB - #page itself,
      or (D30 caught this) any other real page region like #region-main,
      which is *also* directly matched by a "#page *" selector and sits
@@ -120,12 +152,12 @@ Styleguide 2.
      can reach any of those otherwise-unstyled descendants - without
      changing how the panel already looks, since these *are* that
      default. */
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: normal;
-  word-spacing: normal;
-  text-align: start;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-align: start;
 }
 
 /* ===========================================================================
@@ -163,15 +195,15 @@ FAB/panel opt-out from page-wide effects.
 Styleguide 3.
 */
 .local-a11y-root * {
-  filter: none !important;
-  cursor: auto !important;
+    filter: none !important;
+    cursor: auto !important;
 }
 .local-a11y-root {
-  cursor: auto !important;
+    cursor: auto !important;
 }
 .local-a11y-root button,
 .local-a11y-root [role="button"] {
-  cursor: pointer !important;
+    cursor: pointer !important;
 }
 /* D41: toggle-option rows (templates/option_toggle.mustache) are clickable
    across their whole area via event delegation in amd/src/panel.js, but the
@@ -187,7 +219,7 @@ Styleguide 3.
    just redundantly covered here too. */
 .local-a11y-root .local-a11y-option,
 .local-a11y-root .local-a11y-option * {
-  cursor: pointer !important;
+    cursor: pointer !important;
 }
 
 /* ===========================================================================
@@ -200,72 +232,98 @@ The floating action button (FAB).
 Styleguide 4.
 */
 .local-a11y-fab {
-  position: fixed;
-  width: 56px;
-  height: 56px;
-  border: 0;
-  padding: 0;
-  background: var(--local-a11y-accent, var(--a11y-accent));
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.16), 0 2px 6px rgba(0,0,0,0.08);
-  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease, filter 150ms ease;
-  z-index: 99990;
+    position: fixed;
+    width: 56px;
+    height: 56px;
+    border: 0;
+    padding: 0;
+    background: var(--local-a11y-accent, var(--a11y-accent));
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 200ms ease, filter 150ms ease;
+    z-index: 99990;
 }
-.local-a11y-fab--circle { border-radius: 50%; }
-.local-a11y-fab--square { border-radius: 16px; }
+.local-a11y-fab--circle {
+    border-radius: 50%;
+}
+.local-a11y-fab--square {
+    border-radius: 16px;
+}
 /* Drawer panel format hides the FAB: it stays in the DOM (amd/src/main.js
    needs it) but is visually removed. */
-.local-a11y-fab--hidden { display: none !important; }
-.local-a11y-fab--bottom-right { bottom: 24px; right: 24px; }
-.local-a11y-fab--bottom-left { bottom: 24px; left: 24px; }
-.local-a11y-fab--middle-right { top: 50%; right: 24px; transform: translateY(-50%); }
-.local-a11y-fab--middle-left { top: 50%; left: 24px; transform: translateY(-50%); }
-.local-a11y-fab:hover {
-  box-shadow: 0 10px 32px rgba(0,0,0,0.22), 0 3px 10px rgba(0,0,0,0.1);
-  filter: brightness(1.08);
+.local-a11y-fab--hidden {
+    display: none !important;
 }
-.local-a11y-fab:active { filter: brightness(0.94); }
+.local-a11y-fab--bottom-right {
+    bottom: 24px;
+    right: 24px;
+}
+.local-a11y-fab--bottom-left {
+    bottom: 24px;
+    left: 24px;
+}
+.local-a11y-fab--middle-right {
+    top: 50%;
+    right: 24px;
+    transform: translateY(-50%);
+}
+.local-a11y-fab--middle-left {
+    top: 50%;
+    left: 24px;
+    transform: translateY(-50%);
+}
+.local-a11y-fab:hover {
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.22), 0 3px 10px rgba(0, 0, 0, 0.1);
+    filter: brightness(1.08);
+}
+.local-a11y-fab:active {
+    filter: brightness(0.94);
+}
 .local-a11y-fab:focus-visible {
-  outline: 3px solid #fff;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 5px var(--local-a11y-accent, var(--a11y-accent));
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px var(--local-a11y-accent, var(--a11y-accent));
 }
 .local-a11y-fab--lifted.local-a11y-fab--bottom-right,
 .local-a11y-fab--lifted.local-a11y-fab--bottom-left {
-  bottom: calc(24px + var(--local-a11y-lift, 0px));
+    bottom: calc(24px + var(--local-a11y-lift, 0px));
 }
-.local-a11y-fab__icon { display: flex; }
+.local-a11y-fab__icon {
+    display: flex;
+}
 /* The UN accessibility logo (icons::un_accessibility_svg()) themes via
    currentColor like every other icon, so on the FAB it's already white
    via .local-a11y-fab's own `color: #fff` - it just gets a touch of
    breathing room so it isn't flush against the button. */
 .local-a11y-fab__icon--un {
-  border-radius: 50%;
-  padding: 3px;
+    border-radius: 50%;
+    padding: 3px;
 }
 .local-a11y-fab__badge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 6px;
-  border-radius: 999px;
-  background: var(--a11y-surface);
-  color: var(--local-a11y-accent, var(--a11y-accent));
-  font-size: 11px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-  font-variant-numeric: tabular-nums;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--a11y-surface);
+    color: var(--local-a11y-accent, var(--a11y-accent));
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    font-variant-numeric: tabular-nums;
 }
-.local-a11y-fab__badge[hidden] { display: none; }
+.local-a11y-fab__badge[hidden] {
+    display: none;
+}
 
 /* ===========================================================================
    PANEL — overlay (modal/drawer formats only)
@@ -277,14 +335,16 @@ Panel overlay (modal/drawer formats only).
 Styleguide 5.1.
 */
 .local-a11y-panel-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.1);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  z-index: 99988;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.1);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    z-index: 99988;
 }
-.local-a11y-panel-overlay[hidden] { display: none; }
+.local-a11y-panel-overlay[hidden] {
+    display: none;
+}
 
 /* ===========================================================================
    PANEL — container
@@ -296,46 +356,76 @@ Panel container (popover/drawer/modal formats, density).
 Styleguide 5.2.
 */
 .local-a11y-panel {
-  position: fixed;
-  background: var(--a11y-surface);
-  border: 1px solid var(--a11y-border);
-  box-shadow: var(--a11y-shadow-lg), 0 1px 0 0 rgba(255,255,255,0.6) inset;
-  z-index: 99989;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  font-size: 14px;
-  color: var(--a11y-text);
+    position: fixed;
+    background: var(--a11y-surface);
+    border: 1px solid var(--a11y-border);
+    box-shadow: var(--a11y-shadow-lg), 0 1px 0 0 rgba(255, 255, 255, 0.6) inset;
+    z-index: 99989;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    font-size: 14px;
+    color: var(--a11y-text);
 }
-.local-a11y-panel[hidden] { display: none; }
+.local-a11y-panel[hidden] {
+    display: none;
+}
 
 /* Popover format (default) */
 .local-a11y-panel--popover {
-  width: 380px;
-  max-height: calc(100vh - 120px);
-  border-radius: 18px;
+    width: 380px;
+    max-height: calc(100vh - 120px);
+    border-radius: 18px;
 }
-.local-a11y-panel--popover.local-a11y-panel--bottom-right { bottom: 92px; right: 24px; transform-origin: bottom right; }
-.local-a11y-panel--popover.local-a11y-panel--bottom-left  { bottom: 92px; left: 24px;  transform-origin: bottom left; }
-.local-a11y-panel--popover.local-a11y-panel--middle-right { top: 50%; right: 92px; transform: translateY(-50%); transform-origin: right center; }
-.local-a11y-panel--popover.local-a11y-panel--middle-left  { top: 50%; left: 92px;  transform: translateY(-50%); transform-origin: left center; }
+.local-a11y-panel--popover.local-a11y-panel--bottom-right {
+    bottom: 92px;
+    right: 24px;
+    transform-origin: bottom right;
+}
+.local-a11y-panel--popover.local-a11y-panel--bottom-left {
+    bottom: 92px;
+    left: 24px;
+    transform-origin: bottom left;
+}
+.local-a11y-panel--popover.local-a11y-panel--middle-right {
+    top: 50%;
+    right: 92px;
+    transform: translateY(-50%);
+    transform-origin: right center;
+}
+.local-a11y-panel--popover.local-a11y-panel--middle-left {
+    top: 50%;
+    left: 92px;
+    transform: translateY(-50%);
+    transform-origin: left center;
+}
 
 /* Drawer format */
 .local-a11y-panel--drawer {
-  top: 0; right: 0; bottom: 0;
-  width: min(400px, 100vw);
-  max-height: 100vh;
-  border-radius: 0;
-  border-top: 0; border-right: 0; border-bottom: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    /* stylelint-disable-next-line csstree/validator -- width: min() is
+       standard, broadly-supported CSS (Values and Units L4); css-tree's
+       bundled property-value grammar just hasn't been updated for it. */
+    width: min(400px, 100vw);
+    max-height: 100vh;
+    border-radius: 0;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 0;
 }
 
 /* Modal format */
 .local-a11y-panel--modal {
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(520px, calc(100vw - 32px));
-  max-height: calc(100vh - 64px);
-  border-radius: 18px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* stylelint-disable-next-line csstree/validator -- see the drawer-format
+       width: min() comment above; same tooling limitation, not a real bug. */
+    width: min(520px, calc(100vw - 32px));
+    max-height: calc(100vh - 64px);
+    border-radius: 18px;
 }
 
 /*
@@ -353,21 +443,23 @@ format is popover or modal.
 Styleguide 5.2.1.
 */
 @media (max-width: 767.98px) {
-  .local-a11y-panel--popover,
-  .local-a11y-panel--modal {
-    top: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    left: auto !important;
-    width: min(400px, 100vw) !important;
-    max-height: 100vh !important;
-    border-radius: 0 !important;
-    border-top: 0 !important;
-    border-right: 0 !important;
-    border-bottom: 0 !important;
-    transform: none !important;
-    transform-origin: initial !important;
-  }
+    .local-a11y-panel--popover,
+    .local-a11y-panel--modal {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: auto !important;
+        /* stylelint-disable-next-line csstree/validator -- see the
+           drawer-format width: min() comment further up this file. */
+        width: min(400px, 100vw) !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        border-top: 0 !important;
+        border-right: 0 !important;
+        border-bottom: 0 !important;
+        transform: none !important;
+        transform-origin: initial !important;
+    }
 }
 
 /* Density (local_a11y/density admin setting).
@@ -378,23 +470,57 @@ Styleguide 5.2.1.
    size, the gap between rows and the label/description font-size, so all
    3 levels read as clearly different panels, not just a few px of
    padding. */
-.local-a11y-panel--density-compact .local-a11y-option { padding: 6px 10px; }
-.local-a11y-panel--density-regular .local-a11y-option { padding: 11px 12px; }
-.local-a11y-panel--density-comfortable .local-a11y-option { padding: 16px 14px; }
-.local-a11y-panel--density-compact .local-a11y-option__desc { display: none; }
+.local-a11y-panel--density-compact .local-a11y-option {
+    padding: 6px 10px;
+}
+.local-a11y-panel--density-regular .local-a11y-option {
+    padding: 11px 12px;
+}
+.local-a11y-panel--density-comfortable .local-a11y-option {
+    padding: 16px 14px;
+}
+.local-a11y-panel--density-compact .local-a11y-option__desc {
+    display: none;
+}
 
-.local-a11y-panel--density-compact .local-a11y-category__body { gap: 0; }
-.local-a11y-panel--density-regular .local-a11y-category__body { gap: 2px; }
-.local-a11y-panel--density-comfortable .local-a11y-category__body { gap: 6px; }
+.local-a11y-panel--density-compact .local-a11y-category__body {
+    gap: 0;
+}
+.local-a11y-panel--density-regular .local-a11y-category__body {
+    gap: 2px;
+}
+.local-a11y-panel--density-comfortable .local-a11y-category__body {
+    gap: 6px;
+}
 
-.local-a11y-panel--density-compact .local-a11y-option__icon { width: 26px; height: 26px; border-radius: 7px; }
-.local-a11y-panel--density-regular .local-a11y-option__icon { width: 32px; height: 32px; border-radius: 8px; }
-.local-a11y-panel--density-comfortable .local-a11y-option__icon { width: 38px; height: 38px; border-radius: 10px; }
+.local-a11y-panel--density-compact .local-a11y-option__icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+}
+.local-a11y-panel--density-regular .local-a11y-option__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+}
+.local-a11y-panel--density-comfortable .local-a11y-option__icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+}
 
-.local-a11y-panel--density-compact .local-a11y-option__label { font-size: 12.5px; }
-.local-a11y-panel--density-regular .local-a11y-option__label { font-size: 13.5px; }
-.local-a11y-panel--density-comfortable .local-a11y-option__label { font-size: 14.5px; }
-.local-a11y-panel--density-comfortable .local-a11y-option__desc { font-size: 12px; }
+.local-a11y-panel--density-compact .local-a11y-option__label {
+    font-size: 12.5px;
+}
+.local-a11y-panel--density-regular .local-a11y-option__label {
+    font-size: 13.5px;
+}
+.local-a11y-panel--density-comfortable .local-a11y-option__label {
+    font-size: 14.5px;
+}
+.local-a11y-panel--density-comfortable .local-a11y-option__desc {
+    font-size: 12px;
+}
 
 /* ===========================================================================
    PANEL — header
@@ -406,32 +532,74 @@ Panel header (badge, titles, reset/close buttons).
 Styleguide 5.3.
 */
 .local-a11y-panel__header {
-  position: relative;
-  padding: 18px 20px 14px;
-  border-bottom: 1px solid var(--a11y-surface-subtle);
-  background: var(--a11y-surface);
+    position: relative;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--a11y-surface-subtle);
+    background: var(--a11y-surface);
 }
-.local-a11y-panel__header-row { display: flex; align-items: center; gap: 12px; }
+.local-a11y-panel__header-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 .local-a11y-panel__badge {
-  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
-  background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent);
-  color: var(--local-a11y-accent, var(--a11y-accent));
-  display: flex; align-items: center; justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent);
+    color: var(--local-a11y-accent, var(--a11y-accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.local-a11y-panel__titles { flex: 1; min-width: 0; }
-.local-a11y-panel__title { display: block; font-size: 15px; font-weight: 600; color: var(--a11y-text); letter-spacing: -0.01em; }
-.local-a11y-panel__subtitle { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--a11y-text-muted); margin-top: 1px; }
+.local-a11y-panel__titles {
+    flex: 1;
+    min-width: 0;
+}
+.local-a11y-panel__title {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--a11y-text);
+    letter-spacing: -0.01em;
+}
+.local-a11y-panel__subtitle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--a11y-text-muted);
+    margin-top: 1px;
+}
 .local-a11y-panel__subtitle--active::before {
-  content: ''; width: 6px; height: 6px; background: var(--a11y-success); border-radius: 50%; flex-shrink: 0;
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--a11y-success);
+    border-radius: 50%;
+    flex-shrink: 0;
 }
 .local-a11y-iconbutton {
-  width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
-  border: 1px solid var(--a11y-border); background: var(--a11y-surface); color: var(--a11y-text-muted);
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: all 150ms ease;
-  min-width: 24px; min-height: 24px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    border: 1px solid var(--a11y-border);
+    background: var(--a11y-surface);
+    color: var(--a11y-text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 150ms ease;
+    min-width: 24px;
+    min-height: 24px;
 }
-.local-a11y-iconbutton:hover { background: var(--a11y-surface-subtle); color: var(--a11y-text); }
+.local-a11y-iconbutton:hover {
+    background: var(--a11y-surface-subtle);
+    color: var(--a11y-text);
+}
 
 /* Single fixed reset button in the header row (see DECISIONS.md D23) -
    always rendered, never hidden/shown, so the header has a constant
@@ -442,17 +610,17 @@ Styleguide 5.3.
    falling back to the plain accent below when no profile - just an
    individual option - is active). */
 .local-a11y-panel__reset-icon:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 .local-a11y-panel__reset-icon--active {
-  background: var(--local-a11y-tone-bg, var(--a11y-accent-soft));
-  border-color: var(--local-a11y-tone-border, var(--local-a11y-accent, var(--a11y-accent)));
-  color: var(--local-a11y-tone-icon, var(--local-a11y-accent, var(--a11y-accent)));
+    background: var(--local-a11y-tone-bg, var(--a11y-accent-soft));
+    border-color: var(--local-a11y-tone-border, var(--local-a11y-accent, var(--a11y-accent)));
+    color: var(--local-a11y-tone-icon, var(--local-a11y-accent, var(--a11y-accent)));
 }
 .local-a11y-panel__reset-icon--active:hover {
-  background: var(--local-a11y-tone-bg, var(--a11y-accent-soft));
-  color: var(--local-a11y-tone-icon, var(--local-a11y-accent, var(--a11y-accent)));
+    background: var(--local-a11y-tone-bg, var(--a11y-accent-soft));
+    color: var(--local-a11y-tone-icon, var(--local-a11y-accent, var(--a11y-accent)));
 }
 
 /* ===========================================================================
@@ -465,30 +633,75 @@ Panel body and search box.
 Styleguide 5.4.
 */
 .local-a11y-panel__body {
-  flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden;
-  scrollbar-width: thin; scrollbar-color: rgba(0, 0, 0, .15) transparent;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, .15) transparent;
 }
-.local-a11y-panel__body::-webkit-scrollbar { width: 8px; }
-.local-a11y-panel__body::-webkit-scrollbar-track { background: transparent; margin: 2px; }
+.local-a11y-panel__body::-webkit-scrollbar {
+    width: 8px;
+}
+.local-a11y-panel__body::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 2px;
+}
 .local-a11y-panel__body::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, .15); border-radius: 4px;
-  border: 2px solid transparent; background-clip: content-box;
+    background: rgba(0, 0, 0, .15);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: content-box;
 }
 .local-a11y-panel__body::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, .25); border: 2px solid transparent; background-clip: content-box;
+    background: rgba(0, 0, 0, .25);
+    border: 2px solid transparent;
+    background-clip: content-box;
 }
 .local-a11y-panel__search {
-  margin: 14px 20px 8px; position: sticky; top: 0; z-index: 5;
-  height: 38px; display: flex; align-items: center; gap: 10px; padding: 0 12px;
-  background: var(--a11y-surface-subtle); border: 1px solid transparent; border-radius: 10px;
+    margin: 14px 20px 8px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px;
+    background: var(--a11y-surface-subtle);
+    border: 1px solid transparent;
+    border-radius: 10px;
 }
-.local-a11y-panel__search-icon { color: var(--a11y-text-hint); display: flex; flex-shrink: 0; }
+.local-a11y-panel__search-icon {
+    color: var(--a11y-text-hint);
+    display: flex;
+    flex-shrink: 0;
+}
 .local-a11y-panel__search-input {
-  flex: 1; border: 0; background: transparent; outline: 0; font-size: 13px; color: var(--a11y-text);
-  font-family: inherit; min-width: 0;
+    flex: 1;
+    border: 0;
+    background: transparent;
+    outline: 0;
+    font-size: 13px;
+    color: var(--a11y-text);
+    font-family: inherit;
+    min-width: 0;
 }
-.local-a11y-panel__search-clear { border: 0; background: transparent; color: var(--a11y-text-hint); cursor: pointer; padding: 0; display: flex; min-width: 24px; min-height: 24px; align-items: center; justify-content: center; }
-.local-a11y-panel__search-clear[hidden] { display: none; }
+.local-a11y-panel__search-clear {
+    border: 0;
+    background: transparent;
+    color: var(--a11y-text-hint);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    min-width: 24px;
+    min-height: 24px;
+    align-items: center;
+    justify-content: center;
+}
+.local-a11y-panel__search-clear[hidden] {
+    display: none;
+}
 
 /* ===========================================================================
    PANEL — sections / profiles
@@ -499,47 +712,124 @@ Panel sections and profile preset cards.
 
 Styleguide 5.5.
 */
-.local-a11y-panel__section { padding: 6px 20px 4px; }
+.local-a11y-panel__section {
+    padding: 6px 20px 4px;
+}
 /* A <button> (see amd/src/panel.js toggleProfiles) - reset its native
    button chrome the same way .local-a11y-category__header does, on top of
    the section heading's own existing layout below. */
 .local-a11y-panel__section-heading {
-  width: 100%; background: transparent; border: 0; cursor: pointer; font-family: inherit;
-  padding: 10px 0 8px; display: flex; align-items: center; gap: 10px; text-align: left;
+    width: 100%;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 10px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
 }
-.local-a11y-panel__section-heading-icon { color: var(--a11y-text-secondary); display: flex; }
-.local-a11y-panel__section-heading-text { flex: 1; min-width: 0; }
-.local-a11y-panel__section-heading-label { display: block; font-size: 11.5px; font-weight: 600; color: var(--a11y-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
-.local-a11y-panel__section-heading-sublabel { display: block; font-size: 11.5px; color: var(--a11y-text-muted); margin-top: 1px; }
+.local-a11y-panel__section-heading-icon {
+    color: var(--a11y-text-secondary);
+    display: flex;
+}
+.local-a11y-panel__section-heading-text {
+    flex: 1;
+    min-width: 0;
+}
+.local-a11y-panel__section-heading-label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--a11y-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+.local-a11y-panel__section-heading-sublabel {
+    display: block;
+    font-size: 11.5px;
+    color: var(--a11y-text-muted);
+    margin-top: 1px;
+}
 /* Chevron rotation, same mechanic/markup as .local-a11y-category__chevron
    (reused class) - just keyed off this heading's own aria-expanded instead
    of the category header's. */
-.local-a11y-panel__section-heading[aria-expanded="true"] .local-a11y-category__chevron { transform: rotate(0deg); }
-.local-a11y-panel__section-heading[aria-expanded="false"] .local-a11y-category__chevron { transform: rotate(-90deg); }
+.local-a11y-panel__section-heading[aria-expanded="true"] .local-a11y-category__chevron {
+    transform: rotate(0deg);
+}
+.local-a11y-panel__section-heading[aria-expanded="false"] .local-a11y-category__chevron {
+    transform: rotate(-90deg);
+}
 
-.local-a11y-profile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+.local-a11y-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 18px;
+}
 .local-a11y-profile-card {
-  position: relative; padding: 10px 8px; border-radius: 12px;
-  border: 1px solid var(--a11y-border); background: var(--a11y-surface); cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  transition: all 150ms ease; text-align: center; min-height: 78px; font-family: inherit;
+    position: relative;
+    padding: 10px 8px;
+    border-radius: 12px;
+    border: 1px solid var(--a11y-border);
+    background: var(--a11y-surface);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: all 150ms ease;
+    text-align: center;
+    min-height: 78px;
+    font-family: inherit;
 }
-.local-a11y-profile-card:hover { border-color: var(--a11y-border-strong); background: var(--a11y-surface-hover); }
+.local-a11y-profile-card:hover {
+    border-color: var(--a11y-border-strong);
+    background: var(--a11y-surface-hover);
+}
 .local-a11y-profile-card__icon {
-  width: 30px; height: 30px; border-radius: 8px; background: var(--local-a11y-tone-bg);
-  color: var(--local-a11y-tone-icon); display: flex; align-items: center; justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--local-a11y-tone-bg);
+    color: var(--local-a11y-tone-icon);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.local-a11y-profile-card__label { font-size: 11.5px; font-weight: 600; color: var(--a11y-text); line-height: 1.2; }
+.local-a11y-profile-card__label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--a11y-text);
+    line-height: 1.2;
+}
 .local-a11y-profile-card__check {
-  position: absolute; top: 6px; right: 6px; width: 14px; height: 14px; border-radius: 50%;
-  background: var(--local-a11y-tone-icon); color: #fff; display: flex; align-items: center; justify-content: center;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--local-a11y-tone-icon);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.local-a11y-profile-card__check[hidden] { display: none; }
+.local-a11y-profile-card__check[hidden] {
+    display: none;
+}
 .local-a11y-profile-card--active {
-  border: 1.5px solid var(--local-a11y-tone-icon); background: var(--local-a11y-tone-bg);
+    border: 1.5px solid var(--local-a11y-tone-icon);
+    background: var(--local-a11y-tone-bg);
 }
-.local-a11y-profile-card--active .local-a11y-profile-card__icon { background: var(--a11y-surface); }
-.local-a11y-profile-card--active .local-a11y-profile-card__label { color: var(--local-a11y-tone-text); }
+.local-a11y-profile-card--active .local-a11y-profile-card__icon {
+    background: var(--a11y-surface);
+}
+.local-a11y-profile-card--active .local-a11y-profile-card__label {
+    color: var(--local-a11y-tone-text);
+}
 
 /* ===========================================================================
    PANEL — categories / options
@@ -550,21 +840,49 @@ Panel categories and option rows (toggle/stepper).
 
 Styleguide 5.6.
 */
-.local-a11y-panel__categories { padding: 4px 20px 12px; }
-.local-a11y-category { margin-bottom: 6px; }
-.local-a11y-category__header {
-  width: 100%; display: flex; align-items: center; gap: 10px;
-  padding: 12px 10px 10px; background: transparent; border: 0; cursor: pointer;
-  color: var(--a11y-text-tertiary); text-align: left; border-radius: 8px; font-family: inherit;
-  min-height: 24px;
+.local-a11y-panel__categories {
+    padding: 4px 20px 12px;
 }
-.local-a11y-category__icon { color: var(--a11y-text-secondary); display: flex; }
-.local-a11y-category__label { font-size: 11.5px; font-weight: 600; color: var(--a11y-text-secondary); text-transform: uppercase; letter-spacing: 0.06em; flex: 1; }
+.local-a11y-category {
+    margin-bottom: 6px;
+}
+.local-a11y-category__header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 10px 10px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    color: var(--a11y-text-tertiary);
+    text-align: left;
+    border-radius: 8px;
+    font-family: inherit;
+    min-height: 24px;
+}
+.local-a11y-category__icon {
+    color: var(--a11y-text-secondary);
+    display: flex;
+}
+.local-a11y-category__label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--a11y-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    flex: 1;
+}
 .local-a11y-category__count {
-  font-size: 10px; font-weight: 700; color: var(--local-a11y-accent, var(--a11y-accent));
-  background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent);
-  padding: 2px 7px; border-radius: 999px; font-variant-numeric: tabular-nums;
-  display: inline-flex; align-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--local-a11y-accent, var(--a11y-accent));
+    background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent);
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: center;
 }
 /* Its box (15px line-height + 4px padding = 19px) is taller than the rest
    of the header row, so a plain [hidden] (display:none) would let the
@@ -579,30 +897,57 @@ Styleguide 5.6.
    !important needed: Bootstrap's own reboot sets a blanket
    `[hidden] { display: none !important; }`, which would otherwise beat
    this rule regardless of our higher selector specificity. */
-.local-a11y-category__count[hidden] { display: inline-flex !important; visibility: hidden; }
-.local-a11y-category__chevron { color: var(--a11y-text-hint); display: flex; transition: transform 200ms ease; }
-.local-a11y-category__header[aria-expanded="true"] .local-a11y-category__chevron { transform: rotate(0deg); }
-.local-a11y-category__header[aria-expanded="false"] .local-a11y-category__chevron { transform: rotate(-90deg); }
-.local-a11y-category__body { display: flex; flex-direction: column; gap: 2px; margin-bottom: 8px; }
-.local-a11y-category__body[hidden] { display: none; }
+.local-a11y-category__count[hidden] {
+    display: inline-flex !important;
+    visibility: hidden;
+}
+.local-a11y-category__chevron {
+    color: var(--a11y-text-hint);
+    display: flex;
+    transition: transform 200ms ease;
+}
+.local-a11y-category__header[aria-expanded="true"] .local-a11y-category__chevron {
+    transform: rotate(0deg);
+}
+.local-a11y-category__header[aria-expanded="false"] .local-a11y-category__chevron {
+    transform: rotate(-90deg);
+}
+.local-a11y-category__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 8px;
+}
+.local-a11y-category__body[hidden] {
+    display: none;
+}
 
 .local-a11y-option {
-  display: flex; align-items: center; gap: 12px; border-radius: 10px; cursor: pointer;
-  /* Border is always 1px, even inactive (transparent) - --active below only
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    /* Border is always 1px, even inactive (transparent) - --active below only
      ever changes border-color, never border-width, so toggling an option
      never resizes its own row. The row-jump this was meant to fix actually
      came from .local-a11y-category__count above (its box is taller than
      the rest of the header, so it grew the header when a category's first
      option went active) and, separately, from the readable/dyslexic-font
      effects reaching into the panel's own text further down - see both. */
-  border: 1px solid transparent; transition: all 150ms ease;
+    border: 1px solid transparent;
+    transition: all 150ms ease;
 }
-.local-a11y-option:hover { background: var(--a11y-surface-hover); }
+.local-a11y-option:hover {
+    background: var(--a11y-surface-hover);
+}
 .local-a11y-option--active {
-  background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent);
-  border-color: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 20%, transparent);
+    background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent);
+    border-color: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 20%, transparent);
 }
-.local-a11y-option--active:hover { background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent); }
+.local-a11y-option--active:hover {
+    background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent);
+}
 /* Moodle core styles every [role="button"] (which .local-a11y-option is)
    with a focus ring on plain :focus, not just :focus-visible - so mouse
    clicks show it too, not only keyboard nav. For the 7 stepper options
@@ -614,40 +959,80 @@ Styleguide 5.6.
    Suppressing it only for :not(:focus-visible) - i.e. only when focus
    didn't come from the keyboard - keeps the real keyboard focus indicator
    intact (WCAG 2.4.7). */
-.local-a11y-option[data-kind="stepper"]:focus:not(:focus-visible) { box-shadow: none; }
-@keyframes local-a11y-option-pulse {
-  0%, 100% { background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent); }
-  40% { background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 28%, transparent); }
+.local-a11y-option[data-kind="stepper"]:focus:not(:focus-visible) {
+    box-shadow: none;
 }
-.local-a11y-option--pulse { animation: local-a11y-option-pulse 350ms ease; }
+
+@keyframes local-a11y-option-pulse {
+    0%,
+    100% {
+        background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent);
+    }
+    40% {
+        background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 28%, transparent);
+    }
+}
+.local-a11y-option--pulse {
+    animation: local-a11y-option-pulse 350ms ease;
+}
 /* Options that have a help block wrap their children (the block goes on its
    own line below the icon / text / switch row). */
-.local-a11y-option--has-help { flex-wrap: wrap; }
+.local-a11y-option--has-help {
+    flex-wrap: wrap;
+}
 /* Help toggle button "?" */
 .local-a11y-help-btn {
-  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--a11y-border-strong);
-  background: transparent; color: var(--a11y-text-secondary); font-size: 11px; font-weight: 700;
-  cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-  transition: border-color 120ms, color 120ms; font-family: inherit;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--a11y-border-strong);
+    background: transparent;
+    color: var(--a11y-text-secondary);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 120ms, color 120ms;
+    font-family: inherit;
 }
 .local-a11y-help-btn:hover,
 .local-a11y-help-btn[aria-expanded="true"] {
-  border-color: var(--local-a11y-accent, var(--a11y-accent));
-  color: var(--local-a11y-accent, var(--a11y-accent));
+    border-color: var(--local-a11y-accent, var(--a11y-accent));
+    color: var(--local-a11y-accent, var(--a11y-accent));
 }
 /* Expandable help block */
 .local-a11y-help-block {
-  flex: 0 0 100%; /* full-width on its own flex line */
-  background: var(--a11y-surface-subtle); border-radius: 8px;
-  padding: 10px 12px; margin-top: 4px; font-size: 12px; color: var(--a11y-text-secondary);
-  line-height: 1.5;
+    flex: 0 0 100%; /* full-width on its own flex line */
+    background: var(--a11y-surface-subtle);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--a11y-text-secondary);
+    line-height: 1.5;
 }
-.local-a11y-help-intro { margin: 0 0 6px; font-weight: 500; color: var(--a11y-text); }
-.local-a11y-help-list { margin: 0; padding-left: 16px; display: flex; flex-direction: column; gap: 3px; }
+.local-a11y-help-intro {
+    margin: 0 0 6px;
+    font-weight: 500;
+    color: var(--a11y-text);
+}
+.local-a11y-help-list {
+    margin: 0;
+    padding-left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
 .local-a11y-help-list li code {
-  font-family: monospace; font-size: 11px;
-  background: var(--a11y-surface); border: 1px solid var(--a11y-border); border-radius: 4px;
-  padding: 1px 4px;
+    font-family: monospace;
+    font-size: 11px;
+    background: var(--a11y-surface);
+    border: 1px solid var(--a11y-border);
+    border-radius: 4px;
+    padding: 1px 4px;
 }
 /* D52: a row forced active by another option (hideImages while focusMode
    is at level 3) - switch stays visibly "on" (its [aria-pressed="true"]
@@ -655,43 +1040,129 @@ Styleguide 5.6.
    one-line explanatory note on its own line, same wrap mechanism as the
    help block above but its own class: overloading --has-help for a row
    that has no help button would be a misleading class name to read later. */
-.local-a11y-option--forced { cursor: default; }
-.local-a11y-option--has-note { flex-wrap: wrap; }
-.local-a11y-switch:disabled { cursor: not-allowed; opacity: 0.7; }
+.local-a11y-option--forced {
+    cursor: default;
+}
+.local-a11y-option--has-note {
+    flex-wrap: wrap;
+}
+.local-a11y-switch:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
 .local-a11y-option__forced-note {
-  flex: 0 0 100%; font-size: 11.5px; font-style: italic; color: var(--a11y-text-muted);
-  margin-top: 2px; line-height: 1.3;
+    flex: 0 0 100%;
+    font-size: 11.5px;
+    font-style: italic;
+    color: var(--a11y-text-muted);
+    margin-top: 2px;
+    line-height: 1.3;
 }
 .local-a11y-option__icon {
-  width: 32px; height: 32px; border-radius: 8px; background: var(--a11y-surface-subtle); color: var(--a11y-text-secondary);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 150ms ease;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--a11y-surface-subtle);
+    color: var(--a11y-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 150ms ease;
 }
-.local-a11y-option--active .local-a11y-option__icon { background: var(--local-a11y-accent, var(--a11y-accent)); color: #fff; }
-.local-a11y-option__text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.local-a11y-option__label { font-size: 13.5px; font-weight: 500; color: var(--a11y-text); letter-spacing: -0.005em; }
+.local-a11y-option--active .local-a11y-option__icon {
+    background: var(--local-a11y-accent, var(--a11y-accent));
+    color: #fff;
+}
+.local-a11y-option__text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+.local-a11y-option__label {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--a11y-text);
+    letter-spacing: -0.005em;
+}
 /* --a11y-text-hint (#9ca3af) fails WCAG AA contrast at this font size (axe:
    color-contrast) - use --a11y-text-muted (#6b7280, ~4.8:1 on white) instead. */
-.local-a11y-option__desc { font-size: 11.5px; color: var(--a11y-text-muted); margin-top: 1px; line-height: 1.3; }
+.local-a11y-option__desc {
+    font-size: 11.5px;
+    color: var(--a11y-text-muted);
+    margin-top: 1px;
+    line-height: 1.3;
+}
 
 .local-a11y-switch {
-  width: 36px; height: 20px; border-radius: 999px; border: 0; cursor: pointer; padding: 0;
-  position: relative; flex-shrink: 0; background: #d4d4d8; transition: background 200ms ease;
-  margin-right: 12px;
+    width: 36px;
+    height: 20px;
+    border-radius: 999px;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    flex-shrink: 0;
+    background: #d4d4d8;
+    transition: background 200ms ease;
+    margin-right: 12px;
 }
-.local-a11y-switch[aria-pressed="true"] { background: var(--local-a11y-accent, var(--a11y-accent)); }
+.local-a11y-switch[aria-pressed="true"] {
+    background: var(--local-a11y-accent, var(--a11y-accent));
+}
 .local-a11y-switch__thumb {
-  position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%;
-  background: var(--a11y-surface); box-shadow: 0 1px 3px rgba(0,0,0,0.15); transition: left 200ms cubic-bezier(0.4,0,0.2,1);
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--a11y-surface);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    transition: left 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
-.local-a11y-switch[aria-pressed="true"] .local-a11y-switch__thumb { left: 18px; }
+.local-a11y-switch[aria-pressed="true"] .local-a11y-switch__thumb {
+    left: 18px;
+}
 
-.local-a11y-stepper { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-right: 12px; }
-.local-a11y-stepper__label { font-size: 11.5px; font-weight: 600; color: var(--a11y-text-muted); min-width: 56px; text-align: right; font-variant-numeric: tabular-nums; }
-.local-a11y-option--active .local-a11y-stepper__label { color: var(--local-a11y-accent, var(--a11y-accent)); }
-.local-a11y-stepper__dots { display: flex; align-items: center; gap: 3px; }
-.local-a11y-stepper__dot { width: 6px; height: 6px; border-radius: 999px; background: var(--a11y-border); transition: all 200ms ease; }
-.local-a11y-stepper__dot--active { width: 14px; background: var(--local-a11y-accent, var(--a11y-accent)); }
-.local-a11y-stepper__dot:first-child:not(.local-a11y-stepper__dot--active) { background: #a1a1aa; }
+.local-a11y-stepper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-right: 12px;
+}
+.local-a11y-stepper__label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--a11y-text-muted);
+    min-width: 56px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+.local-a11y-option--active .local-a11y-stepper__label {
+    color: var(--local-a11y-accent, var(--a11y-accent));
+}
+.local-a11y-stepper__dots {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+.local-a11y-stepper__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--a11y-border);
+    transition: all 200ms ease;
+}
+.local-a11y-stepper__dot--active {
+    width: 14px;
+    background: var(--local-a11y-accent, var(--a11y-accent));
+}
+.local-a11y-stepper__dot:first-child:not(.local-a11y-stepper__dot--active) {
+    background: #a1a1aa;
+}
 
 /* ===========================================================================
    PANEL — footer
@@ -703,14 +1174,34 @@ Panel footer.
 Styleguide 5.7.
 */
 .local-a11y-panel__footer {
-  padding: 12px 20px; border-top: 1px solid var(--a11y-surface-subtle); background: var(--a11y-surface-hover);
-  display: flex; align-items: center; gap: 10px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--a11y-surface-subtle);
+    background: var(--a11y-surface-hover);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-.local-a11y-panel__footer-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-.local-a11y-panel__footer-title { font-size: 12px; font-weight: 600; color: var(--a11y-text); line-height: 1.2; }
+.local-a11y-panel__footer-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+.local-a11y-panel__footer-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--a11y-text);
+    line-height: 1.2;
+}
 .local-a11y-panel__footer-kbd {
-  font-size: 10px; font-family: inherit; color: var(--a11y-text-muted); background: var(--a11y-surface);
-  border: 1px solid var(--a11y-border); border-radius: 4px; padding: 2px 5px; white-space: nowrap;
+    font-size: 10px;
+    font-family: inherit;
+    color: var(--a11y-text-muted);
+    background: var(--a11y-surface);
+    border: 1px solid var(--a11y-border);
+    border-radius: 4px;
+    padding: 2px 5px;
+    white-space: nowrap;
 }
 
 /* ===========================================================================
@@ -723,50 +1214,154 @@ Screen reader (TTS) status pill and on-screen virtual keyboard.
 Styleguide 6.
 */
 .local-a11y-sr-pill {
-  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 99986;
-  background: var(--a11y-surface); border: 1px solid var(--a11y-border); border-radius: 999px;
-  box-shadow: 0 10px 30px -8px rgba(0,0,0,0.2), 0 4px 10px rgba(0,0,0,0.06);
-  padding: 10px 16px 10px 12px; display: flex; align-items: center; gap: 10px;
-  font-size: 13px; color: var(--a11y-text); max-width: 480px;
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    z-index: 99986;
+    background: var(--a11y-surface);
+    border: 1px solid var(--a11y-border);
+    border-radius: 999px;
+    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.2), 0 4px 10px rgba(0, 0, 0, 0.06);
+    padding: 10px 16px 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--a11y-text);
+    max-width: 480px;
 }
-.local-a11y-sr-pill[hidden] { display: none; }
+.local-a11y-sr-pill[hidden] {
+    display: none;
+}
 .local-a11y-sr-pill__icon {
-  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-  background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 18%, transparent);
-  color: var(--local-a11y-accent, var(--a11y-accent));
-  display: flex; align-items: center; justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 18%, transparent);
+    color: var(--local-a11y-accent, var(--a11y-accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.local-a11y-sr-pill__hint { color: var(--a11y-text-secondary); }
-.local-a11y-sr-pill__title { font-weight: 600; font-size: 12px; }
-.local-a11y-sr-pill__text { font-size: 11.5px; color: var(--a11y-text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 280px; }
+.local-a11y-sr-pill__hint {
+    color: var(--a11y-text-secondary);
+}
+.local-a11y-sr-pill__title {
+    font-weight: 600;
+    font-size: 12px;
+}
+.local-a11y-sr-pill__text {
+    font-size: 11.5px;
+    color: var(--a11y-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px;
+}
 .local-a11y-sr-pill__stop {
-  border: 0; background: #fee2e2; color: #b91c1c; font-weight: 600; font-size: 11.5px;
-  border-radius: 999px; padding: 6px 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; min-height: 24px;
+    border: 0;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-weight: 600;
+    font-size: 11.5px;
+    border-radius: 999px;
+    padding: 6px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 24px;
 }
 
 .local-a11y-vk {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 99982;
-  background: var(--a11y-surface-subtle); border-top: 1px solid #e2e2e5; box-shadow: 0 -8px 24px rgba(0,0,0,0.08);
-  padding: 10px 14px 14px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99982;
+    background: var(--a11y-surface-subtle);
+    border-top: 1px solid #e2e2e5;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+    padding: 10px 14px 14px;
 }
-.local-a11y-vk[hidden] { display: none; }
-.local-a11y-vk__status { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; color: var(--a11y-text-secondary); }
-.local-a11y-vk__status-icon { color: var(--local-a11y-accent, var(--a11y-accent)); display: flex; }
-.local-a11y-vk__status-target { font-weight: 600; color: var(--a11y-text); }
-.local-a11y-vk__rows { display: flex; flex-direction: column; gap: 6px; max-width: 760px; margin: 0 auto; }
-.local-a11y-vk__row { display: flex; gap: 6px; justify-content: center; }
+.local-a11y-vk[hidden] {
+    display: none;
+}
+.local-a11y-vk__status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--a11y-text-secondary);
+}
+.local-a11y-vk__status-icon {
+    color: var(--local-a11y-accent, var(--a11y-accent));
+    display: flex;
+}
+.local-a11y-vk__status-target {
+    font-weight: 600;
+    color: var(--a11y-text);
+}
+.local-a11y-vk__rows {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-width: 760px;
+    margin: 0 auto;
+}
+.local-a11y-vk__row {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+}
 .local-a11y-vk__key {
-  border: 1px solid var(--a11y-border); background: var(--a11y-surface); color: var(--a11y-text); cursor: pointer;
-  border-radius: 9px; font-family: inherit; font-weight: 500; display: flex; align-items: center; justify-content: center;
-  transition: all 100ms ease; flex-shrink: 0; width: 40px; height: 42px; font-size: 14px;
+    border: 1px solid var(--a11y-border);
+    background: var(--a11y-surface);
+    color: var(--a11y-text);
+    cursor: pointer;
+    border-radius: 9px;
+    font-family: inherit;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 100ms ease;
+    flex-shrink: 0;
+    width: 40px;
+    height: 42px;
+    font-size: 14px;
 }
-.local-a11y-vk__key:hover { background: var(--a11y-surface-subtle); }
-.local-a11y-vk__key--wide { width: 52px; }
-.local-a11y-vk__key--small { width: 34px; height: 34px; font-size: 12px; }
-.local-a11y-vk__key--active { border: 1.5px solid var(--local-a11y-accent, var(--a11y-accent)); color: var(--local-a11y-accent, var(--a11y-accent)); background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent); }
+.local-a11y-vk__key:hover {
+    background: var(--a11y-surface-subtle);
+}
+.local-a11y-vk__key--wide {
+    width: 52px;
+}
+.local-a11y-vk__key--small {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+}
+.local-a11y-vk__key--active {
+    border: 1.5px solid var(--local-a11y-accent, var(--a11y-accent));
+    color: var(--local-a11y-accent, var(--a11y-accent));
+    background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 14%, transparent);
+}
 .local-a11y-vk__space {
-  flex: 1; max-width: 360px; height: 42px; border-radius: 9px; border: 1px solid var(--a11y-border);
-  background: var(--a11y-surface); cursor: pointer; font-family: inherit; font-size: 12.5px; color: var(--a11y-text-secondary); font-weight: 500;
+    flex: 1;
+    max-width: 360px;
+    height: 42px;
+    border-radius: 9px;
+    border: 1px solid var(--a11y-border);
+    background: var(--a11y-surface);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12.5px;
+    color: var(--a11y-text-secondary);
+    font-weight: 500;
 }
 
 /* ===========================================================================
@@ -790,16 +1385,34 @@ Reading guide line and reading mask.
 Styleguide 7.
 */
 .local-a11y-reading-guide {
-  position: fixed; top: 0; left: 0; right: 0; height: 3px;
-  background: var(--a11y-guide-color, #3b82f6);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--a11y-guide-color, #3b82f6) 60%, transparent);
-  pointer-events: none; z-index: 99985; transform: translateY(-100px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--a11y-guide-color, #3b82f6);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--a11y-guide-color, #3b82f6) 60%, transparent);
+    pointer-events: none;
+    z-index: 99985;
+    transform: translateY(-100px);
 }
-.local-a11y-reading-mask-top, .local-a11y-reading-mask-bottom {
-  position: fixed; left: 0; right: 0; background: rgba(0,0,0,0.62); pointer-events: none; z-index: 99984;
+.local-a11y-reading-mask-top,
+.local-a11y-reading-mask-bottom {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.62);
+    pointer-events: none;
+    z-index: 99984;
 }
-.local-a11y-reading-mask-top { top: 0; height: 0; }
-.local-a11y-reading-mask-bottom { bottom: 0; height: 0; }
+.local-a11y-reading-mask-top {
+    top: 0;
+    height: 0;
+}
+.local-a11y-reading-mask-bottom {
+    bottom: 0;
+    height: 0;
+}
 
 /* ===========================================================================
    TOOLTIPS (amd/src/tooltips.js) — dark bubble + arrow, replaces the
@@ -812,33 +1425,38 @@ Custom tooltip bubble.
 Styleguide 8.
 */
 .local-a11y-tooltip {
-  position: fixed;
-  max-width: 260px;
-  padding: 6px 10px;
-  border-radius: 6px;
-  background: #18181b;
-  color: #fff;
-  font-size: 12.5px;
-  line-height: 1.4;
-  font-weight: 500;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
-  pointer-events: none;
-  z-index: 99999;
+    position: fixed;
+    max-width: 260px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #18181b;
+    color: #fff;
+    font-size: 12.5px;
+    line-height: 1.4;
+    font-weight: 500;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+    pointer-events: none;
+    z-index: 99999;
 }
 .local-a11y-tooltip::after {
-  content: '';
-  position: absolute;
-  left: var(--local-a11y-tooltip-arrow-left, 50%);
-  width: 8px;
-  height: 8px;
-  background: #18181b;
-  transform: translateX(-50%) rotate(45deg);
-  border-radius: 1px;
+    content: '';
+    position: absolute;
+    left: var(--local-a11y-tooltip-arrow-left, 50%);
+    width: 8px;
+    height: 8px;
+    background: #18181b;
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 1px;
 }
 /* Default: bubble above the target, arrow on its bottom edge pointing down. */
-.local-a11y-tooltip::after { bottom: -4px; }
+.local-a11y-tooltip::after {
+    bottom: -4px;
+}
 /* Flipped below the target (not enough room above): arrow on the top edge. */
-.local-a11y-tooltip--below::after { top: -4px; bottom: auto; }
+.local-a11y-tooltip--below::after {
+    top: -4px;
+    bottom: auto;
+}
 
 /* ===========================================================================
    REDUCED MOTION / COLOR SCHEME
@@ -850,15 +1468,19 @@ Reduced motion and OS colour-scheme support.
 Styleguide 9.
 */
 @media (prefers-reduced-motion: reduce) {
-  /* D39: .moodle-shell (the prototype's own single page-wrapper mock,
+    /* D39: .moodle-shell (the prototype's own single page-wrapper mock,
      _design-reference/a11y-panel.jsx) removed from this list - our plugin
      never creates an element with that class in real Moodle, so it never
      matched anything here; harmless (an inert selector), but dead. */
-  .local-a11y-fab, .local-a11y-panel, .local-a11y-switch__thumb, .local-a11y-stepper__dot,
-  .local-a11y-category__chevron, .local-a11y-option {
-    transition: none !important;
-    animation: none !important;
-  }
+    .local-a11y-fab,
+    .local-a11y-panel,
+    .local-a11y-switch__thumb,
+    .local-a11y-stepper__dot,
+    .local-a11y-category__chevron,
+    .local-a11y-option {
+        transition: none !important;
+        animation: none !important;
+    }
 }
 
 /* ===========================================================================
@@ -877,7 +1499,7 @@ Styleguide 10.
 .navbar,
 .drawer,
 footer#page-footer {
-  transition: filter 200ms ease, background-color 200ms ease, color 200ms ease;
+    transition: filter 200ms ease, background-color 200ms ease, color 200ms ease;
 }
 
 /* Typography
@@ -899,17 +1521,23 @@ Readable Font and Dyslexic Font typography effects.
 
 Styleguide 10.1.
 */
-body.a11y-readable-font #page, body.a11y-readable-font #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
-body.a11y-readable-font .navbar, body.a11y-readable-font .navbar *:not(.icon, .fa, [class*="fa-"]),
-body.a11y-readable-font footer#page-footer, body.a11y-readable-font footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
-  font-family: 'Atkinson Hyperlegible', system-ui, sans-serif !important;
+body.a11y-readable-font #page,
+body.a11y-readable-font #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
+body.a11y-readable-font .navbar,
+body.a11y-readable-font .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-readable-font footer#page-footer,
+body.a11y-readable-font footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif !important;
 }
-body.a11y-dyslexic-font #page, body.a11y-dyslexic-font #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
-body.a11y-dyslexic-font .navbar, body.a11y-dyslexic-font .navbar *:not(.icon, .fa, [class*="fa-"]),
-body.a11y-dyslexic-font footer#page-footer, body.a11y-dyslexic-font footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
-  font-family: 'Lexend', 'Comic Sans MS', system-ui, sans-serif !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.02em !important;
+body.a11y-dyslexic-font #page,
+body.a11y-dyslexic-font #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
+body.a11y-dyslexic-font .navbar,
+body.a11y-dyslexic-font .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-dyslexic-font footer#page-footer,
+body.a11y-dyslexic-font footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
+    font-family: 'Lexend', 'Comic Sans MS', system-ui, sans-serif !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
 }
 
 /* :not(.local-a11y-root, .local-a11y-root *) on every selector below keeps
@@ -948,21 +1576,26 @@ Styleguide 10.2.
 body.a11y-highlight-titles #page h1:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-titles #page h2:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *) {
-  background: linear-gradient(180deg, transparent 60%, color-mix(in srgb, var(--a11y-highlight-titles-color, #eab308) 55%, transparent) 60%) !important;
-  border-radius: 3px !important;
-  box-decoration-break: clone !important;
-  -webkit-box-decoration-break: clone !important;
+    background:
+        linear-gradient(
+            180deg,
+            transparent 60%,
+            color-mix(in srgb, var(--a11y-highlight-titles-color, #eab308) 55%, transparent) 60%
+        ) !important;
+    border-radius: 3px !important;
+    box-decoration-break: clone !important;
+    -webkit-box-decoration-break: clone !important;
 }
 
 body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-links .navbar a {
-  color: var(--a11y-highlight-links-color, #3b82f6) !important;
-  text-decoration: underline !important;
-  text-decoration-color: var(--a11y-highlight-links-color, #3b82f6) !important;
-  text-decoration-thickness: 1.5px !important;
-  text-underline-offset: 2px !important;
-  font-weight: 500 !important;
-  transition: background-color 120ms ease !important;
+    color: var(--a11y-highlight-links-color, #3b82f6) !important;
+    text-decoration: underline !important;
+    text-decoration-color: var(--a11y-highlight-links-color, #3b82f6) !important;
+    text-decoration-thickness: 1.5px !important;
+    text-underline-offset: 2px !important;
+    font-weight: 500 !important;
+    transition: background-color 120ms ease !important;
 }
 /* Background tint only on interaction (hover, or keyboard focus so
    Tab-only users get the same affordance mouse users do) - the constant
@@ -972,15 +1605,15 @@ body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *):hove
 body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *):focus-visible,
 body.a11y-highlight-links .navbar a:hover,
 body.a11y-highlight-links .navbar a:focus-visible {
-  background-color: color-mix(in srgb, var(--a11y-highlight-links-color, #3b82f6) 16%, transparent) !important;
+    background-color: color-mix(in srgb, var(--a11y-highlight-links-color, #3b82f6) 16%, transparent) !important;
 }
 
 body.a11y-highlight-buttons #page button:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-buttons #page .btn:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-buttons #page [role="button"]:not(.local-a11y-root, .local-a11y-root *) {
-  outline: 3px solid var(--a11y-highlight-buttons-color, #f97316) !important;
-  outline-offset: 2px !important;
-  box-shadow: 0 0 0 1px white inset !important;
+    outline: 3px solid var(--a11y-highlight-buttons-color, #f97316) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 1px white inset !important;
 }
 
 /* Text Size / Line Height / Spacing
@@ -997,48 +1630,127 @@ Text Size, Line Height, Text Spacing and Word Spacing effects.
 
 Styleguide 10.3.
 */
-body.a11y-text-size-1 #page, body.a11y-text-size-1 .navbar, body.a11y-text-size-1 .drawer-left, body.a11y-text-size-1 .drawer-right { font-size: 17px !important; }
-body.a11y-text-size-2 #page, body.a11y-text-size-2 .navbar, body.a11y-text-size-2 .drawer-left, body.a11y-text-size-2 .drawer-right { font-size: 19px !important; }
-body.a11y-text-size-3 #page, body.a11y-text-size-3 .navbar, body.a11y-text-size-3 .drawer-left, body.a11y-text-size-3 .drawer-right { font-size: 22px !important; }
-body.a11y-text-size-4 #page, body.a11y-text-size-4 .navbar, body.a11y-text-size-4 .drawer-left, body.a11y-text-size-4 .drawer-right { font-size: 26px !important; }
-body.a11y-text-size-1 #page h1 { font-size: 32px !important; }
-body.a11y-text-size-2 #page h1 { font-size: 36px !important; }
-body.a11y-text-size-3 #page h1 { font-size: 40px !important; }
-body.a11y-text-size-4 #page h1 { font-size: 48px !important; }
-
-body.a11y-line-height-1 #page, body.a11y-line-height-1 #page *:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-line-height-1 .navbar, body.a11y-line-height-1 .navbar *,
-body.a11y-line-height-1 .drawer-left, body.a11y-line-height-1 .drawer-left *,
-body.a11y-line-height-1 .drawer-right, body.a11y-line-height-1 .drawer-right * { line-height: 1.5 !important; }
-body.a11y-line-height-2 #page, body.a11y-line-height-2 #page *:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-line-height-2 .navbar, body.a11y-line-height-2 .navbar *,
-body.a11y-line-height-2 .drawer-left, body.a11y-line-height-2 .drawer-left *,
-body.a11y-line-height-2 .drawer-right, body.a11y-line-height-2 .drawer-right * { line-height: 1.8 !important; }
-body.a11y-line-height-3 #page, body.a11y-line-height-3 #page *:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-line-height-3 .navbar, body.a11y-line-height-3 .navbar *,
-body.a11y-line-height-3 .drawer-left, body.a11y-line-height-3 .drawer-left *,
-body.a11y-line-height-3 .drawer-right, body.a11y-line-height-3 .drawer-right * { line-height: 2.2 !important; }
-
-body.a11y-text-spacing-1 #page, body.a11y-text-spacing-1 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-text-spacing-1 #page span:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-text-spacing-1 #page h1, body.a11y-text-spacing-1 #page h2, body.a11y-text-spacing-1 #page h3,
-body.a11y-text-spacing-1 .navbar, body.a11y-text-spacing-1 .navbar p, body.a11y-text-spacing-1 .navbar span,
-body.a11y-text-spacing-1 .drawer-left, body.a11y-text-spacing-1 .drawer-left p, body.a11y-text-spacing-1 .drawer-left span,
-body.a11y-text-spacing-1 .drawer-right, body.a11y-text-spacing-1 .drawer-right p, body.a11y-text-spacing-1 .drawer-right span {
-  letter-spacing: 0.05em !important; word-spacing: 0.1em !important;
+body.a11y-text-size-1 #page,
+body.a11y-text-size-1 .navbar,
+body.a11y-text-size-1 .drawer-left,
+body.a11y-text-size-1 .drawer-right {
+    font-size: 17px !important;
 }
-body.a11y-text-spacing-2 #page, body.a11y-text-spacing-2 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-text-spacing-2 #page span:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-text-spacing-2 #page h1, body.a11y-text-spacing-2 #page h2, body.a11y-text-spacing-2 #page h3,
-body.a11y-text-spacing-2 .navbar, body.a11y-text-spacing-2 .navbar p, body.a11y-text-spacing-2 .navbar span,
-body.a11y-text-spacing-2 .drawer-left, body.a11y-text-spacing-2 .drawer-left p, body.a11y-text-spacing-2 .drawer-left span,
-body.a11y-text-spacing-2 .drawer-right, body.a11y-text-spacing-2 .drawer-right p, body.a11y-text-spacing-2 .drawer-right span {
-  letter-spacing: 0.1em !important; word-spacing: 0.2em !important;
+body.a11y-text-size-2 #page,
+body.a11y-text-size-2 .navbar,
+body.a11y-text-size-2 .drawer-left,
+body.a11y-text-size-2 .drawer-right {
+    font-size: 19px !important;
 }
-body.a11y-text-spacing-3 #page, body.a11y-text-spacing-3 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-text-spacing-3 #page span:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-text-spacing-3 #page h1, body.a11y-text-spacing-3 #page h2, body.a11y-text-spacing-3 #page h3,
-body.a11y-text-spacing-3 .navbar, body.a11y-text-spacing-3 .navbar p, body.a11y-text-spacing-3 .navbar span,
-body.a11y-text-spacing-3 .drawer-left, body.a11y-text-spacing-3 .drawer-left p, body.a11y-text-spacing-3 .drawer-left span,
-body.a11y-text-spacing-3 .drawer-right, body.a11y-text-spacing-3 .drawer-right p, body.a11y-text-spacing-3 .drawer-right span {
-  letter-spacing: 0.18em !important; word-spacing: 0.35em !important;
+body.a11y-text-size-3 #page,
+body.a11y-text-size-3 .navbar,
+body.a11y-text-size-3 .drawer-left,
+body.a11y-text-size-3 .drawer-right {
+    font-size: 22px !important;
+}
+body.a11y-text-size-4 #page,
+body.a11y-text-size-4 .navbar,
+body.a11y-text-size-4 .drawer-left,
+body.a11y-text-size-4 .drawer-right {
+    font-size: 26px !important;
+}
+body.a11y-text-size-1 #page h1 {
+    font-size: 32px !important;
+}
+body.a11y-text-size-2 #page h1 {
+    font-size: 36px !important;
+}
+body.a11y-text-size-3 #page h1 {
+    font-size: 40px !important;
+}
+body.a11y-text-size-4 #page h1 {
+    font-size: 48px !important;
+}
+
+body.a11y-line-height-1 #page,
+body.a11y-line-height-1 #page *:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-line-height-1 .navbar,
+body.a11y-line-height-1 .navbar *,
+body.a11y-line-height-1 .drawer-left,
+body.a11y-line-height-1 .drawer-left *,
+body.a11y-line-height-1 .drawer-right,
+body.a11y-line-height-1 .drawer-right * {
+    line-height: 1.5 !important;
+}
+body.a11y-line-height-2 #page,
+body.a11y-line-height-2 #page *:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-line-height-2 .navbar,
+body.a11y-line-height-2 .navbar *,
+body.a11y-line-height-2 .drawer-left,
+body.a11y-line-height-2 .drawer-left *,
+body.a11y-line-height-2 .drawer-right,
+body.a11y-line-height-2 .drawer-right * {
+    line-height: 1.8 !important;
+}
+body.a11y-line-height-3 #page,
+body.a11y-line-height-3 #page *:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-line-height-3 .navbar,
+body.a11y-line-height-3 .navbar *,
+body.a11y-line-height-3 .drawer-left,
+body.a11y-line-height-3 .drawer-left *,
+body.a11y-line-height-3 .drawer-right,
+body.a11y-line-height-3 .drawer-right * {
+    line-height: 2.2 !important;
+}
+
+body.a11y-text-spacing-1 #page,
+body.a11y-text-spacing-1 #page p:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-text-spacing-1 #page span:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-text-spacing-1 #page h1,
+body.a11y-text-spacing-1 #page h2,
+body.a11y-text-spacing-1 #page h3,
+body.a11y-text-spacing-1 .navbar,
+body.a11y-text-spacing-1 .navbar p,
+body.a11y-text-spacing-1 .navbar span,
+body.a11y-text-spacing-1 .drawer-left,
+body.a11y-text-spacing-1 .drawer-left p,
+body.a11y-text-spacing-1 .drawer-left span,
+body.a11y-text-spacing-1 .drawer-right,
+body.a11y-text-spacing-1 .drawer-right p,
+body.a11y-text-spacing-1 .drawer-right span {
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.1em !important;
+}
+body.a11y-text-spacing-2 #page,
+body.a11y-text-spacing-2 #page p:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-text-spacing-2 #page span:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-text-spacing-2 #page h1,
+body.a11y-text-spacing-2 #page h2,
+body.a11y-text-spacing-2 #page h3,
+body.a11y-text-spacing-2 .navbar,
+body.a11y-text-spacing-2 .navbar p,
+body.a11y-text-spacing-2 .navbar span,
+body.a11y-text-spacing-2 .drawer-left,
+body.a11y-text-spacing-2 .drawer-left p,
+body.a11y-text-spacing-2 .drawer-left span,
+body.a11y-text-spacing-2 .drawer-right,
+body.a11y-text-spacing-2 .drawer-right p,
+body.a11y-text-spacing-2 .drawer-right span {
+    letter-spacing: 0.1em !important;
+    word-spacing: 0.2em !important;
+}
+body.a11y-text-spacing-3 #page,
+body.a11y-text-spacing-3 #page p:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-text-spacing-3 #page span:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-text-spacing-3 #page h1,
+body.a11y-text-spacing-3 #page h2,
+body.a11y-text-spacing-3 #page h3,
+body.a11y-text-spacing-3 .navbar,
+body.a11y-text-spacing-3 .navbar p,
+body.a11y-text-spacing-3 .navbar span,
+body.a11y-text-spacing-3 .drawer-left,
+body.a11y-text-spacing-3 .drawer-left p,
+body.a11y-text-spacing-3 .drawer-left span,
+body.a11y-text-spacing-3 .drawer-right,
+body.a11y-text-spacing-3 .drawer-right p,
+body.a11y-text-spacing-3 .drawer-right span {
+    letter-spacing: 0.18em !important;
+    word-spacing: 0.35em !important;
 }
 
 /* Word Spacing - independent of Text Spacing above (word-spacing only, no
@@ -1048,26 +1760,56 @@ body.a11y-text-spacing-3 .drawer-right, body.a11y-text-spacing-3 .drawer-right p
    properties sealed on .local-a11y-root (see the PANEL/FAB design-token
    block near the top of this file, D26/D30) - no extra opt-out rule needed
    here. */
-body.a11y-word-spacing-1 #page, body.a11y-word-spacing-1 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-word-spacing-1 #page span:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-word-spacing-1 #page h1, body.a11y-word-spacing-1 #page h2, body.a11y-word-spacing-1 #page h3,
-body.a11y-word-spacing-1 .navbar, body.a11y-word-spacing-1 .navbar p, body.a11y-word-spacing-1 .navbar span,
-body.a11y-word-spacing-1 .drawer-left, body.a11y-word-spacing-1 .drawer-left p, body.a11y-word-spacing-1 .drawer-left span,
-body.a11y-word-spacing-1 .drawer-right, body.a11y-word-spacing-1 .drawer-right p, body.a11y-word-spacing-1 .drawer-right span {
-  word-spacing: 0.1em !important;
+body.a11y-word-spacing-1 #page,
+body.a11y-word-spacing-1 #page p:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-word-spacing-1 #page span:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-word-spacing-1 #page h1,
+body.a11y-word-spacing-1 #page h2,
+body.a11y-word-spacing-1 #page h3,
+body.a11y-word-spacing-1 .navbar,
+body.a11y-word-spacing-1 .navbar p,
+body.a11y-word-spacing-1 .navbar span,
+body.a11y-word-spacing-1 .drawer-left,
+body.a11y-word-spacing-1 .drawer-left p,
+body.a11y-word-spacing-1 .drawer-left span,
+body.a11y-word-spacing-1 .drawer-right,
+body.a11y-word-spacing-1 .drawer-right p,
+body.a11y-word-spacing-1 .drawer-right span {
+    word-spacing: 0.1em !important;
 }
-body.a11y-word-spacing-2 #page, body.a11y-word-spacing-2 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-word-spacing-2 #page span:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-word-spacing-2 #page h1, body.a11y-word-spacing-2 #page h2, body.a11y-word-spacing-2 #page h3,
-body.a11y-word-spacing-2 .navbar, body.a11y-word-spacing-2 .navbar p, body.a11y-word-spacing-2 .navbar span,
-body.a11y-word-spacing-2 .drawer-left, body.a11y-word-spacing-2 .drawer-left p, body.a11y-word-spacing-2 .drawer-left span,
-body.a11y-word-spacing-2 .drawer-right, body.a11y-word-spacing-2 .drawer-right p, body.a11y-word-spacing-2 .drawer-right span {
-  word-spacing: 0.2em !important;
+body.a11y-word-spacing-2 #page,
+body.a11y-word-spacing-2 #page p:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-word-spacing-2 #page span:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-word-spacing-2 #page h1,
+body.a11y-word-spacing-2 #page h2,
+body.a11y-word-spacing-2 #page h3,
+body.a11y-word-spacing-2 .navbar,
+body.a11y-word-spacing-2 .navbar p,
+body.a11y-word-spacing-2 .navbar span,
+body.a11y-word-spacing-2 .drawer-left,
+body.a11y-word-spacing-2 .drawer-left p,
+body.a11y-word-spacing-2 .drawer-left span,
+body.a11y-word-spacing-2 .drawer-right,
+body.a11y-word-spacing-2 .drawer-right p,
+body.a11y-word-spacing-2 .drawer-right span {
+    word-spacing: 0.2em !important;
 }
-body.a11y-word-spacing-3 #page, body.a11y-word-spacing-3 #page p:not(.local-a11y-root, .local-a11y-root *), body.a11y-word-spacing-3 #page span:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-word-spacing-3 #page h1, body.a11y-word-spacing-3 #page h2, body.a11y-word-spacing-3 #page h3,
-body.a11y-word-spacing-3 .navbar, body.a11y-word-spacing-3 .navbar p, body.a11y-word-spacing-3 .navbar span,
-body.a11y-word-spacing-3 .drawer-left, body.a11y-word-spacing-3 .drawer-left p, body.a11y-word-spacing-3 .drawer-left span,
-body.a11y-word-spacing-3 .drawer-right, body.a11y-word-spacing-3 .drawer-right p, body.a11y-word-spacing-3 .drawer-right span {
-  word-spacing: 0.35em !important;
+body.a11y-word-spacing-3 #page,
+body.a11y-word-spacing-3 #page p:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-word-spacing-3 #page span:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-word-spacing-3 #page h1,
+body.a11y-word-spacing-3 #page h2,
+body.a11y-word-spacing-3 #page h3,
+body.a11y-word-spacing-3 .navbar,
+body.a11y-word-spacing-3 .navbar p,
+body.a11y-word-spacing-3 .navbar span,
+body.a11y-word-spacing-3 .drawer-left,
+body.a11y-word-spacing-3 .drawer-left p,
+body.a11y-word-spacing-3 .drawer-left span,
+body.a11y-word-spacing-3 .drawer-right,
+body.a11y-word-spacing-3 .drawer-right p,
+body.a11y-word-spacing-3 .drawer-right span {
+    word-spacing: 0.35em !important;
 }
 
 /* Text Alignment
@@ -1084,10 +1826,18 @@ Text Alignment effect.
 
 Styleguide 10.4.
 */
-body.a11y-text-align-1 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: left !important; }
-body.a11y-text-align-2 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: center !important; }
-body.a11y-text-align-3 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: right !important; }
-body.a11y-text-align-4 #page *:not(.local-a11y-root, .local-a11y-root *) { text-align: justify !important; }
+body.a11y-text-align-1 #page *:not(.local-a11y-root, .local-a11y-root *) {
+    text-align: left !important;
+}
+body.a11y-text-align-2 #page *:not(.local-a11y-root, .local-a11y-root *) {
+    text-align: center !important;
+}
+body.a11y-text-align-3 #page *:not(.local-a11y-root, .local-a11y-root *) {
+    text-align: right !important;
+}
+body.a11y-text-align-4 #page *:not(.local-a11y-root, .local-a11y-root *) {
+    text-align: justify !important;
+}
 
 /* Hide Images
    D44: fully hidden, no placeholder - a pedido do usuário. An earlier
@@ -1108,7 +1858,7 @@ Styleguide 10.5.
 */
 body.a11y-hide-images #page img,
 body.a11y-hide-images #page video {
-  display: none !important;
+    display: none !important;
 }
 
 /* Pause Animations */
@@ -1118,13 +1868,15 @@ Pause Animations effect (CSS animations/transitions).
 
 Styleguide 10.6.
 */
-body.a11y-pause-animations #page, body.a11y-pause-animations #page *,
-body.a11y-pause-animations #page *::before, body.a11y-pause-animations #page *::after {
-  animation-play-state: paused !important;
-  animation-duration: 0s !important;
-  animation-delay: 0s !important;
-  transition-duration: 0s !important;
-  transition-delay: 0s !important;
+body.a11y-pause-animations #page,
+body.a11y-pause-animations #page *,
+body.a11y-pause-animations #page *::before,
+body.a11y-pause-animations #page *::after {
+    animation-play-state: paused !important;
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
 }
 
 /* Bionic Reading (amd/src/bionic_reading.js)
@@ -1162,21 +1914,21 @@ Bionic Reading effect (bold word-prefix + screen-reader-safe original text).
 Styleguide 10.7.
 */
 .local-a11y-br-original {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
 }
 #page .local-a11y-br b {
-  font-weight: 700 !important;
+    font-weight: 700 !important;
 }
 body.a11y-dyslexic-font #page .local-a11y-br b {
-  font-weight: 600 !important;
+    font-weight: 600 !important;
 }
 
 /* ===========================================================================
@@ -1286,9 +2038,9 @@ body.a11y-contrast-1 .modal-content,
 body.a11y-contrast-1 .secondary-navigation .navigation,
 body.a11y-contrast-1 .section-item,
 body.a11y-contrast-1 footer#page-footer {
-  background-color: #1f1f1f !important;
-  color: #f3f4f6 !important;
-  border-color: #3f3f46 !important;
+    background-color: #1f1f1f !important;
+    color: #f3f4f6 !important;
+    border-color: #3f3f46 !important;
 }
 /* Drawers (course-index left, blocks right) get their own, visibly
    different tone from #region-main/.card/etc above - sharing the exact
@@ -1300,30 +2052,35 @@ body.a11y-contrast-1 footer#page-footer {
    border colour) is a much bigger, clearly visible jump. */
 body.a11y-contrast-1 .drawer-left,
 body.a11y-contrast-1 .drawer-right {
-  background-color: #3f3f46 !important;
-  color: #f3f4f6 !important;
-  border-color: #52525b !important;
+    background-color: #3f3f46 !important;
+    color: #f3f4f6 !important;
+    border-color: #52525b !important;
 }
 body.a11y-contrast-1 {
-  --bs-body-bg: #1f1f1f;
-  --bs-body-bg-rgb: 31, 31, 31;
-  --bs-body-color: #f3f4f6;
-  --bs-body-color-rgb: 243, 244, 246;
-  --bs-emphasis-color: #ffffff;
-  --bs-secondary-bg: #27272a;
-  --bs-tertiary-bg: #18181b;
-  --bs-border-color: #3f3f46;
-  --bs-border-color-translucent: #3f3f46;
-  --bs-link-color: #93c5fd;
-  --bs-link-hover-color: #bfdbfe;
-  --bs-light: #27272a;
-  --bs-light-rgb: 39, 39, 42;
+    --bs-body-bg: #1f1f1f;
+    --bs-body-bg-rgb: 31, 31, 31;
+    --bs-body-color: #f3f4f6;
+    --bs-body-color-rgb: 243, 244, 246;
+    --bs-emphasis-color: #fff;
+    --bs-secondary-bg: #27272a;
+    --bs-tertiary-bg: #18181b;
+    --bs-border-color: #3f3f46;
+    --bs-border-color-translucent: #3f3f46;
+    --bs-link-color: #93c5fd;
+    --bs-link-hover-color: #bfdbfe;
+    --bs-light: #27272a;
+    --bs-light-rgb: 39, 39, 42;
 }
-body.a11y-contrast-1 .navbar { background-color: #0a0a0a !important; border-bottom-color: #3f3f46 !important; }
+body.a11y-contrast-1 .navbar {
+    background-color: #0a0a0a !important;
+    border-bottom-color: #3f3f46 !important;
+}
 /* Belt-and-braces: some Moodle links set their own colour instead of
    inheriting --bs-link-color (e.g. activity/section title links), so the
    variable override above doesn't reach them - force it explicitly too. */
-body.a11y-contrast-1 #page-wrapper a:not(.btn) { color: #93c5fd !important; }
+body.a11y-contrast-1 #page-wrapper a:not(.btn) {
+    color: #93c5fd !important;
+}
 /* D37: re-theme our own FAB/panel/vk/sr-pill/etc. too (see the D37 comment
    on PANEL OPT-OUT, further up) - same 8 design tokens their component
    CSS already reads everywhere (--a11y-bg/surface/surface-subtle/
@@ -1338,18 +2095,18 @@ body.a11y-contrast-1 #page-wrapper a:not(.btn) { color: #93c5fd !important; }
    palette, exactly like Contraste leaves Moodle's own primary links/
    buttons alone at these two levels too. */
 body.a11y-contrast-1 .local-a11y-root {
-  --a11y-bg: #1f1f1f;
-  --a11y-surface: #27272a;
-  --a11y-surface-subtle: #18181b;
-  --a11y-surface-hover: #3f3f46;
-  --a11y-border: #3f3f46;
-  --a11y-border-strong: #52525b;
-  --a11y-text: #f3f4f6;
-  --a11y-text-muted: #a1a1aa;
-  --a11y-text-hint: #71717a;
-  --a11y-text-secondary: #d4d4d8;
-  --a11y-text-tertiary: #e4e4e7;
-  --a11y-accent-soft: #1e3a5f;
+    --a11y-bg: #1f1f1f;
+    --a11y-surface: #27272a;
+    --a11y-surface-subtle: #18181b;
+    --a11y-surface-hover: #3f3f46;
+    --a11y-border: #3f3f46;
+    --a11y-border-strong: #52525b;
+    --a11y-text: #f3f4f6;
+    --a11y-text-muted: #a1a1aa;
+    --a11y-text-hint: #71717a;
+    --a11y-text-secondary: #d4d4d8;
+    --a11y-text-tertiary: #e4e4e7;
+    --a11y-accent-soft: #1e3a5f;
 }
 
 /* Contrast Level 2 (Light) */
@@ -1372,44 +2129,47 @@ body.a11y-contrast-2 .modal-content,
 body.a11y-contrast-2 .secondary-navigation .navigation,
 body.a11y-contrast-2 .section-item,
 body.a11y-contrast-2 footer#page-footer {
-  background-color: #fffbeb !important;
-  color: #1c1917 !important;
-  border-color: #d6d3d1 !important;
+    background-color: #fffbeb !important;
+    color: #1c1917 !important;
+    border-color: #d6d3d1 !important;
 }
 /* Drawers - see the equivalent comment on contrast-1 above. */
 body.a11y-contrast-2 .drawer-left,
 body.a11y-contrast-2 .drawer-right {
-  background-color: #fef3c7 !important;
-  color: #1c1917 !important;
-  border-color: #d6d3d1 !important;
+    background-color: #fef3c7 !important;
+    color: #1c1917 !important;
+    border-color: #d6d3d1 !important;
 }
-body.a11y-contrast-2 .navbar { background-color: #fffbeb !important; border-bottom-color: #d6d3d1 !important; }
+body.a11y-contrast-2 .navbar {
+    background-color: #fffbeb !important;
+    border-bottom-color: #d6d3d1 !important;
+}
 body.a11y-contrast-2 {
-  --bs-body-bg: #fffbeb;
-  --bs-body-bg-rgb: 255, 251, 235;
-  --bs-body-color: #1c1917;
-  --bs-body-color-rgb: 28, 25, 23;
-  --bs-secondary-bg: #fef3c7;
-  --bs-tertiary-bg: #fef9ec;
-  --bs-border-color: #d6d3d1;
-  --bs-border-color-translucent: #d6d3d1;
-  --bs-light: #fef3c7;
-  --bs-light-rgb: 254, 243, 199;
+    --bs-body-bg: #fffbeb;
+    --bs-body-bg-rgb: 255, 251, 235;
+    --bs-body-color: #1c1917;
+    --bs-body-color-rgb: 28, 25, 23;
+    --bs-secondary-bg: #fef3c7;
+    --bs-tertiary-bg: #fef9ec;
+    --bs-border-color: #d6d3d1;
+    --bs-border-color-translucent: #d6d3d1;
+    --bs-light: #fef3c7;
+    --bs-light-rgb: 254, 243, 199;
 }
 /* D37 - see the equivalent block for contrast-1 above. */
 body.a11y-contrast-2 .local-a11y-root {
-  --a11y-bg: #fffbeb;
-  --a11y-surface: #fffdf7;
-  --a11y-surface-subtle: #fef3c7;
-  --a11y-surface-hover: #fef9ec;
-  --a11y-border: #d6d3d1;
-  --a11y-border-strong: #b8b0a8;
-  --a11y-text: #1c1917;
-  --a11y-text-muted: #57534e;
-  --a11y-text-hint: #78716c;
-  --a11y-text-secondary: #44403c;
-  --a11y-text-tertiary: #292524;
-  --a11y-accent-soft: #fef3c7;
+    --a11y-bg: #fffbeb;
+    --a11y-surface: #fffdf7;
+    --a11y-surface-subtle: #fef3c7;
+    --a11y-surface-hover: #fef9ec;
+    --a11y-border: #d6d3d1;
+    --a11y-border-strong: #b8b0a8;
+    --a11y-text: #1c1917;
+    --a11y-text-muted: #57534e;
+    --a11y-text-hint: #78716c;
+    --a11y-text-secondary: #44403c;
+    --a11y-text-tertiary: #292524;
+    --a11y-accent-soft: #fef3c7;
 }
 
 /* Contrast Level 3 (High) */
@@ -1433,10 +2193,10 @@ body.a11y-contrast-3 .navbar,
 body.a11y-contrast-3 .secondary-navigation .navigation,
 body.a11y-contrast-3 .section-item,
 body.a11y-contrast-3 footer#page-footer {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-  border-color: #ffffff !important;
-  border-width: 2px !important;
+    background-color: #000 !important;
+    color: #fff !important;
+    border-color: #fff !important;
+    border-width: 2px !important;
 }
 /* Drawers - see the equivalent comment on contrast-1 further up. #141414
    (~20/255 off #000000) was tried first and, same as contrast-1's first
@@ -1446,29 +2206,38 @@ body.a11y-contrast-3 footer#page-footer {
    point - only the *fill* needs to read as a distinct region. */
 body.a11y-contrast-3 .drawer-left,
 body.a11y-contrast-3 .drawer-right {
-  background-color: #333333 !important;
-  color: #ffffff !important;
-  border-color: #ffffff !important;
-  border-width: 2px !important;
+    background-color: #333 !important;
+    color: #fff !important;
+    border-color: #fff !important;
+    border-width: 2px !important;
 }
 body.a11y-contrast-3 {
-  --bs-body-bg: #000000;
-  --bs-body-bg-rgb: 0, 0, 0;
-  --bs-body-color: #ffffff;
-  --bs-body-color-rgb: 255, 255, 255;
-  --bs-emphasis-color: #ffffff;
-  --bs-secondary-bg: #000000;
-  --bs-tertiary-bg: #000000;
-  --bs-border-color: #ffffff;
-  --bs-border-color-translucent: #ffffff;
-  --bs-link-color: #ffff00;
-  --bs-link-hover-color: #ffff66;
-  --bs-light: #000000;
-  --bs-light-rgb: 0, 0, 0;
+    --bs-body-bg: #000;
+    --bs-body-bg-rgb: 0, 0, 0;
+    --bs-body-color: #fff;
+    --bs-body-color-rgb: 255, 255, 255;
+    --bs-emphasis-color: #fff;
+    --bs-secondary-bg: #000;
+    --bs-tertiary-bg: #000;
+    --bs-border-color: #fff;
+    --bs-border-color-translucent: #fff;
+    --bs-link-color: #ff0;
+    --bs-link-hover-color: #ff6;
+    --bs-light: #000;
+    --bs-light-rgb: 0, 0, 0;
 }
-body.a11y-contrast-3 #page-wrapper a:not(.btn) { color: #ffff00 !important; }
-body.a11y-contrast-3 a { text-decoration: underline !important; }
-body.a11y-contrast-3 .btn-primary { background: #ffff00 !important; border-color: #ffff00 !important; color: #000 !important; font-weight: 700 !important; }
+body.a11y-contrast-3 #page-wrapper a:not(.btn) {
+    color: #ff0 !important;
+}
+body.a11y-contrast-3 a {
+    text-decoration: underline !important;
+}
+body.a11y-contrast-3 .btn-primary {
+    background: #ff0 !important;
+    border-color: #ff0 !important;
+    color: #000 !important;
+    font-weight: 700 !important;
+}
 /* D37 - see the equivalent block for contrast-1 further up. Unlike levels
    1/2, level 3 also forces --local-a11y-accent itself (not just
    --a11y-accent, which alone would never reach it - it's always set
@@ -1483,19 +2252,19 @@ body.a11y-contrast-3 .btn-primary { background: #ffff00 !important; border-color
    yellow-accent pairing instead of keeping the admin's normal accent at
    a contrast ratio this level was never designed around. */
 body.a11y-contrast-3 .local-a11y-root {
-  --a11y-bg: #000000;
-  --a11y-surface: #000000;
-  --a11y-surface-subtle: #000000;
-  --a11y-surface-hover: #1a1a1a;
-  --a11y-border: #ffffff;
-  --a11y-border-strong: #ffffff;
-  --a11y-text: #ffffff;
-  --a11y-text-muted: #e5e5e5;
-  --a11y-text-hint: #d4d4d4;
-  --a11y-text-secondary: #ffffff;
-  --a11y-text-tertiary: #ffffff;
-  --a11y-accent-soft: #3a3a00;
-  --local-a11y-accent: #ffff00 !important;
+    --a11y-bg: #000;
+    --a11y-surface: #000;
+    --a11y-surface-subtle: #000;
+    --a11y-surface-hover: #1a1a1a;
+    --a11y-border: #fff;
+    --a11y-border-strong: #fff;
+    --a11y-text: #fff;
+    --a11y-text-muted: #e5e5e5;
+    --a11y-text-hint: #d4d4d4;
+    --a11y-text-secondary: #fff;
+    --a11y-text-tertiary: #fff;
+    --a11y-accent-soft: #3a3a00;
+    --local-a11y-accent: #ff0 !important;
 }
 
 /* Invert / Saturation / Colour-blind Filters
@@ -1532,13 +2301,48 @@ Filter effects.
 
 Styleguide 11.4.
 */
-body.a11y-invert #page, body.a11y-invert .navbar, body.a11y-invert .drawer, body.a11y-invert .local-a11y-root { --a11y-filter-invert: invert(1) hue-rotate(180deg); }
-body.a11y-saturation-1 #page, body.a11y-saturation-1 .navbar, body.a11y-saturation-1 .drawer, body.a11y-saturation-1 .local-a11y-root { --a11y-filter-saturate: saturate(1.8); }
-body.a11y-saturation-2 #page, body.a11y-saturation-2 .navbar, body.a11y-saturation-2 .drawer, body.a11y-saturation-2 .local-a11y-root { --a11y-filter-saturate: saturate(0.4); }
-body.a11y-saturation-3 #page, body.a11y-saturation-3 .navbar, body.a11y-saturation-3 .drawer, body.a11y-saturation-3 .local-a11y-root { --a11y-filter-saturate: grayscale(1); }
-body.a11y-color-1 #page, body.a11y-color-1 .navbar, body.a11y-color-1 .drawer, body.a11y-color-1 .local-a11y-root { --a11y-filter-color: url(#local-a11y-protanopia); }
-body.a11y-color-2 #page, body.a11y-color-2 .navbar, body.a11y-color-2 .drawer, body.a11y-color-2 .local-a11y-root { --a11y-filter-color: url(#local-a11y-deuteranopia); }
-body.a11y-color-3 #page, body.a11y-color-3 .navbar, body.a11y-color-3 .drawer, body.a11y-color-3 .local-a11y-root { --a11y-filter-color: url(#local-a11y-tritanopia); }
+body.a11y-invert #page,
+body.a11y-invert .navbar,
+body.a11y-invert .drawer,
+body.a11y-invert .local-a11y-root {
+    --a11y-filter-invert: invert(1) hue-rotate(180deg);
+}
+body.a11y-saturation-1 #page,
+body.a11y-saturation-1 .navbar,
+body.a11y-saturation-1 .drawer,
+body.a11y-saturation-1 .local-a11y-root {
+    --a11y-filter-saturate: saturate(1.8);
+}
+body.a11y-saturation-2 #page,
+body.a11y-saturation-2 .navbar,
+body.a11y-saturation-2 .drawer,
+body.a11y-saturation-2 .local-a11y-root {
+    --a11y-filter-saturate: saturate(0.4);
+}
+body.a11y-saturation-3 #page,
+body.a11y-saturation-3 .navbar,
+body.a11y-saturation-3 .drawer,
+body.a11y-saturation-3 .local-a11y-root {
+    --a11y-filter-saturate: grayscale(1);
+}
+body.a11y-color-1 #page,
+body.a11y-color-1 .navbar,
+body.a11y-color-1 .drawer,
+body.a11y-color-1 .local-a11y-root {
+    --a11y-filter-color: url(#local-a11y-protanopia);
+}
+body.a11y-color-2 #page,
+body.a11y-color-2 .navbar,
+body.a11y-color-2 .drawer,
+body.a11y-color-2 .local-a11y-root {
+    --a11y-filter-color: url(#local-a11y-deuteranopia);
+}
+body.a11y-color-3 #page,
+body.a11y-color-3 .navbar,
+body.a11y-color-3 .drawer,
+body.a11y-color-3 .local-a11y-root {
+    --a11y-filter-color: url(#local-a11y-tritanopia);
+}
 /* D40: Blue Light Filter (warm/amber tint) joins the same composition, as a
    4th independent term - it does NOT interact with Contraste (recolours via
    design-token overrides on specific elements, not `filter` - see D37's
@@ -1553,9 +2357,24 @@ body.a11y-color-3 #page, body.a11y-color-3 .navbar, body.a11y-color-3 .drawer, b
    last stage before the screen regardless of whatever the app underneath
    is rendering - putting it first instead would let a later invert()
    partially cancel the warm shift, defeating the point of the option. */
-body.a11y-bluelight-1 #page, body.a11y-bluelight-1 .navbar, body.a11y-bluelight-1 .drawer, body.a11y-bluelight-1 .local-a11y-root { --a11y-filter-bluelight: sepia(0.25) saturate(1.1) brightness(0.98); }
-body.a11y-bluelight-2 #page, body.a11y-bluelight-2 .navbar, body.a11y-bluelight-2 .drawer, body.a11y-bluelight-2 .local-a11y-root { --a11y-filter-bluelight: sepia(0.45) saturate(1.15) brightness(0.95); }
-body.a11y-bluelight-3 #page, body.a11y-bluelight-3 .navbar, body.a11y-bluelight-3 .drawer, body.a11y-bluelight-3 .local-a11y-root { --a11y-filter-bluelight: sepia(0.65) saturate(1.2) brightness(0.9); }
+body.a11y-bluelight-1 #page,
+body.a11y-bluelight-1 .navbar,
+body.a11y-bluelight-1 .drawer,
+body.a11y-bluelight-1 .local-a11y-root {
+    --a11y-filter-bluelight: sepia(0.25) saturate(1.1) brightness(0.98);
+}
+body.a11y-bluelight-2 #page,
+body.a11y-bluelight-2 .navbar,
+body.a11y-bluelight-2 .drawer,
+body.a11y-bluelight-2 .local-a11y-root {
+    --a11y-filter-bluelight: sepia(0.45) saturate(1.15) brightness(0.95);
+}
+body.a11y-bluelight-3 #page,
+body.a11y-bluelight-3 .navbar,
+body.a11y-bluelight-3 .drawer,
+body.a11y-bluelight-3 .local-a11y-root {
+    --a11y-filter-bluelight: sepia(0.65) saturate(1.2) brightness(0.9);
+}
 /* D37: .local-a11y-root joins this composition too (see the PANEL OPT-OUT
    comment above) - every element carrying that class (FAB, panel,
    overlay, reading-guide/mask, vk, sr-pill, tooltip bubble) is a
@@ -1563,21 +2382,31 @@ body.a11y-bluelight-3 #page, body.a11y-bluelight-3 .navbar, body.a11y-bluelight-
    so giving each its own `filter` here is exactly as safe as #page/
    .navbar/.drawer already are, with none of the containing-block risk a
    shared ancestor (or <body> itself) would carry. */
-#page, .navbar, .drawer, .local-a11y-root {
-  filter:
-    var(--a11y-filter-invert, )
-    var(--a11y-filter-saturate, )
-    var(--a11y-filter-color, )
-    var(--a11y-filter-bluelight, );
+#page,
+.navbar,
+.drawer,
+.local-a11y-root {
+    filter:
+        var(--a11y-filter-invert,)
+        var(--a11y-filter-saturate,)
+        var(--a11y-filter-color,)
+        var(--a11y-filter-bluelight,);
 }
 /* Defensive backstop kept from D27 even though per-element filtering (D31)
    fixes the actual cause of the horizontal-scroll bug (see above) - cheap
    insurance in case some other still-fixed element we haven't found yet
    reacts the same way. */
-body.a11y-invert, body.a11y-saturation-1, body.a11y-saturation-2, body.a11y-saturation-3,
-body.a11y-color-1, body.a11y-color-2, body.a11y-color-3,
-body.a11y-bluelight-1, body.a11y-bluelight-2, body.a11y-bluelight-3 {
-  overflow-x: hidden;
+body.a11y-invert,
+body.a11y-saturation-1,
+body.a11y-saturation-2,
+body.a11y-saturation-3,
+body.a11y-color-1,
+body.a11y-color-2,
+body.a11y-color-3,
+body.a11y-bluelight-1,
+body.a11y-bluelight-2,
+body.a11y-bluelight-3 {
+    overflow-x: hidden;
 }
 
 /* D33: #page's own background-color is transparent by default (it relies
@@ -1597,11 +2426,17 @@ body.a11y-bluelight-1, body.a11y-bluelight-2, body.a11y-bluelight-3 {
    #page-wrapper, neither of which receive `filter`) - it carries no
    position:fixed containing-block risk at all, so it can't regress the
    FAB/panel/navbar/drawer/sticky-footer fixes above. */
-body.a11y-invert #page, body.a11y-saturation-1 #page, body.a11y-saturation-2 #page,
-body.a11y-saturation-3 #page, body.a11y-color-1 #page, body.a11y-color-2 #page,
-body.a11y-color-3 #page, body.a11y-bluelight-1 #page, body.a11y-bluelight-2 #page,
+body.a11y-invert #page,
+body.a11y-saturation-1 #page,
+body.a11y-saturation-2 #page,
+body.a11y-saturation-3 #page,
+body.a11y-color-1 #page,
+body.a11y-color-2 #page,
+body.a11y-color-3 #page,
+body.a11y-bluelight-1 #page,
+body.a11y-bluelight-2 #page,
 body.a11y-bluelight-3 #page {
-  background-color: #fff;
+    background-color: #fff;
 }
 
 /* Big Cursors */
@@ -1611,11 +2446,21 @@ Big cursor replacements.
 
 Styleguide 11.5.
 */
-body.a11y-cursor-1 #page, body.a11y-cursor-1 #page * {
-  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23000' stroke='%23fff' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
+body.a11y-cursor-1 #page,
+body.a11y-cursor-1 #page * {
+    /* stylelint-disable-next-line function-url-scheme-disallowed-list --
+       inline data: URI is deliberate here: a tiny (few-hundred-byte) custom
+       cursor SVG, avoiding a separate HTTP request/file for something this
+       small, with zero external network dependency (matches this plugin's
+       own "no runtime third-party requests" design - see README). */
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23000' stroke='%23fff' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
 }
-body.a11y-cursor-2 #page, body.a11y-cursor-2 #page * {
-  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23fff' stroke='%23000' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
+body.a11y-cursor-2 #page,
+body.a11y-cursor-2 #page * {
+    /* stylelint-disable-next-line function-url-scheme-disallowed-list --
+       see the a11y-cursor-1 rule just above: same deliberate inline data:
+       URI, same reasoning. */
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23fff' stroke='%23000' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
 }
 
 /* Focus Mode - D52: converted from a toggle into a 3-level stepper (see
@@ -1699,12 +2544,12 @@ body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) [data-region
 body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) #page-content .breadcrumb,
 body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) footer#page-footer,
 body:is(.a11y-focus-mode-1, .a11y-focus-mode-2, .a11y-focus-mode-3) .navbar .nav-item:not(:first-child) {
-  display: none !important;
+    display: none !important;
 }
 body.a11y-focus-mode-1 #region-main,
 body.a11y-focus-mode-1 #region-main-box {
-  max-width: 900px !important;
-  margin: 0 auto !important;
+    max-width: 900px !important;
+    margin: 0 auto !important;
 }
 
 /*
@@ -1717,15 +2562,15 @@ body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main .card,
 body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main .card-body,
 body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main .box,
 body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main .well {
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
 }
 body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main,
 body:is(.a11y-focus-mode-2, .a11y-focus-mode-3) #region-main-box {
-  max-width: 70ch !important;
-  margin: 32px auto !important;
+    max-width: 70ch !important;
+    margin: 32px auto !important;
 }
 
 /*
@@ -1736,13 +2581,18 @@ Styleguide 11.6.3.
 body.a11y-focus-mode-3 #page img:not(:is(form, .que, .editor_atto, .tox-tinymce) *),
 body.a11y-focus-mode-3 #page video:not(:is(form, .que, .editor_atto, .tox-tinymce) *),
 body.a11y-focus-mode-3 #page iframe:not(:is(form, .que, .editor_atto, .tox-tinymce) *) {
-  display: none !important;
+    display: none !important;
 }
+/* stylelint-disable selector-type-no-unknown -- mjx-container is a real
+   custom element MathJax renders its output into; stylelint's default HTML
+   tag allowlist doesn't include custom elements. See the comment further
+   up this section for why it's excluded here at all. */
 body.a11y-focus-mode-3 #page [aria-hidden="true"]:not(
-  :is(a, button, [role="button"], form, .que, .editor_atto, .tox-tinymce, .MathJax, mjx-container),
-  :is(a, button, [role="button"], form, .que, .editor_atto, .tox-tinymce, .MathJax, mjx-container) *
+:is(a, button, [role="button"], form, .que, .editor_atto, .tox-tinymce, .MathJax, mjx-container),
+:is(a, button, [role="button"], form, .que, .editor_atto, .tox-tinymce, .MathJax, mjx-container) *
 ) {
-  display: none !important;
+    /* stylelint-enable selector-type-no-unknown */
+    display: none !important;
 }
 
 /* ===========================================================================
@@ -1775,18 +2625,26 @@ Magnifier lens and its clipped, scaled content.
 Styleguide 12.
 */
 .local-a11y-magnifier {
-  position: fixed; top: 0; left: 0; width: 220px; height: 220px;
-  border-radius: 50%; overflow: hidden; pointer-events: none;
-  border: 3px solid var(--a11y-border-strong, #d1d5db);
-  box-shadow: 0 10px 30px -6px rgba(0,0,0,0.35), 0 0 0 2px rgba(255,255,255,0.6) inset;
-  background: var(--a11y-bg, #fff);
-  z-index: 99987;
-  will-change: transform;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    overflow: hidden;
+    pointer-events: none;
+    border: 3px solid var(--a11y-border-strong, #d1d5db);
+    box-shadow: 0 10px 30px -6px rgba(0, 0, 0, 0.35), 0 0 0 2px rgba(255, 255, 255, 0.6) inset;
+    background: var(--a11y-bg, #fff);
+    z-index: 99987;
+    will-change: transform;
 }
 .local-a11y-magnifier__content {
-  position: absolute; top: 0; left: 0;
-  transform-origin: 0 0;
-  will-change: transform, filter;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: 0 0;
+    will-change: transform, filter;
 }
 
 /* ===========================================================================
@@ -1855,12 +2713,12 @@ VLibras integration (hide by default, reveal via the signLanguage toggle).
 Styleguide 13.
 */
 body.a11y-vlibras-integrated #vlibras-access-wrapper {
-  display: none !important;
+    display: none !important;
 }
 body.a11y-vlibras-integrated.a11y-sign-language #vlibras-access-wrapper {
-  display: block !important;
+    display: block !important;
 }
 body.a11y-vlibras-integrated:not(.a11y-sign-language) #vlibras-app-root {
-  display: none !important;
+    display: none !important;
 }
 

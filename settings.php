@@ -25,14 +25,12 @@
  * generic "Appearance" section). Every setting has a real description -
  * none are left blank.
  *
- * @description Admin settings for local_a11y.
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version    0.1.0
  * @since      0.1.0
  */
 
@@ -42,7 +40,7 @@ if ($hassiteconfig) {
     $settings = new admin_settingpage('local_a11y', new lang_string('pluginname', 'local_a11y'));
     $ADMIN->add('localplugins', $settings);
 
-    // ── Geral ────────────────────────────────────────────────────────────
+    // Geral ──────────────────────────────────────────────────────────────
     // Whether/where the plugin runs, and which of the 24 options are
     // available to users at all (independent of any one user's own choices).
     $settings->add(new admin_setting_heading(
@@ -84,7 +82,7 @@ if ($hassiteconfig) {
         $featurechoices
     ));
 
-    // ── Integrações ──────────────────────────────────────────────────────
+    // Integrações ────────────────────────────────────────────────────────
     // Third-party plugin integrations - currently just VLibras (D54). Only
     // local_a11y's own admin setting and, when relevant, a position-
     // collision warning live here; every actual VLibras-specific check is
@@ -122,7 +120,7 @@ if ($hassiteconfig) {
         }
     }
 
-    // ── Botão Flutuante (FAB) ───────────────────────────────────────────
+    // Botão Flutuante (FAB) ─────────────────────────────────────────────
     // The entry point rendered on every page: where it sits, what it
     // looks like.
     $settings->add(new admin_setting_heading(
@@ -148,12 +146,10 @@ if ($hassiteconfig) {
         'local_a11y/fabicon',
         new lang_string('settings_fabicon', 'local_a11y'),
         new lang_string('settings_fabicon_desc', 'local_a11y'),
-        'un',
+        'default',
         [
+            'default' => new lang_string('icon_default', 'local_a11y'),
             'un' => new lang_string('icon_un', 'local_a11y'),
-            'accessibility' => new lang_string('icon_accessibility', 'local_a11y'),
-            'sparkles' => new lang_string('icon_sparkles', 'local_a11y'),
-            'user' => new lang_string('icon_user', 'local_a11y'),
         ]
     ));
 
@@ -168,7 +164,7 @@ if ($hassiteconfig) {
         ]
     ));
 
-    // ── Painel ───────────────────────────────────────────────────────────
+    // Painel ─────────────────────────────────────────────────────────────
     // The settings surface itself: how it's presented and what it contains
     // beyond the option list.
     $settings->add(new admin_setting_heading(
@@ -216,7 +212,7 @@ if ($hassiteconfig) {
         PARAM_RAW
     ));
 
-    // ── Cores ────────────────────────────────────────────────────────────
+    // Cores ──────────────────────────────────────────────────────────────
     // Every colour the plugin lets an admin customise, grouped in one
     // place: the FAB/panel's own accent, plus the 4 page-effect colours
     // used by "Destacar Títulos", "Destacar Links", "Destacar Botões" and
@@ -264,7 +260,7 @@ if ($hassiteconfig) {
         '#3b82f6'
     ));
 
-    // ── Estatísticas ─────────────────────────────────────────────────────
+    // Estatísticas ───────────────────────────────────────────────────────
     // Contadores de uso agregados e anônimos (D47) - desligado por padrão;
     // o admin precisa optar explicitamente. Ver classes/stats.php e
     // admin/stats.php (relatório, protegido por local/a11y:viewstats).

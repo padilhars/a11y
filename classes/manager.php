@@ -20,14 +20,12 @@ namespace local_a11y;
  * Central place for defaults, activation checks, merge/validate/sanitize
  * logic for local_a11y settings.
  *
- * @description Central place for defaults, activation checks, merge/validate/sanitize logic.
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version    0.1.0
  * @since      0.1.0
  */
 class manager {
@@ -74,7 +72,7 @@ class manager {
             'faceNavigation' => false,
         ];
 
-        // signLanguage (D54) mirrors options::all()'s own condition exactly
+        // The signLanguage (D54) entry mirrors options::all()'s own condition exactly
         // - this is the mechanism the orphaned-preference requirement
         // relies on: sanitize_settings() below only ever looks at keys
         // present in this array, so a stored `signLanguage` value left
@@ -143,7 +141,7 @@ class manager {
             'hideImages' => 'a11y-hide-images',
             'pauseAnimations' => 'a11y-pause-animations',
             'invertColors' => 'a11y-invert',
-            // signLanguage (D54) is listed unconditionally here, unlike its
+            // The signLanguage (D54) entry is listed unconditionally here, unlike its
             // entry in get_default_settings() above - safe even when the
             // local_vlibras integration isn't currently on, because the CSS
             // rule that actually reveals VLibras' widget requires *both*
@@ -238,7 +236,7 @@ class manager {
                 continue;
             }
             if (isset($steppermax[$key])) {
-                // (int) is safe for a legacy boolean here (D52 - focusMode
+                // Casting to (int) is safe for a legacy boolean here (D52 - focusMode
                 // moved from toggle to stepper): PHP casts true -> 1, false
                 // -> 0 natively, unlike JS's parseInt(), which needs an
                 // explicit guard - see amd/src/storage.js::sanitize() and
