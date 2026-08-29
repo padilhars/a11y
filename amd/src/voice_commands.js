@@ -44,6 +44,50 @@ let callbacks = {};
  */
 const getSpeechRecognitionCtor = () => window.SpeechRecognition || window.webkitSpeechRecognition || null;
 
+// Security/privacy audit finding: in Chrome/Chromium, the SpeechRecognition
+// implementation used above sends captured microphone audio to Google's own
+// remote speech-recognition service to transcribe it (confirmed against
+// MDN's documentation of the SpeechRecognition API) - this plugin has no
+// control over that and previously never disclosed it anywhere, contrary to
+// README.md's "no third-party API is loaded" claim (the two documented
+// exceptions there were the MediaPipe CDN and the UN icon, neither of which
+// covers this). See classes/privacy/provider.php for the Privacy API
+// disclosure and README.md for the user-facing one. This constant/functions
+// pair adds a one-time runtime notice, shown before the feature is ever
+// actually activated for the first time on a given browser.
+const PRIVACY_ACK_KEY = 'local_a11y_vc_privacy_ack';
+
+/**
+ * Whether the user has already acknowledged the privacy notice below, on
+ * this browser.
+ *
+ * @return {Boolean}
+ */
+const hasAcknowledgedPrivacyNotice = () => {
+    try {
+        return window.localStorage && window.localStorage.getItem(PRIVACY_ACK_KEY) === '1';
+    } catch (e) {
+        return false;
+    }
+};
+
+/**
+ * Remember that the user acknowledged the privacy notice, so it is not
+ * shown again on this browser.
+ *
+ * @return {void}
+ */
+const rememberPrivacyAck = () => {
+    try {
+        if (window.localStorage) {
+            window.localStorage.setItem(PRIVACY_ACK_KEY, '1');
+        }
+    } catch (e) {
+        // Storage unavailable (private browsing, etc.) - worst case, the
+        // notice is shown again next time. Never blocks activation.
+    }
+};
+
 /**
  * Build and append the status pill DOM element showing the given label.
  *
@@ -210,9 +254,15 @@ const dispatch = (phrase) => {
 
 /**
  * Start listening. Idempotent; silently does nothing if the browser has no
- * SpeechRecognition support (graceful fallback, per the brief).
+ * SpeechRecognition support (graceful fallback, per the brief). The first
+ * time this actually runs on a given browser, shows a blocking privacy
+ * notice (vc_privacynotice) first - see PRIVACY_ACK_KEY above; if declined,
+ * calls `cb.declineActivation()` (so the caller can turn the option's
+ * toggle back off) and returns without starting anything.
  *
- * @param {Object} cb Action callbacks, see `dispatch()` for the supported keys.
+ * @param {Object} cb Action callbacks: speech-command keys, see `dispatch()`
+ *        for those, plus `declineActivation` (called if the privacy notice
+ *        above is declined).
  * @return {Promise<void>}
  */
 export const start = async(cb) => {
@@ -225,6 +275,21 @@ export const start = async(cb) => {
     if (!Ctor) {
         pill = buildPill(await getString('vc_notsupported', 'local_a11y'));
         return;
+    }
+
+    if (!hasAcknowledgedPrivacyNotice()) {
+        const notice = await getString('vc_privacynotice', 'local_a11y');
+        // window.confirm(): a native, zero-dependency, always-available
+        // blocking dialog - the right tool for a one-time consent gate that
+        // must never silently proceed if declined. Not shown again once
+        // acknowledged (rememberPrivacyAck()).
+        if (!window.confirm(notice)) {
+            if (callbacks.declineActivation) {
+                callbacks.declineActivation();
+            }
+            return;
+        }
+        rememberPrivacyAck();
     }
 
     listeningLabel = await getString('vc_listening', 'local_a11y');

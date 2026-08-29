@@ -40,6 +40,19 @@ use core_privacy\local\request\writer;
  * schema rationale and classes/stats.php for the only code that writes
  * to it.
  *
+ * Since D62 (security audit finding) the metadata also declares an
+ * `add_external_location_link()`: the "Voice Commands" option uses the
+ * browser's native Web Speech API, which - in Chrome/Chromium - sends the
+ * captured microphone audio to Google's own remote speech-recognition
+ * service to transcribe it (confirmed against MDN's own documentation of
+ * SpeechRecognition). This plugin never sends, receives or stores that
+ * audio or its transcription itself - the browser does this on its own,
+ * outside any code in this plugin - but the Privacy API has no other way
+ * to represent "a feature you can turn on causes the browser itself to
+ * talk to a third party", so this is the closest accurate declaration
+ * available. See amd/src/voice_commands.js for the runtime consent notice
+ * shown before this ever happens.
+ *
  * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
@@ -66,6 +79,9 @@ class provider implements
             \local_a11y\manager::PREFERENCE_NAME,
             'privacy:metadata:preference:local_a11y_settings'
         );
+        $items->add_external_location_link('speechrecognitionservice', [
+            'audio' => 'privacy:metadata:speechrecognitionservice:audio',
+        ], 'privacy:metadata:speechrecognitionservice');
         return $items;
     }
 

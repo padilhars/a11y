@@ -24,10 +24,10 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 
 ## Por que usar
 
-- **Sem dependências externas em tempo de execução** — nenhum script, fonte ou API de terceiro é carregado do navegador do usuário final (as duas exceções — CDN do MediaPipe para Navegação por Face e o ícone ONU — estão documentadas e a primeira passa por verificação de integridade SHA-256 antes de ser executada).
+- **Sem dependências externas empacotadas** — nenhum script ou fonte de terceiro é *baixado* pelo navegador do usuário final além de duas exceções documentadas (CDN do MediaPipe para Navegação por Face, com verificação de integridade SHA-256 vinculada ao código que de fato executa; e o ícone ONU). **Comandos por Voz é uma terceira exceção, de natureza diferente**: usa a API nativa `SpeechRecognition` do navegador, que em navegadores baseados em Chromium processa o áudio do microfone em um serviço de reconhecimento de fala remoto do próprio fabricante do navegador (não operado por este plugin nem por este site) — ver "Comandos por Voz e reconhecimento de fala" abaixo.
 - **29 opções reais, não uma lista de marketing** — cada uma foi implementada, testada em auditoria de segurança e código morto, e documentada (PHPDoc/JSDoc/KSS completos, ver [`docs/`](docs/README.md)).
 - **Zero FOUC**: as preferências do usuário são aplicadas antes da primeira pintura da página, via script inline síncrono.
-- **Privacidade real**: a única informação pessoal armazenada é a preferência de acessibilidade do próprio usuário; a única tabela própria do plugin é 100% agregada e anônima (opcional, desligada por padrão — ver "Estatísticas de uso" abaixo); nada é compartilhado com terceiros.
+- **Privacidade real**: a única informação pessoal armazenada *por este plugin* é a preferência de acessibilidade do próprio usuário; a única tabela própria do plugin é 100% agregada e anônima (opcional, desligada por padrão — ver "Estatísticas de uso" abaixo); nada é compartilhado com terceiros *por este plugin* (a exceção de Comandos por Voz acima é comportamento do próprio navegador do usuário, fora do controle do plugin).
 - **Feito para produção**: controle de acesso via capabilities do Moodle (`local/a11y:view`), Hooks API (não callbacks legados), auditado quanto a segurança e código morto antes de cada publicação.
 
 ## Capturas de tela
@@ -101,7 +101,15 @@ Baixa Visão, Daltonismo, Dislexia, TDAH/Foco, Idoso/Sênior, Epilepsia, Defici�
 
 ## Privacidade
 
-O plugin implementa a Privacy API do Moodle (`classes/privacy/provider.php`): a única informação pessoal armazenada é a preferência `local_a11y_settings` do próprio usuário (suas opções de acessibilidade escolhidas). Nada é compartilhado com terceiros. Visitantes usam apenas `localStorage` do navegador, fora do alcance do Moodle.
+O plugin implementa a Privacy API do Moodle (`classes/privacy/provider.php`): a única informação pessoal *armazenada por este plugin* é a preferência `local_a11y_settings` do próprio usuário (suas opções de acessibilidade escolhidas). Nada é compartilhado com terceiros *pelo código deste plugin*. Visitantes usam apenas `localStorage` do navegador, fora do alcance do Moodle. Ver também "Comandos por Voz e reconhecimento de fala" logo abaixo — a única exceção conhecida, e é comportamento do navegador do usuário, não deste plugin.
+
+### Comandos por Voz e reconhecimento de fala
+
+A opção "Comandos por Voz" usa a API nativa `SpeechRecognition`/`webkitSpeechRecognition` do navegador — este plugin nunca implementa reconhecimento de fala próprio nem envia áudio a lugar nenhum por conta própria. Em navegadores baseados em Chromium (Chrome, Edge, etc.), essa API do próprio navegador envia o áudio captado pelo microfone a um serviço de reconhecimento de fala remoto operado pelo fabricante do navegador (documentado pela [MDN](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition)) para transcrevê-lo em texto — esse envio é feito pelo navegador, fora do alcance de qualquer código deste plugin ou deste site. Por isso:
+
+- A primeira vez que a opção é ativada em cada navegador, um aviso é mostrado (`vc_privacynotice`) informando isso, antes de qualquer captura de áudio começar; se recusado, a opção não é ativada.
+- `classes/privacy/provider.php` declara essa exceção via `add_external_location_link()`, a forma correta da Privacy API do Moodle para "uma funcionalidade opcional faz o navegador conversar com um terceiro", ainda que o próprio plugin não seja parte dessa troca.
+- Em navegadores sem esse comportamento (ex.: Firefox, dependendo da configuração), a opção simplesmente não fica disponível (`vc_notsupported`) — não há um modo alternativo de processamento local implementado por este plugin.
 
 ### Estatísticas de uso (opcional, desligada por padrão)
 

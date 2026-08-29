@@ -187,8 +187,31 @@ export const getSettings = async(isLoggedIn) => {
         stored = null;
     }
 
+    // Security audit finding, fixed: local_a11y_settings is stored with no
+    // format validation server-side (lib.php declares it PARAM_RAW -
+    // sanitize_settings() only runs when READING it back, see
+    // classes/manager.php), so a corrupted/non-JSON value is always
+    // possible here (e.g. a direct core_user_set_user_preference call
+    // bypassing this module entirely). JSON.parse() used to run outside any
+    // try/catch, so a bad value threw an unhandled rejection out of this
+    // whole async function and silently broke Panel/Effects initialisation
+    // for that user on every page - never for anyone else's account, but a
+    // real self-inflicted denial of this plugin's own accessibility
+    // features. Treated the same as "no value yet" now - falls through to
+    // the same guest-migration/defaults path below, which also has the
+    // side effect of overwriting the corrupted value with a valid one the
+    // next time settings are saved.
+    let parsed = null;
     if (stored) {
-        return sanitize(JSON.parse(stored));
+        try {
+            parsed = JSON.parse(stored);
+        } catch (e) {
+            parsed = null;
+        }
+    }
+
+    if (parsed) {
+        return sanitize(parsed);
     }
 
     // No server-side preference yet: migrate any locally-stored guest
