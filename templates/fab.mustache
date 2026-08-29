@@ -47,6 +47,14 @@
         "accent": "#3b82f6"
     }
 }}
+{{! Known, accepted false positive from `moodle-plugin-ci mustache`: its
+    HTML validator lints this template in isolation, so aria-controls below
+    (pointing at #local-a11y-panel, defined in the separate
+    templates/panel.mustache) always warns "must point to an element in the
+    same document" - it isn't, in that isolated render. In the real page
+    both are direct children of <body> (amd/src/main.js's init()), so the
+    reference is valid there. Nothing to fix here; documented so this
+    doesn't get "fixed" into something wrong on a future lint pass. }}
 <button
     type="button"
     id="local-a11y-fab"

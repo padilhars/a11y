@@ -34,14 +34,12 @@ use renderer_base;
  * server round-trip, so this export only needs to produce structurally
  * correct, accessible markup.
  *
- * @description The accessibility panel (profiles grid + collapsible option categories).
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version    0.1.0
  * @since      0.1.0
  */
 class panel implements renderable, templatable {
@@ -167,6 +165,7 @@ class panel implements renderable, templatable {
             'profiles' => $profilecards,
             'categories' => $categories,
             'savetitle' => config::footer_text(),
+            'keyboardhint' => get_string('keyboardhint', 'local_a11y'),
             'panelformatclass' => 'local-a11y-panel--' . $appearance['panelformat'],
             'positionclass' => 'local-a11y-panel--' . preg_replace('/[^a-z-]/', '', $appearance['fabposition']),
             'densityclass' => 'local-a11y-panel--density-' . $appearance['density'],

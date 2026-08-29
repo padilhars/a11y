@@ -17,24 +17,31 @@
 /**
  * Plugin version information for local_a11y.
  *
- * @description Plugin version information for local_a11y.
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version    0.1.0
  * @since      0.1.0
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_a11y';
-$plugin->version   = 2026082806;
+$plugin->version   = 2026082903;
 // Approximate branching version for the Moodle 5.0 release on this timeline
 // (this install is already on branch 502 / 2026042001.07 — see DECISIONS.md D2).
 // Any value at or below the site's current $version satisfies "5.0+" support.
 $plugin->requires  = 2025041500;
-$plugin->maturity  = MATURITY_ALPHA;
+// Declared branch range for the Moodle Plugins Directory. LOWER bound (500)
+// mirrors $requires above - nothing in this plugin uses any API introduced
+// after Moodle 5.0, so there's no known reason 5.0/5.1 wouldn't work, but
+// this has only ever actually been *run* against 5.2 (this development/
+// production host has never had anything but 5.2.1 installed - see
+// DECISIONS.md D2). UPPER bound (502) is the one branch this has real,
+// live-tested evidence for. Widen the upper bound only after actually
+// testing against a newer branch, not just because a newer one exists.
+$plugin->supported = [500, 502];
+$plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = '0.1.0';

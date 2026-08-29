@@ -24,14 +24,12 @@ namespace local_a11y;
  * Labels/descriptions are resolved via get_string() instead of the
  * prototype's inline pt-BR/en literals.
  *
- * @description The 28 accessibility options (PHP port of OPTIONS).
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version    0.1.0
  * @since      0.1.0
  */
 class options {
@@ -42,7 +40,7 @@ class options {
      */
     public static function all(): array {
         $options = [
-            // -- Typography --
+            // Typography.
             ['id' => 'readableFont', 'cat' => 'typography', 'kind' => 'toggle', 'icon' => 'type',
                 'labelkey' => 'opt_readablefont', 'desckey' => 'opt_readablefont_desc'],
             ['id' => 'dyslexicFont', 'cat' => 'typography', 'kind' => 'toggle', 'icon' => 'bookOpen',
@@ -72,7 +70,7 @@ class options {
                 // carry a desc either.
                 'labelkey' => 'opt_bionicreading', 'desckey' => null, 'hashelp' => true],
 
-            // -- Color & contrast --
+            // Color & contrast.
             ['id' => 'contrast', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'contrast',
                 'labelkey' => 'opt_contrast', 'desckey' => null, 'levelprefix' => 'contrastlevel_'],
             ['id' => 'invertColors', 'cat' => 'color', 'kind' => 'toggle', 'icon' => 'invertColors',
@@ -84,7 +82,7 @@ class options {
             ['id' => 'blueLightFilter', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'moon',
                 'labelkey' => 'opt_bluelightfilter', 'desckey' => null, 'levelprefix' => 'bluelightlevel_'],
 
-            // -- Media & motion --
+            // Media & motion.
             ['id' => 'hideImages', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'imageOff',
                 'labelkey' => 'opt_hideimages', 'desckey' => null],
             ['id' => 'pauseAnimations', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'pause',
@@ -94,7 +92,7 @@ class options {
             ['id' => 'tooltips', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'tooltip',
                 'labelkey' => 'opt_tooltips', 'desckey' => null],
 
-            // -- Focus & navigation --
+            // Focus & navigation.
             ['id' => 'readingGuide', 'cat' => 'navigation', 'kind' => 'toggle', 'icon' => 'ruler',
                 'labelkey' => 'opt_readingguide', 'desckey' => null, 'hashelp' => true],
             ['id' => 'readingMask', 'cat' => 'navigation', 'kind' => 'toggle', 'icon' => 'mask',
@@ -106,7 +104,7 @@ class options {
             ['id' => 'focusMode', 'cat' => 'navigation', 'kind' => 'stepper', 'max' => 3, 'icon' => 'focus',
                 'labelkey' => 'opt_focusmode', 'desckey' => 'opt_focusmode_desc', 'levelprefix' => 'focusmodelevel_'],
 
-            // -- Advanced --
+            // Advanced.
             ['id' => 'screenReader', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'volume',
                 'labelkey' => 'opt_screenreader', 'desckey' => 'opt_screenreader_desc', 'hashelp' => true],
             ['id' => 'virtualKeyboard', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'keyboard',
@@ -117,7 +115,7 @@ class options {
                 'labelkey' => 'opt_facenavigation', 'desckey' => 'opt_facenavigation_desc', 'hashelp' => true],
         ];
 
-        // signLanguage (D54) only exists at all while the local_vlibras
+        // The signLanguage (D54) entry only exists at all while the local_vlibras
         // integration is actually usable - see
         // classes/integration/vlibras.php::is_integrated(). This is the
         // one option in this array that isn't a fixed, always-present

@@ -125,7 +125,8 @@ GNU GPL v3 ou posterior — ver `COPYING.txt` do Moodle.
 
 ### Atribuição de terceiros
 
-`pix/accessibility-un.svg` (ícone padrão do botão flutuante) é uma cópia local de
+`pix/accessibility-un.svg` (uma das opções de ícone do botão flutuante — "Logo de
+acessibilidade da ONU") é uma cópia local de
 ["Accessibility logo (UN)"](https://commons.wikimedia.org/wiki/File:Accessibility_logo.svg),
 Wikimedia Commons, licenciado sob
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) (Creative Commons
@@ -135,3 +136,12 @@ arquivo original por atributos de apresentação equivalentes aplicados diretame
 nos elementos, para que o SVG possa ser inserido com segurança inline na página do
 Moodle (sem depender de nomes de classe CSS globais que poderiam colidir com outros
 elementos da página). Ver `classes/icons.php::un_accessibility_svg()`.
+
+`pix/accessibility-default.svg` (ícone padrão do botão flutuante desde D60) foi
+fornecido diretamente pelo autor do plugin, originalmente baixado de svgrepo.com. O
+arquivo de origem só credita "SVG Repo Mixer Tools" no cabeçalho e não declara uma
+licença específica — **isso ainda precisa ser confirmado/documentado com uma licença
+de verdade antes de qualquer distribuição pública do plugin** (ver `docs/PUBLISHING.md`
+e `DECISIONS.md` D60). O único ajuste feito na geometria original foi trocar
+`fill="#000000"` por `fill="currentColor"`, para o ícone tematizar como todos os
+outros do plugin. Ver `classes/icons.php::default_accessibility_svg()`.

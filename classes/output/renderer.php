@@ -22,14 +22,12 @@ use local_a11y\manager;
 /**
  * Renderer for local_a11y.
  *
- * @description Renderer for local_a11y.
  * @package    Moodle
  * @subpackage Plugin a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
  * @copyright  Universidade Federal de Pelotas - UFPel
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version    0.1.0
  * @since      0.1.0
  */
 class renderer extends \plugin_renderer_base {
@@ -188,7 +186,9 @@ JS;
             'deuteranopia' => '0.367,0.861,-0.228,0,0  0.280,0.673,0.047,0,0  -0.012,0.043,0.969,0,0  0,0,0,1,0',
             'tritanopia' => '1.256,-0.077,-0.179,0,0  -0.078,0.931,0.148,0,0  0.005,0.691,0.304,0,0  0,0,0,1,0',
         ];
-        $svg = '<svg aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden;" xmlns="http://www.w3.org/2000/svg">';
+        $svg = '<svg aria-hidden="true" focusable="false" '
+            . 'style="position:absolute;width:0;height:0;overflow:hidden;" '
+            . 'xmlns="http://www.w3.org/2000/svg">';
         foreach ($matrices as $name => $matrix) {
             $svg .= '<filter id="local-a11y-' . $name . '" color-interpolation-filters="sRGB">'
                 . '<feColorMatrix type="matrix" values="' . $matrix . '"/></filter>';
