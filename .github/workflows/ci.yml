@@ -45,6 +45,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          extensions: pgsql, zip, gd, mysqli
           ini-values: max_input_vars=5000
           coverage: none
 
@@ -61,15 +62,17 @@ jobs:
           composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
           echo "$(cd ci; pwd)/bin" >> $GITHUB_PATH
           echo "$(cd ci; pwd)/vendor/bin" >> $GITHUB_PATH
+          sudo locale-gen en_AU.UTF-8
 
+      # A branch do Moodle e o tipo de banco são lidos por variável de ambiente
+      # (MOODLE_BRANCH/DB), não por flag de linha de comando - "--moodle-branch"
+      # não é uma opção reconhecida por "moodle-plugin-ci install" e falhava
+      # (exit code 1) igualmente nas 12 combinações da matriz na primeira execução real.
       - name: Instalar Moodle + plugin
-        run: |
-          moodle-plugin-ci install \
-            --plugin ./plugin \
-            --moodle-branch ${{ matrix.moodle-branch }} \
-            --db-host=127.0.0.1
+        run: moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
         env:
           DB: ${{ matrix.database }}
+          MOODLE_BRANCH: ${{ matrix.moodle-branch }}
 
       - name: phplint
         run: moodle-plugin-ci phplint
