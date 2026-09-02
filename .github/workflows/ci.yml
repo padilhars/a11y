@@ -27,9 +27,12 @@ jobs:
       postgres:
         image: postgres:14
         env:
-          # 'root', não 'postgres' - o padrão de referência do moodle-plugin-ci
-          # usa o mesmo nome de usuário do serviço mariadb abaixo para os dois.
-          POSTGRES_USER: 'root'
+          # 'postgres' - confirmado por log real que "moodle-plugin-ci install"
+          # conecta como esse usuário por padrão para DB=pgsql (não hardcoded
+          # em nenhum lugar deste workflow). Uma tentativa anterior, sem
+          # evidência, trocou para 'root' por analogia com o padrão oficial -
+          # isso quebrou a role que o install de fato usa; revertido. D67/D68.
+          POSTGRES_USER: 'postgres'
           POSTGRES_HOST_AUTH_METHOD: 'trust'
         ports:
           - 5432:5432
@@ -94,8 +97,14 @@ jobs:
         run: moodle-plugin-ci validate
       - name: savepoints
         run: moodle-plugin-ci savepoints
+      # --max-warnings 1: tolera o único warning já conhecido e revisado deste
+      # projeto (fab.mustache, aria-controls apontando para um id que só
+      # existe no template do painel, fora do fragmento isolado que o linter
+      # renderiza sozinho - falso positivo, não um problema real da página
+      # renderizada de verdade). Qualquer warning NOVO além desse ainda falha
+      # o build. Ver DECISIONS.md D68.
       - name: mustache
-        run: moodle-plugin-ci mustache
+        run: moodle-plugin-ci mustache --max-warnings 1
       - name: grunt (eslint/stylelint/AMD build)
         run: moodle-plugin-ci grunt
       - name: phpunit
