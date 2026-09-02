@@ -1,0 +1,10 @@
+version: 2
+updates:
+  # Este repositório não versiona package.json/composer.json próprios (o build
+  # AMD/grunt e o moodle-plugin-ci rodam a partir de checkouts externos do Moodle
+  # e do próprio moodle-plugin-ci, não deste repositório) - o único ecossistema
+  # de dependências que existe aqui de fato são as actions usadas em CI.
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'monthly'
