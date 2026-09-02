@@ -407,8 +407,19 @@ Styleguide 5.2.
     bottom: 0;
     /* stylelint-disable-next-line csstree/validator -- width: min() is
        standard, broadly-supported CSS (Values and Units L4); css-tree's
-       bundled property-value grammar just hasn't been updated for it. */
-    width: min(400px, 100vw);
+       bundled property-value grammar just hasn't been updated for it.
+       Compliance audit finding, fixed: this used to be min(400px, 100vw) -
+       `100vw` is defined to always equal the *initial* viewport width,
+       which on platforms/browsers that reserve room for a vertical
+       scrollbar is wider than the actual visible/usable width
+       (document.documentElement.clientWidth). Live-measured (WebDriver,
+       audit/04-conformidade.md): at a ~325px-wide viewport, this panel
+       rendered 340px wide and clipped ~15px off-screen, contributing to
+       horizontal scroll - exactly what WCAG 2.2 SC 1.4.10 (Reflow) says
+       must not happen. `100%` here resolves against the actual containing
+       block (the real visible viewport for this fixed-position element),
+       not the scrollbar-inclusive one `100vw` always reports. */
+    width: min(400px, 100%);
     max-height: 100vh;
     border-radius: 0;
     border-top: 0;
@@ -450,8 +461,9 @@ Styleguide 5.2.1.
         bottom: 0 !important;
         left: auto !important;
         /* stylelint-disable-next-line csstree/validator -- see the
-           drawer-format width: min() comment further up this file. */
-        width: min(400px, 100vw) !important;
+           drawer-format width: min() comment further up this file (same
+           compliance audit fix: 100vw -> 100% for SC 1.4.10 reflow). */
+        width: min(400px, 100%) !important;
         max-height: 100vh !important;
         border-radius: 0 !important;
         border-top: 0 !important;
@@ -673,7 +685,13 @@ Styleguide 5.4.
     border-radius: 10px;
 }
 .local-a11y-panel__search-icon {
-    color: var(--a11y-text-hint);
+    /* Compliance audit finding, fixed: --a11y-text-hint measures 2.54:1 on
+       white (live-measured, audit/04-conformidade.md) - below the 3:1
+       minimum for non-text UI components (WCAG 2.2 SC 1.4.11). Same class
+       of bug the comment on .local-a11y-option__desc below already found
+       and fixed via axe-core; --a11y-text-muted (~4.8:1) is that same
+       already-audited fix, applied here too. */
+    color: var(--a11y-text-muted);
     display: flex;
     flex-shrink: 0;
 }
@@ -690,7 +708,9 @@ Styleguide 5.4.
 .local-a11y-panel__search-clear {
     border: 0;
     background: transparent;
-    color: var(--a11y-text-hint);
+    /* Compliance audit finding, fixed: see .local-a11y-panel__search-icon
+       above - same 2.54:1-on-white contrast failure, same fix. */
+    color: var(--a11y-text-muted);
     cursor: pointer;
     padding: 0;
     display: flex;
@@ -902,7 +922,9 @@ Styleguide 5.6.
     visibility: hidden;
 }
 .local-a11y-category__chevron {
-    color: var(--a11y-text-hint);
+    /* Compliance audit finding, fixed: see .local-a11y-panel__search-icon
+       above - same 2.54:1-on-white contrast failure, same fix. */
+    color: var(--a11y-text-muted);
     display: flex;
     transition: transform 200ms ease;
 }
@@ -1104,7 +1126,15 @@ Styleguide 5.6.
     padding: 0;
     position: relative;
     flex-shrink: 0;
-    background: #d4d4d8;
+    /* Compliance audit finding, fixed: the previous hardcoded #d4d4d8 (this
+       option's default/"off" track colour) measured 1.48:1 against the
+       panel's white background (live-measured, audit/04-conformidade.md) -
+       well below the 3:1 minimum for non-text UI component state (WCAG 2.2
+       SC 1.4.11), with no border/box-shadow to compensate. Reusing
+       --a11y-text-muted here (already contrast-audited for text use
+       elsewhere in this file, ~4.8:1 on white in the default theme) instead
+       of inventing a new colour. */
+    background: var(--a11y-text-muted);
     transition: background 200ms ease;
     margin-right: 12px;
 }

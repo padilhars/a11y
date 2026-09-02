@@ -82,8 +82,13 @@ class options {
                 'labelkey' => 'opt_bluelightfilter', 'desckey' => null, 'levelprefix' => 'bluelightlevel_'],
 
             // Media & motion.
+            // desckey set (compliance audit, audit/04-conformidade.md item
+            // B8): this option hides every image/video under #page
+            // indiscriminately (styles.css - no distinction between
+            // decorative and informational content), and had no description
+            // warning the user about that limitation before this.
             ['id' => 'hideImages', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'imageOff',
-                'labelkey' => 'opt_hideimages', 'desckey' => null],
+                'labelkey' => 'opt_hideimages', 'desckey' => 'opt_hideimages_desc'],
             ['id' => 'pauseAnimations', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'pause',
                 'labelkey' => 'opt_pauseanimations', 'desckey' => null, 'hashelp' => true],
             ['id' => 'silenceMedia', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'volumeX',

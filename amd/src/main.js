@@ -34,19 +34,75 @@ import Effects from 'local_a11y/effects';
 import Storage from 'local_a11y/storage';
 import Profiles from 'local_a11y/profiles';
 import FabLift from 'local_a11y/fab_lift';
-import ReadingGuide from 'local_a11y/reading_guide';
-import ReadingMask from 'local_a11y/reading_mask';
-import Magnifier from 'local_a11y/magnifier';
-import ScreenReader from 'local_a11y/screen_reader';
-import VirtualKeyboard from 'local_a11y/virtual_keyboard';
-import VoiceCommands from 'local_a11y/voice_commands';
-import Tooltips from 'local_a11y/tooltips';
-import FaceNavigation from 'local_a11y/face_navigation';
-import PauseMedia from 'local_a11y/pause_media';
-import SilenceMedia from 'local_a11y/silence_media';
-import BionicReading from 'local_a11y/bionic_reading';
 import VlibrasIntegration from 'local_a11y/vlibras_integration';
 import Stats from 'local_a11y/stats';
+
+/**
+ * Quality/performance audit finding, fixed: the 11 modules below used to be
+ * static top-level imports too, exactly like the ones above - which meant
+ * RequireJS fetched, parsed and executed every one of them (define()'s
+ * factory function runs immediately once its dependencies resolve, whether
+ * or not the exported sync()/start() is ever actually called) on every
+ * single page, for every single user, regardless of whether that user ever
+ * touches Navegação por Face, Comandos por Voz, Teclado Virtual, Lupa, etc.
+ * Measured (audit/03-qualidade-desempenho.md, section 1.7): ~60KB of
+ * minified JS processed by default for the common case of a user who
+ * enables none of these.
+ *
+ * lazy(moduleId) wraps a module id in a function with the exact same
+ * (active, ...args) signature its own real sync() already has, so every
+ * call site below (syncAdvancedFeatures()) is unchanged in shape - only the
+ * import moved from module-load time to first-activation time. The module
+ * is only ever import()-ed (a real network fetch + parse + execute, via
+ * RequireJS's own dynamic require() - see the babel `import()` transform
+ * this project's build already relies on) the first time it is actually
+ * switched on for the current user; turning an already-off option off
+ * again, or one that was never turned on this page load, never fetches
+ * anything.
+ *
+ * `wantActive` guards a real race: if the user switches an option off again
+ * before its very first import() has resolved (a human can double-click
+ * faster than a small JS file fetches+parses on a slow connection), the
+ * module must not start anyway once it finally loads - it would otherwise
+ * silently override the user's own more recent "off" click. The module is
+ * still cached once loaded either way, so a later re-activation is instant.
+ *
+ * @param {String} moduleId The local_a11y/xxx AMD module id to lazy-load.
+ * @return {Function} sync(active, ...args), matching the wrapped module's own sync().
+ */
+const lazy = (moduleId) => {
+    let cached = null;
+    let wantActive = false;
+    return (active, ...args) => {
+        wantActive = active;
+        if (cached) {
+            cached.sync(active, ...args);
+            return;
+        }
+        if (!active) {
+            // Never loaded, and now told to turn off - nothing to stop.
+            return;
+        }
+        import(moduleId).then((mod) => {
+            cached = mod;
+            if (wantActive) {
+                mod.sync(true, ...args);
+            }
+        });
+    };
+};
+
+const ReadingGuide = lazy('local_a11y/reading_guide');
+const ReadingMask = lazy('local_a11y/reading_mask');
+const Magnifier = lazy('local_a11y/magnifier');
+const ScreenReader = lazy('local_a11y/screen_reader');
+const VirtualKeyboard = lazy('local_a11y/virtual_keyboard');
+const VoiceCommands = lazy('local_a11y/voice_commands');
+const Tooltips = lazy('local_a11y/tooltips');
+const FaceNavigation = lazy('local_a11y/face_navigation');
+const PauseMedia = lazy('local_a11y/pause_media');
+const SilenceMedia = lazy('local_a11y/silence_media');
+const BionicReading = lazy('local_a11y/bionic_reading');
 
 let settings = {...Storage.DEFAULT_SETTINGS};
 let isLoggedIn = false;
@@ -142,6 +198,18 @@ const renderHeaderCount = () => {
 let voiceCallbacks = {};
 
 /**
+ * Callbacks passed to FaceNavigation.sync()/start() - today only
+ * `declineActivation`, called if the user declines the one-time privacy
+ * notice shown before requesting camera access (compliance audit,
+ * audit/04-conformidade.md item A5). Defined as a plain constant (unlike
+ * voiceCallbacks above) because, unlike Comandos por Voz, it never needs
+ * access to the full voice-command action table - just this one callback.
+ */
+const faceCallbacks = {
+    declineActivation: () => onToggle('faceNavigation', false),
+};
+
+/**
  * Navigate to a Moodle page by path. Uses M.cfg.wwwroot when available so
  * this works regardless of whether Moodle is installed at the domain root.
  *
@@ -162,17 +230,17 @@ const navigateTo = (path) => {
  * @return {void}
  */
 const syncAdvancedFeatures = () => {
-    ReadingGuide.sync(Boolean(settings.readingGuide));
-    ReadingMask.sync(Boolean(settings.readingMask));
-    Magnifier.sync(Boolean(settings.magnifier));
-    ScreenReader.sync(Boolean(settings.screenReader));
-    VirtualKeyboard.sync(Boolean(settings.virtualKeyboard));
-    VoiceCommands.sync(Boolean(settings.voiceCommands), voiceCallbacks);
-    Tooltips.sync(Boolean(settings.tooltips));
-    FaceNavigation.sync(Boolean(settings.faceNavigation));
-    PauseMedia.sync(Boolean(settings.pauseAnimations));
-    SilenceMedia.sync(Boolean(settings.silenceMedia));
-    BionicReading.sync(Boolean(settings.bionicReading));
+    ReadingGuide(Boolean(settings.readingGuide));
+    ReadingMask(Boolean(settings.readingMask));
+    Magnifier(Boolean(settings.magnifier));
+    ScreenReader(Boolean(settings.screenReader));
+    VirtualKeyboard(Boolean(settings.virtualKeyboard));
+    VoiceCommands(Boolean(settings.voiceCommands), voiceCallbacks);
+    Tooltips(Boolean(settings.tooltips));
+    FaceNavigation(Boolean(settings.faceNavigation), faceCallbacks);
+    PauseMedia(Boolean(settings.pauseAnimations));
+    SilenceMedia(Boolean(settings.silenceMedia));
+    BionicReading(Boolean(settings.bionicReading));
     // hideImages needs no JS module (D44) - display:none on a body-class
     // rule alone hides images/video fully, no reserved space to paint.
     // signLanguage's own reveal/hide is CSS-only (styles.css), same as

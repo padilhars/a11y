@@ -190,20 +190,49 @@ class manager {
      * M1..M5 milestones can be verified end-to-end before the admin
      * settings exist.
      *
+     * Quality/performance audit finding, fixed: this is called once from
+     * each of classes/hook_callbacks.php's 4 hook methods - without
+     * memoisation, config::current_page_excluded() (the most expensive
+     * check here, parsing the excludedpages setting and matching it
+     * against $FULLME) was recomputed from scratch 4 times per page, even
+     * though the answer can never change within a single request ($PAGE,
+     * the current user and $FULLME are all fixed for the request's
+     * lifetime). A `static` local is the right tool: it lives only for
+     * this one PHP process/request (Moodle has no persistent PHP process
+     * across requests), so there is no risk of serving a stale answer to
+     * a later, unrelated request.
+     *
+     * PHPUnit caveat: unlike production, a single PHPUnit run keeps one PHP
+     * process across many test methods, so this `static` persists across
+     * them too - resetAfterTest() does not clear it. No current test calls
+     * this method, so it is not an issue today; a future test that does,
+     * across two different configs/pages in the same test run, would need
+     * to be aware of this (or call it in separate test methods, which
+     * PHPUnit does run as fresh - actually still the same process for
+     * statics; use a data provider or isolate via @runInSeparateProcess if
+     * that ever becomes necessary).
+     *
      * @return bool
      */
     public static function is_active_on_current_page(): bool {
+        static $result = null;
+        if ($result !== null) {
+            return $result;
+        }
+
         global $PAGE;
 
         if (during_initial_install()) {
-            return false;
+            return $result = false;
         }
 
         if (isset($PAGE) && $PAGE->pagelayout === 'maintenance') {
-            return false;
+            return $result = false;
         }
 
-        return config::is_enabled() && config::allowed_for_current_user() && !config::current_page_excluded();
+        return $result = (
+            config::is_enabled() && config::allowed_for_current_user() && !config::current_page_excluded()
+        );
     }
 
     /**

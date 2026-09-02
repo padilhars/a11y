@@ -282,7 +282,13 @@ export const start = async(cb) => {
         // window.confirm(): a native, zero-dependency, always-available
         // blocking dialog - the right tool for a one-time consent gate that
         // must never silently proceed if declined. Not shown again once
-        // acknowledged (rememberPrivacyAck()).
+        // acknowledged (rememberPrivacyAck()). Deliberate use, despite the
+        // eslint no-alert warning it triggers (quality audit): the
+        // alternative, Moodle's core/modal_factory, is async/non-blocking
+        // by design, which would let start() race ahead before the user
+        // answers - a native confirm() is the only synchronous option
+        // without adding a new dependency for a one-time gate.
+        // eslint-disable-next-line no-alert
         if (!window.confirm(notice)) {
             if (callbacks.declineActivation) {
                 callbacks.declineActivation();

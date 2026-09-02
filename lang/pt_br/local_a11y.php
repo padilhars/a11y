@@ -34,7 +34,7 @@ $string['a11y:view'] = 'Usar o painel de acessibilidade';
 $string['a11y:viewstats'] = 'Ver o relatório agregado de estatísticas de uso da acessibilidade';
 
 // Privacy.
-$string['privacy:metadata:preference:local_a11y_settings'] = 'As opções de acessibilidade escolhidas pelo usuário (tamanho do texto, contraste, perfil ativo, etc).';
+$string['privacy:metadata:preference:local_a11y_settings'] = 'As opções de acessibilidade escolhidas pelo usuário (tamanho do texto, contraste, fonte, filtros de cor, etc). Observação: clicar em um dos "perfis" prontos (ex.: Dislexia, Epilepsia) só aplica os valores de opção correspondentes aqui - qual perfil, se algum, foi clicado nunca é registrado por si só.';
 $string['privacy:metadata:speechrecognitionservice'] = 'Quando "Comandos por Voz" está ativo, alguns navegadores (ex.: Chrome) enviam o áudio do microfone a um serviço remoto de reconhecimento de fala próprio para transcrevê-lo em texto. Este plugin não tem controle sobre esse serviço, e nunca envia, recebe ou armazena esse áudio ou sua transcrição - ver README.md.';
 $string['privacy:metadata:speechrecognitionservice:audio'] = 'Áudio do microfone captado pelo navegador enquanto "Comandos por Voz" está ativo, pelo tempo necessário para reconhecer um comando.';
 
@@ -129,6 +129,7 @@ $string['opt_colorchange_desc'] = 'Filtros para daltonismo';
 $string['opt_saturation'] = 'Saturação';
 $string['opt_bluelightfilter'] = 'Filtro de Luz Azul';
 $string['opt_hideimages'] = 'Ocultar Imagens';
+$string['opt_hideimages_desc'] = 'Oculta toda imagem e vídeo da página. Isso vale para todos, inclusive os que carregam informação (um diagrama, um gráfico) - não há como manter só esses visíveis.';
 $string['hideimages_forcednote'] = 'Ativado automaticamente pelo Modo Foco (nível 3 — Somente texto)';
 $string['opt_pauseanimations'] = 'Pausar Animações';
 $string['opt_silencemedia'] = 'Silenciar Mídia';
@@ -220,6 +221,7 @@ $string['face_sens'] = 'Velocidade do Cursor Virtual';
 $string['face_error'] = 'Erro ao iniciar';
 $string['face_click'] = 'Clique: Abrir a boca ou piscar com os dois olhos';
 $string['face_scroll'] = 'Rolar página: Leve o cursor virtual até a borda superior ou inferior da página';
+$string['face_privacynotice'] = 'Ativar Navegação por Face liga sua câmera. A imagem é processada inteiramente no seu navegador e nunca é enviada a este site ou a qualquer outro lugar - mas isso exige baixar um componente de terceiro (MediaPipe) para rodar localmente. Continuar?';
 
 // Profiles.
 $string['profile_lowvision'] = 'Baixa Visão';

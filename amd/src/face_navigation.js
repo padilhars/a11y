@@ -185,9 +185,52 @@ let sensitivity = 3;
 // before the HUD ever renders, same mechanism Moodle uses for its own
 // component strings, so this now respects the site's actual language.
 const STRING_KEYS = ['face_loading', 'face_camhint', 'face_calibrate', 'face_active',
-    'face_stop', 'face_sens', 'face_error', 'face_click', 'face_scroll'];
+    'face_stop', 'face_sens', 'face_error', 'face_click', 'face_scroll', 'face_privacynotice'];
 
 let cache = null;
+
+// Compliance audit finding (audit/04-conformidade.md, item A5): Comandos por
+// Voz (D62) shows a one-time privacy notice before requesting microphone
+// access; this module requested camera access with no equivalent notice,
+// even though it also loads third-party code (MediaPipe, see MP_CDN above)
+// to do so - an asymmetry with no good reason, now fixed the same way.
+// Unlike Comandos por Voz, camera *video* itself never leaves the browser
+// (confirmed: no fetch()/XHR/WebSocket/sendBeacon anywhere in this module
+// touches the MediaStream - only the MediaPipe SDK's own code/model files
+// are fetched, see fetchVerified() above) - the notice text reflects that
+// distinction rather than reusing Voice Commands' wording verbatim.
+const PRIVACY_ACK_KEY = 'local_a11y_fn_privacy_ack';
+
+/**
+ * Whether the user has already acknowledged the privacy notice below, on
+ * this browser.
+ *
+ * @return {Boolean}
+ */
+const hasAcknowledgedPrivacyNotice = () => {
+    try {
+        return window.localStorage && window.localStorage.getItem(PRIVACY_ACK_KEY) === '1';
+    } catch (e) {
+        return false;
+    }
+};
+
+/**
+ * Remember that the user acknowledged the privacy notice, so it is not
+ * shown again on this browser.
+ *
+ * @return {void}
+ */
+const rememberPrivacyAck = () => {
+    try {
+        if (window.localStorage) {
+            window.localStorage.setItem(PRIVACY_ACK_KEY, '1');
+        }
+    } catch (e) {
+        // Storage unavailable (private browsing, etc.) - worst case, the
+        // notice is shown again next time. Never blocks activation.
+    }
+};
 
 /**
  * Resolve and cache every face_* lang string, once. Idempotent - safe to
@@ -670,18 +713,33 @@ const detect = () => {
 // ── Public API ────────────────────────────────────────────────────────────────
 
 /**
- * Start face navigation: resolves lang strings, builds the HUD/cursor,
- * loads MediaPipe, requests camera access, and either resumes a saved
- * calibration or shows the Calibrate step. Idempotent.
+ * Start face navigation: resolves lang strings, shows a one-time privacy
+ * notice before ever requesting the camera (see PRIVACY_ACK_KEY above), then
+ * builds the HUD/cursor, loads MediaPipe, requests camera access, and either
+ * resumes a saved calibration or shows the Calibrate step. Idempotent.
  *
+ * @param {Object} cb Optional callbacks: `declineActivation`, called if the
+ *        privacy notice is declined (so the caller can turn the option's
+ *        toggle back off).
  * @return {Promise<void>}
  */
-export const start = async() => {
+export const start = async(cb) => {
     if (hud) {
         return;
     }
 
     await preloadStrings();
+
+    if (!hasAcknowledgedPrivacyNotice()) {
+        // eslint-disable-next-line no-alert
+        if (!window.confirm(t('privacynotice'))) {
+            if (cb && cb.declineActivation) {
+                cb.declineActivation();
+            }
+            return;
+        }
+        rememberPrivacyAck();
+    }
 
     hud      = buildHud();
     cursorEl = buildCursor();
@@ -755,11 +813,12 @@ export const stop = () => {
  * Toggle Face Navigation on/off.
  *
  * @param {Boolean} active Whether face navigation should be active.
+ * @param {Object} cb Optional callbacks, forwarded to start() when activating.
  * @return {void}
  */
-export const sync = (active) => {
+export const sync = (active, cb) => {
     if (active) {
-        start();
+        start(cb);
     } else {
         // Turning the feature off is deliberate: drop the saved calibration so
         // re-enabling later starts with a fresh Calibrate step.
