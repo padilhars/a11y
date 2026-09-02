@@ -1,11 +1,11 @@
 # A11Y for Moodle - Plugin de Acessibilidade para Moodle
 
 [![Licença: GPL v3+](https://img.shields.io/badge/licença-GPL%20v3%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
-[![Moodle](https://img.shields.io/badge/Moodle-5.0%2B-orange.svg)](https://moodle.org)
+[![Moodle](https://img.shields.io/badge/Moodle-5.2-orange.svg)](https://moodle.org)
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4.svg)](https://www.php.net)
 [![Documentação](https://img.shields.io/badge/docs-phpDocumentor%20%7C%20JSDoc%20%7C%20KSS-6f42c1.svg)](docs/README.md)
 
-Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (FAB) e um painel com **29 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
+Um plugin de acessibilidade para Moodle 5.2 que adiciona um botão flutuante (FAB) e um painel com **29 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
 
 ![Painel aberto mostrando os perfis de acessibilidade](.github/screenshots/m2/02-panel-open.png)
 
@@ -45,13 +45,13 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 
 ## Requisitos
 
-- Moodle 5.0 ou superior.
+- Moodle 5.2 (única versão com suporte confirmado - ver `version.php:$plugin->supported`; testar contra outras versões antes de assumir compatibilidade).
 - PHP 8.2+.
 - Nenhuma dependência externa em tempo de execução (as fontes Atkinson Hyperlegible e Lexend são empacotadas localmente; nada é carregado de CDNs de terceiros).
 
 ## Instalação
 
-1. Extraia `local_a11y.zip` de forma que o diretório `a11y` fique em `<moodleroot>/local/a11y` (layout Moodle 5.0+: dentro do webroot, ou seja `<moodleroot>/public/local/a11y` se o seu checkout já usa a nova estrutura com `public/`).
+1. Extraia `local_a11y.zip` de forma que o diretório `a11y` fique em `<moodleroot>/local/a11y` (no layout de webroot moderno do Moodle, com diretório `public/`, isso é `<moodleroot>/public/local/a11y`).
 2. Acesse **Administração do site → Notificações** para concluir a instalação, ou rode:
    ```bash
    php admin/cli/upgrade.php --non-interactive

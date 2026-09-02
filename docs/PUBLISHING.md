@@ -9,7 +9,7 @@ Este documento cobre só a parte que **depende de ação humana** (login real, s
 - [x] `LICENSE` (texto completo da GPL v3, copiado da própria cópia do Moodle core neste servidor) na raiz do plugin.
 - [x] `README.md` e `CHANGELOG.md` presentes e atualizados.
 - [x] Cabeçalho GPL (`This file is part of Moodle...`) em 100% dos arquivos `.php`, `.mustache` e agora também `styles.css`.
-- [x] `version.php` com `component`, `version`, `release`, `requires`, `supported` (`[500, 502]`) e `maturity` (`MATURITY_STABLE`, promovido de ALPHA por decisão explícita do autor) preenchidos.
+- [x] `version.php` com `component`, `version`, `release`, `requires`, `supported` (`[502, 502]` - restrito de `[500, 502]` depois que o CI provou, contra a branch real, que o core do Moodle 5.0 nunca chega na build que `$plugin->requires` exige; ver `DECISIONS.md` D67) e `maturity` (`MATURITY_STABLE`, promovido de ALPHA por decisão explícita do autor) preenchidos.
 - [x] `phplint`, `phpcpd`, `phpmd`, `phpcs` (padrão moodle), `validate`, `savepoints`, `mustache`, `grunt` (eslint/rollup/gherkinlint/stylelint) e `phpunit` rodados via `moodle-plugin-ci`; achados corrigidos onde fazia sentido, os que não deram para corrigir estão documentados com justificativa (ver seção 5).
 - [x] Teste PHPUnit novo (`tests/lang_parity_test.php`) que falha se `lang/en` e `lang/pt_br` divergirem em conjunto de chaves.
 - [x] Auditoria de i18n completa (strings hardcoded, paridade de chaves, concatenação, convenção de nomes) - achados corrigidos, 11 chaves órfãs removidas dos dois idiomas.
