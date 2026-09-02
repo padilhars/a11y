@@ -25,7 +25,9 @@ jobs:
 
     services:
       postgres:
-        image: postgres:14
+        # Moodle 5.2 exige Postgres 16+ ("[System] version 16 is required and
+        # you are running 14.24" - confirmado por log real). D69.
+        image: postgres:16
         env:
           # 'postgres' - confirmado por log real que "moodle-plugin-ci install"
           # conecta como esse usuário por padrão para DB=pgsql (não hardcoded
@@ -97,14 +99,29 @@ jobs:
         run: moodle-plugin-ci validate
       - name: savepoints
         run: moodle-plugin-ci savepoints
-      # --max-warnings 1: tolera o único warning já conhecido e revisado deste
-      # projeto (fab.mustache, aria-controls apontando para um id que só
-      # existe no template do painel, fora do fragmento isolado que o linter
-      # renderiza sozinho - falso positivo, não um problema real da página
-      # renderizada de verdade). Qualquer warning NOVO além desse ainda falha
-      # o build. Ver DECISIONS.md D68.
+      # "mustache" não tem flag de tolerância a warning (confirmado: "--max-warnings"
+      # não existe para este comando, só ["-m|--moodle MOODLE] [--] [<plugin>]").
+      # Em vez de inventar outra flag, captura a saída e só tolera exatamente o
+      # único falso positivo já conhecido e revisado deste projeto (fab.mustache,
+      # aria-controls apontando para um id que só existe no template do painel,
+      # fora do fragmento isolado que o linter renderiza sozinho) - qualquer
+      # warning/erro diferente disso ainda falha o build. Ver DECISIONS.md D69.
       - name: mustache
-        run: moodle-plugin-ci mustache --max-warnings 1
+        run: |
+          set +e
+          OUTPUT=$(moodle-plugin-ci mustache 2>&1)
+          STATUS=$?
+          echo "$OUTPUT"
+          if [ $STATUS -eq 0 ]; then
+            exit 0
+          fi
+          FINDINGS=$(echo "$OUTPUT" | grep -c "WARNING:\|ERROR:")
+          KNOWN=$(echo "$OUTPUT" | grep -c "fab\.mustache.*aria-controls")
+          if [ "$FINDINGS" -ge 1 ] && [ "$FINDINGS" -eq "$KNOWN" ]; then
+            echo "Só o falso positivo conhecido de fab.mustache - tolerado."
+            exit 0
+          fi
+          exit $STATUS
       - name: grunt (eslint/stylelint/AMD build)
         run: moodle-plugin-ci grunt
       - name: phpunit
