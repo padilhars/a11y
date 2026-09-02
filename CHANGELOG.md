@@ -4,6 +4,12 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [1.0.0] - 2026-09-02
+
+Everything below accumulated under `[Unreleased]` for 5.5+ weeks and 90+ commits without ever being cut into a real version - exactly the process gap `audit/05-sdlc.md` flagged, and `CONTRIBUTING.md` (D65) now documents the discipline to prevent recurring: cut a version at a meaningful milestone instead of leaving `[Unreleased]` open indefinitely. This is that cut. `$plugin->maturity` was already `MATURITY_STABLE` (D59); `$plugin->release` now matches it.
+
 ### Added
 
 - OpenDyslexic (SIL OFL 1.1, Abbie Gonzalez) packaged as a second choice for "Fonte para Dislexia", alongside the existing Lexend - the option is now a 2-level stepper (0 = off, 1 = Lexend, 2 = OpenDyslexic) instead of a single-font toggle, same "toggle outgrew a boolean" pattern already used for Focus Mode (D52). Sylexiad, also requested, was not added: no explicit redistribution license could be found on its website (only "free to download", not a license grant) - see DECISIONS.md D75.
@@ -17,6 +23,9 @@ All notable changes to `local_a11y` are documented here.
 
 ### Changed
 
+- `opt_colorchange_desc` (Color Change / daltonismo filters) now mentions that it also affects every image on the page, including ones that encode information by color (a chart legend, a heat map) - the "known limitation" the compliance audit (`audit/04-conformidade.md` B8) asked to have documented. Not implemented as a help block like Hide Images/Silence Media: `option_stepper.mustache`'s row is itself `role="button"` (the whole row cycles the stepper on click) - nesting a real `<button>` inside it, the way toggle rows safely do, would be an axe "nested-interactive" violation. See DECISIONS.md D76.
+- `.github/workflows/ci.yml`: `actions/checkout`/`actions/setup-node` bumped from v4 to v7 - applied by hand, not by merging Dependabot's own PRs (#1, #2), which had gone stale since D65 and would have reverted every CI fix from D66-D73 (PHP 8.2, Postgres 14, the broken `--moodle-branch` flag, etc. all back) if merged as-is. See DECISIONS.md D76.
+- `docs/PUBLISHING.md`: updated to reflect reality - CI now exists and is green, the repository is confirmed public, `git push`/full history already happened, and the stale `129` count for `styles.css`'s `!important` uses corrected to `140`.
 - Dyslexia-Friendly Font's one-line description removed - the option's own label already makes clear what it does; unlike Silence Media/Hide Images below, it doesn't get a help block either, matching most other simple toggles/steppers in this file. See DECISIONS.md D75.
 - Hide Images' long warning (hides every image/video indiscriminately, including informational ones) moved from an always-visible description under the option row to the "?" help block, same as most other options with a caveat this detailed - it was too long to sit as a one-line desc. Silence Media's one-line description was removed outright (redundant with its own, already-existing help block). See DECISIONS.md D75.
 - Hide Images now hides fully (`display: none`), no reserved-space placeholder badge.
@@ -67,6 +76,7 @@ All notable changes to `local_a11y` are documented here.
 
 ### Testing / docs
 
+- 3 new Behat scenarios (`tests/behat/local_a11y.feature`), addressing the quality/performance audit's coverage gap (`audit/03-qualidade-desempenho.md`, 83% of options had no behavioural test): Hide Images' body-class toggle; Contrast cycling through its 3 levels; and a real regression test for the Focus Mode level 3 → Hide Images forced-on interaction (D52), never covered before. Verified for real: `vendor/bin/behat --tags="@local_a11y&&~@vlibras"` - 7 scenarios, 7 passed; 80 steps, 80 passed. See DECISIONS.md D76.
 - Full suite run: PHPUnit (20/20), Behat (`@local_a11y`, 2/2, first successful real-browser run - the Selenium/chromedriver environment from initial development was never completed), `moodlehq/moodle-cs` phpcs (`moodle` standard - 20 auto-fixable whitespace/brace errors fixed; pervasive `@description`/`@version` docblock tags and the lang files' by-section string ordering are known, deliberate deviations from the Moodle standard, left as-is), and an axe-core scan (0 violations with the panel open and every category expanded; combined-effects scan with Magnifier/Silence Media/Blue Light Filter/Word Spacing/Contrast level 3 active found one pre-existing serious color-contrast finding on Moodle core's own dashboard "course overview" block under Contrast level 3 - not part of this plugin's own UI, not fixed here, same class of issue as D35/D36).
 - Regenerated phpDocumentor/JSDoc/KSS docs under `docs/`.
 - Corrected a long-standing option-count inconsistency: this file said 22 for 0.1.0 while README/panel/lang already said 24 - see the "Added" entries above for the full 22 → 24 → 28 trail, and DECISIONS.md D30's correction (it had mis-stated the prototype's own option count).
