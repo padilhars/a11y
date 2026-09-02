@@ -122,8 +122,11 @@ jobs:
             exit 0
           fi
           exit $STATUS
+      # "--tasks" aceita múltiplos valores repetindo a flag, não por vírgula
+      # ("multiple values allowed" no --help) - "amd,yui,gherkinlint" como um
+      # valor só foi lido como nome de UMA tarefa inexistente. D71.
       - name: grunt (eslint/AMD build/gherkin)
-        run: moodle-plugin-ci grunt --tasks amd,yui,gherkinlint
+        run: moodle-plugin-ci grunt --tasks=amd --tasks=yui --tasks=gherkinlint
       # stylelint separado, não bloqueante: styles.css tem 129 declarações
       # !important, todas deliberadas (o plugin precisa sobrescrever CSS do
       # tema/Bootstrap do host, que já vem com alta especificidade) - já
@@ -134,7 +137,7 @@ jobs:
       # comando) - continua rodando e visível no log, só não derruba o build.
       # Ver DECISIONS.md D70.
       - name: grunt (stylelint - não bloqueante)
-        run: moodle-plugin-ci grunt --tasks stylelint
+        run: moodle-plugin-ci grunt --tasks=stylelint
         continue-on-error: true
       - name: phpunit
         run: moodle-plugin-ci phpunit
