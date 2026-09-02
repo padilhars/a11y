@@ -108,7 +108,16 @@
         </div>
 
         {{#showprofiles}}
-        <section class="local-a11y-panel__section" data-region="profiles-section">
+        {{! Plain <div>, not <section>: a <section> landmark needs an
+            accessible name from a real heading (h2-h6), but the label
+            below is a styled <span> (design decision to control font/
+            weight independently of a heading's browser defaults), so a
+            real <section> here fails HTML validation ("Section lacks
+            heading" - quality/performance audit, mustache lint). Same
+            reasoning already applied to header/footer just above: this
+            popover already has role="dialog", so a nested landmark isn't
+            adding real navigation value for assistive tech users here. }}
+        <div class="local-a11y-panel__section" data-region="profiles-section">
             <button type="button" class="local-a11y-panel__section-heading" data-action="toggle-profiles" aria-expanded="true">
                 <span class="local-a11y-panel__section-heading-icon">{{{sparklesiconsvg}}}</span>
                 <span class="local-a11y-panel__section-heading-text">
@@ -124,7 +133,7 @@
                 {{> local_a11y/profile_card}}
                 {{/profiles}}
             </div>
-        </section>
+        </div>
         {{/showprofiles}}
 
         <div class="local-a11y-panel__categories" data-region="categories">

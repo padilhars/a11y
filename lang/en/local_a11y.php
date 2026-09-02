@@ -34,7 +34,7 @@ $string['a11y:view'] = 'Use the accessibility panel';
 $string['a11y:viewstats'] = 'View the aggregate accessibility usage-stats report';
 
 // Privacy.
-$string['privacy:metadata:preference:local_a11y_settings'] = 'The accessibility options the user has chosen (text size, contrast, active profile, etc).';
+$string['privacy:metadata:preference:local_a11y_settings'] = 'The accessibility options the user has chosen (text size, contrast, font, colour filters, etc). Note: clicking one of the ready-made "profiles" (e.g. Dyslexia, Epilepsy) only applies its underlying option values here - which profile, if any, was clicked is never itself recorded.';
 $string['privacy:metadata:speechrecognitionservice'] = 'When "Voice Commands" is active, some browsers (e.g. Chrome) send the microphone audio to their own remote speech-recognition service to transcribe it into text. This plugin has no control over that service, and never itself sends, receives or stores this audio or its transcription - see README.md.';
 $string['privacy:metadata:speechrecognitionservice:audio'] = 'Microphone audio captured by the browser while "Voice Commands" is active, for as long as needed to recognise a command.';
 
@@ -129,6 +129,7 @@ $string['opt_colorchange_desc'] = 'Color-blindness filters';
 $string['opt_saturation'] = 'Saturation';
 $string['opt_bluelightfilter'] = 'Blue Light Filter';
 $string['opt_hideimages'] = 'Hide Images';
+$string['opt_hideimages_desc'] = 'Hides every image and video on the page. This applies to all of them, including ones that carry information (a diagram, a chart) - there is no way to keep just those visible.';
 $string['hideimages_forcednote'] = 'Automatically enabled by Focus Mode (level 3 — Text only)';
 $string['opt_pauseanimations'] = 'Pause Animations';
 $string['opt_silencemedia'] = 'Silence Media';
@@ -220,6 +221,7 @@ $string['face_sens'] = 'Virtual Cursor Speed';
 $string['face_error'] = 'Failed to start';
 $string['face_click'] = 'Click: Open your mouth or blink both eyes';
 $string['face_scroll'] = 'Scroll page: Move the virtual cursor to the top or bottom edge of the page';
+$string['face_privacynotice'] = 'Activating Face Navigation turns on your camera. The image is processed entirely in your own browser and is never sent to this site or anyone else - but doing that requires downloading a third-party component (MediaPipe) to run locally. Continue?';
 
 // Profiles.
 $string['profile_lowvision'] = 'Low Vision';
