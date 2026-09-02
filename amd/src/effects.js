@@ -34,10 +34,10 @@
 // (D40) and magnifier (D42) join this exclusion too - purely behavioural,
 // no CSS effect (magnifier's lens is entirely amd/src/magnifier.js).
 // focusMode left this map for STEPPER_CLASS_PREFIX_MAP below (D52 - toggle
-// to 3-level stepper).
+// to 3-level stepper), and dyslexicFont did the same (D75 - 2-level
+// stepper, one font per level).
 const BOOL_CLASS_MAP = {
     readableFont: 'a11y-readable-font',
-    dyslexicFont: 'a11y-dyslexic-font',
     highlightTitles: 'a11y-highlight-titles',
     highlightLinks: 'a11y-highlight-links',
     highlightButtons: 'a11y-highlight-buttons',
@@ -52,6 +52,7 @@ const BOOL_CLASS_MAP = {
 
 // Verbatim port of classes/manager.php::get_stepper_class_prefix_map().
 const STEPPER_CLASS_PREFIX_MAP = {
+    dyslexicFont: 'a11y-dyslexic-font-',
     textSize: 'a11y-text-size-',
     lineHeight: 'a11y-line-height-',
     textSpacing: 'a11y-text-spacing-',

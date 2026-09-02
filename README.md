@@ -47,7 +47,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 
 - Moodle 5.2 (única versão com suporte confirmado - ver `version.php:$plugin->supported`; testar contra outras versões antes de assumir compatibilidade).
 - PHP 8.2+.
-- Nenhuma dependência externa em tempo de execução (as fontes Atkinson Hyperlegible e Lexend são empacotadas localmente; nada é carregado de CDNs de terceiros).
+- Nenhuma dependência externa em tempo de execução (as fontes Atkinson Hyperlegible, Lexend e OpenDyslexic são empacotadas localmente; nada é carregado de CDNs de terceiros).
 
 ## Instalação
 
@@ -150,9 +150,11 @@ Moodle (sem depender de nomes de classe CSS globais que poderiam colidir com out
 elementos da página). Ver `classes/icons.php::un_accessibility_svg()`.
 
 `fonts/atkinson-hyperlegible-*.woff2` (Atkinson Hyperlegible, Braille Institute of
-America) e `fonts/lexend-variable.woff2` (Lexend, The Lexend Project Authors) são
-licenciadas sob a SIL Open Font License 1.1 — texto completo em
-`fonts/OFL-atkinson-hyperlegible.txt` e `fonts/OFL-lexend.txt`, respectivamente.
+America), `fonts/lexend-variable.woff2` (Lexend, The Lexend Project Authors) e
+`fonts/opendyslexic-*.woff2` (OpenDyslexic, Abbie Gonzalez) são licenciadas sob a
+SIL Open Font License 1.1 — texto completo em `fonts/OFL-atkinson-hyperlegible.txt`,
+`fonts/OFL-lexend.txt` e `fonts/OFL-opendyslexic.txt`, respectivamente. "Fonte para
+Dislexia" deixou de aplicar só a Lexend e agora deixa escolher entre as duas (D75).
 
 `pix/accessibility-default.svg` (ícone padrão do botão flutuante desde D60) é do
 conjunto de ícones [Ionicons](https://github.com/ionic-team/ionicons) (Ionic),

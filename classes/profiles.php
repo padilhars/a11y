@@ -48,7 +48,11 @@ class profiles {
             [
                 'id' => 'dyslexia', 'icon' => 'book', 'tone' => 'violet',
                 'labelkey' => 'profile_dyslexia', 'desckey' => 'profile_dyslexia_desc',
-                'apply' => ['dyslexicFont' => true, 'textSpacing' => 2, 'lineHeight' => 2, 'readingGuide' => true],
+                // DyslexicFont: 1 (Lexend), not true - it became a 2-level
+                // stepper in D75; level 1 preserves this profile's original
+                // behaviour (it always meant Lexend, the only font that
+                // existed before OpenDyslexic was added as level 2).
+                'apply' => ['dyslexicFont' => 1, 'textSpacing' => 2, 'lineHeight' => 2, 'readingGuide' => true],
             ],
             [
                 'id' => 'adhd', 'icon' => 'zap', 'tone' => 'pink',

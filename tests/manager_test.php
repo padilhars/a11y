@@ -64,7 +64,7 @@ final class manager_test extends \advanced_testcase {
 
         $this->assertTrue($result['readableFont']);
         $this->assertSame(2, $result['textSize']);
-        $this->assertFalse($result['dyslexicFont']);
+        $this->assertSame(0, $result['dyslexicFont']);
     }
 
     /**
@@ -82,9 +82,10 @@ final class manager_test extends \advanced_testcase {
      * @return void
      */
     public function test_sanitize_settings_clamps_stepper_values(): void {
-        $result = manager::sanitize_settings(['textSize' => 999, 'contrast' => -50]);
+        $result = manager::sanitize_settings(['textSize' => 999, 'contrast' => -50, 'dyslexicFont' => 99]);
         $this->assertSame(4, $result['textSize']);
         $this->assertSame(0, $result['contrast']);
+        $this->assertSame(2, $result['dyslexicFont']);
     }
 
     /**
@@ -105,12 +106,12 @@ final class manager_test extends \advanced_testcase {
     public function test_sanitize_settings_coerces_stringy_booleans(): void {
         $result = manager::sanitize_settings([
             'readableFont' => 'true',
-            'dyslexicFont' => '1',
+            'highlightButtons' => '1',
             'highlightTitles' => 'false',
             'highlightLinks' => '0',
         ]);
         $this->assertTrue($result['readableFont']);
-        $this->assertTrue($result['dyslexicFont']);
+        $this->assertTrue($result['highlightButtons']);
         $this->assertFalse($result['highlightTitles']);
         $this->assertFalse($result['highlightLinks']);
     }

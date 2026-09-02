@@ -41,7 +41,7 @@ const PREFERENCE_NAME = 'local_a11y_settings';
 
 export const DEFAULT_SETTINGS = {
     readableFont: false,
-    dyslexicFont: false,
+    dyslexicFont: 0,
     highlightTitles: false,
     highlightLinks: false,
     highlightButtons: false,
@@ -82,6 +82,7 @@ export const DEFAULT_SETTINGS = {
 };
 
 const STEPPER_MAX = {
+    dyslexicFont: 2,
     textSize: 4,
     lineHeight: 3,
     textSpacing: 3,

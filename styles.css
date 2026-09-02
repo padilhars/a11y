@@ -90,6 +90,22 @@ Styleguide 1.
     src: url([[font:local_a11y|lexend-variable.woff2]]) format('woff2');
 }
 
+@font-face {
+    font-family: 'OpenDyslexic';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url([[font:local_a11y|opendyslexic-400.woff2]]) format('woff2');
+}
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url([[font:local_a11y|opendyslexic-700.woff2]]) format('woff2');
+}
+
 /* ===========================================================================
    DESIGN TOKENS
    =========================================================================== */
@@ -1559,15 +1575,30 @@ body.a11y-readable-font footer#page-footer,
 body.a11y-readable-font footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
     font-family: 'Atkinson Hyperlegible', system-ui, sans-serif !important;
 }
-body.a11y-dyslexic-font #page,
-body.a11y-dyslexic-font #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
-body.a11y-dyslexic-font .navbar,
-body.a11y-dyslexic-font .navbar *:not(.icon, .fa, [class*="fa-"]),
-body.a11y-dyslexic-font footer#page-footer,
-body.a11y-dyslexic-font footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
+/* Fonte para Dislexia (D75): grew from a single-font toggle into a 2-level
+   stepper (1 = Lexend, 2 = OpenDyslexic) so the user can pick between two
+   fonts researched for dyslexia, instead of only ever getting Lexend - see
+   DECISIONS.md D75. Each level gets its own font-family rule; the
+   font-weight/letter-spacing boost that Lexend needs (see the comment near
+   its @font-face block on why 600, not 700) does not apply to OpenDyslexic
+   (a static face with a real 700 weight of its own, no boost needed). */
+body.a11y-dyslexic-font-1 #page,
+body.a11y-dyslexic-font-1 #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
+body.a11y-dyslexic-font-1 .navbar,
+body.a11y-dyslexic-font-1 .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-dyslexic-font-1 footer#page-footer,
+body.a11y-dyslexic-font-1 footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
     font-family: 'Lexend', 'Comic Sans MS', system-ui, sans-serif !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
+}
+body.a11y-dyslexic-font-2 #page,
+body.a11y-dyslexic-font-2 #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
+body.a11y-dyslexic-font-2 .navbar,
+body.a11y-dyslexic-font-2 .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-dyslexic-font-2 footer#page-footer,
+body.a11y-dyslexic-font-2 footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', system-ui, sans-serif !important;
 }
 
 /* :not(.local-a11y-root, .local-a11y-root *) on every selector below keeps
@@ -1887,7 +1918,18 @@ Hide Images effect.
 Styleguide 10.5.
 */
 body.a11y-hide-images #page img,
-body.a11y-hide-images #page video {
+body.a11y-hide-images #page video,
+/* D75: native <video> alone never covered embedded players - YouTube/Vimeo
+   embeds are <iframe>, not <video>. Matched by src, the same two providers
+   amd/src/silence_media.js already recognises (YOUTUBE_RE/VIMEO_RE), for
+   consistency - not every third-party iframe (an H5P activity or an
+   external tool embed is not "an image or a video" in the sense this
+   option promises to hide). A CSS attribute selector re-evaluates
+   continuously, so an iframe whose src is set after the option was
+   already turned on (e.g. lazy-loaded) is still caught - no JS needed. */
+body.a11y-hide-images #page iframe[src*="youtube.com"],
+body.a11y-hide-images #page iframe[src*="youtube-nocookie.com"],
+body.a11y-hide-images #page iframe[src*="player.vimeo.com"] {
     display: none !important;
 }
 
@@ -1957,7 +1999,10 @@ Styleguide 10.7.
 #page .local-a11y-br b {
     font-weight: 700 !important;
 }
-body.a11y-dyslexic-font #page .local-a11y-br b {
+/* Only level 1 (Lexend) needs this cap - see D75 and the comment above the
+   Lexend @font-face block. Level 2 (OpenDyslexic) has a real 700 weight of
+   its own, so the generic rule above already applies correctly to it. */
+body.a11y-dyslexic-font-1 #page .local-a11y-br b {
     font-weight: 600 !important;
 }
 

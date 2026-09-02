@@ -36,6 +36,30 @@
     <customised/>
   </library>
   <library>
+    <location>fonts/opendyslexic-400.woff2</location>
+    <name>OpenDyslexic</name>
+    <description>Typeface designed to increase readability for readers with dyslexia (weighted bottoms, wide default spacing), offered as a second choice alongside Lexend in the "Fonte para Dislexia" option. Packaged locally (WOFF2, Regular weight) instead of loaded from a CDN, for institutional CDN-blocking/privacy reasons - see DECISIONS.md. License text: fonts/OFL-opendyslexic.txt.</description>
+    <version>Regular (400)</version>
+    <license>SIL Open Font License, Version 1.1</license>
+    <repository>https://github.com/antijingoist/opendyslexic</repository>
+    <copyrights>
+      <copyright>2019 Abbie Gonzalez (https://abbiecod.es), with Reserved Font Name OpenDyslexic</copyright>
+    </copyrights>
+    <customised/>
+  </library>
+  <library>
+    <location>fonts/opendyslexic-700.woff2</location>
+    <name>OpenDyslexic</name>
+    <description>Same typeface as above, Bold weight - used for the bold word-prefix in the Bionic Reading option and any other bold text when "Fonte para Dislexia" is set to OpenDyslexic. Packaged locally, same terms. License text: fonts/OFL-opendyslexic.txt.</description>
+    <version>Bold (700)</version>
+    <license>SIL Open Font License, Version 1.1</license>
+    <repository>https://github.com/antijingoist/opendyslexic</repository>
+    <copyrights>
+      <copyright>2019 Abbie Gonzalez (https://abbiecod.es), with Reserved Font Name OpenDyslexic</copyright>
+    </copyrights>
+    <customised/>
+  </library>
+  <library>
     <location>pix/accessibility-default.svg</location>
     <name>Ionicons - accessibility icon</name>
     <description>Generic accessibility figure icon, used as the default FAB icon since D60. Downloaded via svgrepo.com (listed as "Ionicons Filled Interface Icons", author "Ionicons"); confirmed against the upstream Ionicons repository. Re-exported with fill="#000000" replaced by fill="currentColor" so the icon themes like every other icon in classes/icons.php. Path geometry unchanged from the source.</description>

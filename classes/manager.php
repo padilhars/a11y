@@ -41,7 +41,7 @@ class manager {
     public static function get_default_settings(): array {
         $defaults = [
             'readableFont' => false,
-            'dyslexicFont' => false,
+            'dyslexicFont' => 0,
             'highlightTitles' => false,
             'highlightLinks' => false,
             'highlightButtons' => false,
@@ -92,6 +92,7 @@ class manager {
      */
     public static function get_stepper_max(): array {
         return [
+            'dyslexicFont' => 2,
             'textSize' => 4,
             'lineHeight' => 3,
             'textSpacing' => 3,
@@ -122,7 +123,9 @@ class manager {
      * magnifier joins it as well (D42): its lens is built and positioned
      * entirely by amd/src/magnifier.js, no body class involved. focusMode
      * left this map for get_stepper_class_prefix_map() below (D52 - it grew
-     * from a toggle into a 3-level stepper, see DECISIONS.md). bionicReading
+     * from a toggle into a 3-level stepper, see DECISIONS.md), and
+     * dyslexicFont did the same for the same reason (D75 - 2-level stepper
+     * now, one font per level). bionicReading
      * joins the behavioural-only group too (D53): it splits each word's own
      * text into a bold/plain DOM structure, which a body class alone cannot
      * do - handled entirely by amd/src/bionic_reading.js.
@@ -133,7 +136,6 @@ class manager {
     public static function get_boolean_class_map(): array {
         return [
             'readableFont' => 'a11y-readable-font',
-            'dyslexicFont' => 'a11y-dyslexic-font',
             'highlightTitles' => 'a11y-highlight-titles',
             'highlightLinks' => 'a11y-highlight-links',
             'highlightButtons' => 'a11y-highlight-buttons',
@@ -163,11 +165,14 @@ class manager {
      * (D52): it was a plain toggle through 0.1.0, converted to a 3-level
      * stepper the same way textSize/cursor/etc. already work - see
      * DECISIONS.md D52 for why a stepper instead of a new option.
+     * dyslexicFont joined this map the same way (D75): a 2-level stepper
+     * (1 = Lexend, 2 = OpenDyslexic) instead of a single-font toggle.
      *
      * @return array<string, string>
      */
     public static function get_stepper_class_prefix_map(): array {
         return [
+            'dyslexicFont' => 'a11y-dyslexic-font-',
             'textSize' => 'a11y-text-size-',
             'lineHeight' => 'a11y-line-height-',
             'textSpacing' => 'a11y-text-spacing-',

@@ -449,7 +449,12 @@ voiceCallbacks = {
 
     // Font
     toggleReadableFont: () => onToggle('readableFont', !settings.readableFont),
-    toggleDyslexicFont: () => onToggle('dyslexicFont', !settings.dyslexicFont),
+    // dyslexicFont is a 2-level stepper since D75 (was a plain toggle) -
+    // same treatment as toggleFocusMode below: the voice phrase itself is
+    // still on/off by design, so off -> level 1 (Lexend, the behaviour
+    // this option always had before OpenDyslexic existed as level 2),
+    // anything already on -> off.
+    toggleDyslexicFont: () => setStepperValue('dyslexicFont', settings.dyslexicFont > 0 ? 0 : 1),
 
     // Highlights
     toggleHighlightTitles: () => onToggle('highlightTitles', !settings.highlightTitles),

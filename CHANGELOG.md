@@ -6,6 +6,7 @@ All notable changes to `local_a11y` are documented here.
 
 ### Added
 
+- OpenDyslexic (SIL OFL 1.1, Abbie Gonzalez) packaged as a second choice for "Fonte para Dislexia", alongside the existing Lexend - the option is now a 2-level stepper (0 = off, 1 = Lexend, 2 = OpenDyslexic) instead of a single-font toggle, same "toggle outgrew a boolean" pattern already used for Focus Mode (D52). Sylexiad, also requested, was not added: no explicit redistribution license could be found on its website (only "free to download", not a license grant) - see DECISIONS.md D75.
 - `tests/version_readme_parity_test.php` (new) - fails automatically if `README.md`'s Moodle version claims ever fall out of sync with `version.php`'s `$plugin->supported`, the same class of bug that D67's own fix (correctly narrowing `$plugin->supported` to Moodle 5.2) immediately reintroduced by leaving 4 stale "Moodle 5.0+" mentions behind in `README.md`. Same pattern as the existing `tests/lang_parity_test.php`. See DECISIONS.md D74.
 - `MAINTENANCE.md`: added a "Compatibilidade com versões futuras do Moodle" section (the process for widening `$plugin->supported` safely) and a "Resposta a incidente em produção e rollback" section (what to do today, given there's still no separate staging environment). See DECISIONS.md D74.
 - Text Alignment (D30) and Face Navigation (head-tracking virtual cursor) shipped after 0.1.0 but were never logged here: 22 → 24 options. Face Navigation is part of the original prototype's option set (`_design-reference/a11y-data.jsx` has always had 23 entries) but wasn't implemented yet at the 0.1.0 cut; Text Alignment has no prototype equivalent at all - the first fully-new option beyond the prototype's 23.
@@ -16,6 +17,8 @@ All notable changes to `local_a11y` are documented here.
 
 ### Changed
 
+- Dyslexia-Friendly Font's one-line description removed - the option's own label already makes clear what it does; unlike Silence Media/Hide Images below, it doesn't get a help block either, matching most other simple toggles/steppers in this file. See DECISIONS.md D75.
+- Hide Images' long warning (hides every image/video indiscriminately, including informational ones) moved from an always-visible description under the option row to the "?" help block, same as most other options with a caveat this detailed - it was too long to sit as a one-line desc. Silence Media's one-line description was removed outright (redundant with its own, already-existing help block). See DECISIONS.md D75.
 - Hide Images now hides fully (`display: none`), no reserved-space placeholder badge.
 - Silence Media no longer pauses `<video>` (only mutes it) - Pause Animations already does that; the two no longer duplicate each other.
 - Privacy: the plugin now has one database table (see "Added" above) - it is 100% aggregate/anonymous, so the Privacy API declaration is unaffected (nothing personal to declare).
@@ -33,6 +36,7 @@ All notable changes to `local_a11y` are documented here.
 
 ### Fixed
 
+- Hide Images: embedded YouTube and Vimeo videos (`<iframe>`) were never actually hidden by this option - only native `<img>`/`<video>` were, since the CSS rule never accounted for iframes at all. Fixed by matching the iframe's `src` against the same two providers `amd/src/silence_media.js` already recognises, not every third-party iframe (an H5P activity or an external tool embed is not "an image or a video"). Live-verified: a real YouTube and Vimeo test embed are now hidden when the option is on; an unrelated iframe is not. See DECISIONS.md D75.
 - `README.md:4,8,48,54`, `docs/PUBLISHING.md:12`, `MAINTENANCE.md:41`: fixed stale "Moodle 5.0+" claims left behind by D67's own `version.php:$plugin->supported` correction (`[500, 502]` → `[502, 502]`) - a live recurrence, within the same session, of the exact desync class of bug this SDLC audit's re-run was written to catch. See DECISIONS.md D74 and `audit/05-sdlc.md`.
 - `docs/adr/0001-download-de-audio-offline.md` added to git - the project's only formal ADR had never actually been committed.
 - `.github/workflows/ci.yml` confirmed green (all steps passing) across all 4 matrix combinations, after 8 real CI runs and 7 rounds of fixes (D66-D72) to a workflow that had never actually been executed before being written. See DECISIONS.md D73 for the full list of what was wrong and fixed, and the lesson learned (verify each CLI flag against the command's own `--help`/a real local run before publishing, not by analogy).

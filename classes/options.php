@@ -42,8 +42,17 @@ class options {
             // Typography.
             ['id' => 'readableFont', 'cat' => 'typography', 'kind' => 'toggle', 'icon' => 'type',
                 'labelkey' => 'opt_readablefont', 'desckey' => 'opt_readablefont_desc'],
-            ['id' => 'dyslexicFont', 'cat' => 'typography', 'kind' => 'toggle', 'icon' => 'bookOpen',
-                'labelkey' => 'opt_dyslexicfont', 'desckey' => 'opt_dyslexicfont_desc'],
+            // D75: grew from a single-font toggle into a 2-level stepper
+            // (1 = Lexend, 2 = OpenDyslexic) so the user can choose between
+            // two fonts researched for dyslexia, instead of only ever
+            // getting Lexend - same "toggle outgrew a boolean" pattern
+            // already used for focusMode (D52). See DECISIONS.md D75.
+            // Desckey removed (D75, at the user's request) - the label
+            // itself ("Fonte para Dislexia") already makes clear what this
+            // does; the stepper's own level labels (Lexend/OpenDyslexic)
+            // cover which fonts are on offer.
+            ['id' => 'dyslexicFont', 'cat' => 'typography', 'kind' => 'stepper', 'max' => 2, 'icon' => 'bookOpen',
+                'labelkey' => 'opt_dyslexicfont', 'desckey' => null, 'levelprefix' => 'dyslexicfontlevel_'],
             ['id' => 'highlightTitles', 'cat' => 'typography', 'kind' => 'toggle', 'icon' => 'heading',
                 'labelkey' => 'opt_highlighttitles', 'desckey' => null],
             ['id' => 'highlightLinks', 'cat' => 'typography', 'kind' => 'toggle', 'icon' => 'link',
@@ -82,17 +91,22 @@ class options {
                 'labelkey' => 'opt_bluelightfilter', 'desckey' => null, 'levelprefix' => 'bluelightlevel_'],
 
             // Media & motion.
-            // desckey set (compliance audit, audit/04-conformidade.md item
-            // B8): this option hides every image/video under #page
-            // indiscriminately (styles.css - no distinction between
-            // decorative and informational content), and had no description
-            // warning the user about that limitation before this.
+            // Warning about this option hiding every image/video under
+            // #page indiscriminately (compliance audit, audit/04-conformidade.md
+            // item B8) moved from an always-visible desckey to the help
+            // block (D75) - it was too long to sit as a one-line
+            // description under the option row; the "?" help button is
+            // the right place for a caveat this detailed, same as every
+            // other hashelp option in this file.
             ['id' => 'hideImages', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'imageOff',
-                'labelkey' => 'opt_hideimages', 'desckey' => 'opt_hideimages_desc'],
+                'labelkey' => 'opt_hideimages', 'desckey' => null, 'hashelp' => true],
             ['id' => 'pauseAnimations', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'pause',
                 'labelkey' => 'opt_pauseanimations', 'desckey' => null, 'hashelp' => true],
+            // Desckey removed (D75, at the user's request) - the "?" help
+            // block (help_sm_*, already existed) already covers what this
+            // option does in more detail; the one-line desc was redundant.
             ['id' => 'silenceMedia', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'volumeX',
-                'labelkey' => 'opt_silencemedia', 'desckey' => 'opt_silencemedia_desc', 'hashelp' => true],
+                'labelkey' => 'opt_silencemedia', 'desckey' => null, 'hashelp' => true],
             ['id' => 'tooltips', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'tooltip',
                 'labelkey' => 'opt_tooltips', 'desckey' => null],
 
