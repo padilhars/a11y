@@ -20,13 +20,17 @@ Feature: VLibras integration
     Then "#local-a11y-panel [data-option-id='signLanguage']" "css_element" should not exist
     And "body.a11y-vlibras-integrated" "css_element" should not exist
 
+  @vlibras
   Scenario: With local_vlibras installed and the integration switched on, the panel reveals its widget
     # local_vlibras itself is a separate plugin - this scenario only runs
     # meaningfully on a Behat site where it's actually installed (see
     # DECISIONS.md D54). On a site without it, "the following config
     # values are set as admin" for local_vlibras/enabled below has nothing
     # to configure and this scenario should be skipped, not treated as a
-    # failure of local_a11y itself.
+    # failure of local_a11y itself. Tagged @vlibras so CI (which never
+    # installs the third-party local_vlibras plugin) can exclude it via
+    # --tags="@local_a11y&&~@vlibras" instead of failing on it - see
+    # DECISIONS.md D72.
     Given the following config values are set as admin:
       | enabled | 1 | local_vlibras |
       | position | R | local_vlibras |

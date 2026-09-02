@@ -141,5 +141,10 @@ jobs:
         continue-on-error: true
       - name: phpunit
         run: moodle-plugin-ci phpunit
+      # Exclui @vlibras: esse cenário só passa num site com o plugin de
+      # terceiros local_vlibras instalado, o que este CI nunca faz (é uma
+      # integração opcional, desligada por padrão) - já era um gap conhecido
+      # e aceito nos testes locais deste projeto ("Behat 4/5", DECISIONS.md
+      # D64). Ver também DECISIONS.md D72.
       - name: behat
-        run: moodle-plugin-ci behat --profile chrome
+        run: moodle-plugin-ci behat --profile chrome --tags="@local_a11y&&~@vlibras"
