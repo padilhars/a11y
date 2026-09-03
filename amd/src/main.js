@@ -113,6 +113,27 @@ let isLoggedIn = false;
 // server re-checks this itself regardless (see D47), so this flag is
 // never a security boundary, only an optimisation.
 let statsEnabled = false;
+// D78, round 2: whether this visitor has ANY Moodle identity at all -
+// logged in for real OR auto-logged-in as guest (isloggedin() ||
+// isguestuser(), passed in via init() below) - distinct from isLoggedIn
+// above, which is stricter (excludes guest) and only governs where
+// settings persist (Storage.getSettings()/saveSettings()). Found live, not
+// assumed: a genuinely anonymous visitor (neither of those two, the common
+// case on a public course/front page with guest login not forced) has no
+// session local_a11y_record_activation's require_login()/require_sesskey()
+// can satisfy - Ajax.call() (amd/src/stats.js) then has core/ajax's own
+// built-in reaction to that specific failure: it redirects the WHOLE page
+// to the login screen, never even reaching this module's own control flow.
+// The comment on recordActivation() in amd/src/stats.js already correctly
+// anticipated this exact visitor case existing, but assumed the resulting
+// failure would be silently swallowed like any other rejected Ajax.call()
+// - confirmed live via WebDriver that it is not: every option toggle by a
+// genuinely anonymous visitor was hijacking their own page, site-wide,
+// the entire time collectstats has been on. Guarding recordNewActivations()
+// on this flag too (below) means the aggregate counter now honestly
+// undercounts only this one, narrow, no-session-at-all visitor case,
+// instead of ever sending them to a login page they never asked for.
+let hasAnySession = false;
 // Which profile preset (if any) is currently applied. Ephemeral (not
 // persisted) - matches the prototype's own local component state, which
 // also resets on reload; only the resulting `settings` values persist.
@@ -134,15 +155,17 @@ const defaultOf = (id) => Storage.DEFAULT_SETTINGS[id];
  * transitioned from inactive (default) to active (non-default), by
  * comparing old vs new settings - covers a single toggle/stepper change
  * as well as a whole profile preset turning several options on at once.
- * No-ops entirely when statsEnabled is off, without even building the
- * comparison. Fire-and-forget: never awaited, never blocks the UI.
+ * No-ops entirely when statsEnabled is off, or when this visitor has no
+ * Moodle session at all (hasAnySession - see its own docblock above for
+ * why), without even building the comparison. Fire-and-forget: never
+ * awaited, never blocks the UI.
  *
  * @param {Object} oldSettings Settings before the change.
  * @param {Object} newSettings Settings after the change.
  * @return {void}
  */
 const recordNewActivations = (oldSettings, newSettings) => {
-    if (!statsEnabled) {
+    if (!statsEnabled || !hasAnySession) {
         return;
     }
     Object.keys(newSettings).forEach((id) => {
@@ -525,9 +548,11 @@ const buildOptionMeta = (panelEl) => {
  * @param {Boolean} loggedIn True for a real (non-guest) logged-in user.
  * @param {Boolean} collectStatsEnabled classes/config.php::collect_stats_enabled() -
  *        whether to ever call the usage-stats external function at all (D47).
+ * @param {Boolean} sessionExists isloggedin() || isguestuser() - whether this visitor has
+ *        ANY Moodle identity at all, logged in for real or as guest (see hasAnySession above).
  * @return {Promise<void>}
  */
-export const init = async(loggedIn, collectStatsEnabled) => {
+export const init = async(loggedIn, collectStatsEnabled, sessionExists) => {
     const fab = document.getElementById('local-a11y-fab');
     const panelEl = document.getElementById('local-a11y-panel');
     if (!fab || !panelEl) {
@@ -689,6 +714,7 @@ export const init = async(loggedIn, collectStatsEnabled) => {
 
     isLoggedIn = Boolean(loggedIn);
     statsEnabled = Boolean(collectStatsEnabled);
+    hasAnySession = Boolean(sessionExists);
     // One-shot, not tied to whether signLanguage ends up in optionMeta or
     // to its toggle state - see amd/src/vlibras_integration.js's own
     // docblock for why this runs unconditionally here but only ever does

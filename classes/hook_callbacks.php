@@ -121,6 +121,18 @@ class hook_callbacks {
         $PAGE->requires->js_call_amd('local_a11y/main', 'init', [
             isloggedin() && !isguestuser(),
             config::collect_stats_enabled(),
+            // D78, round 2: distinct from the first argument above - a
+            // guest session still satisfies local_a11y_record_activation's
+            // require_login()/require_sesskey() (classes/external/
+            // record_activation.php), only a genuinely anonymous visitor
+            // (neither logged in nor even auto-logged-in as guest) cannot.
+            // See amd/src/main.js's own hasAnySession docblock for the live
+            // WebDriver evidence of what calling that function anyway does
+            // to that specific visitor (core/ajax's own redirect-to-login
+            // reaction to the resulting failure, found live - not silently
+            // swallowed like the rest of this codebase's error handling
+            // assumed a failed Ajax.call() always would be).
+            isloggedin() || isguestuser(),
         ]);
     }
 }

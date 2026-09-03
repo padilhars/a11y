@@ -23,7 +23,7 @@ O Plugins Directory exige uma URL de repositório git **público** apontando par
 - [x] Visibilidade **pública** confirmada (via API do GitHub, `"visibility": "public"`) - necessária, entre outras razões, para o CI (D65) e para as auditorias reexecutadas (D65-D75) conseguirem consultar o histórico de execuções sem autenticação.
 - [x] `git push` feito - todo o trabalho de D61 em diante já está no repositório remoto (autorizado explicitamente pelo usuário a cada rodada).
 - [x] Histórico completo de commits foi junto desde o primeiro push (nenhum segredo/credencial encontrado nele pelas auditorias de segurança/licenciamento já feitas - ver `audit/02-seguranca.md`).
-- [ ] Mover a seção `[Unreleased]` do `CHANGELOG.md` para uma seção versionada real (ex: `## [1.0.0] - AAAA-MM-DD`) batendo com o `$plugin->release` final, e criar a tag git correspondente, no momento de taguear a versão que será submetida. Considerar também se `$plugin->release` (`'0.1.0'` hoje) deveria virar `'1.0.0'` agora que a maturidade é STABLE - decisão de versionamento semântico do autor, não decidida aqui.
+- [x] Seção `[Unreleased]` do `CHANGELOG.md` movida para `## [1.0.0] - 2026-09-02`, `$plugin->release` promovido de `'0.1.0'` para `'1.0.0'` (a maturidade já era `MATURITY_STABLE`), e a tag `v1.0.0` criada e enviada ao repositório remoto - ver `DECISIONS.md` D76.
 
 ## 3. Decisões já tomadas nesta sessão (registradas em DECISIONS.md D59)
 

@@ -60,6 +60,50 @@
     <customised/>
   </library>
   <library>
+    <location>mediapipe/wasm/vision_wasm_internal.js</location>
+    <name>MediaPipe Tasks Vision (WASM loader, SIMD)</name>
+    <description>WebAssembly loader glue for the face-tracking pipeline used by the "Navegação por Face" option. Packaged locally (was loaded from jsDelivr's CDN) so this plugin no longer depends on a third-party CDN at runtime for it - see DECISIONS.md D78. The corresponding .task model file is deliberately NOT bundled here (fetched live and hash-verified instead - see amd/src/face_navigation.js's own MP_MODEL_SHA256 comment for why). License text: mediapipe/LICENSE-mediapipe.txt.</description>
+    <version>0.10.18</version>
+    <license>Apache License, Version 2.0</license>
+    <repository>https://github.com/google-ai-edge/mediapipe</repository>
+    <copyrights>
+      <copyright>Google LLC</copyright>
+    </copyrights>
+  </library>
+  <library>
+    <location>mediapipe/wasm/vision_wasm_internal.wasm</location>
+    <name>MediaPipe Tasks Vision (WASM binary, SIMD)</name>
+    <description>WebAssembly binary for the face-tracking pipeline used by the "Navegação por Face" option, SIMD-capable-browser variant. Packaged locally - see the .js entry above for the full reasoning. License text: mediapipe/LICENSE-mediapipe.txt.</description>
+    <version>0.10.18</version>
+    <license>Apache License, Version 2.0</license>
+    <repository>https://github.com/google-ai-edge/mediapipe</repository>
+    <copyrights>
+      <copyright>Google LLC</copyright>
+    </copyrights>
+  </library>
+  <library>
+    <location>mediapipe/wasm/vision_wasm_nosimd_internal.js</location>
+    <name>MediaPipe Tasks Vision (WASM loader, non-SIMD)</name>
+    <description>Same as vision_wasm_internal.js above, for browsers without WebAssembly SIMD support - FilesetResolver picks between the two variants itself. License text: mediapipe/LICENSE-mediapipe.txt.</description>
+    <version>0.10.18</version>
+    <license>Apache License, Version 2.0</license>
+    <repository>https://github.com/google-ai-edge/mediapipe</repository>
+    <copyrights>
+      <copyright>Google LLC</copyright>
+    </copyrights>
+  </library>
+  <library>
+    <location>mediapipe/wasm/vision_wasm_nosimd_internal.wasm</location>
+    <name>MediaPipe Tasks Vision (WASM binary, non-SIMD)</name>
+    <description>Same as vision_wasm_internal.wasm above, for browsers without WebAssembly SIMD support. License text: mediapipe/LICENSE-mediapipe.txt.</description>
+    <version>0.10.18</version>
+    <license>Apache License, Version 2.0</license>
+    <repository>https://github.com/google-ai-edge/mediapipe</repository>
+    <copyrights>
+      <copyright>Google LLC</copyright>
+    </copyrights>
+  </library>
+  <library>
     <location>pix/accessibility-default.svg</location>
     <name>Ionicons - accessibility icon</name>
     <description>Generic accessibility figure icon, used as the default FAB icon since D60. Downloaded via svgrepo.com (listed as "Ionicons Filled Interface Icons", author "Ionicons"); confirmed against the upstream Ionicons repository. Re-exported with fill="#000000" replaced by fill="currentColor" so the icon themes like every other icon in classes/icons.php. Path geometry unchanged from the source.</description>

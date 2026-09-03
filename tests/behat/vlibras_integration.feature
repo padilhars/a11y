@@ -106,30 +106,43 @@ Feature: VLibras integration
     # have non-zero rendered dimensions) can never return true for either of
     # VLibras' host elements while they're genuinely open.
     And "#vlibras-app-root" "css_element" should exist
-    # D78: the scenario deliberately stops here instead of also exercising
-    # the close half of the cycle (turning signLanguage back off again by
-    # re-clicking the panel toggle). Confirmed live, not assumed: once the
-    # avatar is open, #vlibras-app-root's own invisible root div covers the
-    # ENTIRE viewport at z-index 2147483647 (the maximum possible value) and
-    # intercepts every click on the page - including on our own panel/FAB -
+    # D78, round 2: closing back through our own panel toggle is not
+    # reachable here - confirmed live, not assumed: once the avatar is
+    # open, #vlibras-app-root's own invisible root div covers the ENTIRE
+    # viewport at z-index 2147483647 (the maximum possible value) and
+    # intercepts every click on the page, including on our own panel/FAB -
     # the same way in a real browser as in Behat (this is VLibras' own CSS,
     # not a headless-only artifact; clicking the overlay itself was also
-    # tried and does nothing - there is no click-outside-to-close). This is
-    # not a defect introduced by this plugin or this refactor: it is exactly
-    # why amd/src/vlibras_integration.js's attemptClose() already closes the
-    # avatar by calling .click() directly on a JS *reference* to VLibras' own
-    # "Fechar" button inside #vlibras-app-root's shadow root (bypassing
-    # normal point-based hit-testing entirely) rather than depending on our
-    # panel toggle being reachable - and why watchForCloseButton() wires a
-    # listener onto that same button so a real user closing the avatar
+    # tried and does nothing - there is no click-outside-to-close). This
+    # is not a defect: it is exactly why attemptClose() (amd/src/
+    # vlibras_integration.js) already closes the avatar by calling
+    # .click() directly on a JS *reference* to VLibras' own "Fechar" button
+    # inside #vlibras-app-root's shadow root (bypassing normal
+    # point-based hit-testing entirely) instead of depending on our panel
+    # toggle being reachable - and why watchForCloseButton() wires a
+    # listener onto that same button, so a real user closing the avatar
     # through VLibras' own UI turns signLanguage back off on our side too.
-    # In other words: a real user cannot reopen this plugin's panel and
-    # click signLanguage off again while VLibras' avatar is on screen either
-    # - the supported close path is VLibras' own close button, which is by
-    # design the only element left clickable above its own overlay.
-    # Behat/Mink has no built-in step that can reach into an open shadow
-    # root to click that button the way attemptClose() does, so verifying
-    # the close half end-to-end would need new custom step infrastructure
-    # (a behat_local_a11y.php context), not just a feature-file change -
-    # out of scope for this pass. Tracked as a known, deliberate limitation
-    # rather than left silently uncovered.
+    # A real user closes the same way this step now does: through VLibras'
+    # own interface, never by reopening this plugin's panel while the
+    # avatar covers it. The custom step below (tests/behat/
+    # behat_local_a11y.php) reaches into #vlibras-app-root's open shadow
+    # root the same way findCloseButton() does - Behat/Mink's own CSS
+    # selector engine cannot pierce a shadow boundary, which is why a
+    # feature-file-only fix was not possible here.
+    And I close the VLibras avatar through its own interface
+    # Confirms watchForCloseButton()'s whole point: VLibras' own close
+    # button was wired, on its very first appearance above, to dispatch
+    # 'local_a11y/vlibras-disable' - main.js listens for that and turns
+    # signLanguage off on our side, exactly as if the user had used our
+    # panel (which they could not, per the overlay explanation above).
+    Then "body.a11y-sign-language" "css_element" should not exist
+    And "#vlibras-access-wrapper" "css_element" should not be visible
+    # #vlibras-app-root itself is left in the DOM by VLibras (never
+    # removed, same reasoning as #vlibras-access-wrapper - see
+    # classes/integration/vlibras.php), but the CSS rule
+    # "body.a11y-vlibras-integrated:not(.a11y-sign-language) #vlibras-app-root"
+    # now applies, so it goes back to being a zero-size, display:none host -
+    # "should exist" still holds, "should be visible" would not (same
+    # isDisplayed() asymmetry as #vlibras-access-wrapper throughout this
+    # scenario).
+    And "#vlibras-app-root" "css_element" should exist

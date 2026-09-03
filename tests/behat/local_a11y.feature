@@ -132,6 +132,104 @@ Feature: Accessibility panel
     Then "body.a11y-cursor-1" "css_element" should not exist
     And "body.a11y-cursor-2" "css_element" should not exist
 
+  # D78, round 2: the remaining 9 options with no test yet are all
+  # "JS-behavioural-only" - manager.php::get_boolean_class_map()'s own
+  # docblock explicitly excludes all 9 (tooltips, silenceMedia,
+  # bionicReading, readingGuide, readingMask, screenReader,
+  # virtualKeyboard, voiceCommands, faceNavigation) because none of them
+  # drive a body class at all - they gate always-mounted JS overlay
+  # components instead. That's the reason D77 left them out (no cheap
+  # "click and check body class" signal exists for any of them) and the
+  # reason every scenario below asserts a DOM marker specific to each
+  # option's own overlay instead of a body class. Two of the 9 (Voice
+  # Commands, Face Navigation) also need a real device permission; the
+  # other 7 don't and turn out to be straightforwardly testable once the
+  # right marker for each is identified - Tooltips here first:
+  # #local-a11y-fab has an aria-label (tooltips.js's own SELECTOR includes
+  # "[aria-label]"), so hovering it is enough to trigger one, no fixture
+  # content needed. Silence Media needs an actual <audio>/<video> to act
+  # on, which no course homepage has by default - the custom
+  # "I insert a test autoplaying video" step (tests/behat/
+  # behat_local_a11y.php) exists for exactly this; shouldSilence()
+  # (amd/src/silence_media.js) only checks the `autoplay` property, never
+  # real playback, so no actual video file is needed either.
+  Scenario: Tooltips shows a bubble on hover, Silence Media mutes an autoplaying video
+    Given I click on "#local-a11y-fab" "css_element"
+    And I click on "#local-a11y-panel [data-category-id='media'] [data-action='toggle-category']" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='tooltips']" "css_element"
+    And I hover "#local-a11y-fab" "css_element"
+    Then "#local-a11y-tooltip" "css_element" should exist
+    Given I insert a test autoplaying video into the page
+    When I click on "#local-a11y-panel [data-option-id='silenceMedia']" "css_element"
+    Then the test video should be muted
+
+  # D78, round 2: Reading Guide and Reading Mask both build their overlay
+  # element(s) synchronously in start() (amd/src/reading_guide.js,
+  # amd/src/reading_mask.js) - they don't wait for a first mousemove, so
+  # "should exist" right after the toggle is enough, no need to simulate
+  # mouse movement over the page.
+  Scenario: Reading Guide and Reading Mask create their overlay elements
+    Given I click on "#local-a11y-fab" "css_element"
+    And I click on "#local-a11y-panel [data-category-id='navigation'] [data-action='toggle-category']" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='readingGuide']" "css_element"
+    Then ".local-a11y-reading-guide" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='readingGuide']" "css_element"
+    Then ".local-a11y-reading-guide" "css_element" should not exist
+    When I click on "#local-a11y-panel [data-option-id='readingMask']" "css_element"
+    Then ".local-a11y-reading-mask-top" "css_element" should exist
+    And ".local-a11y-reading-mask-bottom" "css_element" should exist
+
+  # D78, round 2: Screen Reader and Virtual Keyboard both build their
+  # overlay (a status pill / an on-screen keyboard) synchronously in
+  # start() too - same reasoning as the scenario above, no interaction
+  # with the overlay's own content needed to prove it exists.
+  Scenario: Screen Reader and Virtual Keyboard create their overlay elements
+    Given I click on "#local-a11y-fab" "css_element"
+    And I click on "#local-a11y-panel [data-category-id='advanced'] [data-action='toggle-category']" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='screenReader']" "css_element"
+    Then ".local-a11y-sr-pill" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='screenReader']" "css_element"
+    Then ".local-a11y-sr-pill" "css_element" should not exist
+    When I click on "#local-a11y-panel [data-option-id='virtualKeyboard']" "css_element"
+    Then ".local-a11y-vk" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='virtualKeyboard']" "css_element"
+    Then ".local-a11y-vk" "css_element" should not exist
+
+  # D78, round 2: Voice Commands is the one option of these 9 that, at
+  # first glance, looks like it needs real microphone permission - it
+  # doesn't. start() (amd/src/voice_commands.js) builds its status pill
+  # synchronously, straight after the one-time privacy window.confirm()
+  # is accepted, *before* recognition.start() is even called - so the
+  # pill appearing never actually depends on the browser's SpeechRecognition
+  # engine, a real microphone, or any permission grant succeeding. The one
+  # real obstacle is the window.confirm() dialog itself, which generic
+  # Behat steps cannot reliably answer inline - solved the same way
+  # amd/src/face_navigation.js's own equivalent dialog would be: the custom
+  # "I have acknowledged the accessibility privacy notices" step
+  # pre-writes the same localStorage key rememberPrivacyAck() uses, so
+  # hasAcknowledgedPrivacyNotice() is already true and start() never shows
+  # the dialog at all on this run.
+  Scenario: Voice Commands creates its status pill once its privacy notice is acknowledged
+    Given I have acknowledged the accessibility privacy notices
+    And I click on "#local-a11y-fab" "css_element"
+    And I click on "#local-a11y-panel [data-category-id='advanced'] [data-action='toggle-category']" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='voiceCommands']" "css_element"
+    Then ".local-a11y-sr-pill" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='voiceCommands']" "css_element"
+    Then ".local-a11y-sr-pill" "css_element" should not exist
+
+  # D78, round 2: Bionic Reading (typography, open by default) runs its
+  # first pass synchronously in start() (amd/src/bionic_reading.js) before
+  # any MutationObserver/idle-callback chunking kicks in for content added
+  # later - the course homepage's own heading/text content already present
+  # at toggle time is enough to produce at least one wrapped word.
+  Scenario: Bionic Reading wraps existing page text in bold-start spans
+    Given I click on "#local-a11y-fab" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='bionicReading']" "css_element"
+    Then ".local-a11y-br" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='bionicReading']" "css_element"
+    Then ".local-a11y-br" "css_element" should not exist
+
   # D76: quality/performance audit finding (audit/03-qualidade-desempenho.md
   # section 4.2) - 83% of options had no behavioural test at all. Hide
   # Images is a simple boolean toggle, but it is also the option a real bug

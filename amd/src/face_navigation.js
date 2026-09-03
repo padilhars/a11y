@@ -39,8 +39,32 @@
 import {getStrings} from 'core/str';
 
 const MP_CDN   = 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.18';
-const MP_WASM  = MP_CDN + '/wasm';
+// D78, round 2: the WASM fileset (both SIMD and non-SIMD variants -
+// FilesetResolver picks between them itself based on the browser's own
+// feature detection, not something this module controls) is now packaged
+// locally under mediapipe/wasm/ instead of loaded from jsDelivr - same
+// "avoid depending on a third-party CDN we don't control" reasoning
+// already applied to the fonts (see fonts/, DECISIONS.md D8), now that
+// MediaPipe's own license (Apache-2.0, confirmed against @mediapipe/
+// tasks-vision's own package.json) makes bundling it as unambiguous as
+// those already were. thirdpartylibs.xml lists all 4 files. Computed the
+// same way amd/src/main.js's own navigateTo() resolves a plugin-relative
+// URL - see its own comment for why M.cfg.wwwroot is the right tool here.
+const MP_WASM  = ((window.M && window.M.cfg && window.M.cfg.wwwroot) || '') + '/local/a11y/mediapipe/wasm';
 const MP_MODEL = 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task';
+// SHA-256 of face_landmarker.task (float16/1, base64) - computed directly
+// from the downloaded file at the time this was pinned. Unlike the WASM
+// above, this is deliberately NOT bundled locally: unlike the npm package,
+// Google's own docs for this pretrained model name no explicit
+// redistribution license for the model asset itself (only the
+// documentation/code samples are licensed) - bundling and redistributing
+// it ourselves would risk exactly the kind of licensing gap audit/01
+// already found and fixed twice elsewhere in this plugin. Fetching it live
+// from Google's own CDN and verifying it here instead gets the same
+// TOCTOU-safe guarantee as MP_VISION_BUNDLE_SHA256 below, without ever
+// redistributing the asset ourselves - see fetchVerifiedBytes() and its
+// call site in start() below. Update whenever this model version bumps.
+const MP_MODEL_SHA256 = 'ZBhOIpsmMQe8K4BMZiXbE0H/K7cxh0sLzC/mVE4Lyf8=';
 const MP_VISION_BUNDLE = MP_CDN + '/vision_bundle.mjs';
 // SHA-256 of vision_bundle.mjs@0.10.18 (base64), cross-checked against
 // jsDelivr's own published package hash (data.jsdelivr.com/v1/package/npm/
@@ -54,7 +78,7 @@ const MP_VISION_BUNDLE = MP_CDN + '/vision_bundle.mjs';
 // check at all (classic time-of-check-to-time-of-use gap: a CDN able to
 // serve different content to the two requests - e.g. by the `Sec-Fetch-Dest`
 // header, `empty` for a plain fetch() vs `script` for a module import -
-// would sail straight through). fetchVerified() below now returns a
+// would sail straight through). fetchVerifiedBlobUrl() below now returns a
 // same-origin blob: URL built from the *exact* bytes it just hashed, and
 // loadMediaPipe() imports THAT blob: URL instead of the CDN URL - no second
 // network request happens for this file at all, so the code that runs is
@@ -64,15 +88,40 @@ const MP_VISION_BUNDLE = MP_CDN + '/vision_bundle.mjs';
 // own - it is a fully self-contained bundle - so importing it from a blob:
 // URL instead of its real CDN URL changes nothing about its behaviour.
 //
-// Scoped to vision_bundle.mjs only (the one piece that runs as JS with page
-// privileges) - the .wasm/.task loads below are MediaPipe's own internal
-// fetches, made from *inside* FilesetResolver/FaceLandmarker with no hook
-// this module can intercept without re-implementing MediaPipe's own loader.
-// That remains an accepted residual risk: mitigated only by pinning this
-// exact package version and by HTTPS transport, not by a hash check like
-// this one, for lack of any exposed way to do better than that today.
+// D78, round 2 update: MP_MODEL above now gets the same TOCTOU-safe
+// treatment (fetchVerifiedBytes() + modelAssetBuffer, see start() below),
+// and the WASM fileset is no longer fetched from any third party at all
+// (self-hosted, see MP_WASM above) - so the only piece left with no
+// interception point this module can hook into is now none of them; this
+// file no longer has any *unverified* third-party network dependency.
 // Update MP_VISION_BUNDLE_SHA256 whenever MP_CDN's version bumps.
 const MP_VISION_BUNDLE_SHA256 = 'krpgFv0PyLvOI3CG3sYhL3KgOwbQpez9xx3cckzNurs=';
+
+/**
+ * Fetch a URL and verify its SHA-256 digest matches the pinned hash,
+ * returning the raw verified bytes. The shared core of both
+ * fetchVerifiedBlobUrl() (needs a blob: URL to import as a module) and the
+ * model-loading call in start() (needs a Uint8Array for modelAssetBuffer)
+ * below - factored out so both call sites hash the response exactly once,
+ * the same way.
+ *
+ * @param {String} url The URL to fetch and verify.
+ * @param {String} expectedSha256Base64 The expected SHA-256 digest, base64-encoded.
+ * @return {Promise<ArrayBuffer>} Resolves to the verified bytes; rejects if the digest doesn't match.
+ */
+const fetchVerifiedBytes = async(url, expectedSha256Base64) => {
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error('Failed to fetch ' + url + ' (HTTP ' + response.status + ')');
+    }
+    const buffer = await response.arrayBuffer();
+    const digest = await crypto.subtle.digest('SHA-256', buffer);
+    const actual = btoa(String.fromCharCode(...new Uint8Array(digest)));
+    if (actual !== expectedSha256Base64) {
+        throw new Error('Integrity check failed for ' + url);
+    }
+    return buffer;
+};
 
 /**
  * Fetch a URL, verify its SHA-256 digest matches the pinned hash, and return
@@ -88,17 +137,8 @@ const MP_VISION_BUNDLE_SHA256 = 'krpgFv0PyLvOI3CG3sYhL3KgOwbQpez9xx3cckzNurs=';
  * @param {String} mimeType MIME type to give the returned blob: URL (must be a JS type for a module import to accept it).
  * @return {Promise<String>} Resolves to a blob: URL of the verified bytes; rejects if the digest doesn't match.
  */
-const fetchVerified = async(url, expectedSha256Base64, mimeType) => {
-    const response = await fetch(url);
-    if (!response.ok) {
-        throw new Error('Failed to fetch ' + url + ' (HTTP ' + response.status + ')');
-    }
-    const buffer = await response.arrayBuffer();
-    const digest = await crypto.subtle.digest('SHA-256', buffer);
-    const actual = btoa(String.fromCharCode(...new Uint8Array(digest)));
-    if (actual !== expectedSha256Base64) {
-        throw new Error('Integrity check failed for ' + url);
-    }
+const fetchVerifiedBlobUrl = async(url, expectedSha256Base64, mimeType) => {
+    const buffer = await fetchVerifiedBytes(url, expectedSha256Base64);
     return URL.createObjectURL(new Blob([buffer], {type: mimeType}));
 };
 
@@ -197,7 +237,7 @@ let cache = null;
 // Unlike Comandos por Voz, camera *video* itself never leaves the browser
 // (confirmed: no fetch()/XHR/WebSocket/sendBeacon anywhere in this module
 // touches the MediaStream - only the MediaPipe SDK's own code/model files
-// are fetched, see fetchVerified() above) - the notice text reflects that
+// are fetched, see fetchVerifiedBytes() above) - the notice text reflects that
 // distinction rather than reusing Voice Commands' wording verbatim.
 const PRIVACY_ACK_KEY = 'local_a11y_fn_privacy_ack';
 
@@ -273,7 +313,7 @@ const loadMediaPipe = () => {
     if (window.__mp) {
         return Promise.resolve(window.__mp);
     }
-    return fetchVerified(MP_VISION_BUNDLE, MP_VISION_BUNDLE_SHA256, 'text/javascript').then(
+    return fetchVerifiedBlobUrl(MP_VISION_BUNDLE, MP_VISION_BUNDLE_SHA256, 'text/javascript').then(
         (blobUrl) => new Promise((resolve, reject) => {
             const cleanup = () => URL.revokeObjectURL(blobUrl);
             document.addEventListener('__mp_ready', () => {
@@ -814,8 +854,18 @@ export const start = async(cb) => {
     try {
         const mp = await loadMediaPipe();
         const vision = await mp.FilesetResolver.forVisionTasks(MP_WASM);
+        // D78, round 2: modelAssetBuffer instead of modelAssetPath - the
+        // model is still fetched live from Google's own CDN (see
+        // MP_MODEL_SHA256's own comment for why it isn't bundled locally
+        // like the WASM above), but now hash-verified first via the same
+        // fetchVerifiedBytes() helper MP_VISION_BUNDLE_SHA256 already uses,
+        // instead of handing FaceLandmarker a URL to fetch unverified on
+        // its own. Closes the one remaining gap audit/02-seguranca.md's
+        // Achado 1 identified (there is no interception point exposed for
+        // a URL-based load) simply by not using a URL-based load anymore.
+        const modelBytes = await fetchVerifiedBytes(MP_MODEL, MP_MODEL_SHA256);
         landmarker = await mp.FaceLandmarker.createFromOptions(vision, {
-            baseOptions: {modelAssetPath: MP_MODEL, delegate: 'GPU'},
+            baseOptions: {modelAssetBuffer: new Uint8Array(modelBytes), delegate: 'GPU'},
             runningMode: 'VIDEO',
             numFaces: 1,
             outputFaceBlendshapes: true,
