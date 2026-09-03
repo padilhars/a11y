@@ -43,101 +43,47 @@ use renderer_base;
  */
 class panel implements renderable, templatable {
     /**
+     * Category id => icon name. Static (no get_string() involved), unlike
+     * the labels built in build_category() - kept as a class constant
+     * instead of a local array rebuilt on every export_for_template() call.
+     */
+    private const CATEGORY_ICONS = [
+        'typography' => 'typography',
+        'color' => 'palette',
+        'media' => 'media',
+        'navigation' => 'navigation',
+        'advanced' => 'tools',
+    ];
+
+    /**
      * Builds the full panel Mustache context: header/status text, profile
      * preset cards, and every enabled option grouped into its category.
+     *
+     * Quality/performance audit finding, fixed (audit/03-qualidade-desempenho.md
+     * section 2.1): this method used to be 122 lines with cyclomatic
+     * complexity 14/NPath 315 (limits: 100/10/200), building categories and
+     * profile cards inline with two levels of nested loops. Split into
+     * group_options_by_category()/build_categories()/build_category()/
+     * build_profile_cards() below - each with its own single, low
+     * complexity responsibility - so this method is now just orchestration:
+     * call each piece, assemble the final template context.
      *
      * @param renderer_base $output The renderer requesting this export (unused - required by templatable).
      * @return array<string, mixed> Context for templates/panel.mustache.
      */
     public function export_for_template(renderer_base $output): array {
         $appearance = config::get_appearance();
-        $enabled = config::enabled_features();
-        $defaults = manager::get_default_settings();
         $settings = manager::get_current_user_settings();
         $activecount = manager::count_active($settings);
 
-        $categorylabels = [
-            'typography' => get_string('cat_typography', 'local_a11y'),
-            'color' => get_string('cat_color', 'local_a11y'),
-            'media' => get_string('cat_media', 'local_a11y'),
-            'navigation' => get_string('cat_navigation', 'local_a11y'),
-            'advanced' => get_string('cat_advanced', 'local_a11y'),
-        ];
-        $categoryicons = [
-            'typography' => 'typography',
-            'color' => 'palette',
-            'media' => 'media',
-            'navigation' => 'navigation',
-            'advanced' => 'tools',
-        ];
-        $defaultopen = options::category_default_open();
+        $categories = $this->build_categories($settings);
+        $profilecards = $appearance['showprofiles'] ? $this->build_profile_cards() : [];
+
         // The UN logo now themes via currentColor just like every other
         // icon (see pix/accessibility-un.svg), so the badge needs no
         // per-icon special-casing any more: same size, same background for
         // all 4 choices.
         $badgeicon = icons::fabicon_svg($appearance['fabicon'], 20);
-
-        $bycategory = [];
-        foreach (options::all() as $option) {
-            if (!in_array($option['id'], $enabled, true)) {
-                continue;
-            }
-            $bycategory[$option['cat']][] = $option;
-        }
-
-        // D52: hideImages' switch must never render as "off" while
-        // focusMode's level 3 ("Somente texto") is already hiding images
-        // itself - computed once here (from the real current settings, not
-        // just a client-side afterthought) so the *first* server-rendered
-        // paint already gets this right, matching this plugin's usual
-        // no-FOUC standard; amd/src/panel.js re-derives the same thing
-        // client-side (main.js::isHideImagesForced()) for every render
-        // after that.
-        $hideimagesforced = (int) ($settings['focusMode'] ?? 0) === 3;
-
-        $categories = [];
-        foreach (options::category_order() as $catid) {
-            if (empty($bycategory[$catid])) {
-                continue;
-            }
-            $rows = [];
-            $catactivecount = 0;
-            foreach ($bycategory[$catid] as $option) {
-                $forced = $option['id'] === 'hideImages' && $hideimagesforced;
-                $row = $this->export_option($option, $settings[$option['id']], $defaults[$option['id']], $forced);
-                if ($row['isactive']) {
-                    $catactivecount++;
-                }
-                $rows[] = $row;
-            }
-            $categories[] = [
-                'id' => $catid,
-                'label' => $categorylabels[$catid],
-                'iconsvg' => icons::svg($categoryicons[$catid], 15),
-                'isopen' => !empty($defaultopen[$catid]) || $catactivecount > 0,
-                'options' => $rows,
-                'activecount' => $catactivecount,
-                'hasactivecount' => $catactivecount > 0,
-            ];
-        }
-
-        $profilecards = [];
-        if ($appearance['showprofiles']) {
-            foreach (profiles::all() as $profile) {
-                $tone = tone_colors::get($profile['tone']);
-                $profilecards[] = [
-                    'id' => $profile['id'],
-                    'tone' => $profile['tone'],
-                    'label' => get_string($profile['labelkey'], 'local_a11y'),
-                    'desc' => get_string($profile['desckey'], 'local_a11y'),
-                    'iconsvg' => icons::svg($profile['icon'], 17),
-                    'bg' => $tone['bg'],
-                    'text' => $tone['text'],
-                    'iconcolor' => $tone['icon'],
-                    'border' => $tone['border'],
-                ];
-            }
-        }
 
         return [
             'paneltitle' => get_string('paneltitle', 'local_a11y'),
@@ -173,51 +119,200 @@ class panel implements renderable, templatable {
     }
 
     /**
+     * Groups every enabled option definition by its 'cat' key, in the order
+     * options::all() itself returns them (category display order is applied
+     * separately, by build_categories() iterating options::category_order()).
+     *
+     * @return array<string, array<int, array<string, mixed>>> Category id => option definitions.
+     */
+    private function group_options_by_category(): array {
+        $enabled = config::enabled_features();
+        $bycategory = [];
+        foreach (options::all() as $option) {
+            if (!in_array($option['id'], $enabled, true)) {
+                continue;
+            }
+            $bycategory[$option['cat']][] = $option;
+        }
+        return $bycategory;
+    }
+
+    /**
+     * Builds every non-empty category's full Mustache context (label, icon,
+     * open/closed state, and its option rows) in display order.
+     *
+     * @param array<string, bool|int> $settings Current, sanitized user settings.
+     * @return array<int, array<string, mixed>> One entry per non-empty category, in display order.
+     */
+    private function build_categories(array $settings): array {
+        $bycategory = $this->group_options_by_category();
+        $categorylabels = [
+            'typography' => get_string('cat_typography', 'local_a11y'),
+            'color' => get_string('cat_color', 'local_a11y'),
+            'media' => get_string('cat_media', 'local_a11y'),
+            'navigation' => get_string('cat_navigation', 'local_a11y'),
+            'advanced' => get_string('cat_advanced', 'local_a11y'),
+        ];
+
+        $categories = [];
+        foreach (options::category_order() as $catid) {
+            if (empty($bycategory[$catid])) {
+                continue;
+            }
+            $categories[] = $this->build_category($catid, $categorylabels[$catid], $bycategory[$catid], $settings);
+        }
+        return $categories;
+    }
+
+    /**
+     * Builds one category's Mustache context, including all of its option rows.
+     *
+     * @param string $catid Category id, e.g. "media".
+     * @param string $label Already-resolved display label for this category.
+     * @param array<int, array<string, mixed>> $options This category's enabled option definitions.
+     * @param array<string, bool|int> $settings Current, sanitized user settings.
+     * @return array<string, mixed> Context for one entry of templates/panel.mustache's "categories" loop.
+     */
+    private function build_category(string $catid, string $label, array $options, array $settings): array {
+        $defaults = manager::get_default_settings();
+
+        // D52: hideImages' switch must never render as "off" while
+        // focusMode's level 3 ("Somente texto") is already hiding images
+        // itself - computed once here (from the real current settings, not
+        // just a client-side afterthought) so the *first* server-rendered
+        // paint already gets this right, matching this plugin's usual
+        // no-FOUC standard; amd/src/panel.js re-derives the same thing
+        // client-side (main.js::isHideImagesForced()) for every render
+        // after that.
+        $hideimagesforced = (int) ($settings['focusMode'] ?? 0) === 3;
+
+        $rows = [];
+        $catactivecount = 0;
+        foreach ($options as $option) {
+            $forced = $option['id'] === 'hideImages' && $hideimagesforced;
+            $row = $this->export_option($option, $settings[$option['id']], $defaults[$option['id']], $forced);
+            if ($row['isactive']) {
+                $catactivecount++;
+            }
+            $rows[] = $row;
+        }
+
+        $defaultopen = options::category_default_open();
+        return [
+            'id' => $catid,
+            'label' => $label,
+            'iconsvg' => icons::svg(self::CATEGORY_ICONS[$catid], 15),
+            'isopen' => !empty($defaultopen[$catid]) || $catactivecount > 0,
+            'options' => $rows,
+            'activecount' => $catactivecount,
+            'hasactivecount' => $catactivecount > 0,
+        ];
+    }
+
+    /**
+     * Builds every profile preset card's Mustache context. Caller
+     * (export_for_template()) only calls this when appearance['showprofiles']
+     * is on, so this method itself doesn't need to check that.
+     *
+     * @return array<int, array<string, mixed>> One entry per profile, in profiles::all()'s order.
+     */
+    private function build_profile_cards(): array {
+        $profilecards = [];
+        foreach (profiles::all() as $profile) {
+            $tone = tone_colors::get($profile['tone']);
+            $profilecards[] = [
+                'id' => $profile['id'],
+                'tone' => $profile['tone'],
+                'label' => get_string($profile['labelkey'], 'local_a11y'),
+                'desc' => get_string($profile['desckey'], 'local_a11y'),
+                'iconsvg' => icons::svg($profile['icon'], 17),
+                'bg' => $tone['bg'],
+                'text' => $tone['text'],
+                'iconcolor' => $tone['icon'],
+                'border' => $tone['border'],
+            ];
+        }
+        return $profilecards;
+    }
+
+    /**
      * Builds one option row's Mustache context (templates/option_toggle.mustache
      * or templates/option_stepper.mustache, chosen client-side via istoggle/isstepper).
+     *
+     * Quality/performance audit finding, fixed (audit/03-qualidade-desempenho.md
+     * section 2.1): cyclomatic complexity 12 (limit 10), mostly from the
+     * stepper-only branch (a for loop plus its own ternary) living inline.
+     * Moved to export_stepper_fields() below, called only when relevant.
      *
      * @param array<string, mixed> $option Option definition, from options::all().
      * @param bool|int $value Current value for this option (already sanitized).
      * @param bool|int $defaultvalue This option's default value, used to compute isactive.
      * @param bool $forced (D52) True if another option is forcing this one's visible
-     *     effect on regardless of its own value - see export_for_template()'s
+     *     effect on regardless of its own value - see build_category()'s
      *     $hideimagesforced. Toggle-only; never true for a stepper row.
      * @return array<string, mixed> Row context, keyed by the option's id.
      */
     private function export_option(array $option, $value, $defaultvalue, bool $forced = false): array {
+        $istoggle = $option['kind'] === 'toggle';
         $isactive = $forced || $value !== $defaultvalue;
-        $hashelp  = !empty($option['hashelp']);
-        $forcednotekey = $option['id'] === 'hideImages' ? 'hideimages_forcednote' : null;
+        $hashelp = !empty($option['hashelp']);
+
         $row = [
             'id' => $option['id'],
             'datakey' => $option['id'],
             'iconsvg' => icons::svg($option['icon'], 16),
             'label' => get_string($option['labelkey'], 'local_a11y'),
             'desc' => $option['desckey'] ? get_string($option['desckey'], 'local_a11y') : null,
-            'istoggle' => $option['kind'] === 'toggle',
-            'isstepper' => $option['kind'] === 'stepper',
+            'istoggle' => $istoggle,
+            'isstepper' => !$istoggle,
             'isactive' => $isactive,
-            'pressed' => $option['kind'] === 'toggle' && ($forced || $value) ? 'true' : 'false',
+            'pressed' => $istoggle && ($forced || $value) ? 'true' : 'false',
             'forced' => $forced,
-            'forcednote' => $forcednotekey ? get_string($forcednotekey, 'local_a11y') : null,
+            'forcednote' => $this->forced_note_for($option['id']),
             'hashelp' => $hashelp,
             'helplabel' => $hashelp ? get_string('helpbtn', 'local_a11y') : null,
             'helphtml' => $hashelp ? $this->build_help_html($option['id']) : null,
         ];
 
-        if ($option['kind'] === 'stepper') {
-            $levels = [];
-            for ($i = 0; $i <= $option['max']; $i++) {
-                $levels[] = ['index' => $i, 'active' => $i === (int) $value];
-            }
-            $row['max'] = $option['max'];
-            $row['levelprefix'] = $option['levelprefix'];
-            $row['currentlabel'] = get_string($option['levelprefix'] . (int) $value, 'local_a11y');
-            $row['levels'] = $levels;
-            $row['currentvalue'] = (int) $value;
+        if (!$istoggle) {
+            $row += $this->export_stepper_fields($option, $value);
         }
 
         return $row;
+    }
+
+    /**
+     * The one option-specific "forced" note today (hideImages, forced on by
+     * Focus Mode level 3 - see build_category()). A second option needing
+     * this would add its own id => stringkey pair here, not a new parameter.
+     *
+     * @param string $optionid Option id.
+     * @return string|null The note text, or null if this option has none.
+     */
+    private function forced_note_for(string $optionid): ?string {
+        return $optionid === 'hideImages' ? get_string('hideimages_forcednote', 'local_a11y') : null;
+    }
+
+    /**
+     * The extra Mustache context fields a stepper row needs on top of what
+     * export_option() already builds for every option (toggle or stepper).
+     *
+     * @param array<string, mixed> $option Option definition; must be kind => 'stepper'.
+     * @param int $value Current level for this option (already sanitized/clamped).
+     * @return array<string, mixed> Fields to merge onto export_option()'s row.
+     */
+    private function export_stepper_fields(array $option, $value): array {
+        $levels = [];
+        for ($i = 0; $i <= $option['max']; $i++) {
+            $levels[] = ['index' => $i, 'active' => $i === (int) $value];
+        }
+        return [
+            'max' => $option['max'],
+            'levelprefix' => $option['levelprefix'],
+            'currentlabel' => get_string($option['levelprefix'] . (int) $value, 'local_a11y'),
+            'levels' => $levels,
+            'currentvalue' => (int) $value,
+        ];
     }
 
     /**

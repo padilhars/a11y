@@ -57,6 +57,81 @@ Feature: Accessibility panel
   # scenario is the one place in the suite that proves import() actually
   # fetches and runs it correctly on first activation, not just that the
   # option row exists.
+  # D77: quality/performance audit finding (audit/03-qualidade-desempenho.md
+  # section 4.2) - continuing to close the "83% of options untested" gap.
+  # These 4 are simple boolean toggles in Typography (default-open category,
+  # classes/manager.php::get_boolean_class_map()) with no cross-option
+  # interaction to worry about, unlike Hide Images/Focus Mode above.
+  Scenario: Typography toggles set their body classes independently
+    Given I click on "#local-a11y-fab" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='readableFont']" "css_element"
+    Then "body.a11y-readable-font" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='highlightTitles']" "css_element"
+    Then "body.a11y-highlight-titles" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='highlightLinks']" "css_element"
+    Then "body.a11y-highlight-links" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='highlightButtons']" "css_element"
+    Then "body.a11y-highlight-buttons" "css_element" should exist
+    # All 4 still on at once - confirms they don't clobber each other's class.
+    And "body.a11y-readable-font.a11y-highlight-titles.a11y-highlight-links.a11y-highlight-buttons" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='readableFont']" "css_element"
+    Then "body.a11y-readable-font" "css_element" should not exist
+    And "body.a11y-highlight-titles" "css_element" should exist
+
+  # D77: Word Spacing (max 3) and Text Alignment (max 4) - the two
+  # Typography steppers with no coverage yet.
+  Scenario: Word Spacing and Text Alignment cycle through their levels
+    Given I click on "#local-a11y-fab" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='wordSpacing']" "css_element"
+    Then "body.a11y-word-spacing-1" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='wordSpacing']" "css_element"
+    And I click on "#local-a11y-panel [data-option-id='wordSpacing']" "css_element"
+    And I click on "#local-a11y-panel [data-option-id='wordSpacing']" "css_element"
+    Then "body.a11y-word-spacing-3" "css_element" should not exist
+    And "body.a11y-word-spacing-1" "css_element" should not exist
+    When I click on "#local-a11y-panel [data-option-id='textAlign']" "css_element"
+    Then "body.a11y-text-align-1" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='textAlign']" "css_element"
+    Then "body.a11y-text-align-2" "css_element" should exist
+    And "body.a11y-text-align-1" "css_element" should not exist
+
+  # D77: color category (closed by default) - Invert Colors (toggle) plus
+  # the 3 remaining steppers there (Saturation, Blue Light Filter, Color
+  # Change/daltonismo).
+  Scenario: Color category options all set their expected body classes
+    Given I click on "#local-a11y-fab" "css_element"
+    And I click on "#local-a11y-panel [data-category-id='color'] [data-action='toggle-category']" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='invertColors']" "css_element"
+    Then "body.a11y-invert" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='saturation']" "css_element"
+    Then "body.a11y-saturation-1" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='blueLightFilter']" "css_element"
+    Then "body.a11y-bluelight-1" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='colorChange']" "css_element"
+    Then "body.a11y-color-1" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='colorChange']" "css_element"
+    Then "body.a11y-color-2" "css_element" should exist
+    And "body.a11y-color-1" "css_element" should not exist
+
+  # D77: Pause Animations (media, boolean) and Cursor (navigation, stepper,
+  # max 2) - the last 2 options with a direct body-class effect and no
+  # coverage yet.
+  Scenario: Pause Animations and Cursor set their body classes
+    Given I click on "#local-a11y-fab" "css_element"
+    And I click on "#local-a11y-panel [data-category-id='media'] [data-action='toggle-category']" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='pauseAnimations']" "css_element"
+    Then "body.a11y-pause-animations" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='pauseAnimations']" "css_element"
+    Then "body.a11y-pause-animations" "css_element" should not exist
+    And I click on "#local-a11y-panel [data-category-id='navigation'] [data-action='toggle-category']" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='cursor']" "css_element"
+    Then "body.a11y-cursor-1" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='cursor']" "css_element"
+    Then "body.a11y-cursor-2" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='cursor']" "css_element"
+    Then "body.a11y-cursor-1" "css_element" should not exist
+    And "body.a11y-cursor-2" "css_element" should not exist
+
   # D76: quality/performance audit finding (audit/03-qualidade-desempenho.md
   # section 4.2) - 83% of options had no behavioural test at all. Hide
   # Images is a simple boolean toggle, but it is also the option a real bug

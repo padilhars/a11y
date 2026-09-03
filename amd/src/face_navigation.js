@@ -585,6 +585,139 @@ const enterActive = (recapture) => {
 const calibrate = () => enterActive(true);
 
 // ── Detection loop ────────────────────────────────────────────────────────────
+// Quality/performance audit finding, fixed (audit/03-qualidade-desempenho.md
+// section 2.1): detect() used to be one function with cyclomatic complexity
+// 25 (limit 20) and nesting depth 5 (limit 4), inlining all four concerns
+// below. Each is now its own small function, called from detect() in the
+// same order/with the same logic as before - a pure extraction, no
+// behaviour change (see handleBlinkDwell()'s docblock for the one
+// pre-existing asymmetry between it and handleJawDwell(), preserved
+// exactly rather than "fixed" here).
+
+/**
+ * Move the virtual cursor based on head yaw/pitch relative to the
+ * calibrated neutral pose - the "joystick" input model: how far off-neutral
+ * the head is (past a small dead zone) sets a velocity, smoothed frame to
+ * frame, rather than mapping position directly (which would be twitchy).
+ *
+ * @param {Array<Number>} m The current frame's head transformation matrix, flattened
+ *   (results.facialTransformationMatrixes[0].data).
+ * @return {void}
+ */
+const updateCursorFromHeadPose = (m) => {
+    // The webcam preview is mirrored (scaleX(-1)) but MediaPipe reports
+    // unmirrored coordinates, so the X (yaw) axis is negated to match what
+    // the user sees: turning the head right moves the cursor right.
+    const spd = sensitivity * 6;
+    const DZ  = 0.03;
+    const tvx = Math.abs(m[8] - neutral.m8) > DZ ? -(m[8] - neutral.m8) * spd : 0;
+    const tvy = Math.abs(m[9] - neutral.m9) > DZ ? -(m[9] - neutral.m9) * spd : 0;
+
+    vel.vx = 0.2 * tvx + 0.8 * vel.vx;
+    vel.vy = 0.2 * tvy + 0.8 * vel.vy;
+    cursorPos.x = Math.max(0, Math.min(window.innerWidth  - 1, cursorPos.x + vel.vx));
+    cursorPos.y = Math.max(0, Math.min(window.innerHeight - 1, cursorPos.y + vel.vy));
+
+    if (cursorEl) {
+        cursorEl.style.left = cursorPos.x + 'px';
+        cursorEl.style.top  = cursorPos.y + 'px';
+    }
+};
+
+/**
+ * Scroll the page when the cursor is in the top/bottom edge band of the
+ * viewport, at a speed proportional to how deep into the band it is - lets
+ * the user scroll purely by tilting the head up/down (moving the cursor to
+ * the screen edges).
+ *
+ * @return {void}
+ */
+const applyEdgeScroll = () => {
+    const edge = Math.max(70, window.innerHeight * 0.09);
+    const SCROLL_MAX = 20;
+    let scrollAmt = 0;
+    if (cursorPos.y < edge) {
+        scrollAmt = -SCROLL_MAX * (1 - cursorPos.y / edge);
+    } else if (cursorPos.y > window.innerHeight - edge) {
+        scrollAmt = SCROLL_MAX * (1 - (window.innerHeight - cursorPos.y) / edge);
+    }
+    if (scrollAmt !== 0) {
+        window.scrollBy(0, scrollAmt);
+    }
+};
+
+/**
+ * Jaw-open dwell-to-click: once the jaw-open blendshape score crosses
+ * `threshold` and stays there for 400ms, fire a synthetic click at the
+ * current cursor position. Structurally mirrors handleBlinkDwell() below,
+ * kept as its own function rather than one shared generic helper because
+ * the two are not perfectly symmetric - see handleBlinkDwell()'s docblock.
+ *
+ * @param {Number} jawOpen Current jaw-open blendshape score (0-1).
+ * @param {Number} threshold Score above which the jaw counts as "open" (neutral.jaw + margin).
+ * @param {Number} now performance.now() for this frame, shared with handleBlinkDwell().
+ * @return {void}
+ */
+const handleJawDwell = (jawOpen, threshold, now) => {
+    if (jawOpen > threshold) {
+        if (!jawActive) {
+            if (!jawDwell) {
+                jawDwell = now;
+            } else {
+                const elapsed = now - jawDwell;
+                setDwellProgress(Math.min(1, elapsed / 400));
+                if (elapsed >= 400) {
+                    syntheticClick(cursorPos.x, cursorPos.y);
+                    jawActive = true;
+                    jawDwell  = null;
+                    setDwellProgress(0);
+                }
+            }
+        }
+    } else {
+        jawDwell  = null;
+        jawActive = false;
+        setDwellProgress(0);
+    }
+};
+
+/**
+ * Blink dwell-to-click: same mechanism as handleJawDwell() above, with its
+ * own state/duration (500ms) and threshold. Not merged into one shared
+ * function with it: the two differ in one real way, preserved exactly as
+ * it already was before this extraction - jaw's "released" branch resets
+ * the dwell-progress ring (setDwellProgress(0)), blink's released branch
+ * does not. Whether that asymmetry is intentional was not investigated -
+ * this is a complexity refactor (audit/03-qualidade-desempenho.md), not a
+ * behaviour change, so it is kept exactly as found rather than "fixed".
+ *
+ * @param {Number} eyeBlink Current eye-blink blendshape score (0-1), averaged over both eyes.
+ * @param {Number} threshold Score above which a blink counts as "closed" (neutral.blink + margin).
+ * @param {Number} now performance.now() for this frame, shared with handleJawDwell().
+ * @return {void}
+ */
+const handleBlinkDwell = (eyeBlink, threshold, now) => {
+    if (eyeBlink > threshold) {
+        if (!blinkActive) {
+            if (!blinkDwell) {
+                blinkDwell = now;
+            } else {
+                const elapsed = now - blinkDwell;
+                setDwellProgress(Math.min(1, elapsed / 500));
+                if (elapsed >= 500) {
+                    syntheticClick(cursorPos.x, cursorPos.y);
+                    blinkActive = true;
+                    blinkDwell  = null;
+                    setDwellProgress(0);
+                }
+            }
+        }
+    } else {
+        blinkDwell  = null;
+        blinkActive = false;
+    }
+};
+
 /**
  * Per-frame detection loop (driven by requestAnimationFrame while
  * isRunning): reads the current face landmarks, updates the virtual
@@ -623,87 +756,11 @@ const detect = () => {
         }
 
         if (neutral) {
-            // ── Joystick velocity ──────────────────────────────────────────
-            // The webcam preview is mirrored (scaleX(-1)) but MediaPipe reports
-            // unmirrored coordinates, so the X (yaw) axis is negated to match
-            // what the user sees: turning the head right moves the cursor right.
-            const spd = sensitivity * 6;
-            const DZ  = 0.03;
-            const tvx = Math.abs(m[8] - neutral.m8) > DZ ? -(m[8] - neutral.m8) * spd : 0;
-            const tvy = Math.abs(m[9] - neutral.m9) > DZ ? -(m[9] - neutral.m9) * spd : 0;
-
-            vel.vx = 0.2 * tvx + 0.8 * vel.vx;
-            vel.vy = 0.2 * tvy + 0.8 * vel.vy;
-            cursorPos.x = Math.max(0, Math.min(window.innerWidth  - 1, cursorPos.x + vel.vx));
-            cursorPos.y = Math.max(0, Math.min(window.innerHeight - 1, cursorPos.y + vel.vy));
-
-            if (cursorEl) {
-                cursorEl.style.left = cursorPos.x + 'px';
-                cursorEl.style.top  = cursorPos.y + 'px';
-            }
-
-            // ── Edge scrolling ─────────────────────────────────────────────
-            // When the cursor reaches the top/bottom band of the viewport, the
-            // page scrolls in that direction, with speed proportional to how
-            // deep into the band it is. Lets the user scroll purely by tilting
-            // the head up/down (moving the cursor to the screen edges).
-            const edge = Math.max(70, window.innerHeight * 0.09);
-            const SCROLL_MAX = 20;
-            let scrollAmt = 0;
-            if (cursorPos.y < edge) {
-                scrollAmt = -SCROLL_MAX * (1 - cursorPos.y / edge);
-            } else if (cursorPos.y > window.innerHeight - edge) {
-                scrollAmt = SCROLL_MAX * (1 - (window.innerHeight - cursorPos.y) / edge);
-            }
-            if (scrollAmt !== 0) {
-                window.scrollBy(0, scrollAmt);
-            }
-
-            // ── Jaw click (400ms dwell) ────────────────────────────────────
-            const now   = performance.now();
-            const jawT  = Math.min(0.9, neutral.jaw + 0.25);
-            if (jawOpen > jawT) {
-                if (!jawActive) {
-                    if (!jawDwell) {
-                        jawDwell = now;
-                    } else {
-                        const elapsed = now - jawDwell;
-                        setDwellProgress(Math.min(1, elapsed / 400));
-                        if (elapsed >= 400) {
-                            syntheticClick(cursorPos.x, cursorPos.y);
-                            jawActive = true;
-                            jawDwell  = null;
-                            setDwellProgress(0);
-                        }
-                    }
-                }
-            } else {
-                jawDwell  = null;
-                jawActive = false;
-                setDwellProgress(0);
-            }
-
-            // ── Blink click (500ms dwell) ──────────────────────────────────
-            const blinkT = Math.min(0.9, neutral.blink + 0.30);
-            if (eyeBlink > blinkT) {
-                if (!blinkActive) {
-                    if (!blinkDwell) {
-                        blinkDwell = now;
-                    } else {
-                        const elapsed = now - blinkDwell;
-                        setDwellProgress(Math.min(1, elapsed / 500));
-                        if (elapsed >= 500) {
-                            syntheticClick(cursorPos.x, cursorPos.y);
-                            blinkActive = true;
-                            blinkDwell  = null;
-                            setDwellProgress(0);
-                        }
-                    }
-                }
-            } else {
-                blinkDwell  = null;
-                blinkActive = false;
-            }
+            updateCursorFromHeadPose(m);
+            applyEdgeScroll();
+            const now = performance.now();
+            handleJawDwell(jawOpen, Math.min(0.9, neutral.jaw + 0.25), now);
+            handleBlinkDwell(eyeBlink, Math.min(0.9, neutral.blink + 0.30), now);
         }
     }
 
@@ -745,40 +802,44 @@ export const start = async(cb) => {
     cursorEl = buildCursor();
     renderLoading();
 
-    loadMediaPipe()
-        .then((mp) => mp.FilesetResolver.forVisionTasks(MP_WASM).then((vision) => ({mp, vision})))
-        .then(({mp, vision}) => mp.FaceLandmarker.createFromOptions(vision, {
+    // Quality/performance audit finding, fixed (audit/03-qualidade-desempenho.md
+    // section 2.1): this used to be a raw .then() chain with a Promise
+    // nested inside its first callback (promise/no-nesting) and a .then()
+    // with no explicit return (promise/always-return) - both eslint
+    // findings that exist specifically because start() already IS an async
+    // function but wasn't using await for this part. Converted to a
+    // straightforward sequential await chain inside try/catch: same steps,
+    // same order, same error handling (renderError() on any failure), just
+    // without the two lint findings a raw .then() chain invited here.
+    try {
+        const mp = await loadMediaPipe();
+        const vision = await mp.FilesetResolver.forVisionTasks(MP_WASM);
+        landmarker = await mp.FaceLandmarker.createFromOptions(vision, {
             baseOptions: {modelAssetPath: MP_MODEL, delegate: 'GPU'},
             runningMode: 'VIDEO',
             numFaces: 1,
             outputFaceBlendshapes: true,
             outputFacialTransformationMatrixes: true,
-        }))
-        .then((lm) => {
-            landmarker = lm;
-            return navigator.mediaDevices.getUserMedia(
-                {video: {width: 640, height: 480, facingMode: 'user'}}
-            );
-        })
-        .then((s) => {
-            stream = s;
-            const calib = loadCalibration();
-            if (calib) {
-                // Already calibrated before navigating: restore the saved
-                // neutral pose and go straight to the live state - no manual
-                // Calibrate step and no recalibration needed.
-                neutral = calib.neutral;
-                if (typeof calib.sensitivity === 'number') {
-                    sensitivity = calib.sensitivity;
-                }
-                enterActive(false);
-            } else {
-                renderCalibrating();
-            }
-        })
-        .catch((e) => {
-            renderError(e.message || String(e));
         });
+        stream = await navigator.mediaDevices.getUserMedia(
+            {video: {width: 640, height: 480, facingMode: 'user'}}
+        );
+        const calib = loadCalibration();
+        if (calib) {
+            // Already calibrated before navigating: restore the saved
+            // neutral pose and go straight to the live state - no manual
+            // Calibrate step and no recalibration needed.
+            neutral = calib.neutral;
+            if (typeof calib.sensitivity === 'number') {
+                sensitivity = calib.sensitivity;
+            }
+            enterActive(false);
+        } else {
+            renderCalibrating();
+        }
+    } catch (e) {
+        renderError(e.message || String(e));
+    }
 };
 
 /**

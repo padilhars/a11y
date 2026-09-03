@@ -4,7 +4,11 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
-Nothing yet.
+### Testing / docs
+
+- 4 more Behat scenarios (`tests/behat/local_a11y.feature`), covering all 12 remaining options with a direct body-class effect that had no test yet (Typography toggles and its 2 remaining steppers, the whole Color category, Pause Animations, Cursor). Behavioural test coverage goes from 9/30 to 21/30 options - the 9 left (all JS-behavioural-only, no body class) would need device-permission simulation or custom Behat steps, not the generic click-and-check-class pattern used here. Verified for real: 11 scenarios/145 steps, all passed. See DECISIONS.md D77.
+- `tests/behat/vlibras_integration.feature`'s `@vlibras` scenario passes end-to-end for the first time in this project's history. Two real bugs fixed: a stale `local_a11y/enabledfeatures` config value (saved before VLibras ever existed on this site) was silently excluding the `signLanguage` option; and the scenario was asserting the wrong element ("`#vlibras-access-wrapper` should be visible" instead of "`#vlibras-app-root` should exist") - VLibras hides its own idle button by design once its avatar opens. A third, real finding was left deliberately undocumented-as-fixed rather than papered over: once VLibras' avatar is open, its own full-viewport overlay (`z-index: 2147483647`) intercepts clicks everywhere, including on this plugin's own panel - a real user cannot close it by re-clicking the panel toggle either, only through VLibras' own close button (already how `amd/src/vlibras_integration.js` closes it). Testing that close half of the cycle via Behat would need new custom step infrastructure (shadow-DOM traversal), not a feature-file tweak - user decided to document the limitation and stop there. `vendor/bin/behat --tags="@local_a11y"`: 12 scenarios/159 steps, all passed. See DECISIONS.md D78.
+- `classes/output/panel.php` and `amd/src/face_navigation.js` refactored to resolve the high-cyclomatic-complexity findings from `audit/03-qualidade-desempenho.md` (phpmd CC14/NPath315 and CC12; eslint `complexity`=25, `max-depth`=5, `promise/no-nesting`, `promise/always-return`) via extract-method/extract-function - no behaviour change. Verified with real `phpmd`/`eslint` runs (only pre-existing, deliberate findings remain) and the full PHPUnit/Behat suites (22/22, 159/159 steps), no regression. See DECISIONS.md D78.
 
 ## [1.0.0] - 2026-09-02
 
