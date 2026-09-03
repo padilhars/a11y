@@ -7,7 +7,7 @@
 
 Um plugin de acessibilidade para Moodle 5.2 que adiciona um botão flutuante (FAB) e um painel com **29 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
 
-![Painel aberto mostrando os perfis de acessibilidade](.github/screenshots/m2/02-panel-open.png)
+![Acessibilidade para Moodle - Mais inclusão, mais aprendizagem: banner de apresentação do local_a11y com o painel de acessibilidade aberto sobre o painel do Moodle, mostrando os 9 perfis de acessibilidade e a categoria Texto e Tipografia](.github/screenshots/hero/hero-overview.png)
 
 ## Autoria
 
@@ -34,7 +34,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 
 <table>
 <tr>
-<td width="50%"><img src=".github/screenshots/hero/hero-overview.png" alt="Banner de apresentação do local_a11y: 'Acessibilidade para Moodle - Mais inclusão, mais aprendizagem', com o painel de acessibilidade aberto sobre o painel do Moodle mostrando os 9 perfis de acessibilidade e a categoria Texto e Tipografia"></td>
+<td width="50%"><img src=".github/screenshots/m4/m4-01-profile-dyslexia.png" alt="Perfil de Dislexia ativo: fonte alterada na página e painel mostrando 'Perfil Ativo: Dislexia' com 4 opções ativas"></td>
 <td width="50%"><img src=".github/screenshots/bugfix-effects/contrast-dark.png" alt="Modo de contraste escuro aplicado a toda a página, incluindo drawers e navbar"></td>
 </tr>
 <tr>
