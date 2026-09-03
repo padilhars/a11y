@@ -299,3 +299,30 @@ Feature: Accessibility panel
     And ".local-a11y-magnifier__content #page" "css_element" should exist
     When I click on "#local-a11y-panel [data-option-id='magnifier']" "css_element"
     Then ".local-a11y-magnifier" "css_element" should not exist
+
+  # D79, round 2: Face Navigation is the last of the 30 options with no
+  # behavioural test, and stays that way here - not for lack of trying.
+  # A scenario mirroring the one above (privacy-notice pre-ack, open the
+  # panel, toggle the option, wait for the calibration HUD) was written
+  # and tried after adding use-fake-device-for-media-stream/use-fake-ui-
+  # for-media-stream to $CFG->behat_profiles' Chrome args (config.php,
+  # outside this repo - a QA-environment-only change), which does make
+  # getUserMedia() resolve with a synthetic camera instead of hanging on a
+  # real permission prompt. It still fails, for an entirely different,
+  # pre-existing reason unrelated to the camera: this Behat site serves
+  # over plain HTTP (behat_wwwroot), not HTTPS, so `crypto.subtle` is
+  # undefined here (a secure-context-only Web API) - and
+  # fetchVerifiedBytes() (amd/src/face_navigation.js, added in D62's
+  # TOCTOU fix, long before this round) depends on it to hash-verify
+  # vision_bundle.mjs/the model before use. Confirmed via Behat's own
+  # faildump, not assumed: the HUD shows "Failed to start" /
+  # "Cannot read properties of undefined (reading 'digest')" every time,
+  # on this Behat site specifically. This is the same HTTP-vs-HTTPS gap
+  # already known from earlier in this project's history for this exact
+  # module - not a new defect, and not something to work around by
+  # weakening the integrity check just to make a test pass here. The
+  # feature itself is already verified working end-to-end against the
+  # real, HTTPS production site via WebDriver (HUD reaches "Calibrate"
+  # with a live video preview in ~5s - see DECISIONS.md D79) - that live
+  # verification, not a Behat scenario, is this option's regression
+  # coverage until (if ever) this Behat site is also served over HTTPS.

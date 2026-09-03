@@ -47,7 +47,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 
 - Moodle 5.2 (única versão com suporte confirmado - ver `version.php:$plugin->supported`; testar contra outras versões antes de assumir compatibilidade).
 - PHP 8.2+.
-- Nenhuma dependência externa em tempo de execução (as fontes Atkinson Hyperlegible, Lexend e OpenDyslexic são empacotadas localmente; nada é carregado de CDNs de terceiros).
+- Sem dependências externas empacotadas para a instalação do plugin em si (as fontes Atkinson Hyperlegible, Lexend e OpenDyslexic, e o WASM do MediaPipe, são empacotados localmente - nada disso é baixado de CDN de terceiro). Duas exceções reais em tempo de execução, ambas já detalhadas na seção "Por que usar" acima: o modelo de rastreamento facial da Navegação por Face (buscado ao vivo, com verificação de integridade) e a API nativa de reconhecimento de fala usada por Comandos por Voz.
 
 ## Instalação
 
