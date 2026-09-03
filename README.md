@@ -34,7 +34,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 
 <table>
 <tr>
-<td width="50%"><img src=".github/screenshots/m4/m4-01-profile-dyslexia.png" alt="Perfil de Dislexia ativo: fonte alterada na página e painel mostrando 'Perfil Ativo: Dislexia' com 4 opções ativas"></td>
+<td width="50%"><img src=".github/screenshots/hero/hero-overview.png" alt="Banner de apresentação do local_a11y: 'Acessibilidade para Moodle - Mais inclusão, mais aprendizagem', com o painel de acessibilidade aberto sobre o painel do Moodle mostrando os 9 perfis de acessibilidade e a categoria Texto e Tipografia"></td>
 <td width="50%"><img src=".github/screenshots/bugfix-effects/contrast-dark.png" alt="Modo de contraste escuro aplicado a toda a página, incluindo drawers e navbar"></td>
 </tr>
 <tr>
