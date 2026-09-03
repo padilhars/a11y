@@ -51,7 +51,6 @@ use Behat\Mink\Exception\ExpectationException;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_local_a11y extends behat_base {
-
     /**
      * Mirrors classes/integration/vlibras.php::APP_ROOT_SELECTOR - VLibras'
      * own avatar/interpreter UI host, built the first time its idle button
@@ -162,7 +161,7 @@ JS;
         $this->getSession()->executeScript(
             "var v = document.createElement('video');"
             . "v.id = 'local-a11y-behat-test-video';"
-            . "v.setAttribute('autoplay', '');" // shouldSilence() only checks this attribute/property, never real playback.
+            . "v.setAttribute('autoplay', '');" // Only this attribute/property matters to shouldSilence(), never real playback.
             . "document.getElementById('page').appendChild(v);"
         );
     }

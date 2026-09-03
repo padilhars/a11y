@@ -38,10 +38,10 @@ namespace local_a11y;
  * a MediaPipe build nobody actually reviewed.
  *
  * Update the pinned hashes here (and MP_CDN's version comment in
- * amd/src/face_navigation.js) together, deliberately, whenever the
- * @mediapipe/tasks-vision package version bundled in mediapipe/wasm/ is
- * upgraded - never to silence a failure without first confirming why the
- * files actually changed.
+ * amd/src/face_navigation.js) together, deliberately, whenever the version
+ * of the npm package `@mediapipe/tasks-vision` bundled in mediapipe/wasm/
+ * is upgraded - never to silence a failure without first confirming why
+ * the files actually changed.
  *
  * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
