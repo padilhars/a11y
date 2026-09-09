@@ -217,6 +217,33 @@ const buildClone = () => {
     clone.style.borderLeftWidth = sourceStyle.borderLeftWidth;
     clone.style.borderStyle = sourceStyle.borderStyle;
 
+    // D82: #page's own margin - unlike padding/border (D49) - must be
+    // zeroed on the clone, not copied. Boost sets #page a real margin on
+    // some layouts (seen "60px 0 0 0" - space for a sticky/overlapping
+    // navbar); margin lives *outside* the border box, so it shifts where
+    // the clone's content visually starts without moving pageRect (which
+    // is #page's own border box - getBoundingClientRect() never includes
+    // margin) and without the D49 copy touching it (padding/border only).
+    // render()'s coordinate math assumes the clone's content starts at
+    // local (0, 0) inside contentEl (see its docblock derivation) - a
+    // margin-top the clone still renders (margin is copied by the browser
+    // automatically via the still-matching #page id/classes, same as
+    // padding was before D49's fix) breaks that assumption by exactly the
+    // margin amount, in whichever direction(s) the theme sets it. Copying
+    // the margin instead of zeroing it would just relocate the same bug
+    // into the transform math for no benefit (unlike padding, margin
+    // doesn't affect where content reflows *inside* the box, so there is
+    // no reflow-fidelity reason to keep it) - zeroing is the direct fix.
+    // Reproduced live on mdl.snifrbid.com.br (#page margin-top: 60px):
+    // hovering a heading showed the lens sampling content from well above
+    // the actual cursor position; confirmed via the clone's own computed
+    // margin (60px 0 0 0, unzeroed) and a screenshot showing the mismatch,
+    // fixed by the two lines below (verified back to 0px after).
+    clone.style.marginTop = '0';
+    clone.style.marginRight = '0';
+    clone.style.marginBottom = '0';
+    clone.style.marginLeft = '0';
+
     pageRect = source.getBoundingClientRect();
     clone.style.width = pageRect.width + 'px';
     contentEl.replaceChildren(clone);

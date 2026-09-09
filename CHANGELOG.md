@@ -10,6 +10,7 @@ All notable changes to `local_a11y` are documented here.
 
 ### Fixed
 
+- Magnifier (`magnifier`): the lens wasn't precisely centred on the pointer - traced to `#page`'s own CSS margin (60px top on this site's layout) not being zeroed on the cloned copy the lens magnifies, throwing off every sampled point by that same amount. Fixed by explicitly zeroing the clone's margin in `buildClone()`, alongside the padding/border copy already there. Verified against the exact transform formula `render()` itself uses, not just visually. See DECISIONS.md D82.
 - Any accessibility option, toggled by a genuinely anonymous visitor (never logged in, not even auto-logged-in as guest) on a site with usage-stat collection on, was force-redirecting that visitor's whole page to the login screen - not specific to any one option, found while investigating Face Navigation but affecting all of them equally. Root cause: the fire-and-forget usage-stats call (`local_a11y_record_activation`) requires a Moodle session that a genuinely anonymous visitor doesn't have; Moodle's own `core/ajax` module reacts to that specific failure with a page-wide redirect, before this plugin's own error handling ever sees it. `classes/hook_callbacks.php`/`amd/src/main.js` now skip that call entirely for this one visitor case (a small, honest undercount) instead of ever redirecting them. Confirmed live via WebDriver against production: fixed. See DECISIONS.md D79.
 
 ### Security
