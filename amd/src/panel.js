@@ -387,11 +387,15 @@ const registerEventListeners = () => {
         const helpBtn = e.target.closest('[data-action="toggle-help"]');
         if (helpBtn) {
             // Looked up by data-option-id rather than DOM nesting (both the
-            // button and its help block carry it, see option_toggle.mustache)
-            // so this doesn't depend on the block always being a descendant
-            // of the button - stepper rows are role="button" containers of
-            // their own, so a help block nested inside one the way toggle
-            // rows do it would be an axe "nested-interactive" violation.
+            // button and its help block carry it, see option_toggle.mustache
+            // and, since D82, option_stepper.mustache too) so this doesn't
+            // depend on the block always being a descendant of the button -
+            // in both templates it's a plain sibling instead: nesting a
+            // help block (or the "?" button itself) inside an element that
+            // is role="button" would be an axe "nested-interactive"
+            // violation, and stepper rows' cycling control (D82:
+            // .local-a11y-option__trigger, formerly the row itself) is
+            // exactly that.
             const optionId = helpBtn.dataset.optionId;
             const block = panel.querySelector(`[data-region="help-block"][data-option-id="${optionId}"]`);
             if (block) {

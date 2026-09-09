@@ -83,21 +83,23 @@ class options {
                 'labelkey' => 'opt_contrast', 'desckey' => null, 'levelprefix' => 'contrastlevel_'],
             ['id' => 'invertColors', 'cat' => 'color', 'kind' => 'toggle', 'icon' => 'invertColors',
                 'labelkey' => 'opt_invertcolors', 'desckey' => null],
-            // desckey text extended (compliance audit, audit/04-conformidade.md
-            // item B8): color-simulation filters apply to every image under
-            // #page indiscriminately, including ones that encode information
-            // by color (a chart legend, a heat map) - documented as a known
-            // limitation. Not a hashelp block: option_stepper.mustache's row
-            // is itself role="button" (the whole row cycles the stepper) -
-            // nesting a real <button> inside it would be an axe
-            // "nested-interactive" violation (see the comment in
-            // amd/src/panel.js explaining why toggle rows, which aren't
-            // role="button" themselves, can do this safely and steppers
-            // can't without a bigger markup restructure). See DECISIONS.md D76.
-            // Desckey shortened to just the option's purpose (at the user's
-            // request); the caveat about this filter also affecting images
-            // that encode information by color moved to the "?" help block
-            // (help_cc_*), same pattern as hideImages (D75).
+            // desckey text originally extended in place (compliance audit,
+            // audit/04-conformidade.md item B8) to cover a known limitation:
+            // color-simulation filters apply to every image under #page
+            // indiscriminately, including ones that encode information by
+            // color (a chart legend, a heat map). At the time this couldn't
+            // become a hashelp block: option_stepper.mustache's row was
+            // itself role="button" (the whole row cycles the stepper), and
+            // nesting a real <button> inside it would have been an axe
+            // "nested-interactive" violation (D76). D82 later restructured
+            // option_stepper.mustache (role="button" moved to an inner
+            // .local-a11y-option__trigger, freeing the row itself to host
+            // the help button/block as plain siblings, same shape
+            // option_toggle.mustache already used) specifically to lift
+            // this constraint - desckey shortened to just the option's
+            // purpose (at the user's request) and the image-filtering
+            // caveat moved into the now-possible "?" help block (help_cc_*),
+            // same pattern as hideImages (D75).
             ['id' => 'colorChange', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'pipette',
                 'labelkey' => 'opt_colorchange', 'desckey' => 'opt_colorchange_desc', 'levelprefix' => 'colorchangelevel_',
                 'hashelp' => true],
