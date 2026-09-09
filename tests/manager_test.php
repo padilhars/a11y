@@ -39,13 +39,13 @@ final class manager_test extends \advanced_testcase {
     }
 
     /**
-     * Default settings must have exactly the 29 known keys, all "off"
-     * (28 + bionicReading, D53).
+     * Default settings must have exactly the 30 known keys, all "off"
+     * (28 + bionicReading (D53) + contentWidth (D85)).
      * @return void
      */
     public function test_get_default_settings_shape(): void {
         $defaults = manager::get_default_settings();
-        $this->assertCount(29, $defaults);
+        $this->assertCount(30, $defaults);
         foreach ($defaults as $key => $value) {
             $this->assertContains($value, [false, 0], "Default for '$key' should be false or 0");
         }

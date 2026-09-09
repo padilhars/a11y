@@ -64,6 +64,7 @@ const STEPPER_CLASS_PREFIX_MAP = {
     colorChange: 'a11y-color-',
     cursor: 'a11y-cursor-',
     focusMode: 'a11y-focus-mode-',
+    contentWidth: 'a11y-content-width-',
 };
 
 /**

@@ -2671,6 +2671,36 @@ body.a11y-focus-mode-3 #page [aria-hidden="true"]:not(
 }
 
 /* ===========================================================================
+   CONTENT WIDTH (3-level stepper)
+   Overrides .main-inner's own max-width:830px cap (Boost's reading-column
+   card) by setting a min-width instead - min-width always wins over
+   max-width in the CSS used-value algorithm, so this doesn't need to beat
+   the theme's rule on specificity. Capped with min() against a vw ceiling
+   so it can never force horizontal overflow on a narrower viewport -
+   verified with no overflow down to 375px. See D85.
+
+   Styleguide 11.7.
+   =========================================================================== */
+body.a11y-content-width-1 .main-inner {
+    /* stylelint-disable-next-line csstree/validator -- see the drawer-format
+       width: min() comment further up this file; same tooling limitation,
+       not a real bug. */
+    min-width: min(1000px, 90vw) !important;
+}
+body.a11y-content-width-2 .main-inner {
+    /* stylelint-disable-next-line csstree/validator -- see the drawer-format
+       width: min() comment further up this file; same tooling limitation,
+       not a real bug. */
+    min-width: min(1300px, 90vw) !important;
+}
+body.a11y-content-width-3 .main-inner {
+    /* stylelint-disable-next-line csstree/validator -- see the drawer-format
+       width: min() comment further up this file; same tooling limitation,
+       not a real bug. */
+    min-width: min(1600px, 90vw) !important;
+}
+
+/* ===========================================================================
    MAGNIFIER (amd/src/magnifier.js)
    A circular window (this element) clipping a cloned, transform-scaled copy
    of #page (its one child, .local-a11y-magnifier__content) - see D42 for

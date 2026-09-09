@@ -291,6 +291,23 @@ Feature: Accessibility panel
     Then "body.a11y-focus-mode-3" "css_element" should not exist
     And "#local-a11y-panel [data-option-id='hideImages'].local-a11y-option--forced" "css_element" should not exist
 
+  # D85: Widen Content is a plain 3-level stepper like Contrast/Word
+  # Spacing above (min-width override on .main-inner, see styles.css) -
+  # no cross-option coupling to test, just the level cycling and wrap.
+  Scenario: Widen Content cycles through its levels and wraps back to off
+    Given I click on "#local-a11y-fab" "css_element"
+    And I click on "#local-a11y-panel [data-category-id='navigation'] [data-action='toggle-category']" "css_element"
+    When I click on "#local-a11y-panel [data-option-id='contentWidth']" "css_element"
+    Then "body.a11y-content-width-1" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='contentWidth']" "css_element"
+    Then "body.a11y-content-width-2" "css_element" should exist
+    And "body.a11y-content-width-1" "css_element" should not exist
+    When I click on "#local-a11y-panel [data-option-id='contentWidth']" "css_element"
+    Then "body.a11y-content-width-3" "css_element" should exist
+    When I click on "#local-a11y-panel [data-option-id='contentWidth']" "css_element"
+    Then "body.a11y-content-width-3" "css_element" should not exist
+    And "body.a11y-content-width-1" "css_element" should not exist
+
   Scenario: Magnifier clone keeps #page's id, and the option can be turned off again
     Given I click on "#local-a11y-fab" "css_element"
     And I click on "#local-a11y-panel [data-category-id='navigation'] [data-action='toggle-category']" "css_element"

@@ -144,6 +144,12 @@ class icons {
         'clock' => '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
         'zoomIn' => '<circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/><line x1="11" x2="11" '
             . 'y1="8" y2="14"/><line x1="8" x2="14" y1="11" y2="11"/>',
+        // Lucide "maximize-2" - not in _design-reference/a11y-data.jsx's
+        // ICON_PATHS (contentWidth has no prototype equivalent, same
+        // situation focusMode was in per D52) - added new, same stroke/
+        // viewBox conventions as every other icon here.
+        'maximize' => '<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" '
+            . 'y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/>',
     ];
 
     /**

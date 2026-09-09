@@ -5,7 +5,7 @@
 [![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4.svg)](https://www.php.net)
 [![Documentação](https://img.shields.io/badge/docs-phpDocumentor%20%7C%20JSDoc%20%7C%20KSS-6f42c1.svg)](docs/README.md)
 
-Um plugin de acessibilidade para Moodle 5.2 que adiciona um botão flutuante (FAB) e um painel com **29 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
+Um plugin de acessibilidade para Moodle 5.2 que adiciona um botão flutuante (FAB) e um painel com **30 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
 
 ![Acessibilidade para Moodle - Mais inclusão, mais aprendizagem: banner de apresentação do local_a11y com o painel de acessibilidade aberto sobre o painel do Moodle, mostrando os 9 perfis de acessibilidade e a categoria Texto e Tipografia](.github/screenshots/hero/hero-overview.png)
 
@@ -25,7 +25,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 ## Por que usar
 
 - **Sem dependências externas empacotadas** — nenhum script ou fonte de terceiro é *baixado* pelo navegador do usuário final além de duas exceções documentadas: o modelo de rastreamento facial da Navegação por Face (`face_landmarker.task`, buscado ao vivo do CDN do Google — não empacotado localmente porque a licença de redistribuição desse arquivo específico não é declarada de forma explícita pelo fabricante, ao contrário do restante do MediaPipe, que é Apache-2.0 e por isso já vem empacotado localmente em `mediapipe/` — com verificação de integridade SHA-256 vinculada ao código que de fato executa, via `modelAssetBuffer`); e o ícone ONU. **Comandos por Voz é uma terceira exceção, de natureza diferente**: usa a API nativa `SpeechRecognition` do navegador, que em navegadores baseados em Chromium processa o áudio do microfone em um serviço de reconhecimento de fala remoto do próprio fabricante do navegador (não operado por este plugin nem por este site) — ver "Comandos por Voz e reconhecimento de fala" abaixo.
-- **29 opções reais, não uma lista de marketing** — cada uma foi implementada, testada em auditoria de segurança e código morto, e documentada (PHPDoc/JSDoc/KSS completos, ver [`docs/`](docs/README.md)).
+- **30 opções reais, não uma lista de marketing** — cada uma foi implementada, testada em auditoria de segurança e código morto, e documentada (PHPDoc/JSDoc/KSS completos, ver [`docs/`](docs/README.md)).
 - **Zero FOUC**: as preferências do usuário são aplicadas antes da primeira pintura da página, via script inline síncrono.
 - **Privacidade real**: a única informação pessoal armazenada *por este plugin* é a preferência de acessibilidade do próprio usuário; a única tabela própria do plugin é 100% agregada e anônima (opcional, desligada por padrão — ver "Estatísticas de uso" abaixo); nada é compartilhado com terceiros *por este plugin* (a exceção de Comandos por Voz acima é comportamento do próprio navegador do usuário, fora do controle do plugin).
 - **Feito para produção**: controle de acesso via capabilities do Moodle (`local/a11y:view`), Hooks API (não callbacks legados), auditado quanto a segurança e código morto antes de cada publicação.
@@ -69,14 +69,14 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 - **Atalho global `Alt + A`** abre/fecha o painel de qualquer página.
 - Focus trap (WCAG 2.2), `Esc` fecha e devolve o foco ao botão, `aria-live` no contador de opções ativas.
 
-### As 29 opções (5 categorias)
+### As 30 opções (5 categorias)
 
 | Categoria | Opções |
 |---|---|
 | Texto e Tipografia | Fonte Legível, Fonte para Dislexia, Destacar Títulos/Links/Botões, Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Espaçamento entre Palavras, Alinhamento do Texto, Leitura Biônica |
 | Cores e Contraste | Contraste (4 níveis), Inverter Cores, Mudar Cores (filtros de daltonismo via SVG), Saturação, Filtro de Luz Azul |
 | Mídia e Animação | Ocultar Imagens, Pausar Animações, Silenciar Mídia, Dicas de Ferramentas |
-| Foco e Navegação | Guia de Leitura, Máscara de Leitura, Lupa, Cursor (3 níveis), Modo Foco (4 níveis) |
+| Foco e Navegação | Guia de Leitura, Máscara de Leitura, Lupa, Cursor (3 níveis), Modo Foco (4 níveis), Ampliar Conteúdo (3 níveis) |
 | Recursos Avançados | Leitor de Tela (texto-para-fala), Teclado Virtual, Comandos por Voz, Navegação por Face |
 
 ### Os 9 perfis
@@ -93,7 +93,7 @@ Baixa Visão, Daltonismo, Dislexia, TDAH/Foco, Idoso/Sênior, Epilepsia, Defici�
 
 **Administração do site → Plugins → Plugins locais → Acessibilidade (A11y)**, organizada em 5 seções — todas com descrição em cada campo, explicando o que ele faz:
 
-- **Geral** — ativar/desativar o plugin globalmente; mostrar (ou não) para visitantes; padrões de URL a excluir; quais das 29 opções ficam disponíveis para os usuários.
+- **Geral** — ativar/desativar o plugin globalmente; mostrar (ou não) para visitantes; padrões de URL a excluir; quais das 30 opções ficam disponíveis para os usuários.
 - **Botão Flutuante (FAB)** — posição na tela, ícone e forma (círculo/quadrado).
 - **Painel** — formato em telas de desktop (popover/gaveta/modal — em celulares e tablets pequenos o painel sempre abre no estilo gaveta, veja acima); densidade (compacta/regular/confortável); mostrar ou não a seção de perfis; texto do rodapé do painel.
 - **Cores** — 5 cores independentes: acento do botão/painel, e as cores de "Destacar Títulos", "Destacar Links", "Destacar Botões" e "Guia de Leitura" (cada uma configurável separadamente, para não depender de uma única cor cumprindo vários papéis).

@@ -75,6 +75,7 @@ export const DEFAULT_SETTINGS = {
     magnifier: false,
     cursor: 0,
     focusMode: 0,
+    contentWidth: 0,
     screenReader: false,
     virtualKeyboard: false,
     voiceCommands: false,
@@ -94,6 +95,7 @@ const STEPPER_MAX = {
     blueLightFilter: 3,
     cursor: 2,
     focusMode: 3,
+    contentWidth: 3,
 };
 
 /**

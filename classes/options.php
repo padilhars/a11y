@@ -132,6 +132,16 @@ class options {
                 'labelkey' => 'opt_cursor', 'desckey' => null, 'levelprefix' => 'cursorlevel_'],
             ['id' => 'focusMode', 'cat' => 'navigation', 'kind' => 'stepper', 'max' => 3, 'icon' => 'focus',
                 'labelkey' => 'opt_focusmode', 'desckey' => 'opt_focusmode_desc', 'levelprefix' => 'focusmodelevel_'],
+            // Widens the reading column (.main-inner, Boost's own content
+            // card) beyond its default max-width:830px cap via a min-width
+            // override - see styles.css's a11y-content-width-* rules for
+            // the full technique (min() against a vw ceiling, so it can
+            // never force horizontal overflow on a narrower viewport - live-
+            // verified down to 375px). No prototype equivalent, no
+            // hashelp - see D85 for why a short desckey instead, after the
+            // colorChange help-button saga (D81/D83/D84).
+            ['id' => 'contentWidth', 'cat' => 'navigation', 'kind' => 'stepper', 'max' => 3, 'icon' => 'maximize',
+                'labelkey' => 'opt_contentwidth', 'desckey' => 'opt_contentwidth_desc', 'levelprefix' => 'contentwidthlevel_'],
 
             // Advanced.
             ['id' => 'screenReader', 'cat' => 'advanced', 'kind' => 'toggle', 'icon' => 'volume',

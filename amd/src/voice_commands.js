@@ -219,6 +219,8 @@ const dispatch = (phrase) => {
         {patterns: ['guia de leitura', 'reading guide'], action: 'toggleReadingGuide'},
         {patterns: ['máscara de leitura', 'reading mask'], action: 'toggleReadingMask'},
         {patterns: ['modo foco', 'focus mode', 'modo de foco'], action: 'toggleFocusMode'},
+        {patterns: ['ampliar conteúdo', 'widen content', 'increase content width'], action: 'increaseContentWidth'},
+        {patterns: ['reduzir conteúdo', 'narrow content', 'decrease content width'], action: 'decreaseContentWidth'},
         {patterns: ['leitor de tela', 'screen reader'], action: 'toggleScreenReader'},
         {patterns: ['teclado virtual', 'virtual keyboard'], action: 'toggleVirtualKeyboard'},
 

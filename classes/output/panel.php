@@ -330,7 +330,7 @@ class panel implements renderable, templatable {
             // D75: moved from an always-visible desckey to a help block -
             // the warning was too long to sit as a one-line description.
             'hideImages' => ['prefix' => 'help_hi_', 'count' => 2, 'tag' => 'ul'],
-            'voiceCommands' => ['prefix' => 'help_vc_', 'count' => 12, 'tag' => 'ul'],
+            'voiceCommands' => ['prefix' => 'help_vc_', 'count' => 14, 'tag' => 'ul'],
             'faceNavigation' => ['prefix' => 'help_fn_', 'count' => 5, 'tag' => 'ol'],
             'screenReader' => ['prefix' => 'help_sr_', 'count' => 4, 'tag' => 'ol'],
             'virtualKeyboard' => ['prefix' => 'help_vk_', 'count' => 4, 'tag' => 'ol'],

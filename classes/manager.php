@@ -65,6 +65,7 @@ class manager {
             'magnifier' => false,
             'cursor' => 0,
             'focusMode' => 0,
+            'contentWidth' => 0,
             'screenReader' => false,
             'virtualKeyboard' => false,
             'voiceCommands' => false,
@@ -104,6 +105,7 @@ class manager {
             'blueLightFilter' => 3,
             'cursor' => 2,
             'focusMode' => 3,
+            'contentWidth' => 3,
         ];
     }
 
@@ -184,6 +186,7 @@ class manager {
             'colorChange' => 'a11y-color-',
             'cursor' => 'a11y-cursor-',
             'focusMode' => 'a11y-focus-mode-',
+            'contentWidth' => 'a11y-content-width-',
         ];
     }
 

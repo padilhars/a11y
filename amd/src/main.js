@@ -500,6 +500,12 @@ voiceCallbacks = {
     // (the level that preserves this option's original toggle-only
     // behaviour), anything already on -> off.
     toggleFocusMode: () => setStepperValue('focusMode', settings.focusMode > 0 ? 0 : 1),
+    // contentWidth: a real "more/less" stepper (3 levels), same
+    // increase/decrease pattern as textSize/lineHeight/textSpacing above -
+    // not an on/off-style stepper like focusMode/dyslexicFont, so no
+    // special-casing needed here.
+    increaseContentWidth: () => setStepperValue('contentWidth', (Number(settings.contentWidth) || 0) + 1),
+    decreaseContentWidth: () => setStepperValue('contentWidth', (Number(settings.contentWidth) || 0) - 1),
     toggleScreenReader: () => onToggle('screenReader', !settings.screenReader),
     toggleVirtualKeyboard: () => onToggle('virtualKeyboard', !settings.virtualKeyboard),
 
