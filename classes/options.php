@@ -94,8 +94,13 @@ class options {
             // amd/src/panel.js explaining why toggle rows, which aren't
             // role="button" themselves, can do this safely and steppers
             // can't without a bigger markup restructure). See DECISIONS.md D76.
+            // Desckey shortened to just the option's purpose (at the user's
+            // request); the caveat about this filter also affecting images
+            // that encode information by color moved to the "?" help block
+            // (help_cc_*), same pattern as hideImages (D75).
             ['id' => 'colorChange', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'pipette',
-                'labelkey' => 'opt_colorchange', 'desckey' => 'opt_colorchange_desc', 'levelprefix' => 'colorchangelevel_'],
+                'labelkey' => 'opt_colorchange', 'desckey' => 'opt_colorchange_desc', 'levelprefix' => 'colorchangelevel_',
+                'hashelp' => true],
             ['id' => 'saturation', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'saturation',
                 'labelkey' => 'opt_saturation', 'desckey' => null, 'levelprefix' => 'saturationlevel_'],
             ['id' => 'blueLightFilter', 'cat' => 'color', 'kind' => 'stepper', 'max' => 3, 'icon' => 'moon',

@@ -4,6 +4,10 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
+### Changed
+
+- "Mudar Cores" (`colorChange`)'s description is now just "Filtros para Daltonismo" / "Color-blindness filters"; the caveat about the filter also affecting images that encode information by color (a chart legend, a heat map) moved to its new "?" help block, same pattern already used by Hide Images. See DECISIONS.md D81.
+
 ### Fixed
 
 - Any accessibility option, toggled by a genuinely anonymous visitor (never logged in, not even auto-logged-in as guest) on a site with usage-stat collection on, was force-redirecting that visitor's whole page to the login screen - not specific to any one option, found while investigating Face Navigation but affecting all of them equally. Root cause: the fire-and-forget usage-stats call (`local_a11y_record_activation`) requires a Moodle session that a genuinely anonymous visitor doesn't have; Moodle's own `core/ajax` module reacts to that specific failure with a page-wide redirect, before this plugin's own error handling ever sees it. `classes/hook_callbacks.php`/`amd/src/main.js` now skip that call entirely for this one visitor case (a small, honest undercount) instead of ever redirecting them. Confirmed live via WebDriver against production: fixed. See DECISIONS.md D79.
