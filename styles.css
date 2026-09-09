@@ -230,12 +230,9 @@ Styleguide 3.
    reset above and showing the default arrow cursor, even though clicking
    there does toggle the option. Restoring the pointer here is a pure
    `cursor` fix - it adds no `role`/`tabindex`, so it doesn't reintroduce
-   that a11y violation; stepper rows (which carry role="button" on the
-   inner `.local-a11y-option__trigger` since D82, not on `.local-a11y-option`
-   itself - same nested-interactive reason, now that stepper rows can also
-   have a help "?" button) already get this via the rule above through
-   `.local-a11y-root [role="button"]` and are just redundantly covered
-   here too. */
+   that a11y violation; stepper rows (which DO carry role="button" directly
+   on `.local-a11y-option`) already got this via the rule above and are
+   just redundantly covered here too. */
 .local-a11y-root .local-a11y-option,
 .local-a11y-root .local-a11y-option * {
     cursor: pointer !important;
@@ -989,20 +986,18 @@ Styleguide 5.6.
 .local-a11y-option--active:hover {
     background: color-mix(in srgb, var(--local-a11y-accent, var(--a11y-accent)) 6%, transparent);
 }
-/* Moodle core styles every [role="button"] with a focus ring on plain
-   :focus, not just :focus-visible - so mouse clicks show it too, not only
-   keyboard nav. For stepper options, re-clicking while already active
-   cycles to another level without otherwise changing much about the row,
-   so that ring reappearing read as an odd little flash; amd/src/panel.js
-   now flashes the background instead (see .local-a11y-option--pulse
-   below). Suppressing it only for :not(:focus-visible) - i.e. only when
-   focus didn't come from the keyboard - keeps the real keyboard focus
-   indicator intact (WCAG 2.4.7).
-   D82: role="button" (and so the focus ring this suppresses) lives on
-   .local-a11y-option__trigger now, not the row itself - see that
-   template's docblock for why (nested-interactive with the "?" help
-   button). */
-.local-a11y-option__trigger:focus:not(:focus-visible) {
+/* Moodle core styles every [role="button"] (which .local-a11y-option is)
+   with a focus ring on plain :focus, not just :focus-visible - so mouse
+   clicks show it too, not only keyboard nav. For the 7 stepper options
+   (Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Contraste,
+   Mudar Cores, Saturação, Cursor) re-clicking while already active cycles
+   to another level without otherwise changing much about the row, so that
+   ring reappearing read as an odd little flash; amd/src/panel.js now
+   flashes the background instead (see .local-a11y-option--pulse below).
+   Suppressing it only for :not(:focus-visible) - i.e. only when focus
+   didn't come from the keyboard - keeps the real keyboard focus indicator
+   intact (WCAG 2.4.7). */
+.local-a11y-option[data-kind="stepper"]:focus:not(:focus-visible) {
     box-shadow: none;
 }
 
@@ -1022,42 +1017,6 @@ Styleguide 5.6.
    own line below the icon / text / switch row). */
 .local-a11y-option--has-help {
     flex-wrap: wrap;
-}
-/* D82/D83 follow-up, caught by Behat (not by manual testing): stepper rows'
-   label + current-value stepper visual are both wider and non-shrinking
-   (icon and .local-a11y-stepper are flex-shrink: 0 - see further down) in a
-   way toggle rows' single free-form text block never is, so
-   .local-a11y-option__trigger routinely has no room left to sit on the same
-   flex line as the 20px help "?" button inside the ~336px-wide panel -
-   confirmed live (Color Adjustment: trigger alone measured 312px against a
-   336px-wide row). flex-wrap then wrapped the help button onto its own
-   line, which happened to land it near the row's vertical centre - exactly
-   where a coordinate-based click (Behat/Selenium's `I click on X`, unlike
-   a plain DOM .click() call, which is what every manual check in this
-   session up to that point had used) lands by default, so it opened the
-   help block instead of cycling the stepper. `body.a11y-color-1` never
-   appearing was Behat correctly catching a real click-target bug, not a
-   flaky test - it took a real coordinate-based click to surface at all.
-   Fix: take the help button out of the row's normal flex flow entirely
-   (position: absolute in a fixed corner) instead of trying to make it
-   compete for the same line - no amount of shrinking .local-a11y-option__
-   trigger further could reliably win that fight for every stepper's label
-   length, so stop relying on natural flex wrapping. Scoped to
-   [data-kind="stepper"] specifically: toggle rows already fit
-   icon/text/help-btn/switch on one line just fine (their one flexible
-   child, .local-a11y-option__text, isn't fighting two non-shrinking
-   siblings at once the way a stepper's icon *and* value indicator do) and
-   must not be touched. */
-.local-a11y-option--has-help[data-kind="stepper"] {
-    position: relative;
-}
-.local-a11y-option--has-help[data-kind="stepper"] .local-a11y-help-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-}
-.local-a11y-option--has-help[data-kind="stepper"] .local-a11y-option__trigger {
-    padding-right: 28px;
 }
 /* Help toggle button "?" */
 .local-a11y-help-btn {
@@ -1136,21 +1095,6 @@ Styleguide 5.6.
     color: var(--a11y-text-muted);
     margin-top: 2px;
     line-height: 1.3;
-}
-/* D82: wraps icon/text/stepper for stepper rows only - see
-   templates/option_stepper.mustache's docblock. Reproduces the flex
-   layout .local-a11y-option itself provides its children (gap: 12px,
-   centred) one level deeper, since role="button"/tabindex moved here;
-   flex: 1 1 auto + min-width: 0 so it still claims the same space
-   .local-a11y-option__text's own min-width: 0 needs for label truncation,
-   alongside the "?" help button and help block as its own siblings now. */
-.local-a11y-option__trigger {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex: 1 1 auto;
-    min-width: 0;
-    cursor: pointer;
 }
 .local-a11y-option__icon {
     width: 32px;

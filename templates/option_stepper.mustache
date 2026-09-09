@@ -38,9 +38,6 @@
     * levelprefix - lang string prefix used by JS to relabel on cycle
     * currentlabel - text label for the current level
     * levels - array of {index, active}
-    * hashelp - true if this option has an inline help block
-    * helplabel - accessible label for the help toggle button, or null if !hashelp
-    * helphtml - raw help block HTML, or null if !hashelp
 
     Example context (json):
     {
@@ -54,48 +51,22 @@
         "levels": [
             {"index": 0, "active": true},
             {"index": 1, "active": false}
-        ],
-        "hashelp": false,
-        "helplabel": null,
-        "helphtml": null
+        ]
     }
 }}
-{{! D82: the row itself can't be role="button" *and* contain a help "?"
-    <button> - a real interactive control nested inside another interactive
-    role is an axe "nested-interactive" violation (D76 is what first ruled
-    this out, before this restructure existed). Fix: role="button"/tabindex
-    move to an inner .local-a11y-option__trigger wrapping just the parts
-    that cycle the stepper (icon/text/stepper visual); the outer
-    .local-a11y-option div - the same element amd/src/panel.js's click/
-    keydown delegation already targets via data-region="option", unchanged
-    - stays non-interactive itself, exactly like option_toggle.mustache's
-    own row/switch relationship, so the help button and help block can
-    sit as its plain siblings without nesting inside anything focusable.
-    Applied unconditionally (not just when hashelp is true) so every
-    stepper row has the same structure whether or not it currently has
-    help - one fewer template branch to keep in sync, and any stepper can
-    grow a help block later without a structural change here again. }}
-<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}{{#hashelp}} local-a11y-option--has-help{{/hashelp}}" data-region="option" data-option-id="{{id}}" data-kind="stepper"
-    data-max="{{max}}" data-levelprefix="{{levelprefix}}" data-value="{{currentvalue}}">
-    <div class="local-a11y-option__trigger" role="button" tabindex="0">
-        <span class="local-a11y-option__icon">{{{iconsvg}}}</span>
-        <span class="local-a11y-option__text">
-            <span class="local-a11y-option__label">{{label}}</span>
-            {{#desc}}<span class="local-a11y-option__desc">{{desc}}</span>{{/desc}}
+<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}" data-region="option" data-option-id="{{id}}" data-kind="stepper"
+    data-max="{{max}}" data-levelprefix="{{levelprefix}}" data-value="{{currentvalue}}" role="button" tabindex="0">
+    <span class="local-a11y-option__icon">{{{iconsvg}}}</span>
+    <span class="local-a11y-option__text">
+        <span class="local-a11y-option__label">{{label}}</span>
+        {{#desc}}<span class="local-a11y-option__desc">{{desc}}</span>{{/desc}}
+    </span>
+    <span class="local-a11y-stepper">
+        <span class="local-a11y-stepper__label" data-region="stepper-label">{{currentlabel}}</span>
+        <span class="local-a11y-stepper__dots" data-region="stepper-dots">
+            {{#levels}}
+            <span class="local-a11y-stepper__dot{{#active}} local-a11y-stepper__dot--active{{/active}}" data-index="{{index}}"></span>
+            {{/levels}}
         </span>
-        <span class="local-a11y-stepper">
-            <span class="local-a11y-stepper__label" data-region="stepper-label">{{currentlabel}}</span>
-            <span class="local-a11y-stepper__dots" data-region="stepper-dots">
-                {{#levels}}
-                <span class="local-a11y-stepper__dot{{#active}} local-a11y-stepper__dot--active{{/active}}" data-index="{{index}}"></span>
-                {{/levels}}
-            </span>
-        </span>
-    </div>
-    {{#hashelp}}<button type="button" class="local-a11y-help-btn" data-action="toggle-help" data-option-id="{{id}}" aria-expanded="false" aria-label="{{helplabel}}">?</button>{{/hashelp}}
-    {{#hashelp}}
-    <div class="local-a11y-help-block" data-region="help-block" data-option-id="{{id}}" hidden>
-        {{{helphtml}}}
-    </div>
-    {{/hashelp}}
+    </span>
 </div>
