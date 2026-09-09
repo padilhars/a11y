@@ -4,6 +4,10 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
+### Changed
+
+- "Color Adjustment" (`colorChange`) no longer has a "?" help button - added, then found to visually overlap the option's own stepper value indicator on the live site, and reverted along with the description shortening that went with it. Description is just "Color-blindness filters" again. See DECISIONS.md D84.
+
 ### Fixed
 
 - Magnifier (`magnifier`): the lens wasn't precisely centred on the pointer - traced to `#page`'s own CSS margin (60px top on this site's layout) not being zeroed on the cloned copy the lens magnifies, throwing off every sampled point by that same amount. Fixed by explicitly zeroing the clone's margin in `buildClone()`, alongside the padding/border copy already there. Verified against the exact transform formula `render()` itself uses, not just visually. See DECISIONS.md D82.
