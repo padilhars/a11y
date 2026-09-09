@@ -10,6 +10,7 @@ All notable changes to `local_a11y` are documented here.
 
 ### Changed
 
+- Focus Mode and Widen Content descriptions shortened - both dropped the "in 3 progressive levels" tail (redundant with the stepper's own dots) and are now a plain, level-count-free sentence, matching how terse this file's other option descriptions already are. See DECISIONS.md D86.
 - "Color Adjustment" (`colorChange`) no longer has a "?" help button - added, then found to visually overlap the option's own stepper value indicator on the live site, and reverted along with the description shortening that went with it. Description is just "Color-blindness filters" again. See DECISIONS.md D84.
 
 ### Fixed
