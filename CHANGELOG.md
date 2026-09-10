@@ -6,7 +6,7 @@ All notable changes to `local_a11y` are documented here.
 
 ### Added
 
-- New "Widen Content" (`contentWidth`) option, Focus & Navigation category: a 3-level stepper that widens the reading column (`.main-inner`, Boost's own `max-width:830px` card) via `min-width` overrides (1000px/1300px/1600px, each capped at `min(Npx, 90vw)` so it can never force horizontal overflow, live-verified down to 375px viewports) - `min-width` reliably beats the theme's `max-width` in the CSS used-value algorithm regardless of specificity, so no cascade fight with the theme is needed. Includes 2 new voice commands ("widen/narrow content"). See DECISIONS.md D85.
+- New "Widen Content" (`contentWidth`) option, Focus & Navigation category: a 4-level stepper that widens the reading column (`.main-inner`, Boost's own `max-width:830px` card) via `min-width` overrides (1000px/1300px/1600px, each capped at `min(Npx, 90vw)` so it can never force horizontal overflow, live-verified down to 375px viewports) - `min-width` reliably beats the theme's `max-width` in the CSS used-value algorithm regardless of specificity, so no cascade fight with the theme is needed. Includes 2 new voice commands ("widen/narrow content"). See DECISIONS.md D85.
 
 ### Changed
 

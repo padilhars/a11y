@@ -65,7 +65,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 - Botão circular (ou quadrado) fixo, canto configurável, com contador de opções ativas.
 - Painel com busca, seção de perfis de acessibilidade e categorias de opções — todas colapsáveis individualmente, para não virar uma lista extensa de rolagem.
 - Em telas de desktop, o formato do painel é configurável (popover ancorado no botão, gaveta lateral ou modal centralizado); em celulares e tablets pequenos, o painel sempre abre no estilo gaveta, independente dessa configuração — não há espaço de tela suficiente para um popover ou modal flutuante funcionar bem.
-- 6 das opções com mais nuances (Comandos por Voz, Navegação por Face, Leitor de Tela, Teclado Virtual, Guia de Leitura, Máscara de Leitura) têm um botão de ajuda "?" com instruções de uso, além da descrição curta que já acompanha cada opção.
+- 11 das opções com mais nuances (Leitura Biônica, Ocultar Imagens, Pausar Animações, Silenciar Mídia, Guia de Leitura, Máscara de Leitura, Lupa, Leitor de Tela, Teclado Virtual, Comandos por Voz, Navegação por Face) têm um botão de ajuda "?" com instruções de uso, além da descrição curta que já acompanha cada opção — 12 quando a integração com o VLibras está ativa, que soma Libras à lista.
 - **Atalho global `Alt + A`** abre/fecha o painel de qualquer página.
 - Focus trap (WCAG 2.2), `Esc` fecha e devolve o foco ao botão, `aria-live` no contador de opções ativas.
 
@@ -76,7 +76,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 | Texto e Tipografia | Fonte Legível, Fonte para Dislexia, Destacar Títulos/Links/Botões, Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Espaçamento entre Palavras, Alinhamento do Texto, Leitura Biônica |
 | Cores e Contraste | Contraste (4 níveis), Inverter Cores, Mudar Cores (filtros de daltonismo via SVG), Saturação, Filtro de Luz Azul |
 | Mídia e Animação | Ocultar Imagens, Pausar Animações, Silenciar Mídia, Dicas de Ferramentas |
-| Foco e Navegação | Guia de Leitura, Máscara de Leitura, Lupa, Cursor (3 níveis), Modo Foco (4 níveis), Ampliar Conteúdo (3 níveis) |
+| Foco e Navegação | Guia de Leitura, Máscara de Leitura, Lupa, Cursor (3 níveis), Modo Foco (4 níveis), Ampliar Conteúdo (4 níveis) |
 | Recursos Avançados | Leitor de Tela (texto-para-fala), Teclado Virtual, Comandos por Voz, Navegação por Face |
 
 ### Os 9 perfis
