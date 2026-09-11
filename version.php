@@ -28,21 +28,32 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_a11y';
-$plugin->version   = 2026090201;
-// Approximate branching version for the Moodle 5.0 release on this timeline
-// (this install is already on branch 502 / 2026042001.07 — see DECISIONS.md D2).
-// Any value at or below the site's current $version satisfies "5.0+" support.
+$plugin->version   = 2026091201;
+// AUDIT-V2 finding CODE-001: this value can look contradictory next to
+// $supported below (a reviewer might reasonably ask "why declare a 5.0
+// build here if only 502 is supported?"), so the full story is worth
+// spelling out once, here, rather than only in DECISIONS.md D66:
+//
+// This is the nominal branching version for Moodle 5.0 on the upstream
+// release timeline - NOT a value confirmed against a real 5.0 core build.
+// $supported below was originally [500, 502] on that (untested)
+// assumption, until a real CI run against the actual MOODLE_500_STABLE
+// branch disproved it: 5.0's real core version tops out at 2025041409,
+// lower than this $requires (2025041500) - so the plugin actually refuses
+// to install on real Moodle 5.0 ("pluginrequirementsnotmet"), despite this
+// value nominally targeting it. $supported was narrowed to the one branch
+// with real, live-tested evidence (502) instead.
+//
+// $requires itself was deliberately left as-is rather than lowered to
+// match: this project's own discipline (see DECISIONS.md D66-D71) is to
+// never change a version/compatibility value by assumption or analogy,
+// only against real CI evidence - and no CI run has yet established what
+// this plugin's actual minimum required 502 build is (only that the
+// current value is safely low enough to not block installation on it).
+// Lowering this number without that evidence would risk the opposite
+// failure mode from the one that caused this whole finding: an incorrect
+// value that's silently wrong instead of one that just reads oddly.
 $plugin->requires  = 2025041500;
-// Declared branch range for the Moodle Plugins Directory. Previously [500, 502]
-// on the (untested) assumption that $requires above corresponded to a real
-// Moodle 5.0 core build. Disproved: CI (moodle-plugin-ci against the real
-// MOODLE_500_STABLE branch) shows 5.0's actual core version tops out at
-// 2025041409 - lower than $requires (2025041500) - so the plugin refuses to
-// even install on real Moodle 5.0 ("pluginrequirementsnotmet"). Narrowed to
-// the one branch with real, live-tested evidence (502 - this development/
-// production host has only ever run 5.2.1, see DECISIONS.md D2) until 5.0
-// support is either fixed (lowering $requires, if nothing here actually
-// needs a 5.2-only API) or dropped for good. See DECISIONS.md D66.
 $plugin->supported = [502, 502];
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = '1.0.0';

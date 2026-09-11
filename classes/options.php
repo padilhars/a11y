@@ -51,7 +51,23 @@ class options {
             // itself ("Fonte para Dislexia") already makes clear what this
             // does; the stepper's own level labels (Lexend/OpenDyslexic)
             // cover which fonts are on offer.
-            ['id' => 'dyslexicFont', 'cat' => 'typography', 'kind' => 'stepper', 'max' => 2, 'icon' => 'bookOpen',
+            //
+            // AUDIT-V2 finding LGPD-002 (partial technical mitigation, not
+            // a substitute for the pending legal/DPO review - see
+            // docs/PENDENCIAS-LGPD.md): the option `id` itself (persisted
+            // verbatim in {user_preferences}.value as JSON, in
+            // {local_a11y_stats}.featureid, and as a CSS class on <body> -
+            // that last one visible to anyone viewing the page's HTML
+            // source, not just someone with DB access) used to be the
+            // literal string 'dyslexicFont', naming the specific condition
+            // this accommodates in every one of those places. Renamed to
+            // the neutral 'fontVariant' - the visible UI label (`labelkey`/
+            // `levelprefix` below) deliberately still says "Dyslexia" in
+            // both languages, since a user needs to know what the option
+            // does to choose it; only the machine-readable identifier
+            // changed. `db/upgrade.php`'s 2026091200 step migrates
+            // existing stored data for both tables.
+            ['id' => 'fontVariant', 'cat' => 'typography', 'kind' => 'stepper', 'max' => 2, 'icon' => 'bookOpen',
                 'labelkey' => 'opt_dyslexicfont', 'desckey' => null, 'levelprefix' => 'dyslexicfontlevel_'],
             ['id' => 'highlightTitles', 'cat' => 'typography', 'kind' => 'toggle', 'icon' => 'heading',
                 'labelkey' => 'opt_highlighttitles', 'desckey' => null],

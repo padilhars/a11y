@@ -31,13 +31,13 @@ Feature: Accessibility panel
     When I click on "#local-a11y-panel [data-profile-id='dyslexia']" "css_element"
     Then "#local-a11y-panel [data-profile-id='dyslexia'].local-a11y-profile-card--active" "css_element" should exist
     And "#local-a11y-panel [data-region='reset-button'].local-a11y-panel__reset-icon--active" "css_element" should exist
-    And "body.a11y-dyslexic-font-1" "css_element" should exist
+    And "body.a11y-font-variant-1" "css_element" should exist
     And "body.a11y-line-height-2" "css_element" should exist
     And "body.a11y-text-spacing-2" "css_element" should exist
     When I click on "#local-a11y-panel [data-profile-id='dyslexia']" "css_element"
     Then "#local-a11y-panel [data-profile-id='dyslexia'].local-a11y-profile-card--active" "css_element" should not exist
     And "#local-a11y-panel [data-region='reset-button'][disabled]" "css_element" should exist
-    And "body.a11y-dyslexic-font-1" "css_element" should not exist
+    And "body.a11y-font-variant-1" "css_element" should not exist
 
   # Regression test for DECISIONS.md D51: the Magnifier's internal clone of
   # #page used to lose its own `id="page"` (stripped by D42's original

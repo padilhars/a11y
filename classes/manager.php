@@ -41,7 +41,7 @@ class manager {
     public static function get_default_settings(): array {
         $defaults = [
             'readableFont' => false,
-            'dyslexicFont' => 0,
+            'fontVariant' => 0,
             'highlightTitles' => false,
             'highlightLinks' => false,
             'highlightButtons' => false,
@@ -93,7 +93,7 @@ class manager {
      */
     public static function get_stepper_max(): array {
         return [
-            'dyslexicFont' => 2,
+            'fontVariant' => 2,
             'textSize' => 4,
             'lineHeight' => 3,
             'textSpacing' => 3,
@@ -126,12 +126,11 @@ class manager {
      * entirely by amd/src/magnifier.js, no body class involved. focusMode
      * left this map for get_stepper_class_prefix_map() below (D52 - it grew
      * from a toggle into a 3-level stepper, see DECISIONS.md), and
-     * dyslexicFont did the same for the same reason (D75 - 2-level stepper
+     * fontVariant did the same for the same reason (D75 - 2-level stepper
      * now, one font per level). bionicReading
      * joins the behavioural-only group too (D53): it splits each word's own
      * text into a bold/plain DOM structure, which a body class alone cannot
      * do - handled entirely by amd/src/bionic_reading.js.
-     * is 100% behavioural, handled entirely by amd/src/silence_media.js.
      *
      * @return array<string, string>
      */
@@ -167,14 +166,20 @@ class manager {
      * (D52): it was a plain toggle through 0.1.0, converted to a 3-level
      * stepper the same way textSize/cursor/etc. already work - see
      * DECISIONS.md D52 for why a stepper instead of a new option.
-     * dyslexicFont joined this map the same way (D75): a 2-level stepper
-     * (1 = Lexend, 2 = OpenDyslexic) instead of a single-font toggle.
+     * fontVariant joined this map the same way (D75): a 2-level stepper
+     * (1 = Lexend, 2 = OpenDyslexic) instead of a single-font toggle. Its
+     * class prefix is deliberately 'a11y-font-variant-', not
+     * 'a11y-dyslexic-font-' (AUDIT-V2 LGPD-002 mitigation): this class
+     * lands on <body>, visible in the page's HTML source to anyone who
+     * views it - a more concrete exposure than the database itself - so
+     * it should not spell out the specific condition the option
+     * accommodates. See options.php's own comment on this option's `id`.
      *
      * @return array<string, string>
      */
     public static function get_stepper_class_prefix_map(): array {
         return [
-            'dyslexicFont' => 'a11y-dyslexic-font-',
+            'fontVariant' => 'a11y-font-variant-',
             'textSize' => 'a11y-text-size-',
             'lineHeight' => 'a11y-line-height-',
             'textSpacing' => 'a11y-text-spacing-',

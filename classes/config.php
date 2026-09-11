@@ -213,4 +213,81 @@ class config {
     public static function collect_stats_enabled(): bool {
         return (bool) get_config('local_a11y', 'collectstats');
     }
+
+    /**
+     * WCAG 1.4.11 (Non-text Contrast, AA) compliance check for the
+     * customisable colours (AUDIT-V2 finding WCAG-002): none of them were
+     * validated for contrast before, so a site admin could pick a colour
+     * (e.g. a light pastel) that is unreadable against the fixed white
+     * icon/text it is paired with (the FAB's accent, or the coloured
+     * highlight effects on page content). Called via each colour setting's
+     * `set_updatedcallback()` in settings.php right after save - this is a
+     * non-blocking warning (shown via \core\notification on the settings
+     * page after redirect), not a hard validation failure, because a low
+     * ratio against white specifically doesn't necessarily mean the colour
+     * is unreadable in every context it's used in (e.g. text-decoration
+     * colours are also seen against the page's own text colour, not just
+     * white) - flagging it for a human to judge is safer than silently
+     * rejecting a value that might be fine.
+     *
+     * @param string $configkey The `local_a11y/<key>` config key holding the hex colour.
+     * @param string $label The setting's own display name, for the warning message.
+     * @return void
+     */
+    public static function warn_if_low_contrast(string $configkey, string $label): void {
+        $value = (string) get_config('local_a11y', $configkey);
+        $ratio = self::contrast_ratio($value, '#ffffff');
+        if ($ratio === null || $ratio >= 3.0) {
+            return;
+        }
+        \core\notification::add(
+            get_string('warning_lowcontrast', 'local_a11y', (object) [
+                'label' => $label,
+                'colour' => $value,
+                'ratio' => number_format($ratio, 2),
+            ]),
+            \core\notification::WARNING
+        );
+    }
+
+    /**
+     * WCAG contrast ratio between two colours, per the standard relative-
+     * luminance formula (WCAG 2.x, criteria 1.4.3/1.4.11): (L1 + 0.05) / (L2 + 0.05),
+     * L1 being the lighter of the two.
+     *
+     * @param string $hex1 First colour, `#rgb` or `#rrggbb`.
+     * @param string $hex2 Second colour, `#rgb` or `#rrggbb`.
+     * @return float|null The contrast ratio (1.0-21.0), or null if either colour is malformed.
+     */
+    public static function contrast_ratio(string $hex1, string $hex2): ?float {
+        $l1 = self::relative_luminance($hex1);
+        $l2 = self::relative_luminance($hex2);
+        if ($l1 === null || $l2 === null) {
+            return null;
+        }
+        $lighter = max($l1, $l2);
+        $darker = min($l1, $l2);
+        return ($lighter + 0.05) / ($darker + 0.05);
+    }
+
+    /**
+     * WCAG relative luminance of a single sRGB colour.
+     *
+     * @param string $hex `#rgb` or `#rrggbb`.
+     * @return float|null Relative luminance (0.0-1.0), or null if $hex isn't a valid 3/6-digit hex colour.
+     */
+    private static function relative_luminance(string $hex): ?float {
+        $hex = ltrim($hex, '#');
+        if (strlen($hex) === 3) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+        if (!preg_match('/^[0-9a-fA-F]{6}$/', $hex)) {
+            return null;
+        }
+        $channels = array_map(function (string $c): float {
+            $c = hexdec($c) / 255;
+            return $c <= 0.03928 ? $c / 12.92 : (($c + 0.055) / 1.055) ** 2.4;
+        }, str_split($hex, 2));
+        return 0.2126 * $channels[0] + 0.7152 * $channels[1] + 0.0722 * $channels[2];
+    }
 }

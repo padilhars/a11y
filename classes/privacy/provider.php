@@ -53,6 +53,17 @@ use core_privacy\local\request\writer;
  * available. See amd/src/voice_commands.js for the runtime consent notice
  * shown before this ever happens.
  *
+ * AUDIT-V2 finding LGPD-001: "Face Navigation" has the same class of gap,
+ * not previously declared here. Its MediaPipe component (JS bundle +
+ * model file) is fetched live from jsDelivr and Google's own CDN when the
+ * option is first activated (see amd/src/face_navigation.js's MP_CDN/
+ * MP_MODEL) - hash-verified for integrity, but the fetch itself still
+ * reveals the user's IP address/User-Agent to those two third parties,
+ * the same way any third-party network request would. No video/image
+ * data is ever sent anywhere (face landmark detection runs 100% locally
+ * in the browser, see the same file) - only this one-time asset download
+ * touches a third party.
+ *
  * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
  * @author     Jerônimo Medina Madruga <jeronimo.madruga@gmail.com>
@@ -82,6 +93,9 @@ class provider implements
         $items->add_external_location_link('speechrecognitionservice', [
             'audio' => 'privacy:metadata:speechrecognitionservice:audio',
         ], 'privacy:metadata:speechrecognitionservice');
+        $items->add_external_location_link('facenavigationcdn', [
+            'ipaddress' => 'privacy:metadata:facenavigationcdn:ipaddress',
+        ], 'privacy:metadata:facenavigationcdn');
         return $items;
     }
 

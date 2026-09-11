@@ -64,7 +64,7 @@ final class manager_test extends \advanced_testcase {
 
         $this->assertTrue($result['readableFont']);
         $this->assertSame(2, $result['textSize']);
-        $this->assertSame(0, $result['dyslexicFont']);
+        $this->assertSame(0, $result['fontVariant']);
     }
 
     /**
@@ -82,10 +82,10 @@ final class manager_test extends \advanced_testcase {
      * @return void
      */
     public function test_sanitize_settings_clamps_stepper_values(): void {
-        $result = manager::sanitize_settings(['textSize' => 999, 'contrast' => -50, 'dyslexicFont' => 99]);
+        $result = manager::sanitize_settings(['textSize' => 999, 'contrast' => -50, 'fontVariant' => 99]);
         $this->assertSame(4, $result['textSize']);
         $this->assertSame(0, $result['contrast']);
-        $this->assertSame(2, $result['dyslexicFont']);
+        $this->assertSame(2, $result['fontVariant']);
     }
 
     /**
@@ -122,7 +122,7 @@ final class manager_test extends \advanced_testcase {
      * @return void
      */
     public function test_sanitize_settings_respects_disabled_features(): void {
-        set_config('enabledfeatures', 'readableFont,dyslexicFont', 'local_a11y');
+        set_config('enabledfeatures', 'readableFont,fontVariant', 'local_a11y');
 
         $result = manager::sanitize_settings(['textSize' => 3, 'readableFont' => true]);
 
@@ -182,5 +182,85 @@ final class manager_test extends \advanced_testcase {
     public function test_stepper_class_prefix_map_colorchange(): void {
         $map = manager::get_stepper_class_prefix_map();
         $this->assertSame('a11y-color-', $map['colorChange']);
+    }
+
+    /**
+     * AUDIT-V2 finding CODE-003: is_active_on_current_page() had no test
+     * at all before this - each test method below runs in its own process
+     * (its own docblock already flags why: the method's `static $result`
+     * memoizes per-request on purpose, which would otherwise leak its
+     * first answer into every later assertion in the same PHPUnit run).
+     * @return void
+     */
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    public function test_is_active_on_current_page_true_when_enabled_and_allowed(): void {
+        set_config('enabled', 1, 'local_a11y');
+        $user = $this->getDataGenerator()->create_user();
+        $this->setUser($user);
+
+        $this->assertTrue(manager::is_active_on_current_page());
+    }
+
+    /**
+     * The plugin must be inactive site-wide when disabled in admin settings.
+     * @return void
+     */
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    public function test_is_active_on_current_page_false_when_plugin_disabled(): void {
+        set_config('enabled', 0, 'local_a11y');
+        $user = $this->getDataGenerator()->create_user();
+        $this->setUser($user);
+
+        $this->assertFalse(manager::is_active_on_current_page());
+    }
+
+    /**
+     * A guest must be gated by 'showforguests', not the view capability.
+     * @return void
+     */
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    public function test_is_active_on_current_page_false_for_guest_when_hidden_from_guests(): void {
+        set_config('enabled', 1, 'local_a11y');
+        set_config('showforguests', 0, 'local_a11y');
+        $this->setGuestUser();
+
+        $this->assertFalse(manager::is_active_on_current_page());
+    }
+
+    /**
+     * A URL matching an admin-configured excluded-page pattern must disable the plugin there.
+     * @return void
+     */
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    public function test_is_active_on_current_page_false_when_url_excluded(): void {
+        global $FULLME;
+
+        set_config('enabled', 1, 'local_a11y');
+        set_config('excludedpages', 'https://example.com/my/*', 'local_a11y');
+        $user = $this->getDataGenerator()->create_user();
+        $this->setUser($user);
+        $FULLME = 'https://example.com/my/index.php';
+
+        $this->assertFalse(manager::is_active_on_current_page());
+    }
+
+    /**
+     * Once computed, the result must not change within the same request
+     * even if the underlying config changes afterwards - this is the
+     * memoization the method's own docblock documents, being tested
+     * directly rather than just asserted in a comment.
+     * @return void
+     */
+    #[\PHPUnit\Framework\Attributes\RunInSeparateProcess]
+    public function test_is_active_on_current_page_memoizes_within_the_same_process(): void {
+        set_config('enabled', 1, 'local_a11y');
+        $user = $this->getDataGenerator()->create_user();
+        $this->setUser($user);
+
+        $this->assertTrue(manager::is_active_on_current_page());
+
+        set_config('enabled', 0, 'local_a11y');
+        $message = 'The memoized result must not re-evaluate config within the same request.';
+        $this->assertTrue(manager::is_active_on_current_page(), $message);
     }
 }

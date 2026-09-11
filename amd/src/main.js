@@ -472,12 +472,13 @@ voiceCallbacks = {
 
     // Font
     toggleReadableFont: () => onToggle('readableFont', !settings.readableFont),
-    // dyslexicFont is a 2-level stepper since D75 (was a plain toggle) -
-    // same treatment as toggleFocusMode below: the voice phrase itself is
-    // still on/off by design, so off -> level 1 (Lexend, the behaviour
-    // this option always had before OpenDyslexic existed as level 2),
-    // anything already on -> off.
-    toggleDyslexicFont: () => setStepperValue('dyslexicFont', settings.dyslexicFont > 0 ? 0 : 1),
+    // fontVariant (AUDIT-V2 LGPD-002, renamed from dyslexicFont - see
+    // classes/options.php) is a 2-level stepper since D75 (was a plain
+    // toggle) - same treatment as toggleFocusMode below: the voice phrase
+    // itself is still on/off by design, so off -> level 1 (Lexend, the
+    // behaviour this option always had before OpenDyslexic existed as
+    // level 2), anything already on -> off.
+    toggleFontVariant: () => setStepperValue('fontVariant', settings.fontVariant > 0 ? 0 : 1),
 
     // Highlights
     toggleHighlightTitles: () => onToggle('highlightTitles', !settings.highlightTitles),
@@ -502,7 +503,7 @@ voiceCallbacks = {
     toggleFocusMode: () => setStepperValue('focusMode', settings.focusMode > 0 ? 0 : 1),
     // contentWidth: a real "more/less" stepper (3 levels), same
     // increase/decrease pattern as textSize/lineHeight/textSpacing above -
-    // not an on/off-style stepper like focusMode/dyslexicFont, so no
+    // not an on/off-style stepper like focusMode/fontVariant, so no
     // special-casing needed here.
     increaseContentWidth: () => setStepperValue('contentWidth', (Number(settings.contentWidth) || 0) + 1),
     decreaseContentWidth: () => setStepperValue('contentWidth', (Number(settings.contentWidth) || 0) - 1),

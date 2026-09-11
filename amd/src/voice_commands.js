@@ -203,7 +203,7 @@ const dispatch = (phrase) => {
 
         // --- Font ---
         {patterns: ['fonte legível', 'readable font', 'fonte de leitura'], action: 'toggleReadableFont'},
-        {patterns: ['fonte para dislexia', 'fonte disléxica', 'dyslexic font'], action: 'toggleDyslexicFont'},
+        {patterns: ['fonte para dislexia', 'fonte disléxica', 'dyslexic font'], action: 'toggleFontVariant'},
 
         // --- Highlights ---
         {patterns: ['destacar títulos', 'highlight titles', 'realçar títulos'], action: 'toggleHighlightTitles'},

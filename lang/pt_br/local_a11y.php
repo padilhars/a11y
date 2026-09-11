@@ -37,6 +37,8 @@ $string['a11y:viewstats'] = 'Ver o relatório agregado de estatísticas de uso d
 $string['privacy:metadata:preference:local_a11y_settings'] = 'As opções de acessibilidade escolhidas pelo usuário (tamanho do texto, contraste, fonte, filtros de cor, etc). Observação: clicar em um dos "perfis" prontos (ex.: Dislexia, Epilepsia) só aplica os valores de opção correspondentes aqui - qual perfil, se algum, foi clicado nunca é registrado por si só.';
 $string['privacy:metadata:speechrecognitionservice'] = 'Quando "Comandos por Voz" está ativo, alguns navegadores (ex.: Chrome) enviam o áudio do microfone a um serviço remoto de reconhecimento de fala próprio para transcrevê-lo em texto. Este plugin não tem controle sobre esse serviço, e nunca envia, recebe ou armazena esse áudio ou sua transcrição - ver README.md.';
 $string['privacy:metadata:speechrecognitionservice:audio'] = 'Áudio do microfone captado pelo navegador enquanto "Comandos por Voz" está ativo, pelo tempo necessário para reconhecer um comando.';
+$string['privacy:metadata:facenavigationcdn'] = 'Na primeira vez que "Navegação por Face" é ativada, o navegador baixa o MediaPipe (o componente de rastreamento facial que ela usa) do jsDelivr e um arquivo de modelo do CDN próprio do Google. Ambos os downloads têm sua integridade verificada (SHA-256) por este plugin, mas, como em qualquer requisição a um servidor de terceiro, esse servidor vê o endereço IP/User-Agent de quem fez a requisição. Nenhuma imagem, vídeo ou dado de rastreamento facial é enviado a nenhum dos dois - a detecção facial em si roda inteiramente no navegador. Ver README.md e amd/src/face_navigation.js.';
+$string['privacy:metadata:facenavigationcdn:ipaddress'] = 'Endereço IP/User-Agent visível ao jsDelivr e ao Google como efeito colateral comum de baixar o componente MediaPipe, na primeira vez que "Navegação por Face" é ativada em um navegador.';
 
 // Panel chrome.
 $string['fabopen'] = 'Abrir painel de acessibilidade';
@@ -232,7 +234,13 @@ $string['face_sens'] = 'Velocidade do Cursor Virtual';
 $string['face_error'] = 'Erro ao iniciar';
 $string['face_click'] = 'Clique: Abrir a boca ou piscar com os dois olhos';
 $string['face_scroll'] = 'Rolar página: Leve o cursor virtual até a borda superior ou inferior da página';
-$string['face_privacynotice'] = 'Ativar Navegação por Face liga sua câmera. A imagem é processada inteiramente no seu navegador e nunca é enviada a este site ou a qualquer outro lugar - mas isso exige baixar um componente de terceiro (MediaPipe) para rodar localmente. Continuar?';
+$string['face_privacynotice'] = 'Ativar Navegação por Face liga sua câmera. A imagem é processada inteiramente no seu navegador e nunca é enviada a este site ou a qualquer outro lugar - mas, na primeira vez que você fizer isso, seu navegador baixa um componente de terceiro (MediaPipe) do jsDelivr e do Google, que veem seu endereço IP como qualquer outro site que você visita. Continuar?';
+$string['face_error_notallowed'] = 'O acesso à câmera foi negado. Verifique as permissões do site no seu navegador e tente novamente.';
+$string['face_error_notfound'] = 'Nenhuma câmera foi encontrada neste dispositivo.';
+$string['face_error_notreadable'] = 'Não foi possível acessar a câmera - ela pode já estar em uso por outro aplicativo.';
+$string['face_error_overconstrained'] = 'Nenhuma câmera deste dispositivo atende às especificações exigidas.';
+$string['face_error_security'] = 'O acesso à câmera está bloqueado pelas configurações de segurança deste navegador.';
+$string['face_error_abort'] = 'O acesso à câmera foi interrompido antes de começar.';
 
 // Profiles.
 $string['profile_lowvision'] = 'Baixa Visão';
@@ -336,5 +344,8 @@ $string['statsempty'] = 'Nenhuma estatística de uso registrada ainda.';
 $string['statscol_feature'] = 'Opção';
 $string['statscol_counter'] = 'Ativações';
 $string['statscol_lastupdated'] = 'Última atualização';
+
+// Avisos (AUDIT-V2 WCAG-002 - exibido após salvar uma cor cujo contraste contra branco fica abaixo do mínimo de 3:1 do WCAG 1.4.11).
+$string['warning_lowcontrast'] = 'A cor escolhida para "{$a->label}" ({$a->colour}) tem uma razão de contraste de apenas {$a->ratio}:1 contra branco, abaixo do mínimo de 3:1 do WCAG 1.4.11. Pode ficar difícil de ler onde este plugin a combina com texto ou ícones brancos. Este é só um aviso — o valor já foi salvo.';
 
 // Errors.

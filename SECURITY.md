@@ -2,8 +2,9 @@
 
 ## Versões suportadas
 
-Este plugin não publica ainda versões estáveis tagueadas (ver `CHANGELOG.md`). Até a primeira
-release formal, apenas o estado mais recente da branch `master` recebe correções de segurança.
+A primeira release formal (`v1.0.0`) já foi publicada (ver `CHANGELOG.md` e a tag `v1.0.0` no
+repositório). Apenas o estado mais recente da branch `master` recebe correções de segurança;
+não há suporte a releases anteriores a `v1.0.0`.
 
 ## Como reportar uma vulnerabilidade
 

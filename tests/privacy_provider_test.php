@@ -42,9 +42,11 @@ final class privacy_provider_test extends \advanced_testcase {
     }
 
     /**
-     * Metadata must declare exactly the local_a11y_settings user preference
-     * and, since D62, the external speech-recognition-service disclosure
-     * (Voice Commands, browser-dependent - see classes/privacy/provider.php).
+     * Metadata must declare exactly the local_a11y_settings user
+     * preference plus the two external-location disclosures: the D62
+     * speech-recognition-service link (Voice Commands, browser-dependent)
+     * and the AUDIT-V2 LGPD-001 facenavigationcdn link (Face Navigation's
+     * one-time MediaPipe download) - see classes/privacy/provider.php.
      * @return void
      */
     public function test_get_metadata_declares_the_preference(): void {
@@ -52,11 +54,12 @@ final class privacy_provider_test extends \advanced_testcase {
         $result = provider::get_metadata($collection);
 
         $items = $result->get_collection();
-        $this->assertCount(2, $items);
+        $this->assertCount(3, $items);
 
         $names = array_map(fn($item) => $item->get_name(), $items);
         $this->assertContains(\local_a11y\manager::PREFERENCE_NAME, $names);
         $this->assertContains('speechrecognitionservice', $names);
+        $this->assertContains('facenavigationcdn', $names);
     }
 
     /**

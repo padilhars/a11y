@@ -41,7 +41,9 @@ const PREFERENCE_NAME = 'local_a11y_settings';
 
 export const DEFAULT_SETTINGS = {
     readableFont: false,
-    dyslexicFont: 0,
+    // fontVariant (AUDIT-V2 LGPD-002, renamed from dyslexicFont): see
+    // classes/options.php's comment on this option's id for why.
+    fontVariant: 0,
     highlightTitles: false,
     highlightLinks: false,
     highlightButtons: false,
@@ -83,7 +85,7 @@ export const DEFAULT_SETTINGS = {
 };
 
 const STEPPER_MAX = {
-    dyslexicFont: 2,
+    fontVariant: 2,
     textSize: 4,
     lineHeight: 3,
     textSpacing: 3,

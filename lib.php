@@ -42,3 +42,59 @@ function local_a11y_user_preferences() {
         ],
     ];
 }
+
+/**
+ * admin_setting_configcolourpicker::set_updatedcallback() targets for each
+ * of the 5 admin-customisable colours (settings.php) - see
+ * \local_a11y\config::warn_if_low_contrast() for what each of these does
+ * and why (AUDIT-V2 finding WCAG-002). One small named function per colour
+ * rather than a single generic one parsing get_full_name(): Moodle's
+ * updatedcallback receives 's_local_a11y_<name>', not the plain config key,
+ * and re-deriving the key from that string is more fragile than just
+ * naming the key explicitly here, once, next to its own setting.
+ */
+
+/**
+ * Warns the admin if 'accent' has insufficient contrast against white.
+ *
+ * @return void
+ */
+function local_a11y_check_accent_contrast() {
+    \local_a11y\config::warn_if_low_contrast('accent', get_string('settings_accent', 'local_a11y'));
+}
+
+/**
+ * Warns the admin if 'highlighttitlescolor' has insufficient contrast against white.
+ *
+ * @return void
+ */
+function local_a11y_check_highlighttitlescolor_contrast() {
+    \local_a11y\config::warn_if_low_contrast('highlighttitlescolor', get_string('settings_highlighttitlescolor', 'local_a11y'));
+}
+
+/**
+ * Warns the admin if 'highlightlinkscolor' has insufficient contrast against white.
+ *
+ * @return void
+ */
+function local_a11y_check_highlightlinkscolor_contrast() {
+    \local_a11y\config::warn_if_low_contrast('highlightlinkscolor', get_string('settings_highlightlinkscolor', 'local_a11y'));
+}
+
+/**
+ * Warns the admin if 'highlightbuttonscolor' has insufficient contrast against white.
+ *
+ * @return void
+ */
+function local_a11y_check_highlightbuttonscolor_contrast() {
+    \local_a11y\config::warn_if_low_contrast('highlightbuttonscolor', get_string('settings_highlightbuttonscolor', 'local_a11y'));
+}
+
+/**
+ * Warns the admin if 'readingguidecolor' has insufficient contrast against white.
+ *
+ * @return void
+ */
+function local_a11y_check_readingguidecolor_contrast() {
+    \local_a11y\config::warn_if_low_contrast('readingguidecolor', get_string('settings_readingguidecolor', 'local_a11y'));
+}

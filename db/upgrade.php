@@ -87,5 +87,67 @@ function xmldb_local_a11y_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026082800, 'local', 'a11y');
     }
 
+    if ($oldversion < 2026091200) {
+        // AUDIT-V2 finding LGPD-002 (partial technical mitigation - see
+        // classes/options.php's comment on this option's id for the full
+        // reasoning): the 'dyslexicFont' option id, which named the
+        // specific condition it accommodates in stored data, is renamed to
+        // the neutral 'fontVariant'. Two places persist it and need a data
+        // migration so existing users don't silently lose this setting
+        // (manager::sanitize_settings() only ever copies forward keys it
+        // recognises - an unmigrated 'dyslexicFont' would simply vanish,
+        // not error).
+        //
+        // 1) {user_preferences}: same recordset-and-update pattern as the
+        // 2026082800 step above, for the same "this table can be large"
+        // reason. Renaming the key, not just changing its value, so the
+        // JSON key itself is only ever present as 'fontVariant' from here
+        // on - the whole point of this migration.
+        $rs = $DB->get_recordset('user_preferences', ['name' => 'local_a11y_settings']);
+        foreach ($rs as $pref) {
+            $settings = json_decode($pref->value, true);
+            if (!is_array($settings) || !array_key_exists('dyslexicFont', $settings)) {
+                continue;
+            }
+            $settings['fontVariant'] = $settings['dyslexicFont'];
+            unset($settings['dyslexicFont']);
+            $pref->value = json_encode($settings);
+            $DB->update_record('user_preferences', $pref);
+        }
+        $rs->close();
+
+        // 2) {local_a11y_stats}: one aggregate, site-wide counter row per
+        // option id (D47 - not personal data, no user column). Simple
+        // rename-in-place; no merge logic needed since 'fontVariant' can't
+        // already exist as a distinct featureid before this option id did.
+        $DB->set_field('local_a11y_stats', 'featureid', 'fontVariant', ['featureid' => 'dyslexicFont']);
+
+        // 3) local_a11y/enabledfeatures (admin config, config_plugins - a
+        // single comma-separated string of option ids, see
+        // config::enabled_features()): a site that ever saved this setting
+        // has 'dyslexicFont' baked into that string verbatim. Left
+        // unmigrated, the option wouldn't just look wrong - it would
+        // disappear from the panel entirely, since enabled_features() only
+        // matches ids by exact string, and 'fontVariant' is a different
+        // string. Comma-split/rejoin, not str_replace(), so this can't
+        // accidentally match a substring of some other id.
+        $enabledraw = get_config('local_a11y', 'enabledfeatures');
+        if ($enabledraw !== false && $enabledraw !== '') {
+            $ids = explode(',', $enabledraw);
+            $renamed = false;
+            foreach ($ids as $i => $id) {
+                if ($id === 'dyslexicFont') {
+                    $ids[$i] = 'fontVariant';
+                    $renamed = true;
+                }
+            }
+            if ($renamed) {
+                set_config('enabledfeatures', implode(',', $ids), 'local_a11y');
+            }
+        }
+
+        upgrade_plugin_savepoint(true, 2026091200, 'local', 'a11y');
+    }
+
     return true;
 }

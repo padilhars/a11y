@@ -1582,22 +1582,22 @@ body.a11y-readable-font footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
    font-weight/letter-spacing boost that Lexend needs (see the comment near
    its @font-face block on why 600, not 700) does not apply to OpenDyslexic
    (a static face with a real 700 weight of its own, no boost needed). */
-body.a11y-dyslexic-font-1 #page,
-body.a11y-dyslexic-font-1 #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
-body.a11y-dyslexic-font-1 .navbar,
-body.a11y-dyslexic-font-1 .navbar *:not(.icon, .fa, [class*="fa-"]),
-body.a11y-dyslexic-font-1 footer#page-footer,
-body.a11y-dyslexic-font-1 footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
+body.a11y-font-variant-1 #page,
+body.a11y-font-variant-1 #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
+body.a11y-font-variant-1 .navbar,
+body.a11y-font-variant-1 .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-font-variant-1 footer#page-footer,
+body.a11y-font-variant-1 footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
     font-family: 'Lexend', 'Comic Sans MS', system-ui, sans-serif !important;
     font-weight: 500 !important;
     letter-spacing: 0.02em !important;
 }
-body.a11y-dyslexic-font-2 #page,
-body.a11y-dyslexic-font-2 #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
-body.a11y-dyslexic-font-2 .navbar,
-body.a11y-dyslexic-font-2 .navbar *:not(.icon, .fa, [class*="fa-"]),
-body.a11y-dyslexic-font-2 footer#page-footer,
-body.a11y-dyslexic-font-2 footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
+body.a11y-font-variant-2 #page,
+body.a11y-font-variant-2 #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
+body.a11y-font-variant-2 .navbar,
+body.a11y-font-variant-2 .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-font-variant-2 footer#page-footer,
+body.a11y-font-variant-2 footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
     font-family: 'OpenDyslexic', 'Comic Sans MS', system-ui, sans-serif !important;
 }
 
@@ -2002,7 +2002,7 @@ Styleguide 10.7.
 /* Only level 1 (Lexend) needs this cap - see D75 and the comment above the
    Lexend @font-face block. Level 2 (OpenDyslexic) has a real 700 weight of
    its own, so the generic rule above already applies correctly to it. */
-body.a11y-dyslexic-font-1 #page .local-a11y-br b {
+body.a11y-font-variant-1 #page .local-a11y-br b {
     font-weight: 600 !important;
 }
 

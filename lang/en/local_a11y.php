@@ -37,6 +37,8 @@ $string['a11y:viewstats'] = 'View the aggregate accessibility usage-stats report
 $string['privacy:metadata:preference:local_a11y_settings'] = 'The accessibility options the user has chosen (text size, contrast, font, colour filters, etc). Note: clicking one of the ready-made "profiles" (e.g. Dyslexia, Epilepsy) only applies its underlying option values here - which profile, if any, was clicked is never itself recorded.';
 $string['privacy:metadata:speechrecognitionservice'] = 'When "Voice Commands" is active, some browsers (e.g. Chrome) send the microphone audio to their own remote speech-recognition service to transcribe it into text. This plugin has no control over that service, and never itself sends, receives or stores this audio or its transcription - see README.md.';
 $string['privacy:metadata:speechrecognitionservice:audio'] = 'Microphone audio captured by the browser while "Voice Commands" is active, for as long as needed to recognise a command.';
+$string['privacy:metadata:facenavigationcdn'] = 'The first time "Face Navigation" is activated, the browser downloads MediaPipe (the face-tracking component it uses) from jsDelivr and a model file from Google\'s own CDN. Both downloads are integrity-verified (SHA-256) by this plugin, but as with any request to a third-party server, that server sees the requesting IP address/User-Agent. No image, video or face-tracking data is ever sent to either party - face detection itself runs entirely in the browser. See README.md and amd/src/face_navigation.js.';
+$string['privacy:metadata:facenavigationcdn:ipaddress'] = 'IP address/User-Agent visible to jsDelivr and Google as an ordinary side effect of downloading the MediaPipe component, the first time "Face Navigation" is activated in a given browser.';
 
 // Panel chrome.
 $string['fabopen'] = 'Open accessibility panel';
@@ -232,7 +234,13 @@ $string['face_sens'] = 'Virtual Cursor Speed';
 $string['face_error'] = 'Failed to start';
 $string['face_click'] = 'Click: Open your mouth or blink both eyes';
 $string['face_scroll'] = 'Scroll page: Move the virtual cursor to the top or bottom edge of the page';
-$string['face_privacynotice'] = 'Activating Face Navigation turns on your camera. The image is processed entirely in your own browser and is never sent to this site or anyone else - but doing that requires downloading a third-party component (MediaPipe) to run locally. Continue?';
+$string['face_privacynotice'] = 'Activating Face Navigation turns on your camera. The image is processed entirely in your own browser and is never sent to this site or anyone else - but the first time you do this, your browser downloads a third-party component (MediaPipe) from jsDelivr and Google, which see your IP address like any other website you visit. Continue?';
+$string['face_error_notallowed'] = 'Camera access was denied. Check your browser\'s site permissions and try again.';
+$string['face_error_notfound'] = 'No camera was found on this device.';
+$string['face_error_notreadable'] = 'The camera could not be accessed - it may already be in use by another application.';
+$string['face_error_overconstrained'] = 'No camera on this device meets the required specifications.';
+$string['face_error_security'] = 'Camera access is blocked by this browser\'s security settings.';
+$string['face_error_abort'] = 'Camera access was interrupted before it could start.';
 
 // Profiles.
 $string['profile_lowvision'] = 'Low Vision';
@@ -336,5 +344,8 @@ $string['statsempty'] = 'No usage statistics recorded yet.';
 $string['statscol_feature'] = 'Option';
 $string['statscol_counter'] = 'Activations';
 $string['statscol_lastupdated'] = 'Last updated';
+
+// Warnings (AUDIT-V2 WCAG-002 - shown after saving a colour setting whose contrast against white falls below the WCAG 1.4.11 3:1 minimum).
+$string['warning_lowcontrast'] = 'The colour chosen for "{$a->label}" ({$a->colour}) has a contrast ratio of only {$a->ratio}:1 against white, below the WCAG 1.4.11 minimum of 3:1. It may be hard to read where this plugin pairs it with white text or icons. This is a warning only - the value has been saved.';
 
 // Errors.

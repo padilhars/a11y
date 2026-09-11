@@ -35,6 +35,18 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+// A plugin's lib.php isn't loaded on every request the way its classes/
+// (PSR-4 autoloaded) are - only settings.php's own execution context
+// (admin pages) needs the local_a11y_check_*_contrast() callbacks below,
+// and those functions live in lib.php, so it has to be required
+// explicitly here for admin_setting::set_updatedcallback() to find them.
+// AUDIT-V2 WCAG-002 fix: without this, set_updatedcallback() silently did
+// nothing (call_user_func() on an undefined function name is simply
+// never invoked - no error, no warning) - confirmed live: saving a
+// deliberately low-contrast accent colour produced no warning until this
+// was added.
+require_once(__DIR__ . '/lib.php');
+
 if ($hassiteconfig) {
     $settings = new admin_settingpage('local_a11y', new lang_string('pluginname', 'local_a11y'));
     $ADMIN->add('localplugins', $settings);
@@ -224,40 +236,54 @@ if ($hassiteconfig) {
         ''
     ));
 
-    $settings->add(new admin_setting_configcolourpicker(
+    // AUDIT-V2 finding WCAG-002: none of these 5 colours were validated for
+    // contrast before - each now warns the admin (non-blocking, via
+    // \core\notification after save) if it falls below the WCAG 1.4.11
+    // 3:1 minimum against white. See \local_a11y\config::warn_if_low_contrast().
+    $accent = new admin_setting_configcolourpicker(
         'local_a11y/accent',
         new lang_string('settings_accent', 'local_a11y'),
         new lang_string('settings_accent_desc', 'local_a11y'),
         '#3b82f6'
-    ));
+    );
+    $accent->set_updatedcallback('local_a11y_check_accent_contrast');
+    $settings->add($accent);
 
-    $settings->add(new admin_setting_configcolourpicker(
+    $highlighttitles = new admin_setting_configcolourpicker(
         'local_a11y/highlighttitlescolor',
         new lang_string('settings_highlighttitlescolor', 'local_a11y'),
         new lang_string('settings_highlighttitlescolor_desc', 'local_a11y'),
         '#eab308'
-    ));
+    );
+    $highlighttitles->set_updatedcallback('local_a11y_check_highlighttitlescolor_contrast');
+    $settings->add($highlighttitles);
 
-    $settings->add(new admin_setting_configcolourpicker(
+    $highlightlinks = new admin_setting_configcolourpicker(
         'local_a11y/highlightlinkscolor',
         new lang_string('settings_highlightlinkscolor', 'local_a11y'),
         new lang_string('settings_highlightlinkscolor_desc', 'local_a11y'),
         '#3b82f6'
-    ));
+    );
+    $highlightlinks->set_updatedcallback('local_a11y_check_highlightlinkscolor_contrast');
+    $settings->add($highlightlinks);
 
-    $settings->add(new admin_setting_configcolourpicker(
+    $highlightbuttons = new admin_setting_configcolourpicker(
         'local_a11y/highlightbuttonscolor',
         new lang_string('settings_highlightbuttonscolor', 'local_a11y'),
         new lang_string('settings_highlightbuttonscolor_desc', 'local_a11y'),
         '#f97316'
-    ));
+    );
+    $highlightbuttons->set_updatedcallback('local_a11y_check_highlightbuttonscolor_contrast');
+    $settings->add($highlightbuttons);
 
-    $settings->add(new admin_setting_configcolourpicker(
+    $readingguide = new admin_setting_configcolourpicker(
         'local_a11y/readingguidecolor',
         new lang_string('settings_readingguidecolor', 'local_a11y'),
         new lang_string('settings_readingguidecolor_desc', 'local_a11y'),
         '#3b82f6'
-    ));
+    );
+    $readingguide->set_updatedcallback('local_a11y_check_readingguidecolor_contrast');
+    $settings->add($readingguide);
 
     // Estatísticas ───────────────────────────────────────────────────────
     // Contadores de uso agregados e anônimos (D47) - desligado por padrão;

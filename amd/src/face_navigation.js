@@ -225,7 +225,28 @@ let sensitivity = 3;
 // before the HUD ever renders, same mechanism Moodle uses for its own
 // component strings, so this now respects the site's actual language.
 const STRING_KEYS = ['face_loading', 'face_camhint', 'face_calibrate', 'face_active',
-    'face_stop', 'face_sens', 'face_error', 'face_click', 'face_scroll', 'face_privacynotice'];
+    'face_stop', 'face_sens', 'face_error', 'face_click', 'face_scroll', 'face_privacynotice',
+    'face_error_notallowed', 'face_error_notfound', 'face_error_notreadable',
+    'face_error_overconstrained', 'face_error_security', 'face_error_abort'];
+
+// AUDIT-V2 finding SEC-001: getUserMedia() failures reach the catch block in
+// start() below as a native DOMException, whose .message is always in
+// English (browser-generated, never localised) regardless of the site's own
+// language - inconsistent with every other piece of UI text in this plugin.
+// Not a security issue on its own (no sensitive server-side detail is ever
+// in these messages), but worth mapping the common, well-known .name values
+// to this plugin's own translated strings. Anything not in this map (e.g. a
+// MediaPipe load/integrity-check failure, which is already this codebase's
+// own English text, not browser-native) still falls back to the raw
+// message - see mapErrorMessage() below.
+const NATIVE_ERROR_KEYS = {
+    NotAllowedError: 'face_error_notallowed',
+    NotFoundError: 'face_error_notfound',
+    NotReadableError: 'face_error_notreadable',
+    OverconstrainedError: 'face_error_overconstrained',
+    SecurityError: 'face_error_security',
+    AbortError: 'face_error_abort',
+};
 
 let cache = null;
 
@@ -466,6 +487,20 @@ const renderError = (msg) => {
 };
 
 /**
+ * Maps a caught error to a translated message where a well-known browser
+ * error (see NATIVE_ERROR_KEYS above) is recognised, otherwise falls back
+ * to the error's own (untranslated) message. AUDIT-V2 finding SEC-001.
+ *
+ * @param {Error} e The caught error.
+ * @return {String} A message suitable for renderError().
+ */
+const mapErrorMessage = (e) => {
+    const key = e && e.name && NATIVE_ERROR_KEYS[e.name];
+    const mapped = key && t(key);
+    return mapped || (e && e.message) || String(e);
+};
+
+/**
  * Attach the already-acquired webcam MediaStream to the current `videoEl`
  * (re-created on every HUD state render) and start playback.
  *
@@ -474,7 +509,20 @@ const renderError = (msg) => {
 const attachVideoStream = () => {
     if (videoEl && stream) {
         videoEl.srcObject = stream;
-        videoEl.play().catch(() => {});
+        // AUDIT-V2 finding CODE-004: this used to swallow a play() failure
+        // silently. getUserMedia() already succeeded by this point (that's
+        // the only way `stream` is set), so the camera permission itself
+        // isn't the concern here - a rejection at this specific point would
+        // be something else (e.g. the element was removed/replaced before
+        // play() resolved, an autoplay policy quirk). Logged the same way
+        // amd/src/vlibras_integration.js already does for its own
+        // best-effort failures: developer-debug builds only, never thrown,
+        // never blocks the calling render*() function.
+        videoEl.play().catch((e) => {
+            if (window.M && M.cfg && M.cfg.developerdebug) {
+                window.console.warn('local_a11y: Face Navigation video preview failed to play: ' + (e && e.message || e));
+            }
+        });
     }
 };
 
@@ -888,7 +936,7 @@ export const start = async(cb) => {
             renderCalibrating();
         }
     } catch (e) {
-        renderError(e.message || String(e));
+        renderError(mapErrorMessage(e));
     }
 };
 
