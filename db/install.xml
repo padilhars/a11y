@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/a11y/db" VERSION="20260827300" COMMENT="XMLDB file for Moodle local/a11y"
+<XMLDB PATH="local/a11y/db" VERSION="2026091400" COMMENT="XMLDB file for Moodle local/a11y"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -16,6 +16,35 @@
       </KEYS>
       <INDEXES>
         <INDEX NAME="featureid" UNIQUE="true" FIELDS="featureid"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_a11y_stats_daily" COMMENT="Aggregated, anonymous daily usage counters per accessibility option, added for the usage-trend chart on admin/stats.php. One row per (featureid, day) pair - same non-personal-data shape as local_a11y_stats (see its own comment), just bucketed by day instead of a single running total. No userid, courseid, sessionid or IP column: nothing here can be used to reconstruct an individual's behaviour.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="featureid" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Accessibility option id, e.g. readableFont - matches classes/options.php ids."/>
+        <FIELD NAME="day" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="UTC calendar day this row counts, as a YYYYMMDD integer (e.g. 20260912) - see classes/stats.php::day_bucket()."/>
+        <FIELD NAME="counter" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Number of times this option was activated site-wide on this day."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="featureid-day" UNIQUE="true" FIELDS="featureid, day"/>
+        <INDEX NAME="day" UNIQUE="false" FIELDS="day"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="local_a11y_stats_bytype" COMMENT="Aggregated, anonymous usage counters per accessibility option, broken down by account type (Moodle's built-in Guest account vs. a real authenticated account), added for the 'activations by user type' chart on admin/stats.php. One row per (featureid, guest) pair - at most 2 rows per option. `guest` is a 0/1 role flag decided once per request (isguestuser()), never a specific user id: this cannot be used to single out which guest session or which authenticated account triggered any activation, only how many came from each of the two groups in total. No userid, courseid, sessionid or IP column: nothing here can be used to reconstruct an individual's behaviour.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="featureid" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Accessibility option id, e.g. readableFont - matches classes/options.php ids."/>
+        <FIELD NAME="guest" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if this row counts activations from Moodle's Guest account, 0 for real authenticated accounts."/>
+        <FIELD NAME="counter" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Number of times this option was activated site-wide by this account type."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="featureid-guest" UNIQUE="true" FIELDS="featureid, guest"/>
       </INDEXES>
     </TABLE>
   </TABLES>

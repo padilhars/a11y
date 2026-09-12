@@ -344,6 +344,17 @@ $string['statsempty'] = 'No usage statistics recorded yet.';
 $string['statscol_feature'] = 'Option';
 $string['statscol_counter'] = 'Activations';
 $string['statscol_lastupdated'] = 'Last updated';
+$string['statschart_byoption'] = 'Activations by option';
+$string['statschart_bycategory'] = 'Activations by category';
+$string['statschart_trend'] = 'Trend over time';
+$string['statschart_trend_desc'] = 'Daily activations per category, last {$a} days.';
+$string['statstrendempty'] = 'Not enough data yet to show a trend - daily history starts being recorded from this version onwards, and needs at least one activation on a given day to appear.';
+$string['statschart_bytype'] = 'Activations by user type';
+$string['statschart_bytype_desc'] = 'Activations by option, split between real authenticated accounts and Moodle\'s built-in Guest account. A visitor who never logs in at all (not even as Guest) cannot trigger this - no activation is recorded server-side for them.';
+$string['statstype_authenticated'] = 'Authenticated accounts';
+$string['statstype_guest'] = 'Guest account';
+$string['statsbytypeempty'] = 'Not enough data yet to show this breakdown - it starts being recorded from this version onwards.';
+$string['statstable'] = 'Detailed data';
 
 // Warnings (AUDIT-V2 WCAG-002 - shown after saving a colour setting whose contrast against white falls below the WCAG 1.4.11 3:1 minimum).
 $string['warning_lowcontrast'] = 'The colour chosen for "{$a->label}" ({$a->colour}) has a contrast ratio of only {$a->ratio}:1 against white, below the WCAG 1.4.11 minimum of 3:1. It may be hard to read where this plugin pairs it with white text or icons. This is a warning only - the value has been saved.';

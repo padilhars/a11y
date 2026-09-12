@@ -149,5 +149,52 @@ function xmldb_local_a11y_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2026091200, 'local', 'a11y');
     }
 
+    if ($oldversion < 2026091300) {
+        // New table for the daily/weekly usage-trend chart on
+        // admin/stats.php: same aggregate/anonymous shape as
+        // local_a11y_stats (see its own install.xml comment), just
+        // bucketed by day instead of a single running total. install.xml
+        // only takes effect on a brand-new install (same reasoning as the
+        // 2026082700 step above for local_a11y_stats itself).
+        $table = new xmldb_table('local_a11y_stats_daily');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('featureid', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('day', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('counter', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_index('featureid-day', XMLDB_INDEX_UNIQUE, ['featureid', 'day']);
+        $table->add_index('day', XMLDB_INDEX_NOTUNIQUE, ['day']);
+
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2026091300, 'local', 'a11y');
+    }
+
+    if ($oldversion < 2026091400) {
+        // New table for the "activations by user type" chart on
+        // admin/stats.php: same aggregate/anonymous shape as the other
+        // two local_a11y_stats* tables, this time broken down by account
+        // type (Moodle's Guest account vs. a real authenticated account)
+        // instead of by day. See install.xml's own comment on this table
+        // for why the `guest` column is safe (a 0/1 role flag, never a
+        // user id). Same "install.xml only affects brand-new installs"
+        // reasoning as the two upgrade steps above.
+        $table = new xmldb_table('local_a11y_stats_bytype');
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('featureid', XMLDB_TYPE_CHAR, '100', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('guest', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0');
+        $table->add_field('counter', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_index('featureid-guest', XMLDB_INDEX_UNIQUE, ['featureid', 'guest']);
+
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2026091400, 'local', 'a11y');
+    }
+
     return true;
 }

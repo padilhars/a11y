@@ -28,7 +28,7 @@ use core_privacy\local\request\writer;
  * browser's localStorage only, which Moodle's privacy subsystem has no
  * visibility into (and nothing to export/delete server-side for).
  *
- * Since D47 the plugin also has one database table, `local_a11y_stats`
+ * Since D47 the plugin also has a database table, `local_a11y_stats`
  * (optional, off by default - see `local_a11y/collectstats`) - it is
  * DELIBERATELY NOT declared anywhere below via `add_database_table()`
  * (the method for describing tables that *do* hold personal data),
@@ -39,6 +39,22 @@ use core_privacy\local\request\writer;
  * plugin ever queries it by user. See DECISIONS.md D47 for the full
  * schema rationale and classes/stats.php for the only code that writes
  * to it.
+ *
+ * `local_a11y_stats_daily` (added for the usage-trend chart on
+ * admin/stats.php) is the same story with the same conclusion: one row
+ * per (featureid, day) pair, a global counter, no user-identifying column
+ * of any kind - bucketed by day instead of a single running total, but
+ * that's still an aggregate over every user site-wide, not a per-user
+ * record. Not declared for the same reason as local_a11y_stats above.
+ *
+ * `local_a11y_stats_bytype` (added for the "activations by user type"
+ * chart) is the same story again: one row per (featureid, guest) pair, a
+ * global counter, and a `guest` column that is a 0/1 role flag decided
+ * once per request (isguestuser()) - not a user id, not a session id,
+ * and not derived from anything specific to one individual. It answers
+ * "how many activations came from the Guest account vs. real accounts,
+ * in total", never "which guest" or "which account". Not declared for
+ * the same reason as the two tables above.
  *
  * Since D62 (security audit finding) the metadata also declares an
  * `add_external_location_link()`: the "Voice Commands" option uses the

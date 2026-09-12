@@ -66,6 +66,39 @@ final class record_activation_test extends \advanced_testcase {
     }
 
     /**
+     * A real authenticated account's activation must land in
+     * TABLE_BYTYPE's guest=0 row - execute() passes isguestuser(), not a
+     * client-supplied value, so this only proves the wiring is correct
+     * for the ordinary case setUp() already logs in as.
+     * @return void
+     */
+    public function test_execute_records_authenticated_activation_as_not_guest(): void {
+        global $DB;
+
+        record_activation::execute('readableFont');
+
+        $row = $DB->get_record(\local_a11y\stats::TABLE_BYTYPE, ['featureid' => 'readableFont']);
+        $this->assertSame('0', (string) $row->guest);
+    }
+
+    /**
+     * Moodle's Guest account (local/a11y:view is granted to it by default
+     * - see db/access.php) must land in TABLE_BYTYPE's guest=1 row.
+     * @return void
+     */
+    public function test_execute_records_guest_activation_as_guest(): void {
+        global $DB;
+        $this->setGuestUser();
+        $_POST['sesskey'] = sesskey();
+
+        $result = record_activation::execute('readableFont');
+
+        $this->assertTrue($result['recorded']);
+        $row = $DB->get_record(\local_a11y\stats::TABLE_BYTYPE, ['featureid' => 'readableFont']);
+        $this->assertSame('1', (string) $row->guest);
+    }
+
+    /**
      * An unknown/stale featureid must be silently ignored (no exception,
      * `recorded => false`, nothing written) - see the docblock on
      * record_activation::execute() for why this is deliberate.

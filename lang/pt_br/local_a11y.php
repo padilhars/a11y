@@ -344,6 +344,17 @@ $string['statsempty'] = 'Nenhuma estatística de uso registrada ainda.';
 $string['statscol_feature'] = 'Opção';
 $string['statscol_counter'] = 'Ativações';
 $string['statscol_lastupdated'] = 'Última atualização';
+$string['statschart_byoption'] = 'Ativações por opção';
+$string['statschart_bycategory'] = 'Ativações por categoria';
+$string['statschart_trend'] = 'Tendência ao longo do tempo';
+$string['statschart_trend_desc'] = 'Ativações diárias por categoria, últimos {$a} dias.';
+$string['statstrendempty'] = 'Ainda não há dados suficientes para mostrar uma tendência - o histórico diário passa a ser registrado a partir desta versão, e precisa de pelo menos uma ativação em um determinado dia para aparecer.';
+$string['statschart_bytype'] = 'Ativações por tipo de usuário';
+$string['statschart_bytype_desc'] = 'Ativações por opção, separadas entre contas autenticadas reais e a conta padrão "Visitante" (Guest) do Moodle. Um visitante que nunca faz login (nem mesmo como Visitante) não gera esse registro - nenhuma ativação é contabilizada no servidor para essa pessoa.';
+$string['statstype_authenticated'] = 'Contas autenticadas';
+$string['statstype_guest'] = 'Conta Visitante';
+$string['statsbytypeempty'] = 'Ainda não há dados suficientes para mostrar essa separação - o registro passa a existir a partir desta versão.';
+$string['statstable'] = 'Dados detalhados';
 
 // Avisos (AUDIT-V2 WCAG-002 - exibido após salvar uma cor cujo contraste contra branco fica abaixo do mínimo de 3:1 do WCAG 1.4.11).
 $string['warning_lowcontrast'] = 'A cor escolhida para "{$a->label}" ({$a->colour}) tem uma razão de contraste de apenas {$a->ratio}:1 contra branco, abaixo do mínimo de 3:1 do WCAG 1.4.11. Pode ficar difícil de ler onde este plugin a combina com texto ou ícones brancos. Este é só um aviso — o valor já foi salvo.';

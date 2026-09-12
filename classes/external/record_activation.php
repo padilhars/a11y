@@ -81,7 +81,12 @@ class record_activation extends external_api {
             return ['recorded' => false];
         }
 
-        $recorded = \local_a11y\stats::record_activation($featureid);
+        // Called with isguestuser() here, not a value from the client: this is the
+        // one piece of context stats::record_activation() itself has no
+        // way to know on its own (it's a pure data-layer class with no
+        // notion of "current user"), and it must never be something a
+        // client could spoof to pollute the user-type breakdown.
+        $recorded = \local_a11y\stats::record_activation($featureid, isguestuser());
         return ['recorded' => $recorded];
     }
 
