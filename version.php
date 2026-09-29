@@ -28,7 +28,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_a11y';
-$plugin->version   = 2026091400;
+$plugin->version   = 2026092900;
 // AUDIT-V2 finding CODE-001: this value can look contradictory next to
 // $supported below (a reviewer might reasonably ask "why declare a 5.0
 // build here if only 502 is supported?"), so the full story is worth

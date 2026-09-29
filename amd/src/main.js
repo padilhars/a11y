@@ -134,9 +134,13 @@ let statsEnabled = false;
 // undercounts only this one, narrow, no-session-at-all visitor case,
 // instead of ever sending them to a login page they never asked for.
 let hasAnySession = false;
-// Which profile preset (if any) is currently applied. Ephemeral (not
-// persisted) - matches the prototype's own local component state, which
-// also resets on reload; only the resulting `settings` values persist.
+// Which profile preset (if any) is currently applied. The variable itself
+// is not persisted (matches the prototype's own local component state,
+// which also reset on reload) - but init() below re-derives it from the
+// persisted `settings` values on every load via Profiles.matchProfile(),
+// so the profile card's selected state stays in sync with what's actually
+// applied instead of resetting to "none selected" on every reload/page
+// navigation while the profile's effects remain active underneath it.
 let activeProfileId = null;
 // Built from the server-rendered DOM itself (data-kind/data-max/category),
 // so option metadata never has to be duplicated a third time in JS.
@@ -736,6 +740,19 @@ export const init = async(loggedIn, collectStatsEnabled, sessionExists) => {
         onReset,
         onProfileSelect,
     });
+
+    // Bug fix: activeProfileId itself is intentionally ephemeral (see its
+    // own comment above), but until now nothing ever reconstructed it from
+    // the settings that DO persist - so a profile applied on one page load
+    // kept every one of its effects active after a reload/navigation, yet
+    // its card always showed as unselected, forcing a confusing
+    // click-to-activate-then-click-to-deactivate just to turn it back off.
+    // Profiles.matchProfile() derives "which profile card, if any, produced
+    // these settings" from the settings themselves, so the card's state
+    // stays truthful to what's actually applied without needing a new
+    // persisted field of its own.
+    activeProfileId = Profiles.matchProfile(settings, Storage.DEFAULT_SETTINGS);
+    Panel.renderActiveProfile(activeProfileId);
 
     // Re-apply/re-render once the real settings are loaded: the inline
     // no-FOUC script (classes/output/renderer.php::render_nofouc_script())

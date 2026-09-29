@@ -64,6 +64,37 @@ export const applyProfile = (id, defaults) => {
     return {...defaults, ...preset};
 };
 
+/**
+ * Find which profile (if any) the given settings exactly match, so the
+ * right profile card can be shown as active right after a fresh page
+ * load/reload - main.js's activeProfileId is deliberately ephemeral
+ * per-tab (see its own comment), but the settings values a profile
+ * produced DO persist (Storage.getSettings()); this reconstructs "which
+ * profile card, if any, produced these settings" from the settings
+ * themselves instead of needing a new persisted field of its own. Also
+ * used after a profile is applied, so a settings object built by
+ * applyProfile() always round-trips back to the same id.
+ *
+ * Exact match only, on every key of `defaults` - the same "any manual
+ * tweak clears the active profile" rule already enforced in main.js's
+ * onToggle()/setStepperValue() (which set activeProfileId back to null
+ * the moment a single option is changed by hand) applies here too: a
+ * settings object that only *mostly* matches a profile is correctly
+ * treated as "no profile active", not the closest one.
+ *
+ * @param {Object} settings The current settings object to test.
+ * @param {Object} defaults The full default settings object (Storage.DEFAULT_SETTINGS).
+ * @return {String|null} The matching profile id, or null if settings don't exactly match any profile.
+ */
+export const matchProfile = (settings, defaults) => {
+    const id = Object.keys(PROFILES).find((profileId) => {
+        const applied = applyProfile(profileId, defaults);
+        return Object.keys(defaults).every((key) => applied[key] === settings[key]);
+    });
+    return id || null;
+};
+
 export default {
     applyProfile,
+    matchProfile,
 };

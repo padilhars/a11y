@@ -39,6 +39,27 @@ Feature: Accessibility panel
     And "#local-a11y-panel [data-region='reset-button'][disabled]" "css_element" should exist
     And "body.a11y-font-variant-1" "css_element" should not exist
 
+  Scenario: A profile card stays marked active after reloading the page, and one click turns it back off
+    # Regression test: activeProfileId (amd/src/main.js) is an ephemeral,
+    # per-tab-only variable - its underlying settings persist across a
+    # reload, but nothing re-derived which profile card produced them,
+    # so the card showed as unselected even though the profile's effects
+    # (fontVariant, lineHeight, textSpacing here) were still fully active -
+    # forcing a confusing click-to-reactivate-then-click-to-deactivate just
+    # to turn an already-active profile back off. Fixed by
+    # Profiles.matchProfile() reconstructing activeProfileId from the
+    # loaded settings on every init().
+    Given I click on "#local-a11y-fab" "css_element"
+    And I click on "#local-a11y-panel [data-profile-id='dyslexia']" "css_element"
+    And "#local-a11y-panel [data-profile-id='dyslexia'].local-a11y-profile-card--active" "css_element" should exist
+    When I reload the page
+    And I click on "#local-a11y-fab" "css_element"
+    Then "#local-a11y-panel [data-profile-id='dyslexia'].local-a11y-profile-card--active" "css_element" should exist
+    And "body.a11y-font-variant-1" "css_element" should exist
+    When I click on "#local-a11y-panel [data-profile-id='dyslexia']" "css_element"
+    Then "#local-a11y-panel [data-profile-id='dyslexia'].local-a11y-profile-card--active" "css_element" should not exist
+    And "body.a11y-font-variant-1" "css_element" should not exist
+
   # Regression test for DECISIONS.md D51: the Magnifier's internal clone of
   # #page used to lose its own `id="page"` (stripped by D42's original
   # cloning code), which silently broke the active theme's own
