@@ -135,7 +135,7 @@ class options {
             ['id' => 'silenceMedia', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'volumeX',
                 'labelkey' => 'opt_silencemedia', 'desckey' => null, 'hashelp' => true],
             ['id' => 'tooltips', 'cat' => 'media', 'kind' => 'toggle', 'icon' => 'tooltip',
-                'labelkey' => 'opt_tooltips', 'desckey' => null],
+                'labelkey' => 'opt_tooltips', 'desckey' => null, 'hashelp' => true],
 
             // Focus & navigation.
             ['id' => 'readingGuide', 'cat' => 'navigation', 'kind' => 'toggle', 'icon' => 'ruler',
