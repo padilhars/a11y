@@ -1,0 +1,25 @@
+node_modules/
+*.log
+.phpunit.cache/
+behat_*.json
+/local_a11y.zip
+.phpdoc/
+
+# Gerados sob demanda (docs/README.md "Como regenerar") - nunca versionados,
+# removidos do histórico público em 2026-10-01 junto com /audit/.
+/docs/api-php/
+/docs/api-js/
+/docs/styleguide/
+/audit/
+
+# Arquivos internos de desenvolvimento: ficam só na máquina local,
+# nunca são versionados/enviados ao GitHub. Este .gitignore passou a ser
+# versionado em 2026-10-01 (antes era excluído de si mesmo) - um clone novo
+# do repositório público precisa herdar estas regras, ou pode acabar
+# commitando de volta audit/ ou a documentação gerada por engano.
+/CLAUDE.md
+/DECISIONS.md
+/PLAN.md
+/PROGRESS.md
+/ENVIRONMENT.md
+/_design-reference/

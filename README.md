@@ -117,7 +117,7 @@ O plugin pode manter, opcionalmente, uma única tabela própria (`local_a11y_sta
 
 ## Desenvolvimento
 
-Ver [`docs/`](docs/README.md) para a documentação de API completa (phpDocumentor para PHP, JSDoc para os módulos AMD e um style guide KSS navegável para `styles.css`) e `CHANGELOG.md` para o histórico de versões.
+Ver [`docs/`](docs/README.md) para instruções de como gerar localmente a documentação de API completa (phpDocumentor para PHP, JSDoc para os módulos AMD e um style guide KSS para `styles.css` — nenhuma delas fica versionada no repositório, são geradas sob demanda) e `CHANGELOG.md` para o histórico de versões.
 
 ```bash
 # Recompilar AMD após editar amd/src/*.js
@@ -126,6 +126,10 @@ npx grunt amd --root=local/a11y
 # Testes PHPUnit
 vendor/bin/phpunit --configuration local/a11y/phpunit.xml
 ```
+
+## Publicação no Plugins Directory
+
+Ver [`docs/PUBLISHING.md`](docs/PUBLISHING.md) para o checklist de submissão ao [Plugins Directory](https://moodle.org/plugins) do Moodle.
 
 ## Licença
 

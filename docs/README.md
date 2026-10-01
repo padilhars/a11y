@@ -9,11 +9,13 @@ Documentação gerada a partir do código-fonte e dos comentários (PHPDoc, JSDo
 
 ## Índice
 
+A API PHP, API JavaScript e o Style Guide CSS abaixo são **gerados sob demanda** (comandos em "Como regenerar") e não ficam versionados neste repositório — por isso não há um link clicável para eles aqui; rode o comando correspondente localmente e abra o `index.html` gerado.
+
 | Documentação | Gerador | Cobre |
 |---|---|---|
-| [API PHP](api-php/index.html) | phpDocumentor 3 | `classes/`, `lib.php`, `settings.php`, `version.php`, `db/`, `lang/` — todas as classes, métodos, `@param`/`@return`/`@throws` |
-| [API JavaScript](api-js/index.html) | JSDoc 4 | `amd/src/*.js` — todos os módulos AMD e suas funções (exportadas e internas) |
-| [Style Guide (CSS)](styleguide/index.html) | KSS-node | `styles.css` — 33 seções: design tokens, componentes do FAB/painel, efeitos de página (`body.a11y-*`), contraste e filtros de cor, lupa |
+| API PHP (gerar localmente em `docs/api-php/`) | phpDocumentor 3 | `classes/`, `lib.php`, `settings.php`, `version.php`, `db/`, `lang/` — todas as classes, métodos, `@param`/`@return`/`@throws` |
+| API JavaScript (gerar localmente em `docs/api-js/`) | JSDoc 4 | `amd/src/*.js` — todos os módulos AMD e suas funções (exportadas e internas) |
+| Style Guide CSS (gerar localmente em `docs/styleguide/`) | KSS-node | `styles.css` — 33 seções: design tokens, componentes do FAB/painel, efeitos de página (`body.a11y-*`), contraste e filtros de cor, lupa |
 | [Templates Mustache](templates.md) | Referência manual | `templates/*.mustache` — as 5 templates e suas variáveis de contexto |
 
 ## Como regenerar
