@@ -5,7 +5,7 @@ Documentação gerada a partir do código-fonte e dos comentários (PHPDoc, JSDo
 - **Autor:** Rodrigo Padilha Silveira <padilhars@gmail.com>
 - **Copyright:** Universidade Federal de Pelotas - UFPel
 - **Package:** Moodle / Plugin a11y
-- **Versão:** 0.1.0
+- **Versão:** 1.0.0
 
 ## Índice
 

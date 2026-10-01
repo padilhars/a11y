@@ -1,6 +1,6 @@
 # Continuidade e manutenção
 
-Este documento existe porque uma auditoria de SDLC deste projeto (`audit/05-sdlc.md`)
+Este documento existe porque uma auditoria de SDLC interna deste projeto (não publicada)
 identificou um risco real de continuidade: no histórico git deste repositório, **100% dos
 commits estão sob um único autor** (`padilhars@gmail.com`), apesar de o projeto creditar dois
 mantenedores em `README.md` e nos cabeçalhos `@author` do código. Este arquivo é um primeiro
@@ -68,19 +68,19 @@ não um processo antigo mais elaborado):
 - Só ampliar `$plugin->supported` depois desse teste real ter passado - nunca por assumir que
   "nada aqui usa API nova o suficiente para quebrar" (essa mesma suposição, feita sem teste,
   foi exatamente o que gerou o achado de incompatibilidade real com Moodle 5.0, corrigido em
-  D67 - ver `audit/05-sdlc.md`).
+  D67 - ver DECISIONS.md D66-D67).
 - `tests/version_readme_parity_test.php` falha automaticamente se `README.md` ficar
   dessincronizado do valor real de `$plugin->supported` depois dessa mudança.
 
 ## Resposta a incidente em produção e rollback
 
-Não existe hoje um ambiente de homologação separado do de produção (achado registrado em
-`audit/05-sdlc.md` - risco real, não resolvido por esta nota). Enquanto isso não muda, o
+Não existe hoje um ambiente de homologação separado do de produção (achado de auditoria interna
+- risco real, não resolvido por esta nota). Enquanto isso não muda, o
 procedimento mínimo para um incidente causado por uma mudança deste plugin é:
 
 1. **Desativar o plugin sem remover código**: `Administração do site → Plugins → Plugins locais
-   → A11Y for Moodle → Desativar` (ou, via CLI, ajustar a configuração `enabled` do plugin) -
-   reversível instantaneamente, não exige tocar em arquivos.
+   → Acessibilidade (A11y) → Desativar` (ou, via CLI, ajustar a configuração `enabled` do
+   plugin) - reversível instantaneamente, não exige tocar em arquivos.
 2. **Se a causa for uma mudança de código recente**: reverter para o commit anterior no
    repositório git (`git revert` do commit problemático, não `git reset --hard` - preserva o
    histórico) e reimplantar o `local/a11y/` a partir dele. Como não há ambiente de

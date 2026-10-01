@@ -34,8 +34,10 @@ Antes de abrir um PR, rode localmente o que for aplicável à mudança:
 - `moodle-plugin-ci phpunit` e `moodle-plugin-ci behat` para mudanças que afetem comportamento
   em tempo de execução.
 
-O CI roda essa mesma suíte automaticamente em cada push/PR contra uma matriz de Moodle 5.0/5.2 ×
-PHP 8.2/8.3/8.4 × PostgreSQL/MariaDB.
+O CI roda essa mesma suíte automaticamente em cada push/PR contra uma matriz de Moodle 5.2 ×
+PHP 8.3/8.4 × PostgreSQL/MariaDB (Moodle 5.0 e PHP 8.2 foram removidos da matriz depois que o
+próprio CI provou que o core do Moodle 5.2 já exige PHP >=8.3 e que o core 5.0 nunca atinge a
+build mínima que este plugin requer - ver `.github/workflows/ci.yml`).
 
 ## Disciplina de versão e release
 
@@ -43,7 +45,7 @@ Este projeto teve, na prática, um problema real de dessincronia: `$plugin->rele
 travado em `0.1.0` por mais de 5 semanas enquanto dezenas de mudanças (incluindo novas opções
 de acessibilidade) se acumulavam sob `## [Unreleased]` no `CHANGELOG.md`, sem nunca virar uma
 seção de versão nova. Isso já causou pelo menos uma contagem de opções desatualizada em
-documentação (ver `audit/05-sdlc.md`).
+documentação (achado de uma auditoria técnica interna, não publicada).
 
 Para prevenir que isso se repita:
 

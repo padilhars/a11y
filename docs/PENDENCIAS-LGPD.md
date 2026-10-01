@@ -1,6 +1,6 @@
 # Pendências de LGPD do `local_a11y` — para a assessoria jurídica/DPO da UFPel
 
-Este documento existe para ser entregue à assessoria jurídica/encarregado de dados (DPO) da UFPel. Não é uma auditoria técnica completa (isso está em `audit/04-conformidade.md`, mais longo e com evidência de código) — é a lista **objetiva** do que falta decidir, com o contexto mínimo necessário para decidir, e sem repetir texto genérico da lei.
+Este documento existe para ser entregue à assessoria jurídica/encarregado de dados (DPO) da UFPel. Não é uma auditoria técnica completa (isso existe como registro interno, não publicado) — é a lista **objetiva** do que falta decidir, com o contexto mínimo necessário para decidir, e sem repetir texto genérico da lei.
 
 ## O que já está pronto no plugin (não precisa de decisão)
 
@@ -50,4 +50,4 @@ Já deixei os "ganchos" identificados no código para quando as respostas chegar
 
 - **Base legal / RIPD / DPO**: hoje não existe nenhum campo de texto no plugin para isso. O lugar mais natural é uma nova seção `admin_setting_description` em `settings.php` (mesmo padrão já usado para o aviso de colisão do VLibras, `settings.php:112-119`), com o texto final vindo da assessoria — ou, mais simples, um parágrafo no `README.md` do plugin apontando para a política de privacidade institucional (sem duplicar o texto legal ali).
 - **Encarregado/DPO**: mesmo lugar, ou no rodapé do painel (`local_a11y/footertext`, já existe como campo de texto rico configurável pelo admin — `settings.php:207-213` — dá para colocar um link ali sem mudar código, só a configuração).
-- **Se a resposta da pergunta 1 for "sim, é dado sensível"**: a mitigação técnica concreta já identificada em `audit/04-conformidade.md` (seção A2) é renomear a chave `dyslexicFont` para algo como `readableFontVariant` (mantendo o mesmo padrão que já evita persistir o rótulo do perfil), com uma migração de dados em `db/upgrade.php`. Não implementado - fica pronto para quando a decisão vier.
+- **Se a resposta da pergunta 1 for "sim, é dado sensível"**: a mitigação técnica parcial identificada numa auditoria interna **já foi implementada**: a chave que nomeava a condição específica (`dyslexicFont`) foi renomeada para a neutra `fontVariant` em todo o código, incluindo as 3 representações persistidas (`classes/options.php`, `db/upgrade.php`, migração de dados para sites já em produção). Isso **não substitui** a revisão jurídica - a interface ainda rotula a opção como "Dislexia" visivelmente, por desenho (o usuário precisa saber o que a opção faz), então o dado em si continua inferível a partir do uso. Documentado como mitigação de defesa em profundidade, não como resposta à pergunta 1.

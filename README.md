@@ -2,7 +2,7 @@
 
 [![Licença: GPL v3+](https://img.shields.io/badge/licença-GPL%20v3%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![Moodle](https://img.shields.io/badge/Moodle-5.2-orange.svg)](https://moodle.org)
-[![PHP](https://img.shields.io/badge/PHP-8.2%2B-777bb4.svg)](https://www.php.net)
+[![PHP](https://img.shields.io/badge/PHP-8.3%2B-777bb4.svg)](https://www.php.net)
 [![Documentação](https://img.shields.io/badge/docs-phpDocumentor%20%7C%20JSDoc%20%7C%20KSS-6f42c1.svg)](docs/README.md)
 
 Um plugin de acessibilidade para Moodle 5.2 que adiciona um botão flutuante (FAB) e um painel com **30 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
@@ -46,7 +46,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 ## Requisitos
 
 - Moodle 5.2 (única versão com suporte confirmado - ver `version.php:$plugin->supported`; testar contra outras versões antes de assumir compatibilidade).
-- PHP 8.2+.
+- PHP 8.3+ (o core do próprio Moodle 5.2 já exige essa versão mínima - ver `.github/workflows/ci.yml`).
 - Sem dependências externas empacotadas para a instalação do plugin em si (as fontes Atkinson Hyperlegible, Lexend e OpenDyslexic, e o WASM do MediaPipe, são empacotados localmente - nada disso é baixado de CDN de terceiro). Duas exceções reais em tempo de execução, ambas já detalhadas na seção "Por que usar" acima: o modelo de rastreamento facial da Navegação por Face (buscado ao vivo, com verificação de integridade) e a API nativa de reconhecimento de fala usada por Comandos por Voz.
 
 ## Instalação

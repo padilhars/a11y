@@ -4,7 +4,7 @@ Compilado a partir dos comentários `{{! ... }}` no topo de cada arquivo em `tem
 
 - **Autor:** Rodrigo Padilha Silveira <padilhars@gmail.com>
 - **Copyright:** Universidade Federal de Pelotas - UFPel
-- **Versão:** 0.1.0
+- **Versão:** 1.0.0
 
 ---
 
