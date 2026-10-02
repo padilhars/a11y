@@ -35,25 +35,25 @@
         <label class="visually-hidden" for="sq" data-i18n="filt">Filtrar capítulos</label>
         <input id="sq" type="search" placeholder="Filtrar capítulos" data-i18n-attr="placeholder:filt" autocomplete="off">
       </div>
-      <h2>Guia do administrador</h2>
+      <h2 data-i18n="f5">Guia do administrador</h2>
       <ol class="chapters"><li><a href="#1-sobre-este-guia">1. Sobre este guia</a></li><li><a href="#2-requisitos-tecnicos">2. Requisitos técnicos</a></li><li><a href="#3-preparacao-pre-instalacao">3. Preparação pré-instalação</a></li><li><a href="#4-instalacao-passo-a-passo">4. Instalação passo a passo</a></li><li><a href="#5-configuracao-administrativa-completa">5. Configuração administrativa completa</a></li><li><a href="#6-capabilities-e-permissoes">6. Capabilities e permissões</a></li><li><a href="#7-validacao-pos-implantacao">7. Validação pós-implantação</a></li><li><a href="#8-atualizacao-e-manutencao">8. Atualização e manutenção</a></li><li><a href="#9-resposta-a-incidentes-e-reversao">9. Resposta a incidentes e reversão</a></li><li><a href="#10-solucao-de-problemas-tecnicos-comuns">10. Solução de problemas técnicos comuns</a></li><li><a href="#11-onde-encontrar-mais-informacao">11. Onde encontrar mais informação</a></li><li><a href="#12-fontes-e-referencias">12. Fontes e referências</a></li></ol>
       <h2 data-i18n="other">Outros documentos</h2>
-      <div class="tracksel"><a href="manual.html">Manual do usuário</a><a href="tecnica.html">Documentação técnica</a></div>
+      <div class="tracksel"><a href="manual.html" data-i18n="f4">Manual do usuário</a><a href="tecnica.html" data-i18n="f6">Documentação técnica</a></div>
     </div>
   </aside>
   <main class="article" id="conteudo">
-    <nav class="crumbs" aria-label="Você está em"><a href="index.html" data-i18n="docs">Documentação</a><span aria-hidden="true">›</span><span>Guia do administrador</span></nav>
+    <nav class="crumbs" aria-label="Você está em"><a href="index.html" data-i18n="docs">Documentação</a><span aria-hidden="true">›</span><span data-i18n="f5">Guia do administrador</span></nav>
     <header class="doc-cover">
-      <p class="eyebrow">Guia Técnico</p>
-      <h1>Instalação e Administração</h1>
-      <p class="intro">A11y for Moodle — guia para equipes de TI e administradores do Moodle. Complementa a Documentação Executiva e o Manual do Usuário, que não trazem comandos técnicos por serem voltados a públicos não técnicos.</p>
-      <dl class="doc-meta"><div><dt>Instituição</dt><dd>Universidade Federal de Pelotas (UFPel)</dd></div><div><dt>Unidade responsável</dt><dd>CPTED — Coordenação de Políticas e Tecnologias para EaD, Gabinete da Vice-Reitoria</dd></div><div><dt>Público-alvo</dt><dd>Equipes de TI e administradores do Moodle</dd></div><div><dt>Identificador técnico</dt><dd>local_a11y · versão 1.0.0 · licença GPL v3 ou posterior</dd></div></dl>
+      <p class="eyebrow" data-i18n="cov_eye">Guia Técnico</p>
+      <h1 data-i18n="cov_h1">Instalação e Administração</h1>
+      <p class="intro" data-i18n="cov_intro">A11y for Moodle — guia para equipes de TI e administradores do Moodle. Complementa a Documentação Executiva e o Manual do Usuário, que não trazem comandos técnicos por serem voltados a públicos não técnicos.</p>
+      <dl class="doc-meta" data-i18n="cov_meta"><div><dt>Instituição</dt><dd>Universidade Federal de Pelotas (UFPel)</dd></div><div><dt>Unidade responsável</dt><dd>CPTED — Coordenação de Políticas e Tecnologias para EaD, Gabinete da Vice-Reitoria</dd></div><div><dt>Público-alvo</dt><dd>Equipes de TI e administradores do Moodle</dd></div><div><dt>Identificador técnico</dt><dd>local_a11y · versão 1.0.0 · licença GPL v3 ou posterior</dd></div></dl>
       <div class="tools">
         <a class="pdf" href="pdf/Guia_do_Administrador_A11y_for_Moodle.pdf" data-dl="pdf/Guia_do_Administrador_A11y_for_Moodle.pdf" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span data-i18n="pdf">Baixar em PDF</span></a>
         <span class="src"><span data-i18n="src">Fonte</span>: <a href="https://github.com/padilhars/a11y/blob/master/docs/Guia_Tecnico_Instalacao_A11y_for_Moodle.docx">docs/Guia_Tecnico_Instalacao_A11y_for_Moodle.docx</a> · commit fd2398e · 2026-10-01</span>
       </div>
       <p class="ptonly" data-i18n="ptonly" hidden></p>
-      <details class="ver"><summary data-i18n="ver">Controle de versão do documento</summary><div aria-label="Tabela: Versão" class="tbl" role="region" tabindex="0"><table><thead><tr>
+      <details class="ver"><summary data-i18n="ver">Controle de versão do documento</summary><div aria-label="Tabela: Versão" class="tbl" role="region" tabindex="0" data-i18n="cov_ver"><table><thead><tr>
 <th scope="col">Versão</th>
 <th scope="col">Data</th>
 <th scope="col">Descrição</th>
@@ -68,9 +68,15 @@
 <td>Primeira versão, elaborada a partir de verificação direta do código-fonte do plugin (settings.php, db/access.php, version.php, MAINTENANCE.md, README.md).</td>
 <td>Rascunho para validação técnica</td>
 </tr>
+<tr>
+<td>1.1</td>
+<td>02/10/2026</td>
+<td>Validado e publicado junto ao lançamento oficial da versão 1.0.0 (Stable) do plugin no GitHub.</td>
+<td>Publicado</td>
+</tr>
 </tbody>
 </table></div></details>
-      <div class="callout callout--info"><b class="callout__t">Sobre este documento</b>
+      <div class="callout callout--info" data-i18n="cov_about"><b class="callout__t">Sobre este documento</b>
 <p>Este documento foi elaborado a partir do material institucional consolidado do plugin (estudos, código-fonte, arquivos de idioma e exploração ao vivo do ambiente de demonstração). Trechos sem evidência suficiente estão sinalizados como "[INFORMAÇÃO A VALIDAR]" e devem ser confirmados pela equipe responsável antes da publicação oficial.</p></div>
     </header>
     <div class="doc-body">
@@ -345,6 +351,276 @@ vendor/bin/behat --tags="@local_a11y"</code></pre><h2 id="9-resposta-a-incidente
 <li><p>Documentação Executiva — A11y for Moodle, Seções 11 e 12.</p></li>
 </ul><p><em>Guia elaborado a partir de verificação direta do código-fonte do plugin. Sujeito a revisão pela equipe técnica antes de sua adoção como procedimento oficial.</em></p>
     </div>
+    <template id="doc-body-en"><h2 id="1-sobre-este-guia">1. About this guide</h2><p>This guide is intended for IT teams and Moodle administrators responsible for installing, configuring, and maintaining the A11y for Moodle plugin. It provides commands, technical configuration names, and operational procedures that the Executive Documentation and the User Manual deliberately do not provide, since those are aimed at non-technical audiences.</p><p>This guide does not replace the technical documentation automatically generated from the plugin's own source code (Section 11), which is the most detailed reference and the one that most quickly reflects future changes to the code.</p><h2 id="2-requisitos-tecnicos">2. Technical requirements</h2><div aria-label="Tabela" class="tbl" role="region" tabindex="0"><table>
+
+<tbody>
+<tr>
+<td><strong>Moodle version</strong></td>
+<td>Branch 502 (Moodle 5.2) — the only version actually tested and confirmed working.</td>
+</tr>
+<tr>
+<td><strong>PHP version</strong></td>
+<td>8.2 or higher. The project's continuous integration (CI) specifically tests versions 8.3 and 8.4.</td>
+</tr>
+<tr>
+<td><strong>Database</strong></td>
+<td>CI tested against PostgreSQL and MariaDB.</td>
+</tr>
+<tr>
+<td><strong>Disk space</strong></td>
+<td>Approximately 19 MB — the package grew significantly after the MediaPipe library's model and executable (used by Face Navigation) started being bundled locally instead of being loaded from an external CDN.</td>
+</tr>
+<tr>
+<td><strong>PHP extensions</strong></td>
+<td>pgsql, zip, gd, mysqli — used in the project's own continuous integration reference workflow.</td>
+</tr>
+<tr>
+<td><strong>File permissions</strong></td>
+<td>Standard for Moodle plugins: read access by the web server user over the plugin directory.</td>
+</tr>
+</tbody>
+</table></div><div class="callout callout--warn"><b class="callout__t">Watch out for the real version requirement</b>
+<p>The plugin broadly states "Moodle 5.0 or higher" in some places, but the technical value configured in version.php corresponds to a build that the actual 5.0 series of Moodle never reaches. Continuous integration tests against the official Moodle 5.0 core show that the installation is rejected ("pluginrequirementsnotmet"). Before planning the installation, confirm that the target environment actually runs branch 5.2.</p></div><h2 id="3-preparacao-pre-instalacao">3. Pre-installation preparation</h2><p>Checklist before starting:</p><ul>
+<li><p>Confirm the exact Moodle version in use (Site administration → Notifications, or the value of $CFG->version).</p></li>
+<li><p>Confirm the PHP version in use on the server.</p></li>
+<li><p>Back up the database and the Moodle files before installing any plugin — standard practice, not specific to this plugin.</p></li>
+<li><p>Arrange write access to Moodle's local/ directory (or public/local/, on installations that already use the new webroot structure introduced starting with Moodle 5.0).</p></li>
+<li><p>If the institution already uses the local_vlibras plugin, keep that in mind for the Integrations configuration step (Section 5) — installing A11y does not require VLibras, but it can integrate with it if present.</p></li>
+</ul><h2 id="4-instalacao-passo-a-passo">4. Step-by-step installation</h2><h3 id="passo-1-obter-o-pacote">Step 1 — Obtain the package</h3><p>Obtain the local_a11y.zip file, or the source code directly from the repository, from the responsible team (CPTED).</p><h3 id="passo-2-extrair-no-diretorio-correto">Step 2 — Extract into the correct directory</h3><pre><code># Classic layout (installations without the new public/ structure)
+unzip local_a11y.zip -d /caminho/para/moodle/local/
+# Moodle 5.0+ layout with webroot inside public/
+unzip local_a11y.zip -d /caminho/para/moodle/public/local/</code></pre><p>The resulting directory must be named a11y, residing at &lt;moodleroot&gt;/local/a11y (or &lt;moodleroot&gt;/public/local/a11y, depending on the installation layout).</p><h3 id="passo-3-completar-a-instalacao">Step 3 — Complete the installation</h3><p><strong>Option A — via the interface:</strong> go to Site administration → Notifications. Moodle automatically detects the new plugin and presents the standard installation screen.</p><p><strong>Option B — via command line:</strong></p><pre><code>php admin/cli/upgrade.php --non-interactive</code></pre><h3 id="passo-4-confirmar">Step 4 — Confirm</h3><p>The accessibility button should appear on any Moodle page, for any user — including unauthenticated visitors, by default (configurable in Section 5).</p><h2 id="5-configuracao-administrativa-completa">5. Complete administrative configuration</h2><p>Path: Site administration → Plugins → Local plugins → Accessibility (A11y). The settings are organized into up to five groups — the Integrations group only appears if the local_vlibras plugin is installed.</p><h3 id="geral">General</h3><div aria-label="Tabela: Configuração" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Setting</th>
+<th scope="col">Type · default</th>
+<th scope="col">What it does</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>local_a11y/enabled</td>
+<td>Checkbox · enabled</td>
+<td>Enables/disables the button and panel across the entire site.</td>
+</tr>
+<tr>
+<td>local_a11y/showforguests</td>
+<td>Checkbox · enabled</td>
+<td>Displays the button for unauthenticated users.</td>
+</tr>
+<tr>
+<td>local_a11y/excludedpages</td>
+<td>Textarea · empty</td>
+<td>One URL pattern per line (accepts * as a wildcard); the plugin does not load on matching pages.</td>
+</tr>
+<tr>
+<td>local_a11y/enabledfeatures</td>
+<td>Multicheckbox · all enabled</td>
+<td>Chooses which accessibility options are available to users.</td>
+</tr>
+</tbody>
+</table></div><h3 id="integracoes-condicional-a-local-vlibras-estar-instalado">Integrations (conditional on local_vlibras being installed)</h3><div aria-label="Tabela: Configuração" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Setting</th>
+<th scope="col">Type · default</th>
+<th scope="col">What it does</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>local_a11y/integratevlibras</td>
+<td>Checkbox · disabled</td>
+<td>When enabled, visually hides VLibras's own button and moves access to the "Libras (VLibras)" option of this plugin. The VLibras script continues to load normally — only the button's display changes.</td>
+</tr>
+</tbody>
+</table></div><div class="callout callout--note"><b class="callout__t">Note</b>
+<p>If VLibras is installed and active, but this integration is turned off, the administration panel displays a warning about possible visual overlap between the VLibras button and this plugin's button, when the configured positions of each one coincide.</p></div><h3 id="botao-flutuante-fab">Floating Button (FAB)</h3><div aria-label="Tabela: Configuração" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Setting</th>
+<th scope="col">Type · default</th>
+<th scope="col">What it does</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>local_a11y/fabposition</td>
+<td>Select · bottom-right</td>
+<td>Corner of the screen: bottom-right, bottom-left, middle-right, or middle-left.</td>
+</tr>
+<tr>
+<td>local_a11y/fabicon</td>
+<td>Select · default</td>
+<td>Button icon: default (the plugin's own icon, Ionicons) or un (UN accessibility icon).</td>
+</tr>
+<tr>
+<td>local_a11y/fabshape</td>
+<td>Select · circle</td>
+<td>Button shape: circle or square.</td>
+</tr>
+</tbody>
+</table></div><h3 id="painel">Panel</h3><div aria-label="Tabela: Configuração" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Setting</th>
+<th scope="col">Type · default</th>
+<th scope="col">What it does</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>local_a11y/panelformat</td>
+<td>Select · popover</td>
+<td>Format on desktop screens: popover, drawer, or modal. On phones and small tablets, it always opens as a drawer, regardless of this value.</td>
+</tr>
+<tr>
+<td>local_a11y/density</td>
+<td>Select · regular</td>
+<td>Visual density of the option rows: compact, regular, or comfortable.</td>
+</tr>
+<tr>
+<td>local_a11y/showprofiles</td>
+<td>Checkbox · enabled</td>
+<td>Displays the ready-made profiles section in the panel.</td>
+</tr>
+<tr>
+<td>local_a11y/footertext</td>
+<td>HTML editor · empty</td>
+<td>Custom text in the panel footer. Empty uses the default message: "Developed with ❤️ by UFPel, for you."</td>
+</tr>
+</tbody>
+</table></div><h3 id="cores">Colors</h3><div aria-label="Tabela: Configuração" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Setting</th>
+<th scope="col">Default</th>
+<th scope="col">What it colors</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>local_a11y/accent</td>
+<td>#3b82f6</td>
+<td>Accent color of the button and panel.</td>
+</tr>
+<tr>
+<td>local_a11y/highlighttitlescolor</td>
+<td>#eab308</td>
+<td>Color used by "Highlight Titles".</td>
+</tr>
+<tr>
+<td>local_a11y/highlightlinkscolor</td>
+<td>#3b82f6</td>
+<td>Color used by "Highlight Links".</td>
+</tr>
+<tr>
+<td>local_a11y/highlightbuttonscolor</td>
+<td>#f97316</td>
+<td>Color used by "Highlight Buttons".</td>
+</tr>
+<tr>
+<td>local_a11y/readingguidecolor</td>
+<td>#3b82f6</td>
+<td>Line color used by "Reading Guide".</td>
+</tr>
+</tbody>
+</table></div><h2 id="6-capabilities-e-permissoes">6. Capabilities and permissions</h2><p>The plugin defines a single capability:</p><pre><code>local/a11y:view
+captype: read
+contextlevel: CONTEXT_SYSTEM
+archetypes: guest, user, frontpage, student, teacher, editingteacher, manager — all CAP_ALLOW by default</code></pre><p>There is no dedicated configuration capability — the administration screen (settings.php) is protected by Moodle's standard mechanism for site settings (moodle/site:config), like any other plugin.</p><div class="callout callout--note"><b class="callout__t">Note</b>
+<p>A local/a11y:configure capability existed in earlier versions of the plugin, but was removed after a security and dead-code audit found that it was never actually checked anywhere in the code — assigning it to a role had no effect whatsoever.</p></div><h2 id="7-validacao-pos-implantacao">7. Post-deployment validation</h2><p>Suggested checklist after installing or updating:</p><ul>
+<li><p>The accessibility button appears on a course page, both logged in and logged out (if showforguests is enabled).</p></li>
+<li><p>A profile and an individual option apply correctly when selected.</p></li>
+<li><p>The preference persists after reloading the page (F5).</p></li>
+<li><p>For an authenticated user: the preference persists after logging out and logging back in.</p></li>
+<li><p>If the institution integrates VLibras: specifically test the "Libras (VLibras)" option.</p></li>
+<li><p>Test in at least one Chromium-based browser (for Voice Commands) and confirm that other browsers display the unavailability message, instead of failing silently.</p></li>
+</ul><h2 id="8-atualizacao-e-manutencao">8. Updating and maintenance</h2><p>To apply a new version: replace the plugin files with the new version and repeat Section 4, Step 3 (Site administration → Notifications, or the upgrade command via CLI).</p><p>Useful commands for anyone changing the plugin's source code:</p><pre><code># Rebuild the JavaScript (AMD) modules after editing amd/src/*.js
+npx grunt amd --root=local/a11y
+# Run the automated test suite (PHPUnit)
+vendor/bin/phpunit --configuration local/a11y/phpunit.xml
+# Run the behavior tests (Behat), with the plugin's tag
+vendor/bin/behat --tags="@local_a11y"</code></pre><h2 id="9-resposta-a-incidentes-e-reversao">9. Incident response and rollback</h2><p>Procedure documented in the plugin's own repository (MAINTENANCE.md):</p><div class="indent">
+<p><strong>Step 1 — Disable without removing code:</strong> Site administration → Plugins → Local plugins → A11Y for Moodle → Disable (or, via CLI, adjust the local_a11y/enabled setting). Instantly reversible, without touching any files.</p>
+<p><strong>Step 2 — If the cause is a recent code change:</strong> revert to the previous commit in the repository (git revert of the problematic commit — not git reset --hard, to preserve history) and redeploy the local/a11y directory from it.</p>
+</div><div class="callout callout--warn"><b class="callout__t">Limitation</b>
+<p>There is currently no staging environment separate from the production environment for this plugin — a risk already recorded in the Technical Continuity and Succession Plan. Exercise extra caution when testing any change directly in production, and consider testing first in a restricted-access course before exposing the change to the entire institution.</p></div><h2 id="10-solucao-de-problemas-tecnicos-comuns">10. Common technical troubleshooting</h2><div aria-label="Tabela: Problema técnico" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Technical problem</th>
+<th scope="col">Possible cause</th>
+<th scope="col">Action</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>Plugin does not appear after installation</td>
+<td>Outdated Moodle cache.</td>
+<td>Purge all caches: Site administration → Development → Purge caches.</td>
+</tr>
+<tr>
+<td>"pluginrequirementsnotmet" error during installation</td>
+<td>Moodle version below the required one — including the actual 5.0 series.</td>
+<td>Confirm that the instance specifically runs branch 5.2 (see Section 2).</td>
+</tr>
+<tr>
+<td>"Libras (VLibras)" option does not appear, even with VLibras installed</td>
+<td>Integration not enabled in this plugin's settings.</td>
+<td>Enable local_a11y/integratevlibras in Settings → Integrations (Section 5).</td>
+</tr>
+<tr>
+<td>VLibras and A11y buttons visually overlapping</td>
+<td>Configured positions coincide, with the integration turned off.</td>
+<td>Enable the integration (hides the native VLibras button), or adjust the position of one of the two.</td>
+</tr>
+<tr>
+<td>Custom icon or color not applying</td>
+<td>Moodle CSS cache.</td>
+<td>Purge caches; confirm a valid hexadecimal format in the color field.</td>
+</tr>
+<tr>
+<td>Voice Commands does not work in a specific browser</td>
+<td>Speech recognition via the Web Speech API is available only in Chromium-based browsers.</td>
+<td>Expected — the plugin already detects and warns about the unavailability; test in a Chromium browser to confirm the feature itself works.</td>
+</tr>
+</tbody>
+</table></div><h2 id="11-onde-encontrar-mais-informacao">11. Where to find more information</h2><div aria-label="Tabela: Fonte" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Source</th>
+<th scope="col">Covers</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>docs/api-php (phpDocumentor)</td>
+<td>PHP back-end classes, methods, and parameters — classes/, lib.php, settings.php, version.php, db/, lang/.</td>
+</tr>
+<tr>
+<td>docs/api-js (JSDoc)</td>
+<td>All AMD (JavaScript) modules and their functions, exported and internal.</td>
+</tr>
+<tr>
+<td>docs/styleguide (KSS)</td>
+<td>Design tokens, button/panel components, page effects, and CSS color filters.</td>
+</tr>
+<tr>
+<td>docs/templates.md</td>
+<td>Context variables of each Mustache template used by the plugin.</td>
+</tr>
+<tr>
+<td>DECISIONS.md</td>
+<td>History of technical architecture decisions, one by one, with the reasoning behind each.</td>
+</tr>
+<tr>
+<td>CONTRIBUTING.md</td>
+<td>Guidelines for anyone contributing to the plugin's code.</td>
+</tr>
+<tr>
+<td>MAINTENANCE.md</td>
+<td>Maintenance procedures, including incident response (Section 9 of this guide).</td>
+</tr>
+</tbody>
+</table></div><h2 id="12-fontes-e-referencias">12. Sources and references</h2><ul>
+<li><p>Plugin source code: settings.php, db/access.php, version.php, classes/integration/vlibras.php.</p></li>
+<li><p>README.md and docs/README.md, in the plugin repository.</p></li>
+<li><p>MAINTENANCE.md, in the plugin repository.</p></li>
+<li><p>Executive Documentation — A11y for Moodle, Sections 11 and 12.</p></li>
+</ul><p><em>Guide prepared from direct verification of the plugin's source code. Subject to review by the technical team before adoption as an official procedure.</em></p></template>
     <p class="totop"><a href="#conteudo" data-i18n="top">Voltar ao topo</a></p>
   </main>
   <nav class="toc" aria-label="Neste capítulo" data-i18n-attr="aria-label:onpage">
@@ -360,9 +636,8 @@ vendor/bin/behat --tags="@local_a11y"</code></pre><h2 id="9-resposta-a-incidente
   </div>
   <p class="foot__legal" data-i18n="f9">Desenvolvido com ❤️ pela UFPel.</p>
 </footer>
-<script>window.DOC_TOC=[{"t": "1. Sobre este guia", "id": "1-sobre-este-guia", "sub": []}, {"t": "2. Requisitos técnicos", "id": "2-requisitos-tecnicos", "sub": []}, {"t": "3. Preparação pré-instalação", "id": "3-preparacao-pre-instalacao", "sub": []}, {"t": "4. Instalação passo a passo", "id": "4-instalacao-passo-a-passo", "sub": [{"t": "Passo 1 — Obter o pacote", "id": "passo-1-obter-o-pacote"}, {"t": "Passo 2 — Extrair no diretório correto", "id": "passo-2-extrair-no-diretorio-correto"}, {"t": "Passo 3 — Completar a instalação", "id": "passo-3-completar-a-instalacao"}, {"t": "Passo 4 — Confirmar", "id": "passo-4-confirmar"}]}, {"t": "5. Configuração administrativa completa", "id": "5-configuracao-administrativa-completa", "sub": [{"t": "Geral", "id": "geral"}, {"t": "Integrações (condicional a local_vlibras estar instalado)", "id": "integracoes-condicional-a-local-vlibras-estar-instalado"}, {"t": "Botão Flutuante (FAB)", "id": "botao-flutuante-fab"}, {"t": "Painel", "id": "painel"}, {"t": "Cores", "id": "cores"}]}, {"t": "6. Capabilities e permissões", "id": "6-capabilities-e-permissoes", "sub": []}, {"t": "7. Validação pós-implantação", "id": "7-validacao-pos-implantacao", "sub": []}, {"t": "8. Atualização e manutenção", "id": "8-atualizacao-e-manutencao", "sub": []}, {"t": "9. Resposta a incidentes e reversão", "id": "9-resposta-a-incidentes-e-reversao", "sub": []}, {"t": "10. Solução de problemas técnicos comuns", "id": "10-solucao-de-problemas-tecnicos-comuns", "sub": []}, {"t": "11. Onde encontrar mais informação", "id": "11-onde-encontrar-mais-informacao", "sub": []}, {"t": "12. Fontes e referências", "id": "12-fontes-e-referencias", "sub": []}];window.PAGE_EN={"skip": "Skip to content", "navmain": "Main", "n1": "Profiles", "n2": "Try it", "n4": "Administrators", "n5": "Documentation", "n6": "Download", "f1": "Home", "f2": "Download", "f3": "Documentation", "f4": "User manual", "f5": "Administrator guide", "f6": "Technical documentation", "f7": "Project", "f8": "GPL v3 license", "f9": "Made with ❤️ by UFPel.", "ptonly": "<b>Available in Portuguese only.</b> This document is published in Brazilian Portuguese, the language it was written in. The PDF is also in Portuguese.", "pdf": "Download PDF", "chap": "Chapters", "filt": "Filter chapters", "onpage": "In this chapter", "docs": "Documentation", "ver": "Version history", "src": "Source", "prev": "Previous", "next": "Next", "top": "Back to top", "sideb": "Chapters", "other": "Other documents", "_title": "Administrator guide · A11Y for Moodle"};</script>
+<script>window.DOC_TOC=[{"t": "1. Sobre este guia", "id": "1-sobre-este-guia", "sub": [], "te": "1. About this guide"}, {"t": "2. Requisitos técnicos", "id": "2-requisitos-tecnicos", "sub": [], "te": "2. Technical requirements"}, {"t": "3. Preparação pré-instalação", "id": "3-preparacao-pre-instalacao", "sub": [], "te": "3. Pre-installation preparation"}, {"t": "4. Instalação passo a passo", "id": "4-instalacao-passo-a-passo", "sub": [{"t": "Passo 1 — Obter o pacote", "id": "passo-1-obter-o-pacote", "te": "Step 1 — Obtain the package"}, {"t": "Passo 2 — Extrair no diretório correto", "id": "passo-2-extrair-no-diretorio-correto", "te": "Step 2 — Extract into the correct directory"}, {"t": "Passo 3 — Completar a instalação", "id": "passo-3-completar-a-instalacao", "te": "Step 3 — Complete the installation"}, {"t": "Passo 4 — Confirmar", "id": "passo-4-confirmar", "te": "Step 4 — Confirm"}], "te": "4. Step-by-step installation"}, {"t": "5. Configuração administrativa completa", "id": "5-configuracao-administrativa-completa", "sub": [{"t": "Geral", "id": "geral", "te": "General"}, {"t": "Integrações (condicional a local_vlibras estar instalado)", "id": "integracoes-condicional-a-local-vlibras-estar-instalado", "te": "Integrations (conditional on local_vlibras being installed)"}, {"t": "Botão Flutuante (FAB)", "id": "botao-flutuante-fab", "te": "Floating Button (FAB)"}, {"t": "Painel", "id": "painel", "te": "Panel"}, {"t": "Cores", "id": "cores", "te": "Colors"}], "te": "5. Complete administrative configuration"}, {"t": "6. Capabilities e permissões", "id": "6-capabilities-e-permissoes", "sub": [], "te": "6. Capabilities and permissions"}, {"t": "7. Validação pós-implantação", "id": "7-validacao-pos-implantacao", "sub": [], "te": "7. Post-deployment validation"}, {"t": "8. Atualização e manutenção", "id": "8-atualizacao-e-manutencao", "sub": [], "te": "8. Updating and maintenance"}, {"t": "9. Resposta a incidentes e reversão", "id": "9-resposta-a-incidentes-e-reversao", "sub": [], "te": "9. Incident response and rollback"}, {"t": "10. Solução de problemas técnicos comuns", "id": "10-solucao-de-problemas-tecnicos-comuns", "sub": [], "te": "10. Common technical troubleshooting"}, {"t": "11. Onde encontrar mais informação", "id": "11-onde-encontrar-mais-informacao", "sub": [], "te": "11. Where to find more information"}, {"t": "12. Fontes e referências", "id": "12-fontes-e-referencias", "sub": [], "te": "12. Sources and references"}];window.PAGE_EN={"skip": "Skip to content", "navmain": "Main", "n1": "Profiles", "n2": "Try it", "n4": "Administrators", "n5": "Documentation", "n6": "Download", "f1": "Home", "f2": "Download", "f3": "Documentation", "f4": "User manual", "f5": "Administrator guide", "f6": "Technical documentation", "f7": "Project", "f8": "GPL v3 license", "f9": "Made with ❤️ by UFPel.", "ptonly": "<b>Available in Portuguese only.</b> This document is published in Brazilian Portuguese, the language it was written in. The PDF is also in Portuguese.", "pdf": "Download PDF", "chap": "Chapters", "filt": "Filter chapters", "onpage": "In this chapter", "docs": "Documentation", "ver": "Version history", "src": "Source", "prev": "Previous", "next": "Next", "top": "Back to top", "sideb": "Chapters", "other": "Other documents", "cov_eye": "Technical Guide", "cov_h1": "Installation and Administration", "cov_intro": "A11y for Moodle — guide for IT teams and Moodle administrators. Complements the Executive Documentation and the User Manual, which do not include technical commands since they are aimed at non-technical audiences.", "cov_meta": "<div><dt>Institution</dt><dd>Universidade Federal de Pelotas (UFPel)</dd></div><div><dt>Responsible unit</dt><dd>CPTED — Coordenação de Políticas e Tecnologias para EaD, Gabinete da Vice-Reitoria</dd></div><div><dt>Target audience</dt><dd>IT teams and Moodle administrators</dd></div><div><dt>Technical identifier</dt><dd>local_a11y · version 1.0.0 · GPL v3 or later license</dd></div>", "cov_ver": "<table><thead><tr><th scope=\"col\">Version</th><th scope=\"col\">Date</th><th scope=\"col\">Description</th><th scope=\"col\">Status</th></tr></thead><tbody><tr><td>1.0</td><td>09/03/2026</td><td>First version, prepared from direct verification of the plugin's source code (settings.php, db/access.php, version.php, MAINTENANCE.md, README.md).</td><td>Draft for technical validation</td></tr><tr><td>1.1</td><td>10/02/2026</td><td>Validated and published alongside the plugin's official 1.0.0 (Stable) release on GitHub.</td><td>Published</td></tr></tbody></table>", "cov_about": "<b class=\"callout__t\">About this document</b><p>This document was prepared from the plugin's consolidated institutional material (studies, source code, language files, and live exploration of the demo environment). Passages without sufficient evidence are flagged as \"[INFORMATION TO VALIDATE]\" and must be confirmed by the responsible team before official publication.</p>", "_title": "Administrator guide · A11Y for Moodle"};</script>
 <script src="../assets/i18n.js"></script>
-<script src="../assets/fab.js"></script>
 <script src="search-index.js"></script>
 <script src="docs.js"></script>
 </body>
