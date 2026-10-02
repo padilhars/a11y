@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guia do administrador · A11Y for Moodle</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Lexend:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body class="doc doc--admin">
+<a class="skip" href="#conteudo" data-i18n="skip">Pular para o conteúdo</a>
+<header class="nav">
+  <nav class="nav__in" aria-label="Principal" data-i18n-attr="aria-label:navmain">
+    <a class="brand" href="../"><span class="brand__mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="4.5" r="2" fill="currentColor" stroke="none"/><path d="M5 8.5c2.3.7 4.6 1 7 1s4.7-.3 7-1M12 9.5v4.5m0 0-3 6.5m3-6.5 3 6.5"/></svg></span><span class="brand__text">A11Y for Moodle</span></a>
+    <ul class="nav__links">
+      <li class="opt"><a href="../#perfis" data-i18n="n1">Perfis</a></li>
+      <li class="opt"><a href="../#experimente" data-i18n="n2">Experimente</a></li>
+      <li class="opt"><a href="../#admin" data-i18n="n4">Administradores</a></li>
+      <li><a href="index.html" aria-current="page" data-i18n="n5">Documentação</a></li>
+    </ul>
+    <span data-lang-switch></span>
+    <a class="btn" href="../#download" data-i18n="n6">Baixar</a>
+  </nav>
+</header>
+<div class="dwrap layout">
+  <aside class="side" aria-label="Capítulos" data-i18n-attr="aria-label:sideb" data-open="true">
+    <button class="side-toggle" type="button" aria-expanded="true" aria-controls="side-body"><span data-i18n="chap">Capítulos</span> <span aria-hidden="true">▾</span></button>
+    <div class="side__body" id="side-body">
+      <div class="search" role="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label class="visually-hidden" for="sq" data-i18n="filt">Filtrar capítulos</label>
+        <input id="sq" type="search" placeholder="Filtrar capítulos" data-i18n-attr="placeholder:filt" autocomplete="off">
+      </div>
+      <h2>Guia do administrador</h2>
+      <ol class="chapters"><li><a href="#1-sobre-este-guia">1. Sobre este guia</a></li><li><a href="#2-requisitos-tecnicos">2. Requisitos técnicos</a></li><li><a href="#3-preparacao-pre-instalacao">3. Preparação pré-instalação</a></li><li><a href="#4-instalacao-passo-a-passo">4. Instalação passo a passo</a></li><li><a href="#5-configuracao-administrativa-completa">5. Configuração administrativa completa</a></li><li><a href="#6-capabilities-e-permissoes">6. Capabilities e permissões</a></li><li><a href="#7-validacao-pos-implantacao">7. Validação pós-implantação</a></li><li><a href="#8-atualizacao-e-manutencao">8. Atualização e manutenção</a></li><li><a href="#9-resposta-a-incidentes-e-reversao">9. Resposta a incidentes e reversão</a></li><li><a href="#10-solucao-de-problemas-tecnicos-comuns">10. Solução de problemas técnicos comuns</a></li><li><a href="#11-onde-encontrar-mais-informacao">11. Onde encontrar mais informação</a></li><li><a href="#12-fontes-e-referencias">12. Fontes e referências</a></li></ol>
+      <h2 data-i18n="other">Outros documentos</h2>
+      <div class="tracksel"><a href="manual.html">Manual do usuário</a><a href="tecnica.html">Documentação técnica</a></div>
+    </div>
+  </aside>
+  <main class="article" id="conteudo">
+    <nav class="crumbs" aria-label="Você está em"><a href="index.html" data-i18n="docs">Documentação</a><span aria-hidden="true">›</span><span>Guia do administrador</span></nav>
+    <header class="doc-cover">
+      <p class="eyebrow">Guia Técnico</p>
+      <h1>Instalação e Administração</h1>
+      <p class="intro">A11y for Moodle — guia para equipes de TI e administradores do Moodle. Complementa a Documentação Executiva e o Manual do Usuário, que não trazem comandos técnicos por serem voltados a públicos não técnicos.</p>
+      <dl class="doc-meta"><div><dt>Instituição</dt><dd>Universidade Federal de Pelotas (UFPel)</dd></div><div><dt>Unidade responsável</dt><dd>CPTED — Coordenação de Políticas e Tecnologias para EaD, Gabinete da Vice-Reitoria</dd></div><div><dt>Público-alvo</dt><dd>Equipes de TI e administradores do Moodle</dd></div><div><dt>Identificador técnico</dt><dd>local_a11y · versão 1.0.0 · licença GPL v3 ou posterior</dd></div></dl>
+      <div class="tools">
+        <a class="pdf" href="pdf/Guia_do_Administrador_A11y_for_Moodle.pdf" data-dl="pdf/Guia_do_Administrador_A11y_for_Moodle.pdf" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span data-i18n="pdf">Baixar em PDF</span></a>
+        <span class="src"><span data-i18n="src">Fonte</span>: <a href="https://github.com/padilhars/a11y/blob/master/docs/Guia_Tecnico_Instalacao_A11y_for_Moodle.docx">docs/Guia_Tecnico_Instalacao_A11y_for_Moodle.docx</a> · commit fd2398e · 2026-10-01</span>
+      </div>
+      <p class="ptonly" data-i18n="ptonly" hidden></p>
+      <details class="ver"><summary data-i18n="ver">Controle de versão do documento</summary><div aria-label="Tabela: Versão" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Versão</th>
+<th scope="col">Data</th>
+<th scope="col">Descrição</th>
+<th scope="col">Status</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>1.0</td>
+<td>03/09/2026</td>
+<td>Primeira versão, elaborada a partir de verificação direta do código-fonte do plugin (settings.php, db/access.php, version.php, MAINTENANCE.md, README.md).</td>
+<td>Rascunho para validação técnica</td>
+</tr>
+</tbody>
+</table></div></details>
+      <div class="callout callout--info"><b class="callout__t">Sobre este documento</b>
+<p>Este documento foi elaborado a partir do material institucional consolidado do plugin (estudos, código-fonte, arquivos de idioma e exploração ao vivo do ambiente de demonstração). Trechos sem evidência suficiente estão sinalizados como "[INFORMAÇÃO A VALIDAR]" e devem ser confirmados pela equipe responsável antes da publicação oficial.</p></div>
+    </header>
+    <div class="doc-body">
+<h2 id="1-sobre-este-guia">1. Sobre este guia</h2><p>Este guia é destinado a equipes de TI e administradores do Moodle responsáveis por instalar, configurar e manter o plugin A11y for Moodle. Ele traz comandos, nomes técnicos de configuração e procedimentos operacionais que a Documentação Executiva e o Manual do Usuário deliberadamente não trazem, por serem voltados a públicos não técnicos.</p><p>Este guia não substitui a documentação técnica gerada automaticamente a partir do próprio código-fonte do plugin (Seção 11), que é a referência mais detalhada e a que mais rapidamente reflete mudanças futuras no código.</p><h2 id="2-requisitos-tecnicos">2. Requisitos técnicos</h2><div aria-label="Tabela" class="tbl" role="region" tabindex="0"><table>
+
+<tbody>
+<tr>
+<td><strong>Versão do Moodle</strong></td>
+<td>Branch 502 (Moodle 5.2) — única versão efetivamente testada e confirmada em funcionamento.</td>
+</tr>
+<tr>
+<td><strong>Versão do PHP</strong></td>
+<td>8.2 ou superior. A integração contínua (CI) do projeto testa especificamente as versões 8.3 e 8.4.</td>
+</tr>
+<tr>
+<td><strong>Banco de dados</strong></td>
+<td>CI testado contra PostgreSQL e MariaDB.</td>
+</tr>
+<tr>
+<td><strong>Espaço em disco</strong></td>
+<td>Aproximadamente 19 MB — o pacote cresceu de forma relevante após o modelo e o executável da biblioteca MediaPipe (usados pela Navegação por Face) passarem a ser empacotados localmente, em vez de carregados de um CDN externo.</td>
+</tr>
+<tr>
+<td><strong>Extensões PHP</strong></td>
+<td>pgsql, zip, gd, mysqli — usadas no workflow de referência de integração contínua do próprio projeto.</td>
+</tr>
+<tr>
+<td><strong>Permissões de arquivo</strong></td>
+<td>Padrão de plugins Moodle: leitura pelo usuário do servidor web sobre o diretório do plugin.</td>
+</tr>
+</tbody>
+</table></div><div class="callout callout--warn"><b class="callout__t">Atenção ao requisito real de versão</b>
+<p>O plugin cita "Moodle 5.0 ou superior" em alguns pontos de forma ampla, mas o valor técnico configurado em version.php corresponde a uma build que a série 5.0 real do Moodle nunca alcança. Testes de integração contínua contra o núcleo oficial do Moodle 5.0 mostram que a instalação é recusada ("pluginrequirementsnotmet"). Antes de planejar a instalação, confirme que o ambiente-alvo roda efetivamente a branch 5.2.</p></div><h2 id="3-preparacao-pre-instalacao">3. Preparação pré-instalação</h2><p>Checklist antes de iniciar:</p><ul>
+<li><p>Confirmar a versão exata do Moodle em uso (Administração do site → Notificações, ou o valor de $CFG-&gt;version).</p></li>
+<li><p>Confirmar a versão do PHP em uso no servidor.</p></li>
+<li><p>Fazer backup do banco de dados e dos arquivos do Moodle antes de instalar qualquer plugin — prática padrão, não específica deste plugin.</p></li>
+<li><p>Providenciar acesso de escrita ao diretório local/ do Moodle (ou public/local/, em instalações que já usam a nova estrutura de webroot introduzida a partir do Moodle 5.0).</p></li>
+<li><p>Se a instituição já utiliza o plugin local_vlibras, ter isso em mente para a etapa de configuração de Integrações (Seção 5) — a instalação do A11y não exige o VLibras, mas pode integrar-se a ele se presente.</p></li>
+</ul><h2 id="4-instalacao-passo-a-passo">4. Instalação passo a passo</h2><h3 id="passo-1-obter-o-pacote">Passo 1 — Obter o pacote</h3><p>Obtenha o arquivo local_a11y.zip, ou o código-fonte diretamente do repositório, junto à equipe responsável (CPTED).</p><h3 id="passo-2-extrair-no-diretorio-correto">Passo 2 — Extrair no diretório correto</h3><pre><code># Layout clássico (instalações sem a nova estrutura public/)
+unzip local_a11y.zip -d /caminho/para/moodle/local/
+# Layout Moodle 5.0+ com webroot dentro de public/
+unzip local_a11y.zip -d /caminho/para/moodle/public/local/</code></pre><p>O diretório resultante deve se chamar a11y, ficando em &lt;moodleroot&gt;/local/a11y (ou &lt;moodleroot&gt;/public/local/a11y, conforme o layout da instalação).</p><h3 id="passo-3-completar-a-instalacao">Passo 3 — Completar a instalação</h3><p><strong>Opção A — pela interface:</strong> acesse Administração do site → Notificações. O Moodle detecta o plugin novo automaticamente e apresenta a tela padrão de instalação.</p><p><strong>Opção B — por linha de comando:</strong></p><pre><code>php admin/cli/upgrade.php --non-interactive</code></pre><h3 id="passo-4-confirmar">Passo 4 — Confirmar</h3><p>O botão de acessibilidade deve aparecer em qualquer página do Moodle, para qualquer pessoa usuária — inclusive visitantes não autenticados, por padrão (configurável na Seção 5).</p><h2 id="5-configuracao-administrativa-completa">5. Configuração administrativa completa</h2><p>Caminho: Administração do site → Plugins → Plugins locais → Acessibilidade (A11y). As configurações estão organizadas em até cinco grupos — o de Integrações só aparece se o plugin local_vlibras estiver instalado.</p><h3 id="geral">Geral</h3><div aria-label="Tabela: Configuração" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Configuração</th>
+<th scope="col">Tipo · padrão</th>
+<th scope="col">O que faz</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>local_a11y/enabled</td>
+<td>Checkbox · ativado</td>
+<td>Ativa/desativa o botão e o painel em todo o site.</td>
+</tr>
+<tr>
+<td>local_a11y/showforguests</td>
+<td>Checkbox · ativado</td>
+<td>Exibe o botão para usuários não autenticados.</td>
+</tr>
+<tr>
+<td>local_a11y/excludedpages</td>
+<td>Textarea · vazio</td>
+<td>Um padrão de URL por linha (aceita * como coringa); o plugin não carrega nas páginas correspondentes.</td>
+</tr>
+<tr>
+<td>local_a11y/enabledfeatures</td>
+<td>Multicheckbox · todas ativadas</td>
+<td>Escolhe quais opções de acessibilidade ficam disponíveis às pessoas usuárias.</td>
+</tr>
+</tbody>
+</table></div><h3 id="integracoes-condicional-a-local-vlibras-estar-instalado">Integrações (condicional a local_vlibras estar instalado)</h3><div aria-label="Tabela: Configuração" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Configuração</th>
+<th scope="col">Tipo · padrão</th>
+<th scope="col">O que faz</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>local_a11y/integratevlibras</td>
+<td>Checkbox · desativado</td>
+<td>Quando ativado, oculta visualmente o botão próprio do VLibras e move o acesso para a opção "Libras (VLibras)" deste plugin. O script do VLibras continua carregando normalmente — só a exibição do botão muda.</td>
+</tr>
+</tbody>
+</table></div><div class="callout callout--note"><b class="callout__t">Observação</b>
+<p>Se o VLibras estiver instalado e ativo, mas esta integração estiver desligada, o painel de administração exibe um aviso de possível sobreposição visual entre o botão do VLibras e o botão deste plugin, quando as posições configuradas de cada um coincidirem.</p></div><h3 id="botao-flutuante-fab">Botão Flutuante (FAB)</h3><div aria-label="Tabela: Configuração" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Configuração</th>
+<th scope="col">Tipo · padrão</th>
+<th scope="col">O que faz</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>local_a11y/fabposition</td>
+<td>Select · bottom-right</td>
+<td>Canto da tela: bottom-right, bottom-left, middle-right ou middle-left.</td>
+</tr>
+<tr>
+<td>local_a11y/fabicon</td>
+<td>Select · default</td>
+<td>Ícone do botão: default (ícone próprio, Ionicons) ou un (ícone de acessibilidade da ONU).</td>
+</tr>
+<tr>
+<td>local_a11y/fabshape</td>
+<td>Select · circle</td>
+<td>Formato do botão: circle ou square.</td>
+</tr>
+</tbody>
+</table></div><h3 id="painel">Painel</h3><div aria-label="Tabela: Configuração" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Configuração</th>
+<th scope="col">Tipo · padrão</th>
+<th scope="col">O que faz</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>local_a11y/panelformat</td>
+<td>Select · popover</td>
+<td>Formato em telas de desktop: popover, drawer ou modal. Em celulares e tablets pequenos, sempre abre como drawer, independentemente deste valor.</td>
+</tr>
+<tr>
+<td>local_a11y/density</td>
+<td>Select · regular</td>
+<td>Densidade visual das linhas de opção: compact, regular ou comfortable.</td>
+</tr>
+<tr>
+<td>local_a11y/showprofiles</td>
+<td>Checkbox · ativado</td>
+<td>Exibe a seção de perfis prontos no painel.</td>
+</tr>
+<tr>
+<td>local_a11y/footertext</td>
+<td>Editor HTML · vazio</td>
+<td>Texto customizado no rodapé do painel. Vazio usa a mensagem padrão: "Desenvolvido com ❤️ pela UFPel, para você."</td>
+</tr>
+</tbody>
+</table></div><h3 id="cores">Cores</h3><div aria-label="Tabela: Configuração" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Configuração</th>
+<th scope="col">Padrão</th>
+<th scope="col">O que colore</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>local_a11y/accent</td>
+<td>#3b82f6</td>
+<td>Cor de acento do botão e do painel.</td>
+</tr>
+<tr>
+<td>local_a11y/highlighttitlescolor</td>
+<td>#eab308</td>
+<td>Cor usada por "Destacar Títulos".</td>
+</tr>
+<tr>
+<td>local_a11y/highlightlinkscolor</td>
+<td>#3b82f6</td>
+<td>Cor usada por "Destacar Links".</td>
+</tr>
+<tr>
+<td>local_a11y/highlightbuttonscolor</td>
+<td>#f97316</td>
+<td>Cor usada por "Destacar Botões".</td>
+</tr>
+<tr>
+<td>local_a11y/readingguidecolor</td>
+<td>#3b82f6</td>
+<td>Cor da linha usada por "Guia de Leitura".</td>
+</tr>
+</tbody>
+</table></div><h2 id="6-capabilities-e-permissoes">6. Capabilities e permissões</h2><p>O plugin define uma única capability:</p><pre><code>local/a11y:view
+captype: read
+contextlevel: CONTEXT_SYSTEM
+archetypes: guest, user, frontpage, student, teacher, editingteacher, manager — todos CAP_ALLOW por padrão</code></pre><p>Não existe capability própria de configuração — a tela de administração (settings.php) é protegida pelo mecanismo padrão do Moodle para configurações de site (moodle/site:config), como qualquer outro plugin.</p><div class="callout callout--note"><b class="callout__t">Observação</b>
+<p>Uma capability local/a11y:configure existiu em versões anteriores do plugin, mas foi removida após uma auditoria de segurança e código morto constatar que ela nunca era, de fato, verificada em nenhum lugar do código — atribuí-la a um perfil não tinha efeito algum.</p></div><h2 id="7-validacao-pos-implantacao">7. Validação pós-implantação</h2><p>Checklist sugerido após instalar ou atualizar:</p><ul>
+<li><p>O botão de acessibilidade aparece em uma página de curso, tanto logado quanto deslogado (se showforguests estiver ativado).</p></li>
+<li><p>Um perfil e uma opção individual aplicam corretamente ao serem selecionados.</p></li>
+<li><p>A preferência persiste após recarregar a página (F5).</p></li>
+<li><p>Para um usuário autenticado: a preferência persiste após logout e login novamente.</p></li>
+<li><p>Se a instituição integra o VLibras: testar especificamente a opção "Libras (VLibras)".</p></li>
+<li><p>Testar em ao menos um navegador baseado em Chromium (para Comandos por Voz) e confirmar que outros navegadores exibem a mensagem de indisponibilidade, em vez de falhar silenciosamente.</p></li>
+</ul><h2 id="8-atualizacao-e-manutencao">8. Atualização e manutenção</h2><p>Para aplicar uma nova versão: substitua os arquivos do plugin pela versão nova e repita a Seção 4, Passo 3 (Administração do site → Notificações, ou o comando de upgrade via CLI).</p><p>Comandos úteis para quem for alterar o código-fonte do plugin:</p><pre><code># Recompilar os módulos JavaScript (AMD) após editar amd/src/*.js
+npx grunt amd --root=local/a11y
+# Rodar a suíte de testes automatizados (PHPUnit)
+vendor/bin/phpunit --configuration local/a11y/phpunit.xml
+# Rodar os testes de comportamento (Behat), com tag do plugin
+vendor/bin/behat --tags="@local_a11y"</code></pre><h2 id="9-resposta-a-incidentes-e-reversao">9. Resposta a incidentes e reversão</h2><p>Procedimento documentado no próprio repositório do plugin (MAINTENANCE.md):</p><div class="indent">
+<p><strong>Passo 1 — Desativar sem remover código:</strong> Administração do site → Plugins → Plugins locais → A11Y for Moodle → Desativar (ou, via CLI, ajustar a configuração local_a11y/enabled). Reversível instantaneamente, sem tocar em arquivos.</p>
+<p><strong>Passo 2 — Se a causa for uma mudança de código recente:</strong> reverter para o commit anterior no repositório (git revert do commit problemático — não git reset --hard, para preservar o histórico) e reimplantar o diretório local/a11y a partir dele.</p>
+</div><div class="callout callout--warn"><b class="callout__t">Limitação</b>
+<p>Não existe hoje um ambiente de homologação separado do ambiente de produção para este plugin — risco já registrado no Plano de Continuidade e Sucessão Técnica. Redobre a cautela ao testar qualquer mudança diretamente em produção, e considere testar primeiro em um curso de uso restrito antes de expor a mudança a toda a instituição.</p></div><h2 id="10-solucao-de-problemas-tecnicos-comuns">10. Solução de problemas técnicos comuns</h2><div aria-label="Tabela: Problema técnico" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Problema técnico</th>
+<th scope="col">Causa possível</th>
+<th scope="col">Ação</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>Plugin não aparece após a instalação</td>
+<td>Cache do Moodle desatualizado.</td>
+<td>Purgar todos os caches: Administração do site → Desenvolvimento → Purgar caches.</td>
+</tr>
+<tr>
+<td>Erro "pluginrequirementsnotmet" durante a instalação</td>
+<td>Versão do Moodle abaixo da exigida — inclusive a série 5.0 real.</td>
+<td>Confirmar que a instância roda especificamente a branch 5.2 (ver Seção 2).</td>
+</tr>
+<tr>
+<td>Opção "Libras (VLibras)" não aparece, mesmo com o VLibras instalado</td>
+<td>Integração não ativada nas configurações deste plugin.</td>
+<td>Ativar local_a11y/integratevlibras em Configurações → Integrações (Seção 5).</td>
+</tr>
+<tr>
+<td>Botões do VLibras e do A11y sobrepostos visualmente</td>
+<td>Posições configuradas coincidentes, com a integração desligada.</td>
+<td>Ativar a integração (oculta o botão nativo do VLibras), ou ajustar a posição de um dos dois.</td>
+</tr>
+<tr>
+<td>Ícone ou cor customizados não aplicam</td>
+<td>Cache de CSS do Moodle.</td>
+<td>Purgar caches; confirmar formato hexadecimal válido no campo de cor.</td>
+</tr>
+<tr>
+<td>Comandos por Voz não funciona em um navegador específico</td>
+<td>Reconhecimento de voz via Web Speech API disponível apenas em navegadores baseados em Chromium.</td>
+<td>Esperado — o plugin já detecta e avisa a indisponibilidade; testar em navegador Chromium para confirmar que a função em si funciona.</td>
+</tr>
+</tbody>
+</table></div><h2 id="11-onde-encontrar-mais-informacao">11. Onde encontrar mais informação</h2><div aria-label="Tabela: Fonte" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Fonte</th>
+<th scope="col">Cobre</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>docs/api-php (phpDocumentor)</td>
+<td>Classes, métodos e parâmetros do back-end em PHP — classes/, lib.php, settings.php, version.php, db/, lang/.</td>
+</tr>
+<tr>
+<td>docs/api-js (JSDoc)</td>
+<td>Todos os módulos AMD (JavaScript) e suas funções, exportadas e internas.</td>
+</tr>
+<tr>
+<td>docs/styleguide (KSS)</td>
+<td>Tokens de design, componentes do botão/painel, efeitos de página e filtros de cor do CSS.</td>
+</tr>
+<tr>
+<td>docs/templates.md</td>
+<td>Variáveis de contexto de cada template Mustache usado pelo plugin.</td>
+</tr>
+<tr>
+<td>DECISIONS.md</td>
+<td>Histórico de decisões técnicas de arquitetura, uma a uma, com o raciocínio por trás de cada uma.</td>
+</tr>
+<tr>
+<td>CONTRIBUTING.md</td>
+<td>Diretrizes para quem for contribuir com o código do plugin.</td>
+</tr>
+<tr>
+<td>MAINTENANCE.md</td>
+<td>Procedimentos de manutenção, incluindo resposta a incidentes (Seção 9 deste guia).</td>
+</tr>
+</tbody>
+</table></div><h2 id="12-fontes-e-referencias">12. Fontes e referências</h2><ul>
+<li><p>Código-fonte do plugin: settings.php, db/access.php, version.php, classes/integration/vlibras.php.</p></li>
+<li><p>README.md e docs/README.md, no repositório do plugin.</p></li>
+<li><p>MAINTENANCE.md, no repositório do plugin.</p></li>
+<li><p>Documentação Executiva — A11y for Moodle, Seções 11 e 12.</p></li>
+</ul><p><em>Guia elaborado a partir de verificação direta do código-fonte do plugin. Sujeito a revisão pela equipe técnica antes de sua adoção como procedimento oficial.</em></p>
+    </div>
+    <p class="totop"><a href="#conteudo" data-i18n="top">Voltar ao topo</a></p>
+  </main>
+  <nav class="toc" aria-label="Neste capítulo" data-i18n-attr="aria-label:onpage">
+    <h2 data-i18n="onpage">Neste capítulo</h2>
+    <ol id="toc-list"></ol>
+  </nav>
+</div>
+<footer class="foot">
+  <div class="foot__in">
+    <div><h2>A11Y for Moodle</h2><ul><li><a href="../" data-i18n="f1">Página inicial</a></li><li><a href="../#download" data-i18n="f2">Download</a></li></ul></div>
+    <div><h2 data-i18n="f3">Documentação</h2><ul><li><a href="manual.html" data-i18n="f4">Manual do usuário</a></li><li><a href="admin.html" data-i18n="f5">Guia do administrador</a></li><li><a href="tecnica.html" data-i18n="f6">Documentação técnica</a></li></ul></div>
+    <div><h2 data-i18n="f7">Projeto</h2><ul><li><a href="https://github.com/padilhars/a11y">GitHub</a></li><li><a href="https://www.gnu.org/licenses/gpl-3.0.html" data-i18n="f8">Licença GPL v3</a></li></ul></div>
+  </div>
+  <p class="foot__legal" data-i18n="f9">Desenvolvido com ❤️ pela UFPel.</p>
+</footer>
+<script>window.DOC_TOC=[{"t": "1. Sobre este guia", "id": "1-sobre-este-guia", "sub": []}, {"t": "2. Requisitos técnicos", "id": "2-requisitos-tecnicos", "sub": []}, {"t": "3. Preparação pré-instalação", "id": "3-preparacao-pre-instalacao", "sub": []}, {"t": "4. Instalação passo a passo", "id": "4-instalacao-passo-a-passo", "sub": [{"t": "Passo 1 — Obter o pacote", "id": "passo-1-obter-o-pacote"}, {"t": "Passo 2 — Extrair no diretório correto", "id": "passo-2-extrair-no-diretorio-correto"}, {"t": "Passo 3 — Completar a instalação", "id": "passo-3-completar-a-instalacao"}, {"t": "Passo 4 — Confirmar", "id": "passo-4-confirmar"}]}, {"t": "5. Configuração administrativa completa", "id": "5-configuracao-administrativa-completa", "sub": [{"t": "Geral", "id": "geral"}, {"t": "Integrações (condicional a local_vlibras estar instalado)", "id": "integracoes-condicional-a-local-vlibras-estar-instalado"}, {"t": "Botão Flutuante (FAB)", "id": "botao-flutuante-fab"}, {"t": "Painel", "id": "painel"}, {"t": "Cores", "id": "cores"}]}, {"t": "6. Capabilities e permissões", "id": "6-capabilities-e-permissoes", "sub": []}, {"t": "7. Validação pós-implantação", "id": "7-validacao-pos-implantacao", "sub": []}, {"t": "8. Atualização e manutenção", "id": "8-atualizacao-e-manutencao", "sub": []}, {"t": "9. Resposta a incidentes e reversão", "id": "9-resposta-a-incidentes-e-reversao", "sub": []}, {"t": "10. Solução de problemas técnicos comuns", "id": "10-solucao-de-problemas-tecnicos-comuns", "sub": []}, {"t": "11. Onde encontrar mais informação", "id": "11-onde-encontrar-mais-informacao", "sub": []}, {"t": "12. Fontes e referências", "id": "12-fontes-e-referencias", "sub": []}];window.PAGE_EN={"skip": "Skip to content", "navmain": "Main", "n1": "Profiles", "n2": "Try it", "n4": "Administrators", "n5": "Documentation", "n6": "Download", "f1": "Home", "f2": "Download", "f3": "Documentation", "f4": "User manual", "f5": "Administrator guide", "f6": "Technical documentation", "f7": "Project", "f8": "GPL v3 license", "f9": "Made with ❤️ by UFPel.", "ptonly": "<b>Available in Portuguese only.</b> This document is published in Brazilian Portuguese, the language it was written in. The PDF is also in Portuguese.", "pdf": "Download PDF", "chap": "Chapters", "filt": "Filter chapters", "onpage": "In this chapter", "docs": "Documentation", "ver": "Version history", "src": "Source", "prev": "Previous", "next": "Next", "top": "Back to top", "sideb": "Chapters", "other": "Other documents", "_title": "Administrator guide · A11Y for Moodle"};</script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/fab.js"></script>
+<script src="search-index.js"></script>
+<script src="docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manual do usuário · A11Y for Moodle</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Lexend:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body class="doc doc--manual">
+<a class="skip" href="#conteudo" data-i18n="skip">Pular para o conteúdo</a>
+<header class="nav">
+  <nav class="nav__in" aria-label="Principal" data-i18n-attr="aria-label:navmain">
+    <a class="brand" href="../"><span class="brand__mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="4.5" r="2" fill="currentColor" stroke="none"/><path d="M5 8.5c2.3.7 4.6 1 7 1s4.7-.3 7-1M12 9.5v4.5m0 0-3 6.5m3-6.5 3 6.5"/></svg></span><span class="brand__text">A11Y for Moodle</span></a>
+    <ul class="nav__links">
+      <li class="opt"><a href="../#perfis" data-i18n="n1">Perfis</a></li>
+      <li class="opt"><a href="../#experimente" data-i18n="n2">Experimente</a></li>
+      <li class="opt"><a href="../#admin" data-i18n="n4">Administradores</a></li>
+      <li><a href="index.html" aria-current="page" data-i18n="n5">Documentação</a></li>
+    </ul>
+    <span data-lang-switch></span>
+    <a class="btn" href="../#download" data-i18n="n6">Baixar</a>
+  </nav>
+</header>
+<div class="dwrap layout">
+  <aside class="side" aria-label="Capítulos" data-i18n-attr="aria-label:sideb" data-open="true">
+    <button class="side-toggle" type="button" aria-expanded="true" aria-controls="side-body"><span data-i18n="chap">Capítulos</span> <span aria-hidden="true">▾</span></button>
+    <div class="side__body" id="side-body">
+      <div class="search" role="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label class="visually-hidden" for="sq" data-i18n="filt">Filtrar capítulos</label>
+        <input id="sq" type="search" placeholder="Filtrar capítulos" data-i18n-attr="placeholder:filt" autocomplete="off">
+      </div>
+      <h2>Manual do usuário</h2>
+      <ol class="chapters"><li><a href="#1-sobre-o-plugin">1. Sobre o plugin</a></li><li><a href="#2-como-acessar">2. Como acessar</a></li><li><a href="#3-conhecendo-a-interface">3. Conhecendo a interface</a></li><li><a href="#4-recursos-disponiveis">4. Recursos disponíveis</a></li><li><a href="#5-tutoriais-passo-a-passo">5. Tutoriais passo a passo</a></li><li><a href="#6-personalizacao">6. Personalização</a></li><li><a href="#7-uso-com-tecnologias-assistivas">7. Uso com tecnologias assistivas</a></li><li><a href="#8-situacoes-comuns-como-faco-para">8. Situações comuns (&quot;Como faço para...&quot;)</a></li><li><a href="#9-problemas-e-solucoes">9. Problemas e soluções</a></li><li><a href="#10-perguntas-frequentes">10. Perguntas frequentes</a></li><li><a href="#11-glossario">11. Glossário</a></li><li><a href="#12-suporte">12. Suporte</a></li></ol>
+      <h2 data-i18n="other">Outros documentos</h2>
+      <div class="tracksel"><a href="admin.html">Guia do administrador</a><a href="tecnica.html">Documentação técnica</a></div>
+    </div>
+  </aside>
+  <main class="article" id="conteudo">
+    <nav class="crumbs" aria-label="Você está em"><a href="index.html" data-i18n="docs">Documentação</a><span aria-hidden="true">›</span><span>Manual do usuário</span></nav>
+    <header class="doc-cover">
+      <p class="eyebrow">Manual Do Usuário</p>
+      <h1>A11y for Moodle</h1>
+      <p class="intro">Guia prático de uso do painel de acessibilidade do Moodle — para estudantes, docentes, tutores e demais pessoas usuárias.</p>
+      <dl class="doc-meta"><div><dt>Instituição</dt><dd>Universidade Federal de Pelotas (UFPel)</dd></div><div><dt>Unidade responsável</dt><dd>CPTED — Coordenação de Políticas e Tecnologias para EaD, Gabinete da Vice-Reitoria</dd></div><div><dt>Identificador técnico</dt><dd>local_a11y · versão 1.0.0 (maturidade Stable) · licença GPL v3 ou posterior</dd></div></dl>
+      <div class="tools">
+        <a class="pdf" href="pdf/Manual_do_Usuario_A11y_for_Moodle.pdf" data-dl="pdf/Manual_do_Usuario_A11y_for_Moodle.pdf" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span data-i18n="pdf">Baixar em PDF</span></a>
+        <span class="src"><span data-i18n="src">Fonte</span>: <a href="https://github.com/padilhars/a11y/blob/master/docs/Manual_do_Usuario_A11y_for_Moodle.docx">docs/Manual_do_Usuario_A11y_for_Moodle.docx</a> · commit fd2398e · 2026-10-01</span>
+      </div>
+      <p class="ptonly" data-i18n="ptonly" hidden></p>
+      <details class="ver"><summary data-i18n="ver">Controle de versão do documento</summary><div aria-label="Tabela: Versão" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Versão</th>
+<th scope="col">Data</th>
+<th scope="col">Descrição</th>
+<th scope="col">Status</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>1.0</td>
+<td>02/09/2026</td>
+<td>Primeira versão consolidada a partir do material institucional, técnico e de exploração ao vivo disponível sobre o plugin.</td>
+<td>Rascunho para validação</td>
+</tr>
+<tr>
+<td>1.1</td>
+<td>03/09/2026</td>
+<td>Revisão a partir da verificação direta do repositório de código-fonte do plugin (GitHub). Corrige o comportamento de uma opção e adiciona o botão de ajuda "?" à descrição da interface.</td>
+<td>Rascunho para validação</td>
+</tr>
+<tr>
+<td>1.2</td>
+<td>03/09/2026</td>
+<td>Segunda revisão, mais profunda: o plugin evoluiu de 24 para 30 opções (6 novas, 2 que passaram de interruptor para múltiplos níveis), passou a integrar com Libras (VLibras), e a versão pública foi promovida para 1.0.0/Stable.</td>
+<td>Rascunho para validação</td>
+</tr>
+</tbody>
+</table></div></details>
+      <div class="callout callout--info"><b class="callout__t">Sobre este documento</b>
+<p>Este documento foi elaborado a partir do material institucional consolidado do plugin (estudos, código-fonte, arquivos de idioma e exploração ao vivo do ambiente de demonstração). Trechos sem evidência suficiente estão sinalizados como "[INFORMAÇÃO A VALIDAR]" e devem ser confirmados pela equipe responsável antes da publicação oficial.</p></div>
+    </header>
+    <div class="doc-body">
+<h2 id="1-sobre-o-plugin">1. Sobre o plugin</h2><p><strong>O que é:</strong> o A11y for Moodle é um plugin — uma extensão — que adiciona um botão de acessibilidade a qualquer página do Moodle. Com ele, você ajusta como o conteúdo é exibido e utilizado (texto, cores, contraste, navegação e muito mais) do jeito que funciona melhor para você.</p><p><strong>Para que serve:</strong> para você personalizar sua própria experiência de uso do Moodle, sem depender de outras pessoas ou de programas extras instalados no seu computador.</p><p><strong>Quem pode utilizar:</strong> qualquer pessoa que acesse o Moodle — estudantes, docentes, tutores e até visitantes que ainda não fizeram login.</p><div class="callout callout--tip"><b class="callout__t">Dica</b>
+<p>Você não precisa pedir permissão nem fazer nenhum cadastro especial para usar o plugin. O botão já está disponível assim que você abre uma página do Moodle.</p></div><p>Este manual explica onde encontrar o plugin, o que cada opção faz e como resolver as dúvidas mais comuns. Se você preferir aprender fazendo, vá direto para a Seção 5 (Tutoriais passo a passo).</p><h2 id="2-como-acessar">2. Como acessar</h2><h3 id="no-computador">No computador</h3><ul>
+<li><p>O botão de acessibilidade fica fixo em um dos cantos da tela, visível em qualquer página do Moodle — inclusive na tela inicial, dentro de um curso ou durante uma atividade.</p></li>
+<li><p>Clique no botão para abrir o painel. Clique novamente (ou no X) para fechar.</p></li>
+<li><p>Atalho de teclado: pressione Alt+A em qualquer lugar da página para abrir ou fechar o painel sem usar o mouse.</p></li>
+</ul><h3 id="no-tablet-e-no-celular">No tablet e no celular</h3><ul>
+<li><p>O botão também aparece em telas de tablet e celular, adaptado ao tamanho da tela. Toque no botão para abrir o painel.</p></li>
+<li><p>Em celulares e tablets pequenos, o painel sempre abre no formato de gaveta lateral — o formato mais adequado a telas pequenas —, independentemente de como o formato do painel esteja configurado pela instituição para telas de computador.</p></li>
+</ul><div class="fig-grid"><figure><img alt="Página de curso do Moodle no computador com o botão de acessibilidade no canto inferior direito e o painel aberto." height="1375" loading="lazy" src="../img/hero.webp" width="2200"/><figcaption>No computador: o botão fica no canto da tela e abre o painel.</figcaption></figure><figure><img alt="Moodle no celular com o painel de acessibilidade aberto em formato de gaveta." height="1688" loading="lazy" src="../img/mobile-open.webp" width="780"/><figcaption>No celular: o painel abre como gaveta.</figcaption></figure></div><h3 id="posicao-e-aparencia-do-botao">Posição e aparência do botão</h3><p>A posição, o ícone e o formato do botão podem variar de uma instituição para outra, pois são definidos pela equipe de tecnologia da informação nas configurações administrativas do Moodle. Se você não encontrar o botão no canto onde esperava, ele pode estar em outro canto da tela — veja a Seção 8 para outras causas possíveis.</p><h2 id="3-conhecendo-a-interface">3. Conhecendo a interface</h2><p>Ao abrir o painel, você encontra os seguintes elementos:</p><div aria-label="Tabela: Elemento" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Elemento</th>
+<th scope="col">Para que serve</th>
+<th scope="col">Como utilizar</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>Botão de acessibilidade</td>
+<td>Abre e fecha o painel.</td>
+<td>Clique ou toque nele; ou pressione Alt+A.</td>
+</tr>
+<tr>
+<td>Campo de busca</td>
+<td>Encontra uma opção pelo nome, sem precisar abrir cada categoria.</td>
+<td>Digite parte do nome da opção; a lista se filtra automaticamente.</td>
+</tr>
+<tr>
+<td>Seção de Perfis</td>
+<td>Aplica, com um toque, um conjunto de opções prontas para uma necessidade específica.</td>
+<td>Toque no perfil desejado.</td>
+</tr>
+<tr>
+<td>Categorias (5)</td>
+<td>Organizam as 30 opções em grupos: Texto e Tipografia, Cores e Contraste, Mídia e Animação, Foco e Navegação, Recursos Avançados.</td>
+<td>Toque no nome da categoria para abrir ou recolher o grupo de opções.</td>
+</tr>
+<tr>
+<td>Contador de opções ativas</td>
+<td>Mostra quantas opções estão ligadas no momento.</td>
+<td>Apenas informativo — não é clicável.</td>
+</tr>
+<tr>
+<td>Botão "Restaurar padrões"</td>
+<td>Desliga todas as opções e volta ao estado original, de fábrica.</td>
+<td>Toque para restaurar tudo de uma vez.</td>
+</tr>
+<tr>
+<td>Botão fechar</td>
+<td>Fecha o painel.</td>
+<td>Toque no X, pressione Esc, ou use o atalho Alt+A.</td>
+</tr>
+<tr>
+<td>Botão de ajuda ("?")</td>
+<td>Mostra instruções de uso mais detalhadas do que a descrição curta ao lado da opção. Disponível em 6 opções: Leitor de Tela, Teclado Virtual, Comandos por Voz, Navegação por Face, Guia de Leitura e Máscara de Leitura.</td>
+<td>Toque no "?" ao lado do nome da opção.</td>
+</tr>
+</tbody>
+</table></div><div class="fig-one"><figure><img alt="Painel de acessibilidade aberto: no topo, o título com o contador de opções ativas e os botões Restaurar padrões e Fechar; abaixo, o campo de busca, a seção de perfis e a categoria Texto e Tipografia." height="1012" loading="lazy" src="../img/panel.webp" width="760"/><figcaption>O painel aberto: contador de opções ativas, Restaurar padrões e Fechar no topo; depois a busca, os perfis e as categorias.</figcaption></figure></div><div class="callout callout--note"><b class="callout__t">Observação</b>
+<p>O painel é totalmente operável pelo teclado: use Tab para mover entre os elementos, Enter ou Espaço para selecionar, e Esc para fechar. Veja mais na Seção 7.</p></div><h2 id="4-recursos-disponiveis">4. Recursos disponíveis</h2><p>O plugin reúne 9 perfis prontos e 30 opções individuais, organizadas em 5 categorias. Esta seção descreve cada um deles. Se preferir ir direto ao ponto, use o campo de busca do próprio painel ou consulte a Seção 8 ("Como faço para...").</p><div class="callout callout--note"><b class="callout__t">Observação</b>
+<p>Uma dessas 30 opções — "Libras (VLibras)" — só aparece no seu painel se a sua instituição também usa o VLibras e um administrador optou por integrá-lo aqui. Se você não a vir, é esperado: veja a observação na categoria "Mídia e Animação".</p></div><h3 id="como-os-controles-funcionam">Como os controles funcionam</h3><p>Antes de conhecer cada opção, vale entender os dois tipos de controle usados no painel:</p><p><strong>Interruptores (ligar/desligar):</strong> a maioria das opções funciona como um interruptor. Selecione uma vez para ativar; selecione de novo para desativar. O visual do controle muda para indicar se está ligado ou desligado.</p><p><strong>Níveis (vários graus):</strong> algumas opções — como Tamanho do Texto, Contraste, Altura da Linha, Cursor e Modo Foco — funcionam em níveis. Cada seleção avança para o próximo nível; ao chegar no último, a seleção seguinte volta ao nível Padrão (ou Desligado). O nível atual aparece escrito ao lado do nome da opção.</p><div class="callout callout--tip"><b class="callout__t">Dica</b>
+<p>Não sabe por onde começar? Experimente primeiro um perfil pronto (próxima seção) e depois ajuste opções individuais, se quiser refinar o resultado.</p></div><h3 id="perfis-de-acessibilidade">Perfis de Acessibilidade</h3><p><strong>O que faz:</strong> aplica, com um único toque, um conjunto de opções já combinado para uma necessidade de acesso específica — e desliga o que não faz parte daquele conjunto, para não misturar ajustes de perfis diferentes.</p><p><strong>Como utilizar:</strong></p><div class="indent">
+<p><strong>Passo 1 —</strong> Abra o painel de acessibilidade.</p>
+<p><strong>Passo 2 —</strong> Na seção "Perfis de Acessibilidade", observe os nove cartões disponíveis.</p>
+<p><strong>Passo 3 —</strong> Toque no perfil que melhor descreve o que você precisa.</p>
+</div><p><strong>Resultado esperado:</strong> a página muda imediatamente, aplicando todas as opções daquele perfil. O contador de opções ativas, no topo do painel, mostra quantas opções foram ligadas.</p><p><strong>Observações:</strong> você pode ajustar opções individualmente depois de aplicar um perfil — isso não desfaz o perfil, apenas adiciona ou remove um ajuste específico. Para sair completamente de um perfil, use "Restaurar padrões" (Seção 3) ou escolha outro perfil.</p><div aria-label="Tabela: Perfil" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Perfil</th>
+<th scope="col">Para quem é</th>
+<th scope="col">O que ativa</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>Baixa Visão</td>
+<td>Texto maior, alto contraste, cursor destacado.</td>
+<td>Tamanho do Texto (Grande) · Contraste (Alto) · Cursor (Preto grande) · Destacar Links · Destacar Botões</td>
+</tr>
+<tr>
+<td>Daltonismo</td>
+<td>Filtro de cores e links destacados.</td>
+<td>Mudar Cores (Deuteranopia) · Destacar Links · Saturação (Alta)</td>
+</tr>
+<tr>
+<td>Dislexia</td>
+<td>Fonte amigável, espaçamento e guia de leitura.</td>
+<td>Fonte para Dislexia (nível Lexend) · Espaçamento do Texto (Médio) · Altura da Linha (1,8×) · Guia de Leitura</td>
+</tr>
+<tr>
+<td>TDAH / Foco</td>
+<td>Máscara de leitura, modo foco e animações pausadas.</td>
+<td>Máscara de Leitura · Modo Foco (Leitura confortável) · Pausar Animações</td>
+</tr>
+<tr>
+<td>Idoso / Sênior</td>
+<td>Fonte legível, texto maior, botões destacados.</td>
+<td>Fonte Legível · Tamanho do Texto (Médio) · Destacar Botões · Cursor (Preto grande) · Altura da Linha (1,5×)</td>
+</tr>
+<tr>
+<td>Epilepsia</td>
+<td>Sem movimento, saturação baixa, ambiente calmo.</td>
+<td>Pausar Animações · Saturação (Baixa) · Contraste (Escuro)</td>
+</tr>
+<tr>
+<td>Deficiência Motora</td>
+<td>Cursor grande, botões destacados e dicas.</td>
+<td>Cursor (Preto grande) · Destacar Botões · Dicas de Ferramentas</td>
+</tr>
+<tr>
+<td>Cognitivo</td>
+<td>Modo foco, fonte legível, sem distrações.</td>
+<td>Modo Foco (Leitura confortável) · Pausar Animações · Fonte Legível · Altura da Linha (1,8×)</td>
+</tr>
+<tr>
+<td>Modo Noturno</td>
+<td>Contraste escuro e baixa saturação.</td>
+<td>Contraste (Escuro) · Saturação (Baixa)</td>
+</tr>
+</tbody>
+</table></div><div class="fig-grid"><figure><img alt="Página de curso do Moodle sem nenhum perfil ativo." height="1000" loading="lazy" src="../img/profile-none.webp" width="1600"/><figcaption>Antes: a página sem perfil.</figcaption></figure><figure><img alt="A mesma página com o perfil Dislexia ativo: fonte Lexend, mais espaçamento e a linha da guia de leitura." height="1000" loading="lazy" src="../img/profile-dyslexia.webp" width="1600"/><figcaption>Depois: com o perfil Dislexia ativo.</figcaption></figure></div><h3 id="texto-e-tipografia">Texto e Tipografia</h3><p>Opções que ajustam a fonte, o tamanho, o espaçamento e o alinhamento do texto.</p><h4 id="fonte-legivel">Fonte Legível</h4><p><strong>O que faz:</strong> Troca a fonte do texto pela Atkinson Hyperlegible, desenhada para diferenciar letras facilmente confundíveis (como "I", "l" e "1").</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" para abrir a categoria e selecione "Fonte Legível". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> O texto de toda a página passa a usar essa fonte.</p><h4 id="fonte-para-dislexia">Fonte para Dislexia</h4><p><strong>O que faz:</strong> Troca a fonte do texto por uma de duas fontes pesquisadas para dislexia.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" e selecione "Fonte para Dislexia" repetidamente para alternar entre os níveis: Desligado → Lexend → OpenDyslexic. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> O texto de toda a página passa a usar a fonte escolhida.</p><p><strong>Observações:</strong> Não use ao mesmo tempo que "Fonte Legível" — as duas alteram a mesma fonte; a última selecionada prevalece.</p><h4 id="destacar-titulos">Destacar Títulos</h4><p><strong>O que faz:</strong> Aumenta a evidência visual dos títulos da página.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" para abrir a categoria e selecione "Destacar Títulos". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> Os títulos ficam visualmente mais evidentes que o restante do texto.</p><h4 id="destacar-links">Destacar Links</h4><p><strong>O que faz:</strong> Aumenta a evidência visual dos links.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" para abrir a categoria e selecione "Destacar Links". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> Os links ficam mais fáceis de identificar em meio ao texto.</p><h4 id="destacar-botoes">Destacar Botões</h4><p><strong>O que faz:</strong> Aumenta a evidência visual dos botões.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" para abrir a categoria e selecione "Destacar Botões". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> Os botões da página ficam mais fáceis de localizar.</p><h4 id="tamanho-do-texto">Tamanho do Texto</h4><p><strong>O que faz:</strong> Aumenta o tamanho de todo o texto da página.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" e selecione "Tamanho do Texto" repetidamente para alternar entre os níveis: Padrão → 4 níveis crescentes. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> O texto fica maior a cada seleção, até o nível máximo.</p><h4 id="altura-da-linha">Altura da Linha</h4><p><strong>O que faz:</strong> Aumenta o espaço entre uma linha de texto e outra.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" e selecione "Altura da Linha" repetidamente para alternar entre os níveis: Padrão → 1,5× → 1,8× → 2,2×. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> Fica mais fácil acompanhar a linha durante a leitura, especialmente em parágrafos longos.</p><h4 id="espacamento-do-texto">Espaçamento do Texto</h4><p><strong>O que faz:</strong> Aumenta o espaço entre as letras.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" e selecione "Espaçamento do Texto" repetidamente para alternar entre os níveis: Padrão → 3 níveis crescentes. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> As letras ficam mais distantes entre si, o que pode facilitar a leitura.</p><h4 id="espacamento-entre-palavras">Espaçamento entre Palavras</h4><p><strong>O que faz:</strong> Aumenta o espaço entre as palavras — de forma independente do espaçamento entre letras, acima.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" e selecione "Espaçamento entre Palavras" repetidamente para alternar entre os níveis: Padrão → 3 níveis crescentes. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> As palavras ficam mais distantes entre si.</p><h4 id="alinhamento-do-texto">Alinhamento do Texto</h4><p><strong>O que faz:</strong> Ajusta o alinhamento do texto do conteúdo.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" e selecione "Alinhamento do Texto" repetidamente para alternar entre os níveis: Padrão → Esquerda → Centralizado → Direita → Justificado. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> O alinhamento do texto da página muda a cada seleção, conforme o nível escolhido.</p><h4 id="leitura-bionica">Leitura Biônica</h4><p><strong>O que faz:</strong> Escurece o início de cada palavra, proporcionalmente ao tamanho dela, para guiar o olho durante a leitura — o restante da palavra continua com o peso normal.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Texto e Tipografia" para abrir a categoria e selecione "Leitura Biônica". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> As primeiras letras de cada palavra da página ficam em negrito.</p><p><strong>Observações:</strong> Tem um botão de ajuda ("?") com mais detalhes. Não afeta a leitura por leitores de tela (cada palavra continua sendo lida por inteiro) nem atua em formulários, questões de questionário, o editor de texto, fórmulas do MathJax ou o teclado virtual. O próprio plugin observa que a eficácia da técnica para velocidade ou compreensão de leitura não é comprovada de forma consistente — o efeito é só visual.</p><h3 id="cores-e-contraste">Cores e Contraste</h3><p>Opções que ajustam cores, contraste, saturação e luz azul da página.</p><h4 id="contraste">Contraste</h4><p><strong>O que faz:</strong> Ajusta o contraste entre o texto e o fundo da página.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Cores e Contraste" e selecione "Contraste" repetidamente para alternar entre os níveis: Padrão → Escuro → Claro → Alto. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> A página muda de aparência a cada nível — o nível Alto oferece a maior diferença entre texto e fundo.</p><h4 id="inverter-cores">Inverter Cores</h4><p><strong>O que faz:</strong> Inverte as cores exibidas na página (como um "negativo" fotográfico).</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Cores e Contraste" para abrir a categoria e selecione "Inverter Cores". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> As cores da página são invertidas.</p><h4 id="mudar-cores">Mudar Cores</h4><p><strong>O que faz:</strong> Aplica um filtro de cor pensado para os três tipos mais comuns de daltonismo.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Cores e Contraste" e selecione "Mudar Cores" repetidamente para alternar entre os níveis: Padrão → Protanopia → Deuteranopia → Tritanopia. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> As cores da página são ajustadas conforme o filtro escolhido.</p><p><strong>Observações:</strong> O filtro se aplica a toda imagem da página, sem distinção — inclusive imagens que comunicam informação por cor, como a legenda de um gráfico ou um mapa de calor. Se você não souber qual tipo escolher, experimente os três.</p><h4 id="saturacao">Saturação</h4><p><strong>O que faz:</strong> Ajusta a intensidade das cores da página.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Cores e Contraste" e selecione "Saturação" repetidamente para alternar entre os níveis: Padrão (Normal) → Alta → Baixa → Mono (preto e branco). Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> As cores ficam mais ou menos intensas a cada nível; o nível Mono remove a cor por completo.</p><h4 id="filtro-de-luz-azul">Filtro de Luz Azul</h4><p><strong>O que faz:</strong> Reduz a luz azul da tela, de forma parecida com o "modo noturno" de celulares.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Cores e Contraste" e selecione "Filtro de Luz Azul" repetidamente para alternar entre os níveis: Desligado → Sutil → Médio → Forte. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> A tela ganha um tom mais quente, mais forte a cada nível.</p><div class="callout callout--validate"><b class="callout__t">Informação a validar</b>
+<p>Não foi localizada, no material disponível, uma verificação formal e publicada das razões de contraste (contrast ratio) de cada um dos quatro níveis de Contraste. Se você depende de um nível mínimo de contraste certificado, considere testar as opções diretamente antes de confiar apenas nesta descrição.</p></div><h3 id="midia-e-animacao">Mídia e Animação</h3><p>Opções que reduzem estímulos visuais e sonoros na tela — e, quando disponível, o acesso à tradução em Libras.</p><h4 id="ocultar-imagens">Ocultar Imagens</h4><p><strong>O que faz:</strong> Substitui imagens e vídeos da página por um indicador de "oculto" — inclusive vídeos incorporados do YouTube e Vimeo.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Mídia e Animação" para abrir a categoria e selecione "Ocultar Imagens". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> As imagens e vídeos somem da tela e são substituídos por um indicador.</p><p><strong>Observações:</strong> O texto ao redor continua visível normalmente. Isso vale para todo mundo, inclusive imagens que carregam informação (um diagrama, um gráfico) — não há como manter só essas visíveis.</p><h4 id="pausar-animacoes">Pausar Animações</h4><p><strong>O que faz:</strong> Interrompe animações e transições da interface, congela GIFs animados, e pausa vídeos com reprodução automática (ou que já estejam tocando).</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Mídia e Animação" para abrir a categoria e selecione "Pausar Animações". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> Elementos que se moviam na tela param de se mover; vídeos param de tocar.</p><h4 id="silenciar-midia">Silenciar Mídia</h4><p><strong>O que faz:</strong> Silencia e pausa áudio com reprodução automática; silencia vídeos com reprodução automática (inclusive incorporados do YouTube e Vimeo) — sem necessariamente pausá-los.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Mídia e Animação" para abrir a categoria e selecione "Silenciar Mídia". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> O som para. Vídeos podem continuar se movendo, mas sem áudio.</p><p><strong>Observações:</strong> Tem um botão de ajuda ("?") com mais detalhes. Se quiser que o vídeo também pare de se mover, ative "Pausar Animações" também. Desativar esta opção não volta a ligar o som sozinho — só evita silenciar mídia nova a partir daí.</p><h4 id="dicas-de-ferramentas">Dicas de Ferramentas</h4><p><strong>O que faz:</strong> Exibe um texto explicativo quando você passa o cursor sobre um elemento da interface.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Mídia e Animação" para abrir a categoria e selecione "Dicas de Ferramentas". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> Uma pequena legenda aparece perto do elemento apontado.</p><h4 id="libras-vlibras">Libras (VLibras)</h4><p><strong>O que faz:</strong> Mostra ou oculta, dentro do próprio painel, o acesso ao VLibras — tradutor público de Libras mantido pelo governo federal (vlibras.gov.br).</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Mídia e Animação" para abrir a categoria e selecione "Libras (VLibras)". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> Um botão de acesso ao VLibras aparece (ou some) dentro do painel de acessibilidade.</p><p><strong>Observações:</strong> Tem um botão de ajuda ("?") com mais detalhes. Ao usar a tradução, o conteúdo é processado pelo serviço público VLibras, fora da infraestrutura da sua instituição — veja a Seção 7.</p><div class="callout callout--info"><b class="callout__t">Sobre a opção "libras (vlibras)"</b>
+<p>Esta opção só aparece no seu painel se a sua instituição também tiver o VLibras instalado e um administrador tiver optado por integrá-lo a este plugin. Se você não a vê, sua instituição pode simplesmente não ter feito essa integração — o que não impede necessariamente que o VLibras exista em outro lugar da página, fora deste painel.</p></div><h3 id="foco-e-navegacao">Foco e Navegação</h3><p>Opções que ajudam a manter a atenção no conteúdo, a se localizar na página e a enxergar detalhes pequenos.</p><h4 id="guia-de-leitura">Guia de Leitura</h4><p><strong>O que faz:</strong> Exibe uma linha horizontal que acompanha o cursor do mouse verticalmente pela tela, ajudando a manter o lugar durante a leitura.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Foco e Navegação" para abrir a categoria e selecione "Guia de Leitura". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> Uma linha aparece e se move junto com o cursor do mouse.</p><p><strong>Observações:</strong> Esta opção tem um botão de ajuda ("?") ao lado do nome, com instruções adicionais.</p><h4 id="mascara-de-leitura">Máscara de Leitura</h4><p><strong>O que faz:</strong> Mantém visível apenas uma faixa ao redor do cursor, escurecendo o restante da tela.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Foco e Navegação" para abrir a categoria e selecione "Máscara de Leitura". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> A tela escurece, exceto por uma faixa que acompanha o cursor.</p><p><strong>Observações:</strong> Esta opção tem um botão de ajuda ("?") ao lado do nome, com instruções adicionais.</p><h4 id="lupa">Lupa</h4><p><strong>O que faz:</strong> Uma lupa circular acompanha o cursor e amplia o conteúdo sob ela — texto, imagens e tabelas.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Foco e Navegação" para abrir a categoria e selecione "Lupa". Toque novamente para desativar.</p><p><strong>Resultado esperado:</strong> A área ao redor do cursor aparece ampliada, em uma lente circular.</p><p><strong>Observações:</strong> Tem um botão de ajuda ("?") com mais detalhes. Use as setas do teclado para mover a lupa sem precisar do mouse; use + e − para ajustar o zoom (2×, 3× ou 4×); pressione Esc para desligar a qualquer momento.</p><h4 id="cursor">Cursor</h4><p><strong>O que faz:</strong> Aumenta o tamanho do cursor do mouse.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Foco e Navegação" e selecione "Cursor" repetidamente para alternar entre os níveis: Padrão → Grande preto → Grande branco. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> O cursor do mouse fica visivelmente maior, na cor escolhida.</p><h4 id="modo-foco">Modo Foco</h4><p><strong>O que faz:</strong> Simplifica a página, removendo elementos não essenciais da interface.</p><p><strong>Como utilizar:</strong> Abra o painel de acessibilidade, toque em "Foco e Navegação" e selecione "Modo Foco" repetidamente para alternar entre os níveis: Padrão → Sem distrações → Leitura confortável → Somente texto. Continuar selecionando volta ao nível Padrão.</p><p><strong>Resultado esperado:</strong> A página fica mais limpa a cada nível — no nível mais alto ("Somente texto"), praticamente só o conteúdo principal permanece.</p><p><strong>Observações:</strong> No nível "Somente texto", a opção "Ocultar Imagens" é ativada automaticamente junto, e fica temporariamente travada enquanto esse nível estiver ativo — é esperado, não um erro.</p><h3 id="recursos-avancados">Recursos Avançados</h3><p>Os quatro recursos a seguir vão além do ajuste visual e funcionam de um jeito um pouco diferente das demais opções — por isso, cada um tem um passo a passo próprio. Os quatro também têm um botão de ajuda ("?") ao lado do nome, no painel, com um lembrete rápido das instruções abaixo.</p><h4 id="leitor-de-tela-texto-para-fala">Leitor de Tela (texto para fala)</h4><p><strong>O que faz:</strong> Lê em voz alta o texto que você escolher, usando a tecnologia de conversão de texto em fala do seu navegador.</p><p><strong>Como utilizar:</strong></p><div class="indent">
+<p><strong>Passo 1 —</strong> Ative "Leitor de Tela" na categoria Recursos Avançados.</p>
+<p><strong>Passo 2 —</strong> Clique em qualquer texto da página que você queira ouvir.</p>
+<p><strong>Passo 3 —</strong> Para interromper, toque no indicador "Lendo…" que aparece na tela, ou no botão "Parar".</p>
+</div><p><strong>Resultado esperado:</strong> O texto escolhido é lido em voz alta, com um indicador visual mostrando que a leitura está em andamento.</p><p><strong>Observações:</strong> O volume da leitura segue o volume do seu dispositivo. Se não ouvir nada, confira se o som do computador ou celular está ligado.</p><h4 id="teclado-virtual">Teclado Virtual</h4><p><strong>O que faz:</strong> Mostra um teclado na tela, para você digitar sem precisar de um teclado físico.</p><p><strong>Como utilizar:</strong></p><div class="indent">
+<p><strong>Passo 1 —</strong> Ative "Teclado Virtual" na categoria Recursos Avançados.</p>
+<p><strong>Passo 2 —</strong> Toque no campo de texto onde você quer digitar (por exemplo, uma caixa de resposta ou de busca).</p>
+<p><strong>Passo 3 —</strong> Toque nas teclas exibidas na tela para digitar. Uma fileira com acentuação do português brasileiro (á, é, í, ó, ú, ã, õ, ç, â, ê) fica sempre disponível.</p>
+</div><p><strong>Resultado esperado:</strong> O texto digitado no teclado virtual aparece no campo selecionado, como se você tivesse usado um teclado físico.</p><p><strong>Observações:</strong> O teclado virtual digita apenas no campo selecionado. Se nada acontecer, confirme se você tocou dentro de um campo de texto antes de usar o teclado.</p><h4 id="comandos-por-voz">Comandos por Voz</h4><p><strong>O que faz:</strong> Permite controlar opções do plugin usando comandos falados.</p><p><strong>Como utilizar:</strong></p><div class="indent">
+<p><strong>Passo 1 —</strong> Ative "Comandos por Voz" na categoria Recursos Avançados.</p>
+<p><strong>Passo 2 —</strong> Leia o aviso que aparece, explicando que — dependendo do seu navegador — o áudio captado pode ser enviado a um serviço remoto de reconhecimento de fala, não operado pela sua instituição, e confirme se quiser continuar.</p>
+<p><strong>Passo 3 —</strong> Quando solicitado, permita que o navegador use o microfone.</p>
+<p><strong>Passo 4 —</strong> Fale um comando — por exemplo, para aumentar o texto, ativar alto contraste ou fechar o painel.</p>
+</div><p><strong>Resultado esperado:</strong> O navegador reconhece o comando falado e o plugin aplica a ação correspondente.</p><p><strong>Observações:</strong> Sem permissão de microfone, o recurso não funciona. Você pode recusar o aviso ou negar a permissão sem prejudicar nenhuma outra parte do plugin.</p><h4 id="navegacao-por-face">Navegação por Face</h4><p><strong>O que faz:</strong> Permite controlar o cursor do mouse com movimentos da cabeça, sem usar as mãos.</p><p><strong>Como utilizar:</strong></p><div class="indent">
+<p><strong>Passo 1 —</strong> Ative "Navegação por Face" na categoria Recursos Avançados.</p>
+<p><strong>Passo 2 —</strong> Leia o aviso que aparece, explicando que a imagem da câmera é processada inteiramente no seu navegador e nunca é enviada a este site ou a qualquer outro lugar, e confirme se quiser continuar.</p>
+<p><strong>Passo 3 —</strong> Quando solicitado, permita que o navegador use a câmera.</p>
+<p><strong>Passo 4 —</strong> Movimente a cabeça para mover o cursor na tela. Para clicar, abra a boca ou pisque com os dois olhos.</p>
+</div><p><strong>Resultado esperado:</strong> O cursor passa a seguir os movimentos da sua cabeça, captados pela câmera.</p><p><strong>Observações:</strong> Sem permissão de câmera, o recurso não funciona. Você pode recusar o aviso ou negar a permissão sem prejudicar nenhuma outra parte do plugin.</p><h2 id="5-tutoriais-passo-a-passo">5. Tutoriais passo a passo</h2><p>Estes tutoriais reúnem, em sequência, os passos das tarefas mais comuns. Para a explicação completa de cada opção, veja a Seção 4.</p><h3 id="abrir-o-painel-de-acessibilidade-pela-primeira-vez">Abrir o painel de acessibilidade pela primeira vez</h3><p><strong>Objetivo:</strong> Localizar e abrir o painel de acessibilidade em qualquer página do Moodle.</p><div class="indent">
+<p><strong>Passo 1 —</strong> Acesse qualquer página do Moodle.</p>
+<p><strong>Passo 2 —</strong> Localize o botão de acessibilidade, fixo em um dos cantos da tela.</p>
+<p><strong>Passo 3 —</strong> Clique ou toque no botão (ou pressione Alt+A).</p>
+</div><p><strong>Resultado:</strong> O painel se abre, mostrando o campo de busca, a seção de perfis e as cinco categorias de opções.</p><h3 id="ativar-um-perfil-pronto-exemplo-dislexia">Ativar um perfil pronto (exemplo: Dislexia)</h3><p><strong>Objetivo:</strong> Aplicar, com um toque, um conjunto de opções voltado à leitura para pessoas com dislexia.</p><div class="indent">
+<p><strong>Passo 1 —</strong> Abra o painel de acessibilidade.</p>
+<p><strong>Passo 2 —</strong> Na seção de perfis, localize o cartão "Dislexia".</p>
+<p><strong>Passo 3 —</strong> Toque no cartão "Dislexia".</p>
+</div><p><strong>Resultado:</strong> A página aplica imediatamente a Fonte para Dislexia, o Espaçamento do Texto, a Altura da Linha e a Guia de Leitura. O contador de opções ativas mostra "4 opções ativas".</p><h3 id="aumentar-o-tamanho-do-texto">Aumentar o tamanho do texto</h3><p><strong>Objetivo:</strong> Deixar o texto da página maior.</p><div class="indent">
+<p><strong>Passo 1 —</strong> Abra o painel de acessibilidade.</p>
+<p><strong>Passo 2 —</strong> Toque na categoria "Texto e Tipografia" para abri-la.</p>
+<p><strong>Passo 3 —</strong> Selecione "Tamanho do Texto" quantas vezes forem necessárias, até atingir o nível desejado.</p>
+</div><p><strong>Resultado:</strong> O texto da página aumenta a cada seleção, até o nível máximo.</p><h3 id="buscar-uma-opcao-especifica">Buscar uma opção específica</h3><p><strong>Objetivo:</strong> Encontrar rapidamente uma opção sem precisar abrir cada categoria manualmente.</p><div class="indent">
+<p><strong>Passo 1 —</strong> Abra o painel de acessibilidade.</p>
+<p><strong>Passo 2 —</strong> Toque no campo de busca, no topo do painel.</p>
+<p><strong>Passo 3 —</strong> Digite parte do nome da opção — por exemplo, "contraste".</p>
+</div><p><strong>Resultado:</strong> O painel mostra apenas as opções que combinam com o texto digitado, com as categorias correspondentes já abertas.</p><h3 id="usar-o-leitor-de-tela">Usar o Leitor de Tela</h3><p><strong>Objetivo:</strong> Ouvir um texto da página em voz alta.</p><div class="indent">
+<p><strong>Passo 1 —</strong> Abra o painel de acessibilidade e toque na categoria "Recursos Avançados".</p>
+<p><strong>Passo 2 —</strong> Ative "Leitor de Tela".</p>
+<p><strong>Passo 3 —</strong> Clique no texto que deseja ouvir.</p>
+</div><p><strong>Resultado:</strong> O texto escolhido é lido em voz alta, com um indicador "Lendo…" na tela e um botão para interromper.</p><h3 id="usar-o-teclado-virtual">Usar o Teclado Virtual</h3><p><strong>Objetivo:</strong> Digitar em um campo do Moodle sem usar um teclado físico.</p><div class="indent">
+<p><strong>Passo 1 —</strong> Abra o painel de acessibilidade e toque na categoria "Recursos Avançados".</p>
+<p><strong>Passo 2 —</strong> Ative "Teclado Virtual".</p>
+<p><strong>Passo 3 —</strong> Toque no campo onde deseja digitar e, em seguida, toque nas teclas exibidas na tela.</p>
+</div><p><strong>Resultado:</strong> O texto digitado no teclado virtual aparece no campo selecionado.</p><h3 id="usar-a-navegacao-por-face">Usar a Navegação por Face</h3><p><strong>Objetivo:</strong> Controlar o cursor do mouse com movimentos da cabeça, sem usar as mãos.</p><div class="indent">
+<p><strong>Passo 1 —</strong> Abra o painel de acessibilidade e toque na categoria "Recursos Avançados".</p>
+<p><strong>Passo 2 —</strong> Ative "Navegação por Face" e permita o uso da câmera quando solicitado.</p>
+<p><strong>Passo 3 —</strong> Movimente a cabeça para mover o cursor; abra a boca ou pisque com os dois olhos para clicar.</p>
+</div><p><strong>Resultado:</strong> O cursor passa a responder aos movimentos da cabeça, permitindo navegar e clicar sem mouse ou teclado.</p><h3 id="restaurar-todas-as-configuracoes-padrao">Restaurar todas as configurações padrão</h3><p><strong>Objetivo:</strong> Desligar todas as opções ativas e voltar a página ao estado original.</p><div class="indent">
+<p><strong>Passo 1 —</strong> Abra o painel de acessibilidade.</p>
+<p><strong>Passo 2 —</strong> Localize o botão "Restaurar padrões", no topo do painel.</p>
+<p><strong>Passo 3 —</strong> Toque no botão.</p>
+</div><p><strong>Resultado:</strong> Todas as opções e perfis são desativados de uma vez, e a página volta à aparência original.</p><h2 id="6-personalizacao">6. Personalização</h2><p>Você pode combinar livremente qualquer uma das 30 opções descritas na Seção 4 — não é preciso escolher apenas um perfil pronto. Um bom ponto de partida é ativar um perfil e, depois, ajustar opções individuais para refinar o resultado ao seu gosto.</p><ul>
+<li><p>Combine quantas opções quiser: elas não se cancelam, exceto quando afetam exatamente a mesma característica (por exemplo, "Fonte Legível" e "Fonte para Dislexia" alteram a mesma fonte, então a última selecionada prevalece).</p></li>
+<li><p>Use o campo de busca para encontrar e ajustar uma opção específica sem precisar abrir cada categoria.</p></li>
+<li><p>Se você estiver com a sessão iniciada (login feito), suas escolhas ficam salvas na sua conta e valem em qualquer computador ou celular em que você acessar o Moodle.</p></li>
+<li><p>Se você não estiver com a sessão iniciada, suas escolhas ficam guardadas apenas no navegador que você está usando naquele momento.</p></li>
+<li><p>Para voltar tudo ao padrão original, use o botão "Restaurar padrões" (Seção 3).</p></li>
+</ul><div class="callout callout--note"><b class="callout__t">Observação</b>
+<p>A aparência e a posição do próprio botão de acessibilidade (canto da tela, ícone, formato) não são personalizáveis por você — elas são definidas pela equipe de TI da sua instituição para toda a instalação do Moodle.</p></div><h2 id="7-uso-com-tecnologias-assistivas">7. Uso com tecnologias assistivas</h2><p>Esta seção documenta apenas recursos confirmados no material disponível sobre o plugin.</p><h3 id="teclado">Teclado</h3><ul>
+<li><p>O atalho Alt+A abre e fecha o painel de qualquer página, sem precisar do mouse.</p></li>
+<li><p>Dentro do painel, use Tab para mover entre os elementos (busca, perfis, categorias, opções, botões) e Enter ou Espaço para selecionar.</p></li>
+<li><p>Pressione Esc para fechar o painel a qualquer momento; o foco volta para o botão de acessibilidade.</p></li>
+<li><p>Enquanto o painel está aberto, a navegação por Tab permanece dentro dele (não "escapa" para o restante da página por engano).</p></li>
+</ul><h3 id="leitores-de-tela">Leitores de tela</h3><p>O painel foi desenvolvido com suporte a leitores de tela: elementos anunciam seu estado (por exemplo, se uma opção está ativa), e mudanças de opção são anunciadas automaticamente. Essa é a meta de desenvolvimento documentada para o painel (padrão WCAG 2.2 nível AA), verificada por uma varredura interna com a ferramenta axe-core, sem violações críticas ou graves reportadas.</p><div class="callout callout--validate"><b class="callout__t">Informação a validar</b>
+<p>Não foi localizada, no material disponível, uma confirmação de testes com leitores de tela específicos (como NVDA, JAWS ou VoiceOver). Se você utiliza um desses programas, recomendamos relatar sua experiência à equipe responsável (Seção 12) para ajudar a validar essa compatibilidade.</p></div><h3 id="ampliacao">Ampliação</h3><p>O plugin amplia o tamanho do texto (opção "Tamanho do Texto", em 4 níveis) e, separadamente, oferece a Lupa: uma lente circular que amplia (2×, 3× ou 4×) o que estiver sob o cursor — texto, imagens e tabelas —, operável também pelo teclado. Veja a Seção 4 (Foco e Navegação).</p><h3 id="contraste-2">Contraste</h3><p>As opções "Contraste" (4 níveis), "Inverter Cores", "Saturação" (4 níveis, incluindo Mono/preto e branco) e "Filtro de Luz Azul" (4 níveis) ajudam a adaptar a página a diferentes necessidades de contraste e conforto visual. Veja a Seção 4 para o detalhamento de cada uma.</p><h3 id="navegacao">Navegação</h3><p>Além do atalho Alt+A, o Modo Foco (3 níveis) reduz elementos na tela para ajudar na concentração, e a Guia de Leitura e a Máscara de Leitura ajudam a manter o lugar durante a leitura. Veja a Seção 4 (Foco e Navegação).</p><h3 id="comunicacao">Comunicação</h3><p>Quando disponível (Seção 4, "Libras (VLibras)"), o plugin pode centralizar, dentro do próprio painel, o acesso ao VLibras — tradutor público de Libras. Ao usar a tradução, o conteúdo passa a ser processado pelo serviço público VLibras (vlibras.gov.br), fora da infraestrutura da sua instituição.</p><h2 id="8-situacoes-comuns-como-faco-para">8. Situações comuns ("Como faço para...")</h2><h3 id="como-ativar-um-recurso">Como ativar um recurso?</h3><p>Abra o painel de acessibilidade, localize a opção (por categoria ou pelo campo de busca) e selecione-a. Veja a Seção 4.</p><h3 id="como-desativar-um-recurso">Como desativar um recurso?</h3><p>Selecione a mesma opção novamente. Para opções de vários níveis, continue selecionando até voltar ao nível Padrão.</p><h3 id="como-alterar-uma-configuracao-ja-ativa">Como alterar uma configuração já ativa?</h3><p>Abra o painel, localize a opção e selecione-a até chegar no nível desejado (para opções de níveis) ou desative e ative outra opção equivalente (para interruptores simples).</p><h3 id="como-restaurar-a-configuracao-original">Como restaurar a configuração original?</h3><p>Toque no botão "Restaurar padrões", no topo do painel. Isso desliga todas as opções de uma vez. Veja o tutorial na Seção 5.</p><h3 id="onde-encontro-uma-opcao-especifica">Onde encontro uma opção específica?</h3><p>Use o campo de busca no topo do painel, ou abra a categoria correspondente (Texto e Tipografia, Cores e Contraste, Mídia e Animação, Foco e Navegação, Recursos Avançados).</p><h3 id="como-sei-quantas-opcoes-estao-ativas">Como sei quantas opções estão ativas?</h3><p>O contador no topo do painel mostra quantas opções estão ligadas no momento.</p><h3 id="minhas-escolhas-continuam-se-eu-sair-e-voltar">Minhas escolhas continuam se eu sair e voltar?</h3><p>Sim, se você estiver com a sessão iniciada (login), suas escolhas ficam salvas na conta. Se você não estiver logado, elas ficam apenas no navegador utilizado. Veja a Seção 6.</p><h3 id="como-uso-o-plugin-sem-o-mouse">Como uso o plugin sem o mouse?</h3><p>Pressione Alt+A para abrir o painel e use Tab, Enter/Espaço e Esc para navegar e selecionar. Veja a Seção 7.</p><h2 id="9-problemas-e-solucoes">9. Problemas e soluções</h2><div aria-label="Tabela: Problema" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Problema</th>
+<th scope="col">Possível causa</th>
+<th scope="col">Solução</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>O botão de acessibilidade não aparece.</td>
+<td>O plugin pode estar desativado para essa página ou instituição, ou a exibição para visitantes pode estar desligada.</td>
+<td>Tente acessar com login. Se o problema continuar, contate o suporte (Seção 12).</td>
+</tr>
+<tr>
+<td>Minhas preferências sumiram.</td>
+<td>Você trocou de navegador ou de dispositivo sem estar com a sessão iniciada, ou está em uma aba anônima/privada.</td>
+<td>Faça login antes de personalizar; assim suas escolhas passam a valer em qualquer dispositivo (Seção 6).</td>
+</tr>
+<tr>
+<td>A Navegação por Face não funciona.</td>
+<td>Permissão de câmera não concedida, ou o navegador/dispositivo não tem câmera disponível.</td>
+<td>Verifique as permissões de câmera do navegador para o site do Moodle e tente novamente.</td>
+</tr>
+<tr>
+<td>Os Comandos por Voz não respondem.</td>
+<td>Permissão de microfone não concedida, ou o navegador utilizado não suporta a tecnologia de reconhecimento de voz.</td>
+<td>Verifique as permissões de microfone do navegador; se possível, teste em outro navegador atualizado.</td>
+</tr>
+<tr>
+<td>O Leitor de Tela não lê o texto.</td>
+<td>O clique não foi feito diretamente sobre o texto, ou o volume do dispositivo está no mudo.</td>
+<td>Clique diretamente sobre a frase ou parágrafo desejado e confira o volume do dispositivo.</td>
+</tr>
+<tr>
+<td>O Teclado Virtual não digita no campo certo.</td>
+<td>Nenhum campo de texto estava selecionado antes de tocar nas teclas.</td>
+<td>Toque primeiro dentro do campo de texto desejado e, em seguida, use o teclado virtual.</td>
+</tr>
+<tr>
+<td>O painel abre em um perfil diferente do que eu escolhi da última vez.</td>
+<td>A preferência não foi salva (sessão não iniciada) ou "Restaurar padrões" foi usado anteriormente.</td>
+<td>Faça login para manter suas preferências salvas entre sessões (Seção 6).</td>
+</tr>
+<tr>
+<td>Duas opções parecem se cancelar.</td>
+<td>Algumas opções alteram a mesma característica (por exemplo, as duas opções de fonte); a última selecionada prevalece.</td>
+<td>Ative apenas uma das opções conflitantes por vez. Veja a observação na Seção 4.</td>
+</tr>
+</tbody>
+</table></div><h2 id="10-perguntas-frequentes">10. Perguntas frequentes</h2><h3 id="preciso-instalar-alguma-coisa-para-usar-o-plugin">Preciso instalar alguma coisa para usar o plugin?</h3><p>Não. O plugin já está integrado ao Moodle da instituição; basta acessar qualquer página e usar o botão de acessibilidade.</p><h3 id="o-plugin-funciona-no-celular">O plugin funciona no celular?</h3><p>Sim, o botão e o painel se adaptam a telas menores. Veja a Seção 2.</p><h3 id="o-plugin-funciona-sem-internet">O plugin funciona sem internet?</h3><p>Não. Como o plugin faz parte do Moodle, ele depende da mesma conexão com a internet necessária para acessar o Moodle.</p><h3 id="o-plugin-substitui-o-leitor-de-tela-do-meu-computador-ou-cel">O plugin substitui o leitor de tela do meu computador ou celular?</h3><p>Não necessariamente. O Leitor de Tela do plugin é um recurso de "clique para ouvir" dentro do Moodle. Se você já usa um leitor de tela do sistema operacional (como NVDA, JAWS ou VoiceOver), pode continuar usando-o normalmente junto com o plugin.</p><h3 id="outras-pessoas-veem-que-eu-ativei-um-perfil-ou-opcao">Outras pessoas veem que eu ativei um perfil ou opção?</h3><p>Não. As opções que você ativa mudam apenas o que aparece na sua própria tela — elas não alteram o que outras pessoas veem na mesma página.</p><h3 id="minhas-escolhas-ficam-salvas">Minhas escolhas ficam salvas?</h3><p>Sim. Se você estiver com a sessão iniciada, suas escolhas ficam salvas na sua conta e valem em qualquer dispositivo. Se não estiver logado, elas ficam apenas no navegador utilizado. Veja a Seção 6.</p><h3 id="o-plugin-coleta-dados-sobre-como-eu-o-uso">O plugin coleta dados sobre como eu o uso?</h3><p>Não. O plugin não mantém estatísticas de uso nem telemetria. A única informação guardada é a sua própria preferência de acessibilidade, e apenas para aplicá-la da próxima vez que você acessar o Moodle.</p><h3 id="o-plugin-funciona-em-qualquer-navegador">O plugin funciona em qualquer navegador?</h3><p>Os recursos usados (leitura em voz alta, reconhecimento de voz, filtros de imagem) são tecnologias padrão de navegadores modernos e atualizados. <mark class="validar">A validar</mark> Não há, no material disponível, uma lista oficial de navegadores homologados.</p><h3 id="o-plugin-tem-versao-em-libras">O plugin tem versão em Libras?</h3><p>O plugin em si não traduz para Libras. Mas ele pode integrar, dentro do seu próprio painel, o acesso ao VLibras — tradutor público de Libras do governo federal —, se a sua instituição já usa essa outra ferramenta e um administrador optou por ativar a integração. Veja "Libras (VLibras)" na Seção 4.</p><h2 id="11-glossario">11. Glossário</h2><div aria-label="Tabela: Termo" class="tbl" role="region" tabindex="0"><table><thead><tr>
+<th scope="col">Termo</th>
+<th scope="col">Significado</th>
+</tr></thead>
+
+<tbody>
+
+<tr>
+<td>Moodle</td>
+<td>Ambiente Virtual de Aprendizagem (AVA) utilizado pela UFPel para cursos a distância e apoio a disciplinas presenciais.</td>
+</tr>
+<tr>
+<td>Plugin</td>
+<td>Uma extensão que adiciona uma funcionalidade nova a um sistema já existente — neste caso, ao Moodle.</td>
+</tr>
+<tr>
+<td>Botão de acessibilidade</td>
+<td>O botão flutuante, fixo em um dos cantos da tela, que abre e fecha o painel do plugin.</td>
+</tr>
+<tr>
+<td>Painel</td>
+<td>A janela que se abre ao acionar o botão de acessibilidade, com busca, perfis e categorias de opções.</td>
+</tr>
+<tr>
+<td>Perfil de Acessibilidade</td>
+<td>Um conjunto pronto de opções, voltado a uma necessidade de acesso específica, aplicado com um único toque.</td>
+</tr>
+<tr>
+<td>Interruptor (toggle)</td>
+<td>Tipo de controle que liga ou desliga uma opção — veja a Seção 4.</td>
+</tr>
+<tr>
+<td>Nível (stepper)</td>
+<td>Tipo de controle que alterna entre vários graus de uma mesma opção (por exemplo, os quatro níveis de Contraste).</td>
+</tr>
+<tr>
+<td>Contraste</td>
+<td>A diferença de luminosidade entre o texto e o fundo da página; quanto maior o contraste, mais fácil costuma ser distinguir o texto.</td>
+</tr>
+<tr>
+<td>Saturação</td>
+<td>A intensidade das cores exibidas; saturação baixa aproxima a imagem do preto e branco.</td>
+</tr>
+<tr>
+<td>Daltonismo</td>
+<td>Dificuldade de distinguir determinadas cores. Protanopia, Deuteranopia e Tritanopia são três tipos distintos, cada um afetando a percepção de cores de um jeito diferente.</td>
+</tr>
+<tr>
+<td>Dislexia</td>
+<td>Dificuldade específica de leitura, que pode ser amenizada por fontes, espaçamento e guias de leitura adequados.</td>
+</tr>
+<tr>
+<td>TDAH</td>
+<td>Transtorno de Déficit de Atenção e Hiperatividade — pode se beneficiar de recursos que reduzem distrações, como o Modo Foco.</td>
+</tr>
+<tr>
+<td>Leitor de tela (TTS)</td>
+<td>Recurso que converte texto em áudio (texto para fala / text-to-speech).</td>
+</tr>
+<tr>
+<td>Modo Foco</td>
+<td>Opção que oculta elementos não essenciais da interface, para reduzir distrações.</td>
+</tr>
+<tr>
+<td>Navegação por Face</td>
+<td>Recurso que usa a câmera do dispositivo para controlar o cursor do mouse com movimentos da cabeça.</td>
+</tr>
+<tr>
+<td>Leitura Biônica</td>
+<td>Técnica que escurece o início de cada palavra para guiar o olho durante a leitura.</td>
+</tr>
+<tr>
+<td>VLibras</td>
+<td>Tradutor público de Libras (Língua Brasileira de Sinais) mantido pelo governo federal, que este plugin pode integrar dentro do próprio painel.</td>
+</tr>
+<tr>
+<td>Persistência</td>
+<td>A capacidade de o plugin lembrar suas escolhas de uma visita para outra.</td>
+</tr>
+<tr>
+<td>Sessão iniciada (login)</td>
+<td>Estar autenticado no Moodle com usuário e senha, em vez de acessar como visitante.</td>
+</tr>
+</tbody>
+</table></div><h2 id="12-suporte">12. Suporte</h2><p>O plugin é desenvolvido e mantido pela CPTED — Coordenação de Políticas e Tecnologias para EaD, vinculada ao Gabinete da Vice-Reitoria da UFPel —, com autoria de Rodrigo Padilha Silveira e Jerônimo Medina Madruga.</p><div class="callout callout--validate"><b class="callout__t">Suporte — informação a validar</b>
+<p>O material disponível não define um canal institucional específico (e-mail, formulário, sistema de chamados) para relatar problemas ou pedir ajuda sobre o plugin. Recomenda-se que a equipe responsável indique aqui o canal oficial antes da publicação deste manual.</p></div><p>Enquanto esse canal não é definido, procure a coordenação ou o setor de TI responsável pelo Moodle na sua unidade, informando:</p><ul>
+<li><p>o que você estava tentando fazer;</p></li>
+<li><p>o que aconteceu (ou deixou de acontecer);</p></li>
+<li><p>o navegador e o dispositivo utilizados;</p></li>
+<li><p>se possível, uma captura de tela do painel no momento do problema.</p></li>
+</ul><p><em>Manual elaborado a partir de material institucional e técnico consolidado sobre o plugin A11y for Moodle. Sujeito a revisão e validação final pela equipe responsável antes de sua adoção como documentação oficial.</em></p>
+    </div>
+    <p class="totop"><a href="#conteudo" data-i18n="top">Voltar ao topo</a></p>
+  </main>
+  <nav class="toc" aria-label="Neste capítulo" data-i18n-attr="aria-label:onpage">
+    <h2 data-i18n="onpage">Neste capítulo</h2>
+    <ol id="toc-list"></ol>
+  </nav>
+</div>
+<footer class="foot">
+  <div class="foot__in">
+    <div><h2>A11Y for Moodle</h2><ul><li><a href="../" data-i18n="f1">Página inicial</a></li><li><a href="../#download" data-i18n="f2">Download</a></li></ul></div>
+    <div><h2 data-i18n="f3">Documentação</h2><ul><li><a href="manual.html" data-i18n="f4">Manual do usuário</a></li><li><a href="admin.html" data-i18n="f5">Guia do administrador</a></li><li><a href="tecnica.html" data-i18n="f6">Documentação técnica</a></li></ul></div>
+    <div><h2 data-i18n="f7">Projeto</h2><ul><li><a href="https://github.com/padilhars/a11y">GitHub</a></li><li><a href="https://www.gnu.org/licenses/gpl-3.0.html" data-i18n="f8">Licença GPL v3</a></li></ul></div>
+  </div>
+  <p class="foot__legal" data-i18n="f9">Desenvolvido com ❤️ pela UFPel.</p>
+</footer>
+<script>window.DOC_TOC=[{"t": "1. Sobre o plugin", "id": "1-sobre-o-plugin", "sub": []}, {"t": "2. Como acessar", "id": "2-como-acessar", "sub": [{"t": "No computador", "id": "no-computador"}, {"t": "No tablet e no celular", "id": "no-tablet-e-no-celular"}, {"t": "Posição e aparência do botão", "id": "posicao-e-aparencia-do-botao"}]}, {"t": "3. Conhecendo a interface", "id": "3-conhecendo-a-interface", "sub": []}, {"t": "4. Recursos disponíveis", "id": "4-recursos-disponiveis", "sub": [{"t": "Como os controles funcionam", "id": "como-os-controles-funcionam"}, {"t": "Perfis de Acessibilidade", "id": "perfis-de-acessibilidade"}, {"t": "Texto e Tipografia", "id": "texto-e-tipografia"}, {"t": "Cores e Contraste", "id": "cores-e-contraste"}, {"t": "Mídia e Animação", "id": "midia-e-animacao"}, {"t": "Foco e Navegação", "id": "foco-e-navegacao"}, {"t": "Recursos Avançados", "id": "recursos-avancados"}]}, {"t": "5. Tutoriais passo a passo", "id": "5-tutoriais-passo-a-passo", "sub": [{"t": "Abrir o painel de acessibilidade pela primeira vez", "id": "abrir-o-painel-de-acessibilidade-pela-primeira-vez"}, {"t": "Ativar um perfil pronto (exemplo: Dislexia)", "id": "ativar-um-perfil-pronto-exemplo-dislexia"}, {"t": "Aumentar o tamanho do texto", "id": "aumentar-o-tamanho-do-texto"}, {"t": "Buscar uma opção específica", "id": "buscar-uma-opcao-especifica"}, {"t": "Usar o Leitor de Tela", "id": "usar-o-leitor-de-tela"}, {"t": "Usar o Teclado Virtual", "id": "usar-o-teclado-virtual"}, {"t": "Usar a Navegação por Face", "id": "usar-a-navegacao-por-face"}, {"t": "Restaurar todas as configurações padrão", "id": "restaurar-todas-as-configuracoes-padrao"}]}, {"t": "6. Personalização", "id": "6-personalizacao", "sub": []}, {"t": "7. Uso com tecnologias assistivas", "id": "7-uso-com-tecnologias-assistivas", "sub": [{"t": "Teclado", "id": "teclado"}, {"t": "Leitores de tela", "id": "leitores-de-tela"}, {"t": "Ampliação", "id": "ampliacao"}, {"t": "Contraste", "id": "contraste-2"}, {"t": "Navegação", "id": "navegacao"}, {"t": "Comunicação", "id": "comunicacao"}]}, {"t": "8. Situações comuns (\"Como faço para...\")", "id": "8-situacoes-comuns-como-faco-para", "sub": [{"t": "Como ativar um recurso?", "id": "como-ativar-um-recurso"}, {"t": "Como desativar um recurso?", "id": "como-desativar-um-recurso"}, {"t": "Como alterar uma configuração já ativa?", "id": "como-alterar-uma-configuracao-ja-ativa"}, {"t": "Como restaurar a configuração original?", "id": "como-restaurar-a-configuracao-original"}, {"t": "Onde encontro uma opção específica?", "id": "onde-encontro-uma-opcao-especifica"}, {"t": "Como sei quantas opções estão ativas?", "id": "como-sei-quantas-opcoes-estao-ativas"}, {"t": "Minhas escolhas continuam se eu sair e voltar?", "id": "minhas-escolhas-continuam-se-eu-sair-e-voltar"}, {"t": "Como uso o plugin sem o mouse?", "id": "como-uso-o-plugin-sem-o-mouse"}]}, {"t": "9. Problemas e soluções", "id": "9-problemas-e-solucoes", "sub": []}, {"t": "10. Perguntas frequentes", "id": "10-perguntas-frequentes", "sub": [{"t": "Preciso instalar alguma coisa para usar o plugin?", "id": "preciso-instalar-alguma-coisa-para-usar-o-plugin"}, {"t": "O plugin funciona no celular?", "id": "o-plugin-funciona-no-celular"}, {"t": "O plugin funciona sem internet?", "id": "o-plugin-funciona-sem-internet"}, {"t": "O plugin substitui o leitor de tela do meu computador ou celular?", "id": "o-plugin-substitui-o-leitor-de-tela-do-meu-computador-ou-cel"}, {"t": "Outras pessoas veem que eu ativei um perfil ou opção?", "id": "outras-pessoas-veem-que-eu-ativei-um-perfil-ou-opcao"}, {"t": "Minhas escolhas ficam salvas?", "id": "minhas-escolhas-ficam-salvas"}, {"t": "O plugin coleta dados sobre como eu o uso?", "id": "o-plugin-coleta-dados-sobre-como-eu-o-uso"}, {"t": "O plugin funciona em qualquer navegador?", "id": "o-plugin-funciona-em-qualquer-navegador"}, {"t": "O plugin tem versão em Libras?", "id": "o-plugin-tem-versao-em-libras"}]}, {"t": "11. Glossário", "id": "11-glossario", "sub": []}, {"t": "12. Suporte", "id": "12-suporte", "sub": []}];window.PAGE_EN={"skip": "Skip to content", "navmain": "Main", "n1": "Profiles", "n2": "Try it", "n4": "Administrators", "n5": "Documentation", "n6": "Download", "f1": "Home", "f2": "Download", "f3": "Documentation", "f4": "User manual", "f5": "Administrator guide", "f6": "Technical documentation", "f7": "Project", "f8": "GPL v3 license", "f9": "Made with ❤️ by UFPel.", "ptonly": "<b>Available in Portuguese only.</b> This document is published in Brazilian Portuguese, the language it was written in. The PDF is also in Portuguese.", "pdf": "Download PDF", "chap": "Chapters", "filt": "Filter chapters", "onpage": "In this chapter", "docs": "Documentation", "ver": "Version history", "src": "Source", "prev": "Previous", "next": "Next", "top": "Back to top", "sideb": "Chapters", "other": "Other documents", "_title": "User manual · A11Y for Moodle"};</script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/fab.js"></script>
+<script src="search-index.js"></script>
+<script src="docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Documentação técnica · A11Y for Moodle</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Lexend:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body class="doc doc--tecnica">
+<a class="skip" href="#conteudo" data-i18n="skip">Pular para o conteúdo</a>
+<header class="nav">
+  <nav class="nav__in" aria-label="Principal" data-i18n-attr="aria-label:navmain">
+    <a class="brand" href="../"><span class="brand__mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="4.5" r="2" fill="currentColor" stroke="none"/><path d="M5 8.5c2.3.7 4.6 1 7 1s4.7-.3 7-1M12 9.5v4.5m0 0-3 6.5m3-6.5 3 6.5"/></svg></span><span class="brand__text">A11Y for Moodle</span></a>
+    <ul class="nav__links">
+      <li class="opt"><a href="../#perfis" data-i18n="n1">Perfis</a></li>
+      <li class="opt"><a href="../#experimente" data-i18n="n2">Experimente</a></li>
+      <li class="opt"><a href="../#admin" data-i18n="n4">Administradores</a></li>
+      <li><a href="index.html" aria-current="page" data-i18n="n5">Documentação</a></li>
+    </ul>
+    <span data-lang-switch></span>
+    <a class="btn" href="../#download" data-i18n="n6">Baixar</a>
+  </nav>
+</header>
+<div class="dwrap layout">
+  <aside class="side" aria-label="Capítulos" data-i18n-attr="aria-label:sideb" data-open="true">
+    <button class="side-toggle" type="button" aria-expanded="true" aria-controls="side-body"><span data-i18n="chap">Capítulos</span> <span aria-hidden="true">▾</span></button>
+    <div class="side__body" id="side-body">
+      <div class="search" role="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <label class="visually-hidden" for="sq" data-i18n="filt">Filtrar capítulos</label>
+        <input id="sq" type="search" placeholder="Filtrar capítulos" data-i18n-attr="placeholder:filt" autocomplete="off">
+      </div>
+      <h2>Documentação técnica</h2>
+      <ol class="chapters"><li><a href="#1-visao-geral-tecnica">1. Visão geral técnica</a></li><li><a href="#2-desenvolvimento-e-documentacao-de-api">2. Desenvolvimento e documentação de API</a></li><li><a href="#3-templates-mustache">3. Templates Mustache</a></li><li><a href="#4-como-contribuir">4. Como contribuir</a></li><li><a href="#5-manutencao-e-compatibilidade">5. Manutenção e compatibilidade</a></li><li><a href="#6-politica-de-seguranca">6. Política de segurança</a></li><li><a href="#7-licenca-e-atribuicoes">7. Licença e atribuições</a></li></ol>
+      <h2 data-i18n="other">Outros documentos</h2>
+      <div class="tracksel"><a href="manual.html">Manual do usuário</a><a href="admin.html">Guia do administrador</a></div>
+    </div>
+  </aside>
+  <main class="article" id="conteudo">
+    <nav class="crumbs" aria-label="Você está em"><a href="index.html" data-i18n="docs">Documentação</a><span aria-hidden="true">›</span><span>Documentação técnica</span></nav>
+    <header class="doc-cover">
+      <p class="eyebrow">Documentação técnica</p>
+      <h1>Para quem desenvolve e mantém o plugin</h1>
+      <p class="intro">Arquitetura, opções e perfis, API, templates, testes, contribuição, manutenção e segurança do local_a11y, reunidos a partir dos arquivos de documentação do repositório.</p>
+      <dl class="doc-meta"><div><dt>Identificador técnico</dt><dd>local_a11y · versão 1.0.0 · GPL v3 ou posterior</dd></div><div><dt>Arquivos de origem</dt><dd>README.md, docs/README.md, docs/templates.md, CONTRIBUTING.md, MAINTENANCE.md, SECURITY.md</dd></div></dl>
+      <div class="tools">
+        <a class="pdf" href="pdf/Documentacao_Tecnica_A11y_for_Moodle.pdf" data-dl="pdf/Documentacao_Tecnica_A11y_for_Moodle.pdf" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span data-i18n="pdf">Baixar em PDF</span></a>
+        <span class="src"><span data-i18n="src">Fonte</span>: <a href="https://github.com/padilhars/a11y">README.md e docs/</a> · commit fd2398e · 2026-10-01</span>
+      </div>
+      <p class="ptonly" data-i18n="ptonly" hidden></p>
+      
+      
+    </header>
+    <div class="doc-body">
+<h2 id="1-visao-geral-tecnica">1. Visão geral técnica</h2><h3 id="requisitos">Requisitos</h3>
+<ul>
+<li>Moodle 5.2 (única versão com suporte confirmado - ver <code>version.php:$plugin-&gt;supported</code>; testar contra outras versões antes de assumir compatibilidade).</li>
+<li>PHP 8.3+ (o core do próprio Moodle 5.2 já exige essa versão mínima - ver <code>.github/workflows/ci.yml</code>).</li>
+<li>Sem dependências externas empacotadas para a instalação do plugin em si (as fontes Atkinson Hyperlegible, Lexend e OpenDyslexic, e o WASM do MediaPipe, são empacotados localmente - nada disso é baixado de CDN de terceiro). Duas exceções reais em tempo de execução, ambas já detalhadas na seção "Por que usar" acima: o modelo de rastreamento facial da Navegação por Face (buscado ao vivo, com verificação de integridade) e a API nativa de reconhecimento de fala usada por Comandos por Voz.</li>
+</ul>
+<h3 id="o-que-o-plugin-faz">O que o plugin faz</h3>
+<h4 id="botao-flutuante-painel">Botão flutuante + painel</h4>
+<ul>
+<li>Botão circular (ou quadrado) fixo, canto configurável, com contador de opções ativas.</li>
+<li>Painel com busca, seção de perfis de acessibilidade e categorias de opções — todas colapsáveis individualmente, para não virar uma lista extensa de rolagem.</li>
+<li>Em telas de desktop, o formato do painel é configurável (popover ancorado no botão, gaveta lateral ou modal centralizado); em celulares e tablets pequenos, o painel sempre abre no estilo gaveta, independente dessa configuração — não há espaço de tela suficiente para um popover ou modal flutuante funcionar bem.</li>
+<li>11 das opções com mais nuances (Leitura Biônica, Ocultar Imagens, Pausar Animações, Silenciar Mídia, Guia de Leitura, Máscara de Leitura, Lupa, Leitor de Tela, Teclado Virtual, Comandos por Voz, Navegação por Face) têm um botão de ajuda "?" com instruções de uso, além da descrição curta que já acompanha cada opção — 12 quando a integração com o VLibras está ativa, que soma Libras à lista.</li>
+<li><strong>Atalho global <code>Alt + A</code></strong> abre/fecha o painel de qualquer página.</li>
+<li>Focus trap (WCAG 2.2), <code>Esc</code> fecha e devolve o foco ao botão, <code>aria-live</code> no contador de opções ativas.</li>
+</ul>
+<h4 id="as-30-opcoes-5-categorias">As 30 opções (5 categorias)</h4>
+<div aria-label="Tabela: Categoria" class="tbl" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Categoria</th>
+<th>Opções</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Texto e Tipografia</td>
+<td>Fonte Legível, Fonte para Dislexia, Destacar Títulos/Links/Botões, Tamanho do Texto, Altura da Linha, Espaçamento do Texto, Espaçamento entre Palavras, Alinhamento do Texto, Leitura Biônica</td>
+</tr>
+<tr>
+<td>Cores e Contraste</td>
+<td>Contraste (4 níveis), Inverter Cores, Mudar Cores (filtros de daltonismo via SVG), Saturação, Filtro de Luz Azul</td>
+</tr>
+<tr>
+<td>Mídia e Animação</td>
+<td>Ocultar Imagens, Pausar Animações, Silenciar Mídia, Dicas de Ferramentas</td>
+</tr>
+<tr>
+<td>Foco e Navegação</td>
+<td>Guia de Leitura, Máscara de Leitura, Lupa, Cursor (3 níveis), Modo Foco (4 níveis), Ampliar Conteúdo (4 níveis)</td>
+</tr>
+<tr>
+<td>Recursos Avançados</td>
+<td>Leitor de Tela (texto-para-fala), Teclado Virtual, Comandos por Voz, Navegação por Face</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="os-9-perfis">Os 9 perfis</h4>
+<p>Baixa Visão, Daltonismo, Dislexia, TDAH/Foco, Idoso/Sênior, Epilepsia, Deficiência Motora, Cognitivo e Modo Noturno — cada um aplica um conjunto de opções otimizado com um clique (e reseta o restante).</p>
+<h4 id="persistencia">Persistência</h4>
+<ul>
+<li><strong>Usuários logados</strong>: preferência do usuário (<code>local_a11y_settings</code>), sincronizada em todas as páginas e dispositivos.</li>
+<li><strong>Visitantes</strong>: <code>localStorage</code> do navegador, migrado automaticamente para a preferência do usuário no primeiro login.</li>
+<li>Aplicação <strong>sem FOUC</strong>: um script inline no topo do <code>&lt;body&gt;</code> aplica as classes de acessibilidade antes da primeira pintura da página.</li>
+</ul>
+<h3 id="privacidade">Privacidade</h3>
+<p>O plugin implementa a Privacy API do Moodle (<code>classes/privacy/provider.php</code>): a única informação pessoal <em>armazenada por este plugin</em> é a preferência <code>local_a11y_settings</code> do próprio usuário (suas opções de acessibilidade escolhidas). Nada é compartilhado com terceiros <em>pelo código deste plugin</em>. Visitantes usam apenas <code>localStorage</code> do navegador, fora do alcance do Moodle. Ver também "Comandos por Voz e reconhecimento de fala" logo abaixo — a única exceção conhecida, e é comportamento do navegador do usuário, não deste plugin.</p>
+<h4 id="comandos-por-voz-e-reconhecimento-de-fala">Comandos por Voz e reconhecimento de fala</h4>
+<p>A opção "Comandos por Voz" usa a API nativa <code>SpeechRecognition</code>/<code>webkitSpeechRecognition</code> do navegador — este plugin nunca implementa reconhecimento de fala próprio nem envia áudio a lugar nenhum por conta própria. Em navegadores baseados em Chromium (Chrome, Edge, etc.), essa API do próprio navegador envia o áudio captado pelo microfone a um serviço de reconhecimento de fala remoto operado pelo fabricante do navegador (documentado pela <a href="https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition">MDN</a>) para transcrevê-lo em texto — esse envio é feito pelo navegador, fora do alcance de qualquer código deste plugin ou deste site. Por isso:</p>
+<ul>
+<li>A primeira vez que a opção é ativada em cada navegador, um aviso é mostrado (<code>vc_privacynotice</code>) informando isso, antes de qualquer captura de áudio começar; se recusado, a opção não é ativada.</li>
+<li><code>classes/privacy/provider.php</code> declara essa exceção via <code>add_external_location_link()</code>, a forma correta da Privacy API do Moodle para "uma funcionalidade opcional faz o navegador conversar com um terceiro", ainda que o próprio plugin não seja parte dessa troca.</li>
+<li>Em navegadores sem esse comportamento (ex.: Firefox, dependendo da configuração), a opção simplesmente não fica disponível (<code>vc_notsupported</code>) — não há um modo alternativo de processamento local implementado por este plugin.</li>
+</ul>
+<h4 id="estatisticas-de-uso-opcional-desligada-por-padrao">Estatísticas de uso (opcional, desligada por padrão)</h4>
+<p>O plugin pode manter, opcionalmente, uma única tabela própria (<code>local_a11y_stats</code>) com contadores agregados de uso — quantas vezes cada opção de acessibilidade foi ativada, no site inteiro. Por linha, só existem três informações: o identificador da opção, um contador total e a data da última atualização. <strong>Nenhum identificador de usuário, sessão, curso ou IP é armazenado</strong>, e não há registro de data/hora por evento individual — não é possível reconstruir o comportamento de nenhuma pessoa específica a partir desses dados. Desativada por padrão; ative em <strong>Administração do site → Plugins → Plugins locais → Acessibilidade (A11y) → Estatísticas</strong>, seção "Coletar estatísticas de uso". O relatório fica em <strong>Administração do site → Plugins → Plugins locais → Acessibilidade (A11y) → Estatísticas de uso</strong>, protegido pela capability <code>local/a11y:viewstats</code> (concedida por padrão só ao arquétipo <code>manager</code>). Ver DECISIONS.md D47 para a justificativa completa da abordagem agregada.</p>
+
+<h2 id="2-desenvolvimento-e-documentacao-de-api">2. Desenvolvimento e documentação de API</h2><h3 id="desenvolvimento">Desenvolvimento</h3>
+<p>Ver <a href="https://github.com/padilhars/a11y/blob/master/docs/README.md"><code>docs/</code></a> para instruções de como gerar localmente a documentação de API completa (phpDocumentor para PHP, JSDoc para os módulos AMD e um style guide KSS para <code>styles.css</code> — nenhuma delas fica versionada no repositório, são geradas sob demanda) e <code>CHANGELOG.md</code> para o histórico de versões.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="co"># Recompilar AMD após editar amd/src/*.js</span></span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a><span class="ex">npx</span> grunt amd <span class="at">--root</span><span class="op">=</span>local/a11y</span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a><span class="co"># Testes PHPUnit</span></span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a><span class="ex">vendor/bin/phpunit</span> <span class="at">--configuration</span> local/a11y/phpunit.xml</span></code></pre></div>
+<p>Documentação gerada a partir do código-fonte e dos comentários (PHPDoc, JSDoc, KSS e comentários Mustache) do plugin de acessibilidade <strong>local_a11y</strong> para Moodle.</p>
+<ul>
+<li><strong>Autor:</strong> Rodrigo Padilha Silveira <a href="mailto:padilhars@gmail.com">padilhars@gmail.com</a></li>
+<li><strong>Copyright:</strong> Universidade Federal de Pelotas - UFPel</li>
+<li><strong>Package:</strong> Moodle / Plugin a11y</li>
+<li><strong>Versão:</strong> 1.0.0</li>
+</ul>
+<h3 id="indice">Índice</h3>
+<p>A API PHP, API JavaScript e o Style Guide CSS abaixo são <strong>gerados sob demanda</strong> (comandos em "Como regenerar") e não ficam versionados neste repositório — por isso não há um link clicável para eles aqui; rode o comando correspondente localmente e abra o <code>index.html</code> gerado.</p>
+<div aria-label="Tabela: Documentação" class="tbl" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Documentação</th>
+<th>Gerador</th>
+<th>Cobre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API PHP (gerar localmente em <code>docs/api-php/</code>)</td>
+<td>phpDocumentor 3</td>
+<td><code>classes/</code>, <code>lib.php</code>, <code>settings.php</code>, <code>version.php</code>, <code>db/</code>, <code>lang/</code> — todas as classes, métodos, <code>@param</code>/<code>@return</code>/<code>@throws</code></td>
+</tr>
+<tr>
+<td>API JavaScript (gerar localmente em <code>docs/api-js/</code>)</td>
+<td>JSDoc 4</td>
+<td><code>amd/src/*.js</code> — todos os módulos AMD e suas funções (exportadas e internas)</td>
+</tr>
+<tr>
+<td>Style Guide CSS (gerar localmente em <code>docs/styleguide/</code>)</td>
+<td>KSS-node</td>
+<td><code>styles.css</code> — 33 seções: design tokens, componentes do FAB/painel, efeitos de página (<code>body.a11y-*</code>), contraste e filtros de cor, lupa</td>
+</tr>
+<tr>
+<td><a href="https://github.com/padilhars/a11y/blob/master/templates.md">Templates Mustache</a></td>
+<td>Referência manual</td>
+<td><code>templates/*.mustache</code> — as 5 templates e suas variáveis de contexto</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="como-regenerar">Como regenerar</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="ex">php</span> phpDocumentor.phar <span class="at">-d</span> classes <span class="at">-d</span> lib.php <span class="at">-d</span> settings.php <span class="at">-d</span> version.php <span class="at">-d</span> db <span class="at">-d</span> lang <span class="dt">\</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a>    <span class="at">-t</span> docs/api-php <span class="at">--title</span> <span class="st">"local_a11y - API PHP"</span> <span class="at">--defaultpackagename</span> <span class="st">"Plugin a11y"</span> <span class="at">--ignore</span> <span class="st">"*/tests/*"</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a><span class="ex">npx</span> jsdoc amd/src <span class="at">-d</span> docs/api-js <span class="at">--package</span> <span class="op">&lt;</span>package.json com name <span class="st">"local_a11y"</span><span class="op">&gt;</span></span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a><span class="ex">npx</span> kss <span class="at">--source</span> . <span class="at">--destination</span> docs/styleguide <span class="at">--css</span> ../styles.css <span class="at">--title</span> <span class="st">"local_a11y - Style Guide"</span></span></code></pre></div>
+<p>Nenhuma dessas ferramentas faz parte da execução normal do plugin no Moodle — são só para gerar esta documentação sob demanda; não são dependências de runtime.</p>
+
+<h2 id="3-templates-mustache">3. Templates Mustache</h2><p>Compilado a partir dos comentários <code>{{! ... }}</code> no topo de cada arquivo em <code>templates/</code>. Não existe um gerador de documentação padrão para Mustache (ao contrário de PHPDoc/JSDoc/KSS), então esta referência é montada manualmente a partir do que já está documentado no código-fonte.</p>
+<ul>
+<li><strong>Autor:</strong> Rodrigo Padilha Silveira <a href="mailto:padilhars@gmail.com">padilhars@gmail.com</a></li>
+<li><strong>Copyright:</strong> Universidade Federal de Pelotas - UFPel</li>
+<li><strong>Versão:</strong> 1.0.0</li>
+</ul>
+<hr/>
+<h3 id="local-a11y-fab"><code>local_a11y/fab</code></h3>
+<p><strong>Arquivo:</strong> <code>templates/fab.mustache</code></p>
+<p>O botão flutuante de acessibilidade (FAB).</p>
+<p><strong>Variáveis de contexto:</strong></p>
+<div aria-label="Tabela: Variável" class="tbl" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>positionclass</code></td>
+<td>Classe CSS modificadora para a posição do FAB</td>
+</tr>
+<tr>
+<td><code>shapeclass</code></td>
+<td>Classe CSS modificadora para formato círculo/quadrado</td>
+</tr>
+<tr>
+<td><code>iconclass</code></td>
+<td>Classe CSS extra opcional para o wrapper do ícone (string vazia se nenhuma)</td>
+</tr>
+<tr>
+<td><code>iconsvg</code></td>
+<td>Markup <code>&lt;svg&gt;</code> inline cru</td>
+</tr>
+<tr>
+<td><code>ariaopenlabel</code></td>
+<td>Rótulo acessível quando fechado</td>
+</tr>
+<tr>
+<td><code>accent</code></td>
+<td>Cor de acento em hex</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Exemplo de contexto (JSON):</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a aria-hidden="true" href="#cb1-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a aria-hidden="true" href="#cb1-2" tabindex="-1"></a>    <span class="dt">"positionclass"</span><span class="fu">:</span> <span class="st">"local-a11y-fab--bottom-right"</span><span class="fu">,</span></span>
+<span id="cb1-3"><a aria-hidden="true" href="#cb1-3" tabindex="-1"></a>    <span class="dt">"shapeclass"</span><span class="fu">:</span> <span class="st">"local-a11y-fab--circle"</span><span class="fu">,</span></span>
+<span id="cb1-4"><a aria-hidden="true" href="#cb1-4" tabindex="-1"></a>    <span class="dt">"iconclass"</span><span class="fu">:</span> <span class="st">""</span><span class="fu">,</span></span>
+<span id="cb1-5"><a aria-hidden="true" href="#cb1-5" tabindex="-1"></a>    <span class="dt">"iconsvg"</span><span class="fu">:</span> <span class="st">"&lt;svg&gt;&lt;/svg&gt;"</span><span class="fu">,</span></span>
+<span id="cb1-6"><a aria-hidden="true" href="#cb1-6" tabindex="-1"></a>    <span class="dt">"ariaopenlabel"</span><span class="fu">:</span> <span class="st">"Open accessibility panel"</span><span class="fu">,</span></span>
+<span id="cb1-7"><a aria-hidden="true" href="#cb1-7" tabindex="-1"></a>    <span class="dt">"accent"</span><span class="fu">:</span> <span class="st">"#3b82f6"</span></span>
+<span id="cb1-8"><a aria-hidden="true" href="#cb1-8" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr/>
+<h3 id="local-a11y-option-stepper"><code>local_a11y/option_stepper</code></h3>
+<p><strong>Arquivo:</strong> <code>templates/option_stepper.mustache</code></p>
+<p>Uma linha de opção de acessibilidade multi-nível (controle stepper cíclico).</p>
+<p><strong>Variáveis de contexto:</strong></p>
+<div aria-label="Tabela: Variável" class="tbl" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>Id da opção, ex. <code>"textSize"</code></td>
+</tr>
+<tr>
+<td><code>iconsvg</code></td>
+<td>Markup <code>&lt;svg&gt;</code> inline cru</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>Texto do rótulo da opção</td>
+</tr>
+<tr>
+<td><code>desc</code></td>
+<td>Texto de descrição da opção ou <code>null</code></td>
+</tr>
+<tr>
+<td><code>max</code></td>
+<td>Índice do nível mais alto</td>
+</tr>
+<tr>
+<td><code>levelprefix</code></td>
+<td>Prefixo de string de idioma usado pelo JS para re-rotular ao ciclar</td>
+</tr>
+<tr>
+<td><code>currentlabel</code></td>
+<td>Rótulo de texto do nível atual</td>
+</tr>
+<tr>
+<td><code>levels</code></td>
+<td>Array de <code>{index, active}</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Exemplo de contexto (JSON):</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a aria-hidden="true" href="#cb2-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="#cb2-2" tabindex="-1"></a>    <span class="dt">"id"</span><span class="fu">:</span> <span class="st">"textSize"</span><span class="fu">,</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="#cb2-3" tabindex="-1"></a>    <span class="dt">"iconsvg"</span><span class="fu">:</span> <span class="st">"&lt;svg&gt;&lt;/svg&gt;"</span><span class="fu">,</span></span>
+<span id="cb2-4"><a aria-hidden="true" href="#cb2-4" tabindex="-1"></a>    <span class="dt">"label"</span><span class="fu">:</span> <span class="st">"Text Size"</span><span class="fu">,</span></span>
+<span id="cb2-5"><a aria-hidden="true" href="#cb2-5" tabindex="-1"></a>    <span class="dt">"desc"</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb2-6"><a aria-hidden="true" href="#cb2-6" tabindex="-1"></a>    <span class="dt">"max"</span><span class="fu">:</span> <span class="dv">4</span><span class="fu">,</span></span>
+<span id="cb2-7"><a aria-hidden="true" href="#cb2-7" tabindex="-1"></a>    <span class="dt">"levelprefix"</span><span class="fu">:</span> <span class="st">"level_"</span><span class="fu">,</span></span>
+<span id="cb2-8"><a aria-hidden="true" href="#cb2-8" tabindex="-1"></a>    <span class="dt">"currentlabel"</span><span class="fu">:</span> <span class="st">"Default"</span><span class="fu">,</span></span>
+<span id="cb2-9"><a aria-hidden="true" href="#cb2-9" tabindex="-1"></a>    <span class="dt">"levels"</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb2-10"><a aria-hidden="true" href="#cb2-10" tabindex="-1"></a>        <span class="fu">{</span><span class="dt">"index"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span> <span class="dt">"active"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb2-11"><a aria-hidden="true" href="#cb2-11" tabindex="-1"></a>        <span class="fu">{</span><span class="dt">"index"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span> <span class="dt">"active"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">}</span></span>
+<span id="cb2-12"><a aria-hidden="true" href="#cb2-12" tabindex="-1"></a>    <span class="ot">]</span></span>
+<span id="cb2-13"><a aria-hidden="true" href="#cb2-13" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr/>
+<h3 id="local-a11y-option-toggle"><code>local_a11y/option_toggle</code></h3>
+<p><strong>Arquivo:</strong> <code>templates/option_toggle.mustache</code></p>
+<p>Uma linha de opção de acessibilidade booleana (controle switch).</p>
+<p><strong>Variáveis de contexto:</strong></p>
+<div aria-label="Tabela: Variável" class="tbl" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>Id da opção, ex. <code>"readableFont"</code></td>
+</tr>
+<tr>
+<td><code>iconsvg</code></td>
+<td>Markup <code>&lt;svg&gt;</code> inline cru</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>Texto do rótulo da opção</td>
+</tr>
+<tr>
+<td><code>desc</code></td>
+<td>Texto de descrição da opção ou <code>null</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Exemplo de contexto (JSON):</strong></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a aria-hidden="true" href="#cb3-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="#cb3-2" tabindex="-1"></a>    <span class="dt">"id"</span><span class="fu">:</span> <span class="st">"readableFont"</span><span class="fu">,</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="#cb3-3" tabindex="-1"></a>    <span class="dt">"iconsvg"</span><span class="fu">:</span> <span class="st">"&lt;svg&gt;&lt;/svg&gt;"</span><span class="fu">,</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="#cb3-4" tabindex="-1"></a>    <span class="dt">"label"</span><span class="fu">:</span> <span class="st">"Readable Font"</span><span class="fu">,</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="#cb3-5" tabindex="-1"></a>    <span class="dt">"desc"</span><span class="fu">:</span> <span class="st">"Applies Atkinson Hyperlegible"</span></span>
+<span id="cb3-6"><a aria-hidden="true" href="#cb3-6" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Nota de acessibilidade:</strong> não há <code>role</code>/<code>tabindex</code> no <code>&lt;div&gt;</code> externo — o <code>&lt;button&gt;</code> aninhado é o único controle focável (WCAG/axe "nested-interactive" proíbe um <code>div[role=button]</code> envolvendo um <code>&lt;button&gt;</code> real). Clicar em qualquer lugar da linha ainda funciona via delegação de evento em <code>amd/src/panel.js</code>.</p>
+<hr/>
+<h3 id="local-a11y-panel"><code>local_a11y/panel</code></h3>
+<p><strong>Arquivo:</strong> <code>templates/panel.mustache</code></p>
+<p>O painel de acessibilidade: cabeçalho, busca, seção de perfis predefinidos colapsável, categorias de opções colapsáveis e rodapé. Renderizado oculto (fechado); <code>amd/src/panel.js</code> cuida de abrir/fechar, filtro de busca, colapso de seção/categoria e aplicação das configurações salvas do usuário.</p>
+<p><strong>Variáveis de contexto:</strong> ver <code>classes/output/panel.php</code> (contexto complexo, gerado programaticamente — inclui título, subtítulo, ícones, lista de perfis, lista de categorias/opções, classes de formato/posição/densidade e cor de acento).</p>
+<hr/>
+<h3 id="local-a11y-profile-card"><code>local_a11y/profile_card</code></h3>
+<p><strong>Arquivo:</strong> <code>templates/profile_card.mustache</code></p>
+<p>Um card de perfil de acessibilidade predefinido.</p>
+<p><strong>Variáveis de contexto:</strong></p>
+<div aria-label="Tabela: Variável" class="tbl" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Variável</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>Id do perfil, ex. <code>"lowVision"</code></td>
+</tr>
+<tr>
+<td><code>iconsvg</code></td>
+<td>Markup <code>&lt;svg&gt;</code> inline cru</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>Texto do rótulo do perfil</td>
+</tr>
+<tr>
+<td><code>desc</code></td>
+<td>Texto de descrição do perfil (usado como atributo <code>title</code>)</td>
+</tr>
+<tr>
+<td><code>bg</code>, <code>text</code>, <code>iconcolor</code>, <code>border</code></td>
+<td>Cores hex do "tom" do perfil</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Exemplo de contexto (JSON):</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a aria-hidden="true" href="#cb4-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="#cb4-2" tabindex="-1"></a>    <span class="dt">"id"</span><span class="fu">:</span> <span class="st">"lowVision"</span><span class="fu">,</span></span>
+<span id="cb4-3"><a aria-hidden="true" href="#cb4-3" tabindex="-1"></a>    <span class="dt">"iconsvg"</span><span class="fu">:</span> <span class="st">"&lt;svg&gt;&lt;/svg&gt;"</span><span class="fu">,</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="#cb4-4" tabindex="-1"></a>    <span class="dt">"label"</span><span class="fu">:</span> <span class="st">"Low Vision"</span><span class="fu">,</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="#cb4-5" tabindex="-1"></a>    <span class="dt">"desc"</span><span class="fu">:</span> <span class="st">"Larger text, high contrast, big cursor"</span><span class="fu">,</span></span>
+<span id="cb4-6"><a aria-hidden="true" href="#cb4-6" tabindex="-1"></a>    <span class="dt">"bg"</span><span class="fu">:</span> <span class="st">"#eff6ff"</span><span class="fu">,</span></span>
+<span id="cb4-7"><a aria-hidden="true" href="#cb4-7" tabindex="-1"></a>    <span class="dt">"text"</span><span class="fu">:</span> <span class="st">"#1d4ed8"</span><span class="fu">,</span></span>
+<span id="cb4-8"><a aria-hidden="true" href="#cb4-8" tabindex="-1"></a>    <span class="dt">"iconcolor"</span><span class="fu">:</span> <span class="st">"#3b82f6"</span><span class="fu">,</span></span>
+<span id="cb4-9"><a aria-hidden="true" href="#cb4-9" tabindex="-1"></a>    <span class="dt">"border"</span><span class="fu">:</span> <span class="st">"#dbeafe"</span></span>
+<span id="cb4-10"><a aria-hidden="true" href="#cb4-10" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+
+<h2 id="4-como-contribuir">4. Como contribuir</h2><h3 id="fluxo-de-trabalho">Fluxo de trabalho</h3>
+<p>O histórico atual deste projeto é majoritariamente commits diretos na branch <code>master</code>, sem pull request. Para qualquer contribuição externa, o fluxo esperado é:</p>
+<ol type="1">
+<li>Abra uma issue descrevendo o problema/proposta antes de escrever código, exceto para correções triviais.</li>
+<li>Crie um branch a partir de <code>master</code> (<code>feat/...</code>, <code>fix/...</code>, <code>docs/...</code>).</li>
+<li>Abra um Pull Request para <code>master</code>. O CI (<code>.github/workflows/ci.yml</code>) precisa passar antes do merge.</li>
+<li>Pelo menos uma pessoa diferente do autor deve revisar o PR antes do merge, sempre que houver uma segunda pessoa disponível para revisar.</li>
+</ol>
+<h3 id="estilo-de-codigo-e-commits">Estilo de código e commits</h3>
+<ul>
+<li>PHP segue o padrão <code>moodle-cs</code> (<code>moodle-plugin-ci codechecker</code>); JS/CSS seguem o <code>grunt</code> padrão do Moodle (<code>eslint</code>/<code>stylelint</code>, já configurados em <code>.eslintrc</code>/<code>.stylelintrc</code>).</li>
+<li>Mensagens de commit seguem <a href="https://www.conventionalcommits.org/">Conventional Commits</a> (<code>feat(local_a11y): ...</code>, <code>fix(local_a11y): ...</code>, <code>docs(local_a11y): ...</code> etc.), já a prática predominante no histórico deste repositório.</li>
+<li>Toda mudança de comportamento (não só refatoração) deve ter uma entrada correspondente em <code>CHANGELOG.md</code>, na seção <code>[Unreleased]</code>.</li>
+</ul>
+<h3 id="testes">Testes</h3>
+<p>Antes de abrir um PR, rode localmente o que for aplicável à mudança:</p>
+<ul>
+<li><code>moodle-plugin-ci phplint</code>, <code>codechecker</code>, <code>phpmd</code>, <code>phpcpd</code>, <code>validate</code>, <code>savepoints</code>, <code>mustache</code> para mudanças em PHP/templates.</li>
+<li><code>moodle-plugin-ci grunt</code> para mudanças em JS/CSS (também gera os artefatos <code>amd/build/*.min.js</code>
+<ul>
+<li>nunca edite esses arquivos <code>.min.js</code> diretamente).</li>
+</ul></li>
+<li><code>moodle-plugin-ci phpunit</code> e <code>moodle-plugin-ci behat</code> para mudanças que afetem comportamento em tempo de execução.</li>
+</ul>
+<p>O CI roda essa mesma suíte automaticamente em cada push/PR contra uma matriz de Moodle 5.2 × PHP 8.3/8.4 × PostgreSQL/MariaDB (Moodle 5.0 e PHP 8.2 foram removidos da matriz depois que o próprio CI provou que o core do Moodle 5.2 já exige PHP &gt;=8.3 e que o core 5.0 nunca atinge a build mínima que este plugin requer - ver <code>.github/workflows/ci.yml</code>).</p>
+<h3 id="disciplina-de-versao-e-release">Disciplina de versão e release</h3>
+<p>Este projeto teve, na prática, um problema real de dessincronia: <code>$plugin-&gt;release</code> ficou travado em <code>0.1.0</code> por mais de 5 semanas enquanto dezenas de mudanças (incluindo novas opções de acessibilidade) se acumulavam sob <code>## [Unreleased]</code> no <code>CHANGELOG.md</code>, sem nunca virar uma seção de versão nova. Isso já causou pelo menos uma contagem de opções desatualizada em documentação (achado de uma auditoria técnica interna, não publicada).</p>
+<p>Para prevenir que isso se repita:</p>
+<ul>
+<li><strong>Não deixe <code>[Unreleased]</code> crescer indefinidamente.</strong> Ao final de qualquer lote de mudanças que represente um marco (nova opção de acessibilidade, correção de segurança, mudança de comportamento visível ao usuário final), avalie explicitamente se é hora de:
+<ol type="1">
+<li>Mover o conteúdo de <code>[Unreleased]</code> para uma nova seção <code>## [x.y.z] - AAAA-MM-DD</code>;</li>
+<li>Atualizar <code>$plugin-&gt;release</code> em <code>version.php</code> para o mesmo número;</li>
+<li>Criar uma tag git correspondente (<code>git tag vX.Y.Z</code>).</li>
+</ol></li>
+<li><strong>Qualquer número afirmado em texto solto (README, strings do painel) que dependa da contagem de opções deve ser conferido contra <code>classes/options.php</code> antes do commit</strong> - idealmente automatizado por um teste que compare a contagem real (<code>count(\local_a11y\options::all())</code> ou equivalente) contra o número hardcoded, falhando o CI se divergirem, em vez de depender de alguém lembrar de atualizar os dois lugares manualmente.</li>
+<li>A decisão de <em>quando</em> cortar cada versão (e se/quando publicar <code>1.0.0</code>) continua sendo uma decisão humana, não automática - ver <code>docs/PUBLISHING.md</code>.</li>
+</ul>
+<h3 id="seguranca">Segurança</h3>
+<p>Não abra uma issue pública para relatar uma vulnerabilidade - ver <code>SECURITY.md</code>.</p>
+
+<h2 id="5-manutencao-e-compatibilidade">5. Manutenção e compatibilidade</h2><p>Este documento existe porque uma auditoria de SDLC interna deste projeto (não publicada) identificou um risco real de continuidade: no histórico git deste repositório, <strong>100% dos commits estão sob um único autor</strong> (<code>padilhars@gmail.com</code>), apesar de o projeto creditar dois mantenedores em <code>README.md</code> e nos cabeçalhos <code>@author</code> do código. Este arquivo é um primeiro passo para reduzir o risco de "conhecimento que só existe na cabeça de uma pessoa".</p>
+<h3 id="mantenedores-creditados">Mantenedores creditados</h3>
+<p>Ver <code>README.md</code> e os cabeçalhos <code>@author</code> dos arquivos-fonte. Ambos servidores da mesma unidade de coordenação na UFPel.</p>
+<h3 id="o-que-este-repositorio-publico-nao-contem">O que este repositório público NÃO contém</h3>
+<p>Por convenção deste projeto (ver <code>.gitignore</code>), os seguintes arquivos existem apenas na máquina de quem desenvolve, nunca são commitados nem publicados:</p>
+<ul>
+<li><code>DECISIONS.md</code> - log de decisões técnicas tomadas ao longo do projeto, com a justificativa de cada uma. É a fonte de verdade para "por que o código é assim" quando isso não é óbvio pela leitura do próprio código.</li>
+<li><code>ENVIRONMENT.md</code> - notas do ambiente de desenvolvimento/produção específico onde este plugin roda hoje (caminhos, como subir a infraestrutura de teste). <strong>Contém informação sensível de ambiente e não deve, em nenhuma circunstância, ser publicado ou versionado.</strong></li>
+<li><code>CLAUDE.md</code>, <code>PLAN.md</code>, <code>PROGRESS.md</code> - instruções de trabalho e acompanhamento de progresso de sessões de desenvolvimento assistido.</li>
+</ul>
+<p><strong>Implicação prática para quem for assumir a manutenção</strong>: um clone limpo deste repositório público, por si só, não contém o histórico de decisões nem as notas de ambiente. Peça essas informações diretamente aos mantenedores atuais durante a transição, ou reconstrua o equivalente a partir de <code>CHANGELOG.md</code> (que registra o resultado de cada decisão, mesmo sem a justificativa completa) e da documentação pública em <code>docs/</code>.</p>
+<h3 id="como-reconstruir-o-ambiente-de-desenvolvimento-teste-visao-g">Como reconstruir o ambiente de desenvolvimento/teste (visão geral)</h3>
+<p>Detalhes específicos de infraestrutura são do ambiente onde o plugin roda hoje e não estão aqui - o objetivo desta seção é orientar o que perguntar/procurar, não substituir <code>ENVIRONMENT.md</code>.</p>
+<ul>
+<li><strong>Instalação do plugin</strong>: como qualquer plugin <code>local_*</code> do Moodle - em <code>local/a11y/</code> dentro de um site Moodle funcional na versão declarada em <code>version.php:$plugin-&gt;supported</code> (hoje, só 5.2 tem suporte confirmado - ver a seção de compatibilidade futura abaixo).</li>
+<li><strong>Build de JS/CSS</strong>: usa o pipeline Grunt/Babel padrão do Moodle core (não um <code>package.json</code> próprio deste plugin) - requer a versão de Node.js que o Moodle core especifica para a versão em uso (verificado nesta auditoria: Node 22.x funciona; Node 24.x, a versão mais recente disponível no momento desta nota, <strong>não</strong> funciona com o Grunt deste Moodle).</li>
+<li><strong>Ferramental de QA</strong>: <code>moodle-plugin-ci</code> (ver <code>.github/workflows/ci.yml</code> para a lista completa de comandos usados: phplint, codechecker, phpmd, phpcpd, validate, savepoints, mustache, grunt, phpunit, behat).</li>
+<li><strong>Testes <code>@javascript</code> (Behat)</strong>: exigem um WebDriver real (Selenium + Chrome/chromedriver na mesma versão major) apontando para uma instância Moodle dedicada a testes (<code>$CFG-&gt;behat_wwwroot</code>), com seu próprio <code>$CFG-&gt;dataroot</code> e banco de dados, separados da instância de produção.</li>
+</ul>
+<h3 id="compatibilidade-com-versoes-futuras-do-moodle">Compatibilidade com versões futuras do Moodle</h3>
+<p><code>version.php:$plugin-&gt;supported</code> hoje declara só <code>[502, 502]</code> (Moodle 5.2) - a única versão com suporte real, testado ao vivo (ver <code>DECISIONS.md</code> D2, D67). Isso <strong>não é uma garantia de que versões futuras vão quebrar</strong>, só o reflexo honesto de que nada além de 5.2 foi verificado.</p>
+<p>Plano declarado (o que existia antes desta nota era nenhum plano - isto substitui a ausência, não um processo antigo mais elaborado):</p>
+<ul>
+<li>Antes de declarar suporte a uma nova versão do Moodle (ex: 5.3), rodar a suíte completa (<code>.github/workflows/ci.yml</code> já cobre isso mecanicamente - basta adicionar a nova branch à matriz <code>moodle-branch</code> e observar se os 4 tipos de teste continuam passando) contra essa versão antes de mudar <code>version.php:$plugin-&gt;supported</code>.</li>
+<li>Só ampliar <code>$plugin-&gt;supported</code> depois desse teste real ter passado - nunca por assumir que "nada aqui usa API nova o suficiente para quebrar" (essa mesma suposição, feita sem teste, foi exatamente o que gerou o achado de incompatibilidade real com Moodle 5.0, corrigido em D67 - ver DECISIONS.md D66-D67).</li>
+<li><code>tests/version_readme_parity_test.php</code> falha automaticamente se <code>README.md</code> ficar dessincronizado do valor real de <code>$plugin-&gt;supported</code> depois dessa mudança.</li>
+</ul>
+<h3 id="resposta-a-incidente-em-producao-e-rollback">Resposta a incidente em produção e rollback</h3>
+<p>Não existe hoje um ambiente de homologação separado do de produção (achado de auditoria interna</p>
+<ul>
+<li>risco real, não resolvido por esta nota). Enquanto isso não muda, o procedimento mínimo para um incidente causado por uma mudança deste plugin é:</li>
+</ul>
+<ol type="1">
+<li><strong>Desativar o plugin sem remover código</strong>: <code>Administração do site → Plugins → Plugins locais → Acessibilidade (A11y) → Desativar</code> (ou, via CLI, ajustar a configuração <code>enabled</code> do plugin) - reversível instantaneamente, não exige tocar em arquivos.</li>
+<li><strong>Se a causa for uma mudança de código recente</strong>: reverter para o commit anterior no repositório git (<code>git revert</code> do commit problemático, não <code>git reset --hard</code> - preserva o histórico) e reimplantar o <code>local/a11y/</code> a partir dele. Como não há ambiente de homologação, esse passo já é, na prática, a primeira vez que a reversão roda contra um ambiente real - testar localmente contra uma cópia do banco antes, se o tempo permitir.</li>
+<li><strong>Se a causa for uma mudança de dados</strong> (uma opção de <code>db/upgrade.php</code> que rodou mal): não existe um "downgrade" automático no Moodle - reverter dados manualmente exige entender exatamente o que aquele bloco de upgrade mudou (ver <code>db/upgrade.php</code> e o savepoint correspondente em <code>DECISIONS.md</code>) antes de tentar desfazê-lo à mão.</li>
+<li><strong>Quem responde</strong>: não há hoje uma pessoa nomeada além dos mantenedores creditados (ver <code>README.md</code>/<code>SECURITY.md</code>) - qualquer incidente real depende de um deles estar disponível. Isto é uma lacuna real, não resolvida por este documento (ver bus factor, acima).</li>
+</ol>
+<h3 id="contato-para-duvidas-de-manutencao">Contato para dúvidas de manutenção</h3>
+<p>Ver <code>SECURITY.md</code> para o canal de contato dos mantenedores atuais.</p>
+
+<h2 id="6-politica-de-seguranca">6. Política de segurança</h2><h3 id="versoes-suportadas">Versões suportadas</h3>
+<p>A primeira release formal (<code>v1.0.0</code>) já foi publicada (ver <code>CHANGELOG.md</code> e a tag <code>v1.0.0</code> no repositório). Apenas o estado mais recente da branch <code>master</code> recebe correções de segurança; não há suporte a releases anteriores a <code>v1.0.0</code>.</p>
+<h3 id="como-reportar-uma-vulnerabilidade">Como reportar uma vulnerabilidade</h3>
+<p><strong>Não abra uma issue pública para relatar uma vulnerabilidade de segurança.</strong> Issues públicas no GitHub são visíveis a qualquer pessoa antes de existir uma correção.</p>
+<p>Em vez disso, envie um e-mail diretamente para:</p>
+<ul>
+<li><strong><a href="mailto:padilhars@gmail.com">padilhars@gmail.com</a></strong></li>
+</ul>
+<p>Inclua, na medida do possível:</p>
+<ul>
+<li>Uma descrição do problema e seu impacto potencial.</li>
+<li>Passos para reproduzir (versão do Moodle, versão do plugin, configuração relevante).</li>
+<li>Se souber, uma sugestão de correção.</li>
+</ul>
+<p>Você receberá uma confirmação de recebimento em até 5 dias úteis. Pedimos que o problema não seja divulgado publicamente até que uma correção esteja disponível.</p>
+<h3 id="escopo">Escopo</h3>
+<p>Esta política cobre apenas o código deste plugin (<code>local_a11y</code>). Vulnerabilidades no Moodle core ou em plugins de terceiros (ex.: <code>local_vlibras</code>) devem ser reportadas aos respectivos mantenedores.</p>
+
+<h2 id="7-licenca-e-atribuicoes">7. Licença e atribuições</h2><h3 id="licenca">Licença</h3>
+<p>GNU GPL v3 ou posterior — ver <code>LICENSE</code> (texto integral) nesta pasta. Bibliotecas/ assets de terceiros empacotados junto (fontes, ícones) estão listados em <code>thirdpartylibs.xml</code>, conforme exigido pelo Moodle Plugins Directory; ver também a seção abaixo.</p>
+<h4 id="atribuicao-de-terceiros">Atribuição de terceiros</h4>
+<p><code>pix/accessibility-un.svg</code> (uma das opções de ícone do botão flutuante — "Logo de acessibilidade da ONU") é uma cópia local de <a href="https://commons.wikimedia.org/wiki/File:Accessibility_logo.svg">"Accessibility logo (UN)"</a>, Wikimedia Commons — design original de <strong>United Nations, Graphic Design Unit</strong>, vetorização de <strong>Pablo Busatto</strong> — licenciado sob <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a> (Creative Commons Attribution-ShareAlike 4.0 International). A geometria (paths/circles) é idêntica ao arquivo original; o único ajuste foi substituir o bloco <code>&lt;style&gt;</code>/classes CSS do arquivo original por atributos de apresentação equivalentes aplicados diretamente nos elementos, para que o SVG possa ser inserido com segurança inline na página do Moodle (sem depender de nomes de classe CSS globais que poderiam colidir com outros elementos da página). Ver <code>classes/icons.php::un_accessibility_svg()</code>.</p>
+<p><code>fonts/atkinson-hyperlegible-*.woff2</code> (Atkinson Hyperlegible, Braille Institute of America), <code>fonts/lexend-variable.woff2</code> (Lexend, The Lexend Project Authors) e <code>fonts/opendyslexic-*.woff2</code> (OpenDyslexic, Abbie Gonzalez) são licenciadas sob a SIL Open Font License 1.1 — texto completo em <code>fonts/OFL-atkinson-hyperlegible.txt</code>, <code>fonts/OFL-lexend.txt</code> e <code>fonts/OFL-opendyslexic.txt</code>, respectivamente. "Fonte para Dislexia" deixou de aplicar só a Lexend e agora deixa escolher entre as duas (D75).</p>
+<p><code>pix/accessibility-default.svg</code> (ícone padrão do botão flutuante desde D60) é do conjunto de ícones <a href="https://github.com/ionic-team/ionicons">Ionicons</a> (Ionic), baixado via <a href="https://www.svgrepo.com/svg/327598/accessibility">svgrepo.com</a> — licenciado sob <strong>MIT</strong> (Copyright (c) 2015-present Ionic, <a href="http://ionic.io/;">http://ionic.io/;</a> texto completo em <code>thirdpartylibs.xml</code> e no <a href="https://github.com/ionic-team/ionicons/blob/main/LICENSE">repositório oficial</a>). O único ajuste feito na geometria original foi trocar <code>fill="#000000"</code> por <code>fill="currentColor"</code>, para o ícone tematizar como todos os outros do plugin. Ver <code>classes/icons.php::default_accessibility_svg()</code> e <code>DECISIONS.md</code> D61.</p>
+
+    </div>
+    <p class="totop"><a href="#conteudo" data-i18n="top">Voltar ao topo</a></p>
+  </main>
+  <nav class="toc" aria-label="Neste capítulo" data-i18n-attr="aria-label:onpage">
+    <h2 data-i18n="onpage">Neste capítulo</h2>
+    <ol id="toc-list"></ol>
+  </nav>
+</div>
+<footer class="foot">
+  <div class="foot__in">
+    <div><h2>A11Y for Moodle</h2><ul><li><a href="../" data-i18n="f1">Página inicial</a></li><li><a href="../#download" data-i18n="f2">Download</a></li></ul></div>
+    <div><h2 data-i18n="f3">Documentação</h2><ul><li><a href="manual.html" data-i18n="f4">Manual do usuário</a></li><li><a href="admin.html" data-i18n="f5">Guia do administrador</a></li><li><a href="tecnica.html" data-i18n="f6">Documentação técnica</a></li></ul></div>
+    <div><h2 data-i18n="f7">Projeto</h2><ul><li><a href="https://github.com/padilhars/a11y">GitHub</a></li><li><a href="https://www.gnu.org/licenses/gpl-3.0.html" data-i18n="f8">Licença GPL v3</a></li></ul></div>
+  </div>
+  <p class="foot__legal" data-i18n="f9">Desenvolvido com ❤️ pela UFPel.</p>
+</footer>
+<script>window.DOC_TOC=[{"t": "1. Visão geral técnica", "id": "1-visao-geral-tecnica", "sub": [{"t": "Requisitos", "id": "requisitos"}, {"t": "O que o plugin faz", "id": "o-que-o-plugin-faz"}, {"t": "Privacidade", "id": "privacidade"}]}, {"t": "2. Desenvolvimento e documentação de API", "id": "2-desenvolvimento-e-documentacao-de-api", "sub": [{"t": "Desenvolvimento", "id": "desenvolvimento"}, {"t": "Índice", "id": "indice"}, {"t": "Como regenerar", "id": "como-regenerar"}]}, {"t": "3. Templates Mustache", "id": "3-templates-mustache", "sub": [{"t": "local_a11y/fab", "id": "local-a11y-fab"}, {"t": "local_a11y/option_stepper", "id": "local-a11y-option-stepper"}, {"t": "local_a11y/option_toggle", "id": "local-a11y-option-toggle"}, {"t": "local_a11y/panel", "id": "local-a11y-panel"}, {"t": "local_a11y/profile_card", "id": "local-a11y-profile-card"}]}, {"t": "4. Como contribuir", "id": "4-como-contribuir", "sub": [{"t": "Fluxo de trabalho", "id": "fluxo-de-trabalho"}, {"t": "Estilo de código e commits", "id": "estilo-de-codigo-e-commits"}, {"t": "Testes", "id": "testes"}, {"t": "Disciplina de versão e release", "id": "disciplina-de-versao-e-release"}, {"t": "Segurança", "id": "seguranca"}]}, {"t": "5. Manutenção e compatibilidade", "id": "5-manutencao-e-compatibilidade", "sub": [{"t": "Mantenedores creditados", "id": "mantenedores-creditados"}, {"t": "O que este repositório público NÃO contém", "id": "o-que-este-repositorio-publico-nao-contem"}, {"t": "Como reconstruir o ambiente de desenvolvimento/teste (visão geral)", "id": "como-reconstruir-o-ambiente-de-desenvolvimento-teste-visao-g"}, {"t": "Compatibilidade com versões futuras do Moodle", "id": "compatibilidade-com-versoes-futuras-do-moodle"}, {"t": "Resposta a incidente em produção e rollback", "id": "resposta-a-incidente-em-producao-e-rollback"}, {"t": "Contato para dúvidas de manutenção", "id": "contato-para-duvidas-de-manutencao"}]}, {"t": "6. Política de segurança", "id": "6-politica-de-seguranca", "sub": [{"t": "Versões suportadas", "id": "versoes-suportadas"}, {"t": "Como reportar uma vulnerabilidade", "id": "como-reportar-uma-vulnerabilidade"}, {"t": "Escopo", "id": "escopo"}]}, {"t": "7. Licença e atribuições", "id": "7-licenca-e-atribuicoes", "sub": [{"t": "Licença", "id": "licenca"}]}];window.PAGE_EN={"skip": "Skip to content", "navmain": "Main", "n1": "Profiles", "n2": "Try it", "n4": "Administrators", "n5": "Documentation", "n6": "Download", "f1": "Home", "f2": "Download", "f3": "Documentation", "f4": "User manual", "f5": "Administrator guide", "f6": "Technical documentation", "f7": "Project", "f8": "GPL v3 license", "f9": "Made with ❤️ by UFPel.", "ptonly": "<b>Available in Portuguese only.</b> This document is published in Brazilian Portuguese, the language it was written in. The PDF is also in Portuguese.", "pdf": "Download PDF", "chap": "Chapters", "filt": "Filter chapters", "onpage": "In this chapter", "docs": "Documentation", "ver": "Version history", "src": "Source", "prev": "Previous", "next": "Next", "top": "Back to top", "sideb": "Chapters", "other": "Other documents", "_title": "Technical documentation · A11Y for Moodle"};</script>
+<script src="../assets/i18n.js"></script>
+<script src="../assets/fab.js"></script>
+<script src="search-index.js"></script>
+<script src="docs.js"></script>
+</body>
+</html>

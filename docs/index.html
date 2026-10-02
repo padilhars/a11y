@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Documentação · A11Y for Moodle</title>
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Lexend:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/base.css">
+<link rel="stylesheet" href="docs.css">
+</head>
+<body>
+<a class="skip" href="#conteudo" data-i18n="skip">Pular para o conteúdo</a>
+<header class="nav">
+  <nav class="nav__in" aria-label="Principal" data-i18n-attr="aria-label:navmain">
+    <a class="brand" href="../"><span class="brand__mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="4.5" r="2" fill="currentColor" stroke="none"/><path d="M5 8.5c2.3.7 4.6 1 7 1s4.7-.3 7-1M12 9.5v4.5m0 0-3 6.5m3-6.5 3 6.5"/></svg></span><span class="brand__text">A11Y for Moodle</span></a>
+    <ul class="nav__links">
+      <li class="opt"><a href="../#perfis" data-i18n="n1">Perfis</a></li>
+      <li class="opt"><a href="../#experimente" data-i18n="n2">Experimente</a></li>
+      <li class="opt"><a href="../#admin" data-i18n="n4">Administradores</a></li>
+      <li><a href="index.html" aria-current="page" data-i18n="n5">Documentação</a></li>
+    </ul>
+    <span data-lang-switch></span>
+    <a class="btn" href="../#download" data-i18n="n6">Baixar</a>
+  </nav>
+</header>
+
+<main id="conteudo">
+  <section class="dhero dwrap" aria-labelledby="h1">
+    <p class="eyebrow" data-i18n="x0">Documentação</p>
+    <h1 id="h1" data-i18n="x1">Como podemos ajudar?</h1>
+    <p data-i18n="x2">Guias completos para quem usa o painel, para quem administra o Moodle e para quem desenvolve. Leia online ou baixe em PDF.</p>
+    <div class="search" role="search">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <label class="visually-hidden" for="q" data-i18n="x3">Buscar na documentação</label>
+      <input id="q" type="search" placeholder="Buscar: perfil, contraste, instalar…" data-i18n-attr="placeholder:x4" autocomplete="off" aria-controls="results">
+    </div>
+    <ul class="results" id="results" hidden aria-live="polite"></ul>
+  </section>
+
+  <section class="dwrap tracks" aria-label="Trilhas da documentação" data-i18n-attr="aria-label:x5">
+    <article class="track" id="usuario">
+      <span class="track__ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+      <h2><a href="manual.html" class="tlink" data-i18n="tt-manual">Manual do usuário</a></h2>
+      <p data-i18n="td-manual">Para estudantes, docentes e tutores. Como abrir o painel, usar os perfis, cada uma das opções, tutoriais e perguntas frequentes.</p>
+      <ul><li><a href="manual.html#1-sobre-o-plugin">1. Sobre o plugin</a></li><li><a href="manual.html#2-como-acessar">2. Como acessar</a></li><li><a href="manual.html#3-conhecendo-a-interface">3. Conhecendo a interface</a></li><li><a href="manual.html#4-recursos-disponiveis">4. Recursos disponíveis</a></li><li><a href="manual.html#5-tutoriais-passo-a-passo">5. Tutoriais passo a passo</a></li><li><a href="manual.html#6-personalizacao">6. Personalização</a></li><li><a href="manual.html#7-uso-com-tecnologias-assistivas">7. Uso com tecnologias assistivas</a></li><li><a href="manual.html">+ 5 capítulos</a></li></ul>
+      <div class="track__foot"><a class="open" href="manual.html"><span data-i18n="read">Ler online</span> ›</a><a class="pdf" href="pdf/Manual_do_Usuario_A11y_for_Moodle.pdf" data-dl="pdf/Manual_do_Usuario_A11y_for_Moodle.pdf" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span data-i18n="pdf">PDF</span></a></div>
+    </article>
+    <article class="track" id="admin">
+      <span class="track__ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></span>
+      <h2><a href="admin.html" class="tlink" data-i18n="tt-admin">Guia do administrador</a></h2>
+      <p data-i18n="td-admin">Para a equipe de TI. Requisitos, instalação, todas as configurações, permissões, atualização e solução de problemas.</p>
+      <ul><li><a href="admin.html#1-sobre-este-guia">1. Sobre este guia</a></li><li><a href="admin.html#2-requisitos-tecnicos">2. Requisitos técnicos</a></li><li><a href="admin.html#3-preparacao-pre-instalacao">3. Preparação pré-instalação</a></li><li><a href="admin.html#4-instalacao-passo-a-passo">4. Instalação passo a passo</a></li><li><a href="admin.html#5-configuracao-administrativa-completa">5. Configuração administrativa completa</a></li><li><a href="admin.html#6-capabilities-e-permissoes">6. Capabilities e permissões</a></li><li><a href="admin.html#7-validacao-pos-implantacao">7. Validação pós-implantação</a></li><li><a href="admin.html">+ 5 capítulos</a></li></ul>
+      <div class="track__foot"><a class="open" href="admin.html"><span data-i18n="read">Ler online</span> ›</a><a class="pdf" href="pdf/Guia_do_Administrador_A11y_for_Moodle.pdf" data-dl="pdf/Guia_do_Administrador_A11y_for_Moodle.pdf" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span data-i18n="pdf">PDF</span></a></div>
+    </article>
+    <article class="track" id="tecnica">
+      <span class="track__ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg></span>
+      <h2><a href="tecnica.html" class="tlink" data-i18n="tt-tecnica">Documentação técnica</a></h2>
+      <p data-i18n="td-tecnica">Para quem desenvolve. Arquitetura, API, templates Mustache, testes, contribuição, manutenção e segurança.</p>
+      <ul><li><a href="tecnica.html#1-visao-geral-tecnica">1. Visão geral técnica</a></li><li><a href="tecnica.html#2-desenvolvimento-e-documentacao-de-api">2. Desenvolvimento e documentação de API</a></li><li><a href="tecnica.html#3-templates-mustache">3. Templates Mustache</a></li><li><a href="tecnica.html#4-como-contribuir">4. Como contribuir</a></li><li><a href="tecnica.html#5-manutencao-e-compatibilidade">5. Manutenção e compatibilidade</a></li><li><a href="tecnica.html#6-politica-de-seguranca">6. Política de segurança</a></li><li><a href="tecnica.html#7-licenca-e-atribuicoes">7. Licença e atribuições</a></li></ul>
+      <div class="track__foot"><a class="open" href="tecnica.html"><span data-i18n="read">Ler online</span> ›</a><a class="pdf" href="pdf/Documentacao_Tecnica_A11y_for_Moodle.pdf" data-dl="pdf/Documentacao_Tecnica_A11y_for_Moodle.pdf" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span data-i18n="pdf">PDF</span></a></div>
+    </article>
+  </section>
+
+  <section class="dwrap popular" aria-labelledby="h-pop">
+    <h2 id="h-pop" data-i18n="m0">Mais procurados</h2>
+    <ul class="chips">
+      <li><a href="manual.html#ativar-um-perfil-pronto-exemplo-dislexia" data-i18n="m1">Ativar um perfil pronto</a></li>
+      <li><a href="manual.html#aumentar-o-tamanho-do-texto" data-i18n="m4">Aumentar o tamanho do texto</a></li>
+      <li><a href="manual.html#10-perguntas-frequentes" data-i18n="m7">Perguntas frequentes</a></li>
+      <li><a href="admin.html#4-instalacao-passo-a-passo" data-i18n="m5">Instalar o plugin</a></li>
+      <li><a href="admin.html#5-configuracao-administrativa-completa" data-i18n="m6">Todas as configurações</a></li>
+      <li><a href="tecnica.html#3-templates-mustache" data-i18n="m8">Templates Mustache</a></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="foot__in">
+    <div><h2>A11Y for Moodle</h2><ul><li><a href="../" data-i18n="f1">Página inicial</a></li><li><a href="../#download" data-i18n="f2">Download</a></li></ul></div>
+    <div><h2 data-i18n="f3">Documentação</h2><ul><li><a href="manual.html" data-i18n="f4">Manual do usuário</a></li><li><a href="admin.html" data-i18n="f5">Guia do administrador</a></li><li><a href="tecnica.html" data-i18n="f6">Documentação técnica</a></li></ul></div>
+    <div><h2 data-i18n="f7">Projeto</h2><ul><li><a href="https://github.com/padilhars/a11y">GitHub</a></li><li><a href="https://www.gnu.org/licenses/gpl-3.0.html" data-i18n="f8">Licença GPL v3</a></li></ul></div>
+  </div>
+  <p class="foot__legal" data-i18n="f9">Desenvolvido com ❤️ pela UFPel.</p>
+</footer>
+
+<script src="../assets/i18n.js"></script>
+<script>
+window.PAGE_EN={_title:'Documentation · A11Y for Moodle',skip:'Skip to content',navmain:'Main',n1:'Profiles',n2:'Try it',n4:'Administrators',n5:'Documentation',n6:'Download',
+x0:'Documentation',x1:'How can we help?',x2:'Complete guides for people who use the panel, people who run Moodle and people who develop. Read online or download as PDF.',x3:'Search the documentation',x4:'Search: profile, contrast, install…',x5:'Documentation tracks',
+t1:'User manual',t2:'For students, teachers and tutors. How to open the panel, use the profiles and adjust each option.',t3:'1. Getting to know the plugin',t4:'2. The button and the panel',t5:'3. Accessibility profiles',t6:'4. Options by category',t7:'5. Step-by-step tutorials',t8:'10. Frequently asked questions',t9:'11 chapters',pdf:'Download PDF',pdf2:'Download PDF',
+a1:'Administrator guide',a2:'For IT teams. Installation, requirements and every plugin setting.',a3:'Requirements: Moodle 5.2 and PHP 8.3+',a4:'Install and upgrade',a5:'Settings: General and Floating button',a6:'Settings: Panel and Colors',a7:'VLibras integration',a8:'Usage statistics',a9:'Privacy and LGPD',a10:'IT teams',
+d1:'Technical documentation',d2:'For developers. Architecture, templates, JavaScript API and tests, straight from the repository.',d3:'Overview (phpDocumentor, JSDoc, KSS)',d4:'Mustache templates',d5:'How to contribute',d6:'Maintenance and compatibility',d7:'Version history',d8:'Developers',d9:'View on GitHub ›',
+m0:'Most searched',read:'Read online',pdf:'PDF',m7:'Frequently asked questions',m8:'Mustache templates',m6:'Every setting','tt-manual':"User manual",'td-manual':"For students, teachers and tutors. Opening the panel, using profiles, every option, tutorials and FAQ.",'tt-admin':"Administrator guide",'td-admin':"For IT teams. Requirements, installation, every setting, permissions, upgrades and troubleshooting.",'tt-tecnica':"Technical documentation",'td-tecnica':"For developers. Architecture, API, Mustache templates, tests, contributing, maintenance and security.",read:'Read online',pdf:'PDF',m7:'Frequently asked questions',m8:'Mustache templates',m6:'Every setting','tt-manual':"User manual",'td-manual':"For students, teachers and tutors. Opening the panel, using profiles, every option, tutorials and FAQ.",'tt-admin':"Administrator guide",'td-admin':"For IT teams. Requirements, installation, every setting, permissions, upgrades and troubleshooting.",'tt-tecnica':"Technical documentation",'td-tecnica':"For developers. Architecture, API, Mustache templates, tests, contributing, maintenance and security.",m1:'Turn on a ready-made profile',m2:'Turn off a profile',m3:'Which profile to choose',m4:'Make text bigger',m5:'Install the plugin',
+f1:'Home',f2:'Download',f3:'Documentation',f4:'User manual',f5:'Administrator guide',f6:'Technical documentation',f7:'Project',f8:'GPL v3 license',f9:'Made with ❤️ by UFPel.'};
+</script>
+<script src="../assets/fab.js"></script>
+<script src="search-index.js"></script>
+<script src="docs.js"></script>
+</body>
+</html>
