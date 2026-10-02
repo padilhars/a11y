@@ -70,8 +70,8 @@
   /* ================= CARROSSEL ================= */
   var track=document.getElementById('car-track'),dots=document.getElementById('car-dots'),prev=document.getElementById('car-prev'),next=document.getElementById('car-next');
   var SL=[
-    {img:'panel',c:null,tone:'#6d28d9',w:760,h:1561},{img:'cat-0',c:'typography',tone:'#1d4ed8',w:760,h:1760},{img:'cat-1',c:'color',tone:'#c2410c',w:760,h:1760},
-    {img:'cat-2',c:'media',tone:'#15803d',w:760,h:1760},{img:'cat-3',c:'navigation',tone:'#0e7490',w:760,h:1760},{img:'cat-4',c:'advanced',tone:'#334155',w:760,h:1760}
+    {img:'panel',c:null,tone:'#6d28d9',w:760,h:1059},{img:'cat-0',c:'typography',tone:'#1d4ed8',w:760,h:2218},{img:'cat-1',c:'color',tone:'#c2410c',w:760,h:1471},
+    {img:'cat-2',c:'media',tone:'#15803d',w:760,h:1463},{img:'cat-3',c:'navigation',tone:'#0e7490',w:760,h:1625},{img:'cat-4',c:'advanced',tone:'#334155',w:760,h:1393}
   ];
   var TX={
     null:[['Perfis de acessibilidade','Nove combinações prontas no topo do painel. Um toque liga as opções do perfil e desliga as outras.'],['Accessibility profiles','Nine ready-made combinations at the top of the panel. One tap turns on the profile\'s options and turns off the rest.']],
