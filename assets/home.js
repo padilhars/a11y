@@ -116,7 +116,7 @@
   (function(){
     var svg=document.getElementById('fscene');if(!svg)return;
     var $=function(id){return document.getElementById(id)};
-    var head=$('fhead'),feat=$('ffeat'),hair=$('fhair'),face=$('fface'),eL=$('fearL'),eR=$('fearR'),eyes=$('feyes'),mouth=$('fmouth'),
+    var head=$('fhead'),face=$('fface'),eL=$('fearL'),eR=$('fearR'),eyes=$('feyes'),mouth=$('fmouth'),pupL=$('fpupL'),pupR=$('fpupR'),
         cur=$('fcur'),ring=$('fring'),rip=$('frip'),cap=$('fcap'),tiles=svg.querySelectorAll('.ft');
     var T=[{x:250,y:80,how:'mouth'},{x:366,y:80,how:'blink'},{x:308,y:144,how:'mouth'}];
     var cx=307,cy=100,pos={x:250,y:80},from={x:250,y:80},seg=0,phase='move',t0=0,running=false,raf=0,inView=false;
@@ -124,16 +124,19 @@
     function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
     function pose(x,y,jaw,blink){
       var yaw=Math.max(-1,Math.min(1,(x-cx)/68)),pitch=Math.max(-1,Math.min(1,(y-112)/42));
-      /* a pessoa aparece espelhada como numa webcam: virar para a direita da tela move o rosto para a esquerda da imagem */
+      /* a pessoa aparece espelhada como numa webcam: virar para a direita da tela move o rosto para a esquerda da imagem.
+         A cabeça inteira (orelhas, cabelo, rosto) é UM grupo rígido só (#fhead) — nada dentro dela ganha uma
+         transformação própria, senão as partes se somam à do grupo pai e saem de lugar durante o giro. */
       var my=-yaw;
-      head.setAttribute('transform','translate('+(84+my*7)+' '+(110+pitch*5)+') rotate('+(my*9)+')');
-      feat.setAttribute('transform','translate('+(my*13)+' '+(pitch*10)+')');
-      hair.setAttribute('transform','translate('+(my*4)+' '+(pitch*2)+')');
-      face.setAttribute('rx',36-Math.abs(my)*4);
-      eL.setAttribute('transform','translate('+(my*5)+' 0)');eL.style.opacity=my>0.5?0.4:1;
-      eR.setAttribute('transform','translate('+(my*5)+' 0)');eR.style.opacity=my<-0.5?0.4:1;
-      mouth.setAttribute('ry',2.2+jaw*9);mouth.setAttribute('rx',10-jaw*2);
+      head.setAttribute('transform','translate('+(84+my*7)+' '+(108+pitch*5)+') rotate('+(my*9)+')');
+      face.setAttribute('rx',35-Math.abs(my)*4);
+      eL.style.opacity=my>0.5?0.35:1;
+      eR.style.opacity=my<-0.5?0.35:1;
+      mouth.setAttribute('ry',2.2+jaw*9);mouth.setAttribute('rx',9.5-jaw*2);
       eyes.setAttribute('transform','translate(0 -2) scale(1 '+(1-blink*0.92)+') translate(0 2)');
+      /* paralaxe das pupilas: deslocamento pequeno e contido dentro do branco do olho, nunca "solta" da cabeça */
+      if(pupL)pupL.setAttribute('transform','translate('+(-13+my*2)+' '+(-2+pitch*1.2)+')');
+      if(pupR)pupR.setAttribute('transform','translate('+(13+my*2)+' '+(-2+pitch*1.2)+')');
       cur.setAttribute('transform','translate('+x+' '+y+')');
     }
     function L2(p,e){return I18N.L(p,e)}
