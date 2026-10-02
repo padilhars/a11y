@@ -70,8 +70,8 @@
   /* ================= CARROSSEL ================= */
   var track=document.getElementById('car-track'),dots=document.getElementById('car-dots'),prev=document.getElementById('car-prev'),next=document.getElementById('car-next');
   var SL=[
-    {img:'panel',c:null,tone:'#6d28d9'},{img:'cat-0',c:'typography',tone:'#1d4ed8'},{img:'cat-1',c:'color',tone:'#c2410c'},
-    {img:'cat-2',c:'media',tone:'#15803d'},{img:'cat-3',c:'navigation',tone:'#0e7490'},{img:'cat-4',c:'advanced',tone:'#334155'}
+    {img:'panel',c:null,tone:'#6d28d9',w:760,h:1561},{img:'cat-0',c:'typography',tone:'#1d4ed8',w:760,h:1760},{img:'cat-1',c:'color',tone:'#c2410c',w:760,h:1760},
+    {img:'cat-2',c:'media',tone:'#15803d',w:760,h:1760},{img:'cat-3',c:'navigation',tone:'#0e7490',w:760,h:1760},{img:'cat-4',c:'advanced',tone:'#334155',w:760,h:1760}
   ];
   var TX={
     null:[['Perfis de acessibilidade','Nove combinações prontas no topo do painel. Um toque liga as opções do perfil e desliga as outras.'],['Accessibility profiles','Nine ready-made combinations at the top of the panel. One tap turns on the profile\'s options and turns off the rest.']],
@@ -91,7 +91,7 @@
       return '<article class="slide'+(i===active?' is-active':'')+'" style="--sl:'+s.tone+'" role="group" aria-roledescription="'+L('slide','slide')+'" aria-label="'+(i+1)+' '+L('de','of')+' '+SL.length+': '+t[0]+'">'+
         '<div class="slide__text"><div class="slide__head"><span class="slide__n">'+n+'</span><h3>'+t[0]+'</h3></div><p>'+t[1]+'</p><ul class="chips">'+items.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul>'+
         (s.c==='media'?'<p style="font-size:.8rem">'+L('* Só quando a integração com o VLibras está ativa.','* Only when the VLibras integration is on.')+'</p>':'')+'</div>'+
-        '<div class="slide__media"><img src="'+imgDir()+s.img+'.webp" width="760" height="1012" loading="lazy" alt="'+L('Painel com ','Panel with ')+t[0]+L(' aberto',' open')+'"></div></article>';
+        '<div class="slide__media"><img src="'+imgDir()+s.img+'.webp" width="'+s.w+'" height="'+s.h+'" loading="lazy" alt="'+L('Painel com ','Panel with ')+t[0]+L(' aberto',' open')+'"></div></article>';
     }).join('');
     dots.innerHTML=SL.map(function(s,i){return '<button type="button" aria-label="'+L('Ir para ','Go to ')+TX[s.c][k][0]+'" aria-current="'+(i===active)+'"></button>'}).join('');
     syncCar();
