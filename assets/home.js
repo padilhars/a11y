@@ -116,58 +116,53 @@
   (function(){
     var svg=document.getElementById('fscene');if(!svg)return;
     var $=function(id){return document.getElementById(id)};
-    var head=$('fhead'),face=$('fface'),eL=$('fearL'),eR=$('fearR'),eyes=$('feyes'),mouth=$('fmouth'),pupL=$('fpupL'),pupR=$('fpupR'),
+    var head=$('fhead'),box=$('fbox'),dot=$('fdot'),
         cur=$('fcur'),ring=$('fring'),rip=$('frip'),cap=$('fcap'),tiles=svg.querySelectorAll('.ft');
-    var T=[{x:250,y:80,how:'mouth'},{x:366,y:80,how:'blink'},{x:308,y:144,how:'mouth'}];
+    var T=[{x:250,y:80},{x:366,y:80},{x:308,y:144}];
     var cx=307,cy=100,pos={x:250,y:80},from={x:250,y:80},seg=0,phase='move',t0=0,running=false,raf=0,inView=false;
     var MOVE=1500,DWELL=1100,AFTER=900,C=94.25;
     function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
-    function pose(x,y,jaw,blink){
+    function pose(x,y){
       var yaw=Math.max(-1,Math.min(1,(x-cx)/68)),pitch=Math.max(-1,Math.min(1,(y-112)/42));
-      /* a pessoa aparece espelhada como numa webcam: virar para a direita da tela move o rosto para a esquerda da imagem.
-         A cabeça inteira (orelhas, cabelo, rosto) é UM grupo rígido só (#fhead) — nada dentro dela ganha uma
-         transformação própria, senão as partes se somam à do grupo pai e saem de lugar durante o giro. */
+      /* a caixa de foco é UM grupo rígido só (#fhead): translada e encolhe no eixo X (perfil mais estreito
+         quando "vira"), mas nunca gira/inclina — é uma caixa de rastreamento, não uma cabeça que inclina. */
       var my=-yaw;
-      head.setAttribute('transform','translate('+(84+my*7)+' '+(108+pitch*5)+') rotate('+(my*9)+')');
-      face.setAttribute('rx',35-Math.abs(my)*4);
-      eL.style.opacity=my>0.5?0.35:1;
-      eR.style.opacity=my<-0.5?0.35:1;
-      mouth.setAttribute('ry',2.2+jaw*9);mouth.setAttribute('rx',9.5-jaw*2);
-      eyes.setAttribute('transform','translate(0 -2) scale(1 '+(1-blink*0.92)+') translate(0 2)');
-      /* paralaxe das pupilas: deslocamento pequeno e contido dentro do branco do olho, nunca "solta" da cabeça */
-      if(pupL)pupL.setAttribute('transform','translate('+(-13+my*2)+' '+(-2+pitch*1.2)+')');
-      if(pupR)pupR.setAttribute('transform','translate('+(13+my*2)+' '+(-2+pitch*1.2)+')');
+      var sx=1-Math.abs(my)*0.22;
+      head.setAttribute('transform','translate('+(85+my*9)+' '+(106+pitch*6)+') scale('+sx.toFixed(3)+' 1)');
       cur.setAttribute('transform','translate('+x+' '+y+')');
     }
     function L2(p,e){return I18N.L(p,e)}
+    function setConfirm(on){box.classList.toggle('confirm',on);dot.classList.toggle('confirm',on)}
     function tick(now){
       if(!running)return;
-      var tg=T[seg],dt=now-t0;
+      var dt=now-t0;
       if(phase==='move'){
         var k=Math.min(1,dt/MOVE),e=ease(k);
-        pos.x=from.x+(tg.x-from.x)*e;pos.y=from.y+(tg.y-from.y)*e;
-        /* um leve balanço de cabeça a caminho do alvo */
+        pos.x=from.x+(T[seg].x-from.x)*e;pos.y=from.y+(T[seg].y-from.y)*e;
+        /* um leve balanço a caminho do alvo */
         var wob=Math.sin(k*Math.PI)*8;
-        pose(pos.x,pos.y-wob,0,0);
-        if(k>=1){phase='dwell';t0=now;cap.textContent=tg.how==='mouth'?L2('Abre a boca para clicar…','Opening the mouth to click…'):L2('Pisca os dois olhos para clicar…','Blinking both eyes to click…')}
+        pose(pos.x,pos.y-wob);
+        if(k>=1){phase='dwell';t0=now;cap.textContent=L2('Selecionando…','Selecting…')}
       }else if(phase==='dwell'){
         var k2=Math.min(1,dt/DWELL);
         ring.setAttribute('stroke-dashoffset',C*(1-k2));
-        pose(pos.x,pos.y,tg.how==='mouth'?Math.min(1,k2*3):0,tg.how==='blink'?Math.min(1,k2*4):0);
+        setConfirm(k2>0.15);
+        pose(pos.x,pos.y);
         if(k2>=1){phase='after';t0=now;ring.setAttribute('stroke-dashoffset',C);
           tiles.forEach(function(el,i){el.classList.toggle('hit',i===seg)});
-          cap.textContent=L2('Clique!','Click!');}
+          cap.textContent=L2('Selecionado!','Selected!');}
       }else{
         var k3=Math.min(1,dt/AFTER);
         rip.setAttribute('r',8+k3*22);rip.setAttribute('opacity',(1-k3).toFixed(2));
-        pose(pos.x,pos.y,0,0);
+        setConfirm(k3<0.4);
+        pose(pos.x,pos.y);
         if(k3>=1){phase='move';t0=now;from={x:pos.x,y:pos.y};seg=(seg+1)%T.length;cap.textContent=L2('Movendo a cabeça…','Moving the head…')}
       }
       raf=requestAnimationFrame(tick);
     }
     function start(){if(running||reduce)return;running=true;t0=performance.now();raf=requestAnimationFrame(tick)}
     function stop(){running=false;cancelAnimationFrame(raf)}
-    pose(250,80,0,0);
+    pose(250,80);
     if(reduce){tiles[0].classList.add('hit');cap.textContent='';return}
     cap.textContent=L2('Movendo a cabeça…','Moving the head…');
     if('IntersectionObserver' in window){new IntersectionObserver(function(es){inView=es[0].isIntersecting;inView?start():stop()},{threshold:.2}).observe(svg)}else{inView=true;start()}
