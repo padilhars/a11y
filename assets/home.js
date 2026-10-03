@@ -112,59 +112,66 @@
   track.addEventListener('click',function(e){var s=e.target.closest('.slide');if(s&&!s.classList.contains('is-active'))go([].indexOf.call(track.children,s))});
   buildCar();
 
-  /* ================= NAVEGAÇÃO POR FACE (avatar) ================= */
+  /* ================= NAVEGAÇÃO POR FACE (vídeo real + cursor sincronizado) =================
+     O vídeo (assets/video/face-demo.mp4) é um clipe fixo de 10s com tempos conhecidos:
+     0.0–4.5s parado/centro, 4.5–5.75s vira p/ direita, 5.75–7.25s segura à direita (fala ~6.5–7s),
+     7.25–8.0s vira p/ esquerda, 8.0–10.0s segura à esquerda, boca abre (fala) de ~8.5s a 9.75s.
+     O cursor/tela seguem esse relógio exatamente — zero deriva possível, pois os dois lêem o
+     mesmo video.currentTime a cada frame, em vez de rodar dois timers independentes. */
   (function(){
-    var svg=document.getElementById('fscene');if(!svg)return;
+    var video=document.getElementById('favatar'),svg=document.getElementById('fscreen');
+    if(!video||!svg)return;
     var $=function(id){return document.getElementById(id)};
-    var head=$('fhead'),box=$('fbox'),dot=$('fdot'),
-        cur=$('fcur'),ring=$('fring'),rip=$('frip'),cap=$('fcap'),tiles=svg.querySelectorAll('.ft');
-    var T=[{x:250,y:80},{x:366,y:80},{x:308,y:144}];
-    var cx=307,cy=100,pos={x:250,y:80},from={x:250,y:80},seg=0,phase='move',t0=0,running=false,raf=0,inView=false;
-    var MOVE=1500,DWELL=1100,AFTER=900,C=94.25;
+    var cur=$('fcur'),ring=$('fring'),rip=$('frip'),cap=$('fcap'),tiles=svg.querySelectorAll('.ft');
+    var camEl=document.querySelector('.fcam');
+    var C=94.25,running=false,raf=0,inView=false;
+    var LESSON={x:250,y:80},FORUM={x:366,y:80};
+    var SCH=[
+      {t0:0.0,t1:4.5,type:'idle',pos:LESSON},
+      {t0:4.5,t1:5.75,type:'move',from:LESSON,to:FORUM},
+      {t0:5.75,t1:7.0,type:'dwell',pos:FORUM,tile:1},
+      {t0:7.0,t1:7.25,type:'confirm',pos:FORUM,tile:1},
+      {t0:7.25,t1:8.0,type:'move',from:FORUM,to:LESSON},
+      {t0:8.0,t1:8.5,type:'idle',pos:LESSON},
+      {t0:8.5,t1:9.75,type:'dwell',pos:LESSON,tile:0},
+      {t0:9.75,t1:10.0,type:'confirm',pos:LESSON,tile:0},
+    ];
     function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
-    function pose(x,y){
-      var yaw=Math.max(-1,Math.min(1,(x-cx)/68)),pitch=Math.max(-1,Math.min(1,(y-112)/42));
-      /* a caixa de foco é UM grupo rígido só (#fhead): translada e encolhe no eixo X (perfil mais estreito
-         quando "vira"), mas nunca gira/inclina — é uma caixa de rastreamento, não uma cabeça que inclina. */
-      var my=-yaw;
-      var sx=1-Math.abs(my)*0.22;
-      head.setAttribute('transform','translate('+(85+my*9)+' '+(106+pitch*6)+') scale('+sx.toFixed(3)+' 1)');
-      cur.setAttribute('transform','translate('+x+' '+y+')');
-    }
     function L2(p,e){return I18N.L(p,e)}
-    function setConfirm(on){box.classList.toggle('confirm',on);dot.classList.toggle('confirm',on)}
-    function tick(now){
-      if(!running)return;
-      var dt=now-t0;
-      if(phase==='move'){
-        var k=Math.min(1,dt/MOVE),e=ease(k);
-        pos.x=from.x+(T[seg].x-from.x)*e;pos.y=from.y+(T[seg].y-from.y)*e;
-        /* um leve balanço a caminho do alvo */
-        var wob=Math.sin(k*Math.PI)*8;
-        pose(pos.x,pos.y-wob);
-        if(k>=1){phase='dwell';t0=now;cap.textContent=L2('Selecionando…','Selecting…')}
-      }else if(phase==='dwell'){
-        var k2=Math.min(1,dt/DWELL);
-        ring.setAttribute('stroke-dashoffset',C*(1-k2));
-        setConfirm(k2>0.15);
-        pose(pos.x,pos.y);
-        if(k2>=1){phase='after';t0=now;ring.setAttribute('stroke-dashoffset',C);
-          tiles.forEach(function(el,i){el.classList.toggle('hit',i===seg)});
-          cap.textContent=L2('Selecionado!','Selected!');}
+    function findSeg(t){for(var i=0;i<SCH.length;i++){if(t>=SCH[i].t0&&t<SCH[i].t1)return SCH[i]}return SCH[0]}
+    var lastTile=-1;
+    function render(t){
+      var s=findSeg(t),k=(t-s.t0)/(s.t1-s.t0);
+      var x,y;
+      if(s.type==='move'){var e=ease(k),wob=Math.sin(k*Math.PI)*8;
+        x=s.from.x+(s.to.x-s.from.x)*e;y=s.from.y+(s.to.y-s.from.y)*e-wob;
+        cap.textContent=L2('Movendo a cabeça…','Moving the head…');
       }else{
-        var k3=Math.min(1,dt/AFTER);
-        rip.setAttribute('r',8+k3*22);rip.setAttribute('opacity',(1-k3).toFixed(2));
-        setConfirm(k3<0.4);
-        pose(pos.x,pos.y);
-        if(k3>=1){phase='move';t0=now;from={x:pos.x,y:pos.y};seg=(seg+1)%T.length;cap.textContent=L2('Movendo a cabeça…','Moving the head…')}
+        x=s.pos.x;y=s.pos.y;
+        if(s.type==='idle'){ring.setAttribute('stroke-dashoffset',C);cap.textContent=L2('Olhando para a tela…','Looking at the screen…')}
+        else if(s.type==='dwell'){ring.setAttribute('stroke-dashoffset',C*(1-k));cap.textContent=L2('Selecionando…','Selecting…')}
+        else if(s.type==='confirm'){ring.setAttribute('stroke-dashoffset',0);cap.textContent=L2('Selecionado!','Selected!');
+          rip.setAttribute('r',8+k*22);rip.setAttribute('opacity',(1-k).toFixed(2));}
       }
+      cur.setAttribute('transform','translate('+x+' '+y+')');
+      var tileNow=s.type==='confirm'?s.tile:-1;
+      if(tileNow!==lastTile){tiles.forEach(function(el,i){el.classList.toggle('hit',i===tileNow)});lastTile=tileNow}
+      if(camEl)camEl.classList.toggle('confirm',s.type==='confirm');
+    }
+    function tick(){
+      if(!running)return;
+      render(video.currentTime||0);
       raf=requestAnimationFrame(tick);
     }
-    function start(){if(running||reduce)return;running=true;t0=performance.now();raf=requestAnimationFrame(tick)}
-    function stop(){running=false;cancelAnimationFrame(raf)}
-    pose(250,80);
+    function start(){
+      if(running||reduce)return;running=true;
+      video.currentTime=0;
+      var p=video.play();if(p&&p.catch)p.catch(function(){});
+      raf=requestAnimationFrame(tick);
+    }
+    function stop(){running=false;cancelAnimationFrame(raf);try{video.pause()}catch(e){}}
+    render(0);
     if(reduce){tiles[0].classList.add('hit');cap.textContent='';return}
-    cap.textContent=L2('Movendo a cabeça…','Moving the head…');
     if('IntersectionObserver' in window){new IntersectionObserver(function(es){inView=es[0].isIntersecting;inView?start():stop()},{threshold:.2}).observe(svg)}else{inView=true;start()}
     document.addEventListener('visibilitychange',function(){if(document.hidden)stop();else if(inView)start()});
   })();
