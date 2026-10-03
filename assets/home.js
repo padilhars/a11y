@@ -176,13 +176,31 @@
       render(video.currentTime||0);
       raf=requestAnimationFrame(tick);
     }
-    function start(){
-      if(running||reduce)return;running=true;
-      video.currentTime=0;
-      var p=video.play();if(p&&p.catch)p.catch(function(){});
+    function onBegin(){
+      video.removeEventListener('seeked',onBegin);
+      video.removeEventListener('playing',onBegin);
+      if(!running)return;
       raf=requestAnimationFrame(tick);
     }
-    function stop(){running=false;cancelAnimationFrame(raf);try{video.pause()}catch(e){}}
+    function start(){
+      if(running||reduce)return;running=true;
+      render(0);
+      /* currentTime=0 é assíncrono (seek) — sem isso o primeiro frame do relógio do cursor pode
+         ler o valor antigo (quase 10s) de antes do loop, "adiantando" a animação em relação ao
+         vídeo, que ainda está reiniciando visualmente. Só liga o relógio quando o vídeo confirma
+         (via 'seeked'/'playing') que realmente está no começo. */
+      video.addEventListener('seeked',onBegin);
+      video.addEventListener('playing',onBegin);
+      video.currentTime=0;
+      var p=video.play();if(p&&p.catch)p.catch(function(){});
+    }
+    function stop(){
+      running=false;cancelAnimationFrame(raf);
+      video.removeEventListener('seeked',onBegin);
+      video.removeEventListener('playing',onBegin);
+      try{video.pause()}catch(e){}
+      render(0);
+    }
     render(0);
     if(reduce){tiles[0].classList.add('hit');cap.textContent='';return}
     if('IntersectionObserver' in window){new IntersectionObserver(function(es){inView=es[0].isIntersecting;inView?start():stop()},{threshold:.2}).observe(svg)}else{inView=true;start()}
