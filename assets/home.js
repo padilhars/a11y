@@ -113,9 +113,14 @@
   buildCar();
 
   /* ================= NAVEGAÇÃO POR FACE (vídeo real + cursor sincronizado) =================
-     O vídeo (assets/video/face-demo.mp4) é um clipe fixo de 10s com tempos conhecidos:
-     0.0–4.5s parado/centro, 4.5–5.75s vira p/ direita, 5.75–7.25s segura à direita (fala ~6.5–7s),
-     7.25–8.0s vira p/ esquerda, 8.0–10.0s segura à esquerda, boca abre (fala) de ~8.5s a 9.75s.
+     O vídeo (assets/video/face-demo.mp4) foi medido quadro a quadro (rastreamento de pixels de
+     pele, não só leitura visual) para achar os tempos reais dos gestos — só existem 2 giros e
+     1 piscada no clipe, não 4 direções:
+       0.0–4.0s  parado olhando pro centro
+       4.0–5.1s  pisca os dois olhos (sustentado ~1s) — isso é a CALIBRAÇÃO (passo 1 das instruções)
+       5.1–6.3s  (transição) até 6.3–7.6s  gira a cabeça + abre a boca (1º giro, "fala")
+       7.6–7.8s  (transição) até 7.8–9.0s  gira para a outra pose + continua "falando" (2º giro)
+       9.0–10.0s volta pro centro, looping
      O cursor/tela seguem esse relógio exatamente — zero deriva possível, pois os dois lêem o
      mesmo video.currentTime a cada frame, em vez de rodar dois timers independentes. */
   (function(){
@@ -125,36 +130,40 @@
     var cur=$('fcur'),ring=$('fring'),rip=$('frip'),cap=$('fcap'),tiles=svg.querySelectorAll('.ft');
     var camEl=document.querySelector('.fcam');
     var C=94.25,running=false,raf=0,inView=false;
-    var LESSON={x:250,y:80},FORUM={x:366,y:80};
+    var CENTER={x:307,y:22},LESSON={x:250,y:80},FORUM={x:366,y:80};
     var SCH=[
-      {t0:0.0,t1:4.5,type:'idle',pos:LESSON},
-      {t0:4.5,t1:5.75,type:'move',from:LESSON,to:FORUM},
-      {t0:5.75,t1:7.0,type:'dwell',pos:FORUM,tile:1},
-      {t0:7.0,t1:7.25,type:'confirm',pos:FORUM,tile:1},
-      {t0:7.25,t1:8.0,type:'move',from:FORUM,to:LESSON},
-      {t0:8.0,t1:8.5,type:'idle',pos:LESSON},
-      {t0:8.5,t1:9.75,type:'dwell',pos:LESSON,tile:0},
-      {t0:9.75,t1:10.0,type:'confirm',pos:LESSON,tile:0},
+      {t0:0.0,t1:4.0,type:'idle',pos:CENTER},
+      {t0:4.0,t1:5.1,type:'dwell',pos:CENTER,tile:-1},
+      {t0:5.1,t1:5.3,type:'confirm',pos:CENTER,tile:-1},
+      {t0:5.3,t1:6.3,type:'move',from:CENTER,to:FORUM},
+      {t0:6.3,t1:7.3,type:'dwell',pos:FORUM,tile:1},
+      {t0:7.3,t1:7.6,type:'confirm',pos:FORUM,tile:1},
+      {t0:7.6,t1:7.8,type:'move',from:FORUM,to:LESSON},
+      {t0:7.8,t1:8.9,type:'dwell',pos:LESSON,tile:0},
+      {t0:8.9,t1:9.2,type:'confirm',pos:LESSON,tile:0},
+      {t0:9.2,t1:10.0,type:'move',from:LESSON,to:CENTER},
     ];
     function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
     function L2(p,e){return I18N.L(p,e)}
     function findSeg(t){for(var i=0;i<SCH.length;i++){if(t>=SCH[i].t0&&t<SCH[i].t1)return SCH[i]}return SCH[0]}
     var lastTile=-1;
     function render(t){
-      var s=findSeg(t),k=(t-s.t0)/(s.t1-s.t0);
+      var s=findSeg(t),k=(t-s.t0)/(s.t1-s.t0),calib=s.tile===-1;
       var x,y;
-      if(s.type==='move'){var e=ease(k),wob=Math.sin(k*Math.PI)*8;
+      if(s.type==='move'){var e=ease(k),wob=Math.sin(k*Math.PI)*6;
         x=s.from.x+(s.to.x-s.from.x)*e;y=s.from.y+(s.to.y-s.from.y)*e-wob;
         cap.textContent=L2('Movendo a cabeça…','Moving the head…');
       }else{
         x=s.pos.x;y=s.pos.y;
-        if(s.type==='idle'){ring.setAttribute('stroke-dashoffset',C);cap.textContent=L2('Olhando para a tela…','Looking at the screen…')}
-        else if(s.type==='dwell'){ring.setAttribute('stroke-dashoffset',C*(1-k));cap.textContent=L2('Selecionando…','Selecting…')}
-        else if(s.type==='confirm'){ring.setAttribute('stroke-dashoffset',0);cap.textContent=L2('Selecionado!','Selected!');
+        if(s.type==='idle'){ring.setAttribute('stroke-dashoffset',C);cap.textContent=L2('Olhando para o centro…','Looking at the center…')}
+        else if(s.type==='dwell'){ring.setAttribute('stroke-dashoffset',C*(1-k));
+          cap.textContent=calib?L2('Calibrando (pisque)…','Calibrating (blink)…'):L2('Selecionando…','Selecting…');}
+        else if(s.type==='confirm'){ring.setAttribute('stroke-dashoffset',0);
+          cap.textContent=calib?L2('Calibrado!','Calibrated!'):L2('Selecionado!','Selected!');
           rip.setAttribute('r',8+k*22);rip.setAttribute('opacity',(1-k).toFixed(2));}
       }
       cur.setAttribute('transform','translate('+x+' '+y+')');
-      var tileNow=s.type==='confirm'?s.tile:-1;
+      var tileNow=(s.type==='confirm'&&!calib)?s.tile:-1;
       if(tileNow!==lastTile){tiles.forEach(function(el,i){el.classList.toggle('hit',i===tileNow)});lastTile=tileNow}
       if(camEl)camEl.classList.toggle('confirm',s.type==='confirm');
     }
