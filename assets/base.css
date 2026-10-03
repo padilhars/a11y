@@ -76,6 +76,7 @@ a{color:var(--accent)}
 .nav .btn{padding:6px 14px;font-size:.85rem}
 @media (max-width:820px){.nav__links .opt{display:none}.nav__in{gap:12px}.nav__links{gap:14px}}
 @media (max-width:480px){.brand__text{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}}
+@media (max-width:360px){.nav__links{display:none}.nav__in{gap:8px}}
 
 /* Seletor de idioma */
 .lang{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:2px}
