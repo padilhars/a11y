@@ -361,7 +361,8 @@
 .person{display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
 .av{width:56px;height:56px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font:600 1.1rem var(--font-display);color:var(--accent);flex:none;object-fit:cover}
 .person b{display:block;font-family:var(--font-display);font-weight:600}
-.person span{font-size:.88rem;color:var(--muted)}
+.person span{display:block;font-size:.88rem;color:var(--muted)}
+.person__mail{display:block;font-size:.88rem;margin-top:2px}
 </style>
 </head>
 <body>
@@ -693,8 +694,8 @@
     <h2 id="h-who" class="h-sec" data-i18n="u1">Feito na UFPel, para todo mundo.</h2>
     <p class="lede" data-i18n="u2">Desenvolvido por dois servidores públicos federais da Universidade Federal de Pelotas.</p>
     <div class="people">
-      <div class="person"><img class="av" src="img/author-rodrigo.webp" width="240" height="240" alt="" loading="lazy"><div><b>Rodrigo Padilha Silveira</b><span data-i18n="u3">CPTED · Gabinete da Vice-Reitoria · UFPel</span></div></div>
-      <div class="person"><img class="av" src="img/author-jeronimo.webp" width="240" height="240" alt="" loading="lazy"><div><b>Jerônimo Medina Madruga</b><span data-i18n="u3b">CPTED · Gabinete da Vice-Reitoria · UFPel</span></div></div>
+      <div class="person"><img class="av" src="img/author-rodrigo.webp" width="240" height="240" alt="" loading="lazy"><div><b>Rodrigo Padilha Silveira</b><span data-i18n="u3">CPTED · Gabinete da Vice-Reitoria · UFPel</span><span data-i18n="u3r">Técnico em Tecnologia da Informação · 16 anos no cargo</span><a class="person__mail" href="mailto:padilhars@gmail.com">padilhars@gmail.com</a></div></div>
+      <div class="person"><img class="av" src="img/author-jeronimo.webp" width="240" height="240" alt="" loading="lazy"><div><b>Jerônimo Medina Madruga</b><span data-i18n="u3b">CPTED · Gabinete da Vice-Reitoria · UFPel</span><span data-i18n="u3rb">Técnico em Tecnologia da Informação · 16 anos no cargo</span><a class="person__mail" href="mailto:jeronimo.madruga@gmail.com">jeronimo.madruga@gmail.com</a></div></div>
     </div>
   </div>
 </section>

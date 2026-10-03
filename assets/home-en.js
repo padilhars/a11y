@@ -21,7 +21,7 @@ m0:'On your phone',m1:'On phones, the panel becomes a drawer.',
 m2:'On small screens the panel always opens from the bottom, with large touch targets. Signed-in users\' preferences follow them to any device.',
 phonealt:'Moodle on a phone with the accessibility panel open as a drawer, showing the profiles.',
 a0:'Advanced features',a1:'For when a mouse is not an option.',a2:'Four features built on the browser\'s own technology. Nothing to install, no accounts to create.',
-af0:'Face Navigation',facealt:'Animation: the on-screen cursor follows the head movement shown in the camera preview; when a menu item is focused, it lights up and the cursor clicks.',facecam:'CAMERA',ft1:'Lesson 1',ft2:'Forum',ft3:'Submit',af1:'Move the cursor with your head.',
+af0:'Face Navigation',facealt:'Animation: the on-screen cursor follows the head movement shown in the camera preview; when a menu item is focused, it lights up and the cursor clicks.',facecam:'CAMERA',ft1:'Lesson 1',ft2:'Forum',ft3:'Submit',ft4:'Back',af1:'Move the cursor with your head.',
 af2:'Look at the center of the screen and click Calibrate.',af3:'Move your head to move the virtual cursor.',af4:'Open your mouth or blink both eyes for about 1 second to click.',
 af5:'The camera image is processed in your browser. No image or video is sent to any server.',
 as0:'Screen Reader',as1:'Click any text. Hear it instantly.',as2:'Play a sample',as3:'Hover to highlight and click to listen, using your system\'s own voice.',
@@ -60,6 +60,7 @@ g10:'Finish the installation',g11:'Go to <span class="path">Site administration 
 g12:'Done',g13:'The button now appears on every page, including for guests. Adjust everything under <span class="path">Plugins › Local plugins › Accessibility (A11y)</span>.',
 u0:'Who made it',u1:'Made at UFPel, for everyone.',u2:'Developed by two federal public servants at the Federal University of Pelotas, Brazil.',
 u3:'CPTED · Office of the Vice-Rector · UFPel',u3b:'CPTED · Office of the Vice-Rector · UFPel',
+u3r:'Information Technology Technician · 16 years in the role',u3rb:'Information Technology Technician · 16 years in the role',
 f1:'Profiles',f2:'Try it',f3:'Privacy',f4:'Download',f5:'Documentation',f6:'User manual',f7:'Administrator guide',f8:'Technical documentation',f9:'Project',f10:'Report a problem',f11:'GPL v3 license',
 f12:'Made with ❤️ by UFPel. Moodle is a registered trademark of Moodle Pty Ltd; this project is not affiliated with it.'
 };
