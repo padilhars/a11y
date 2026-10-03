@@ -120,7 +120,7 @@ kbd{font:600 .82rem var(--font-mono);border:1px solid var(--line);border-bottom-
 .doc-body ul,.doc-body ol{padding-left:1.3em;display:grid;gap:6px;margin:10px 0 16px}
 .doc-body .indent{margin-left:1.2em}
 .doc-body a{overflow-wrap:anywhere}
-.doc-body code{font:600 .86em var(--font-mono);background:var(--surface-2);border-radius:5px;padding:1px 5px}
+.doc-body code{font:600 .86em var(--font-mono);background:var(--surface-2);border-radius:5px;padding:1px 5px;overflow-wrap:anywhere}
 .doc-body pre{background:#0f1420;color:#e6edf7;border-radius:14px;padding:16px 18px;overflow-x:auto;margin:16px 0;font-size:.86rem;line-height:1.6}
 .doc-body pre code{background:none;padding:0;color:inherit;font-weight:500;white-space:pre}
 .doc-body .tbl table{min-width:480px}
