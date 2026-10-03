@@ -282,6 +282,7 @@ $string['vk_textfield'] = 'text field';
 $string['vc_listening'] = 'Listening…';
 $string['vc_notsupported'] = 'Voice commands are not supported in this browser.';
 $string['vc_privacynotice'] = 'In this browser, activating Voice Commands sends the audio captured by your microphone to a remote speech-recognition service (not operated by this site) to convert it into text. Continue?';
+$string['vc_unsupportednote'] = 'This browser does not provide the voice-recognition technology this feature needs (a browser limitation, not a plugin one).';
 
 // Admin settings.
 $string['settings_general'] = 'General';

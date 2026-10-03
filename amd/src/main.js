@@ -92,6 +92,16 @@ const lazy = (moduleId) => {
     };
 };
 
+// D90: computed once, not inside renderOptionRow - a browser's own
+// SpeechRecognition support never changes mid-session, so there is nothing
+// to gain from re-checking it on every render, only cost. Mirrors
+// amd/src/voice_commands.js::getSpeechRecognitionCtor()'s own check; kept
+// as a separate, duplicated one-liner rather than importing that module
+// here (it's one of the lazy-loaded ones above/below - importing it just
+// for this check would defeat the whole point of lazy(), pulling in the
+// full voice_commands.js module on every single page load again).
+const voiceCommandsSupported = Boolean(window.SpeechRecognition || window.webkitSpeechRecognition);
+
 const ReadingGuide = lazy('local_a11y/reading_guide');
 const ReadingMask = lazy('local_a11y/reading_mask');
 const Magnifier = lazy('local_a11y/magnifier');
@@ -291,13 +301,16 @@ const isHideImagesForced = () => Number(settings.focusMode) === 3;
 
 /**
  * Render one option row, resolving the D52 hideImages/focusMode "forced"
- * state for it along the way.
+ * state and the D90 voiceCommands/browser-support "unsupported" state for
+ * it along the way.
  *
  * @param {String} id The option id.
  * @return {Promise<void>}
  */
 const renderOptionRow = (id) => Panel.renderOption(
-    id, settings[id], defaultOf(id), id === 'hideImages' && isHideImagesForced()
+    id, settings[id], defaultOf(id),
+    id === 'hideImages' && isHideImagesForced(),
+    id === 'voiceCommands' && !voiceCommandsSupported
 );
 
 /**
@@ -761,9 +774,13 @@ export const init = async(loggedIn, collectStatsEnabled, sessionExists) => {
     // and keeps the option rows' own state in sync with it.
     Effects.apply(settings);
     syncAdvancedFeatures();
-    await Promise.all(Object.keys(optionMeta).map(
-        (id) => Panel.renderOption(id, settings[id], defaultOf(id))
-    ));
+    // D90: was a direct Panel.renderOption() call that bypassed
+    // renderOptionRow(), so this particular render pass never resolved the
+    // D52 hideImages/focusMode "forced" state or the D90 voiceCommands
+    // "unsupported" state - using renderOptionRow() here instead keeps this
+    // the one and only place that logic lives, same as every other full
+    // re-render (commit()).
+    await Promise.all(Object.keys(optionMeta).map(renderOptionRow));
     renderCategoryCounts();
     await renderHeaderCount();
 

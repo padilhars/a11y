@@ -269,6 +269,7 @@ class panel implements renderable, templatable {
             'pressed' => $istoggle && ($forced || $value) ? 'true' : 'false',
             'forced' => $forced,
             'forcednote' => $this->forced_note_for($option['id']),
+            'unsupportednote' => $this->unsupported_note_for($option['id']),
             'hashelp' => $hashelp,
             'helplabel' => $hashelp ? get_string('helpbtn', 'local_a11y') : null,
             'helphtml' => $hashelp ? $this->build_help_html($option['id']) : null,
@@ -291,6 +292,22 @@ class panel implements renderable, templatable {
      */
     private function forced_note_for(string $optionid): ?string {
         return $optionid === 'hideImages' ? get_string('hideimages_forcednote', 'local_a11y') : null;
+    }
+
+    /**
+     * D90: the note shown when a browser-API-dependent option's switch gets
+     * disabled by client-side feature detection (amd/src/panel.js::renderOption(),
+     * amd/src/main.js). Always rendered (hidden by default) for options that
+     * CAN be unsupported, so the DOM element exists for the client to reveal -
+     * unlike forced_note_for(), whether it is actually shown is never known
+     * server-side (it depends on the visiting browser's own APIs, not on
+     * anything in $settings).
+     *
+     * @param string $optionid Option id.
+     * @return string|null The note text, or null if this option can never be unsupported.
+     */
+    private function unsupported_note_for(string $optionid): ?string {
+        return $optionid === 'voiceCommands' ? get_string('vc_unsupportednote', 'local_a11y') : null;
     }
 
     /**

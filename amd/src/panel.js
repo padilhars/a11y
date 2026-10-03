@@ -178,9 +178,17 @@ const toggleProfiles = (header) => {
  *     never show a toggle as off while its effect is still visibly on). Toggle-only; steppers never
  *     receive this. Disables the switch (there is nothing a click could meaningfully change while
  *     forced) and reveals the row's forced-note element, if it has one (see templates/option_toggle.mustache).
+ * @param {Boolean} unsupported (D90) Whether this browser lacks an API the option depends on
+ *     (today: voiceCommands when neither window.SpeechRecognition nor window.webkitSpeechRecognition
+ *     exist - Firefox, confirmed live). Unlike `forced`, this never changes isActive/pressed - the
+ *     stored value is left truthful (it may still be "on" from another, supporting browser, since
+ *     this preference can be server-synced) - it only disables the switch and reveals the row's
+ *     unsupported-note element, so the user sees *why* nothing happens before they even click it,
+ *     instead of the old silent-failure behaviour voice_commands.js::start() used to be the only
+ *     line of defense against (see DECISIONS.md D90).
  * @return {Promise<void>}
  */
-const renderOption = async(id, value, defaultValue, forced = false) => {
+const renderOption = async(id, value, defaultValue, forced = false, unsupported = false) => {
     const row = panel.querySelector(`[data-region="option"][data-option-id="${id}"]`);
     if (!row) {
         return;
@@ -190,14 +198,19 @@ const renderOption = async(id, value, defaultValue, forced = false) => {
 
     if (row.dataset.kind === 'toggle') {
         row.classList.toggle('local-a11y-option--forced', forced);
+        row.classList.toggle('local-a11y-option--unsupported', unsupported);
         const switchEl = row.querySelector('[data-region="switch"]');
         if (switchEl) {
             switchEl.setAttribute('aria-pressed', (forced || value) ? 'true' : 'false');
-            switchEl.disabled = forced;
+            switchEl.disabled = forced || unsupported;
         }
         const noteEl = row.querySelector('[data-region="forced-note"]');
         if (noteEl) {
             noteEl.hidden = !forced;
+        }
+        const unsupportedNoteEl = row.querySelector('[data-region="unsupported-note"]');
+        if (unsupportedNoteEl) {
+            unsupportedNoteEl.hidden = !unsupported;
         }
         return;
     }

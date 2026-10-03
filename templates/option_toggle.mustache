@@ -45,6 +45,13 @@
       while its effect is still visibly on.
     * forcednote - explanatory text shown (only) while forced is true, or
       null for every option that can never be forced
+    * unsupportednote - (D90) explanatory text for an option whose
+      underlying browser API may be missing (today: voiceCommands only) -
+      always rendered, server-side, hidden by default; amd/src/panel.js's
+      renderOption() unhides it (and disables the switch) once client-side
+      feature detection confirms this browser actually lacks the API. null
+      for every option that can never be unsupported. Unlike forced, does
+      NOT force isactive/pressed - the stored value is left truthful.
     * hashelp - true if this option has an inline help block
     * helplabel - accessible label for the help toggle button, or null if !hashelp
     * helphtml - raw help block HTML, or null if !hashelp
@@ -59,6 +66,7 @@
         "pressed": "false",
         "forced": false,
         "forcednote": null,
+        "unsupportednote": null,
         "hashelp": false,
         "helplabel": null,
         "helphtml": null
@@ -68,7 +76,7 @@
     control (WCAG/axe "nested-interactive" forbids a div[role=button]
     wrapping a real <button>). Clicking anywhere on the row still works via
     event delegation in amd/src/panel.js. }}
-<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}{{#forced}} local-a11y-option--forced{{/forced}}{{#hashelp}} local-a11y-option--has-help{{/hashelp}}{{#forcednote}} local-a11y-option--has-note{{/forcednote}}" data-region="option" data-option-id="{{id}}" data-kind="toggle">
+<div class="local-a11y-option{{#isactive}} local-a11y-option--active{{/isactive}}{{#forced}} local-a11y-option--forced{{/forced}}{{#hashelp}} local-a11y-option--has-help{{/hashelp}}{{#forcednote}} local-a11y-option--has-note{{/forcednote}}{{#unsupportednote}} local-a11y-option--has-note{{/unsupportednote}}" data-region="option" data-option-id="{{id}}" data-kind="toggle">
     <span class="local-a11y-option__icon">{{{iconsvg}}}</span>
     <span class="local-a11y-option__text">
         <span class="local-a11y-option__label">{{label}}</span>
@@ -86,4 +94,7 @@
     {{#forcednote}}
     <span class="local-a11y-option__forced-note" data-region="forced-note"{{^forced}} hidden{{/forced}}>{{forcednote}}</span>
     {{/forcednote}}
+    {{#unsupportednote}}
+    <span class="local-a11y-option__forced-note" data-region="unsupported-note" hidden>{{unsupportednote}}</span>
+    {{/unsupportednote}}
 </div>
