@@ -28,32 +28,20 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_a11y';
-$plugin->version   = 2026100301;
-// AUDIT-V2 finding CODE-001: this value can look contradictory next to
-// $supported below (a reviewer might reasonably ask "why declare a 5.0
-// build here if only 502 is supported?"), so the full story is worth
-// spelling out once, here, rather than only in DECISIONS.md D66:
-//
-// This is the nominal branching version for Moodle 5.0 on the upstream
-// release timeline - NOT a value confirmed against a real 5.0 core build.
-// $supported below was originally [500, 502] on that (untested)
-// assumption, until a real CI run against the actual MOODLE_500_STABLE
-// branch disproved it: 5.0's real core version tops out at 2025041409,
-// lower than this $requires (2025041500) - so the plugin actually refuses
-// to install on real Moodle 5.0 ("pluginrequirementsnotmet"), despite this
-// value nominally targeting it. $supported was narrowed to the one branch
-// with real, live-tested evidence (502) instead.
-//
-// $requires itself was deliberately left as-is rather than lowered to
-// match: this project's own discipline (see DECISIONS.md D66-D71) is to
-// never change a version/compatibility value by assumption or analogy,
-// only against real CI evidence - and no CI run has yet established what
-// this plugin's actual minimum required 502 build is (only that the
-// current value is safely low enough to not block installation on it).
-// Lowering this number without that evidence would risk the opposite
-// failure mode from the one that caused this whole finding: an incorrect
-// value that's silently wrong instead of one that just reads oddly.
-$plugin->requires  = 2025041500;
+$plugin->version   = 2026101401;
+// D92 (trial, pending real CI evidence): lowered from 2025041500 to
+// 2025041409 - the real build number MOODLE_500_STABLE actually reaches
+// (confirmed live by the CI run in D67, the same run that originally
+// disproved 500 support). Nothing in this plugin is known to use any API
+// introduced after that build; this value was simply left too high the
+// first time, never actually derived from a real requirement. This is a
+// trial value, not yet confirmed - DECISIONS.md D66-D71's own discipline
+// (never change a compatibility value by assumption, only by real CI
+// evidence) applies here too: $supported below is NOT widened back to
+// include 500 until a real CI run (install + phpunit + behat, this exact
+// commit, MOODLE_500_STABLE re-added to the matrix) proves the plugin
+// actually installs and passes against it. See DECISIONS.md D92.
+$plugin->requires  = 2025041409;
 $plugin->supported = [502, 502];
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = '1.0.0';

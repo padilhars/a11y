@@ -16,11 +16,11 @@ jobs:
         # PHP 8.2 removido: o composer.json do próprio core do Moodle (5.0 e 5.2)
         # já exige PHP >=8.3 - confirmado numa execução real do CI (D66).
         php: ['8.3', '8.4']
-        # MOODLE_500_STABLE removido: version.php:$plugin->supported passou a
-        # declarar só 502 depois que esta mesma matriz de CI provou, contra a
-        # branch real, que o core 5.0 nunca chega na build que $plugin->requires
-        # exige - o plugin nem instala nela. Ver DECISIONS.md D66.
-        moodle-branch: ['MOODLE_502_STABLE']
+        # MOODLE_500_STABLE readicionado (D92): version.php:$plugin->requires
+        # foi baixado para o build real que essa branch alcança (D67) - esta
+        # execução é o teste real que decide se $plugin->supported volta a
+        # incluir 500, não mais uma suposição. Ver DECISIONS.md D92.
+        moodle-branch: ['MOODLE_500_STABLE', 'MOODLE_502_STABLE']
         database: ['pgsql', 'mariadb']
 
     services:
