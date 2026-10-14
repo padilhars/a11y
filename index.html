@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>A11Y for Moodle</title>
-<meta name="description" content="Plugin de acessibilidade para Moodle 5.2: 30 opções, 9 perfis, um clique. Desenvolvido na UFPel.">
+<meta name="description" content="Plugin de acessibilidade para Moodle 5.0+: 30 opções, 9 perfis, um clique. Desenvolvido na UFPel.">
 <link rel="icon" href="favicon.ico" sizes="any">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -393,14 +393,14 @@
 <!-- HERO -->
 <section class="hero" id="topo" aria-labelledby="h-hero">
   <div class="narrow">
-    <span class="pill" data-i18n="h0">Plugin para Moodle 5.2</span>
+    <span class="pill" data-i18n="h0">Plugin para Moodle 5.0+</span>
     <h1 id="h-hero" data-i18n="h1">Acessibilidade para Moodle.</h1>
     <p class="hero__sub" data-i18n="h2">30 opções. 9 perfis. Um clique.</p>
     <div class="hero__cta">
       <a class="btn" href="https://github.com/padilhars/a11y/releases/latest"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span data-i18n="h3">Baixar</span></a>
       <a class="btn btn--ghost" href="https://github.com/padilhars/a11y" data-i18n="h4">Ver no GitHub ›</a>
     </div>
-    <p class="hero__meta"><span data-i18n="h5">Versão 1.0.0</span><span>Moodle 5.2</span><span>PHP 8.3+</span><span>GPL v3</span></p>
+    <p class="hero__meta"><span data-i18n="h5">Versão 1.0.0</span><span>Moodle 5.0+</span><span>PHP 8.3+</span><span>GPL v3</span></p>
   </div>
   <div class="hero__shot">
     <div class="browser">
@@ -647,7 +647,7 @@
     <p class="eyebrow" data-i18n="s0">Especificações técnicas</p>
     <h2 id="h-spec" class="h-sec" data-i18n="s1">Especificações.</h2>
     <dl class="specs">
-      <div class="spec"><dt data-i18n="s2">Compatibilidade</dt><dd data-i18n="s3">Moodle 5.2 · PHP 8.3 ou superior<span class="note">Moodle 5.2 é a única versão com suporte testado na integração contínua. O plugin não instala no Moodle 5.0.</span></dd></div>
+      <div class="spec"><dt data-i18n="s2">Compatibilidade</dt><dd data-i18n="s3">Moodle 5.0 a 5.2 · PHP 8.3 ou superior<span class="note">Faixa com suporte testado na integração contínua, nos dois extremos (Moodle 5.0 e 5.2).</span></dd></div>
       <div class="spec"><dt data-i18n="s4">Versão</dt><dd data-i18n="s5">1.0.0 · estável</dd></div>
       <div class="spec"><dt data-i18n="s6">Tipo</dt><dd data-i18n="s7">Plugin local (<span class="path">local_a11y</span>). Funciona com qualquer tema, sem editar código.</dd></div>
       <div class="spec"><dt data-i18n="s8">Conteúdo</dt><dd data-i18n="s9">30 opções em 5 categorias (31 com a integração VLibras) · 9 perfis prontos · busca de opções</dd></div>
@@ -656,7 +656,7 @@
       <div class="spec"><dt data-i18n="s14">Idiomas</dt><dd data-i18n="s15">Português (Brasil) e inglês, com teste automático que garante as mesmas chaves nos dois.</dd></div>
       <div class="spec"><dt data-i18n="s16">Recursos empacotados</dt><dd data-i18n="s17">Fontes Atkinson Hyperlegible, Lexend e OpenDyslexic; motor WASM do MediaPipe</dd></div>
       <div class="spec"><dt data-i18n="s18">Integrações</dt><dd data-i18n="s19">VLibras (opcional, via plugin <span class="path">local_vlibras</span>), para tradução em Libras</dd></div>
-      <div class="spec"><dt data-i18n="s20">Qualidade</dt><dd data-i18n="s21"><ul><li>Testes PHPUnit e Behat</li><li>moodle-plugin-ci: phplint, codechecker, phpmd, phpcpd, validate, savepoints, mustache, grunt</li><li>GitHub Actions: Moodle 5.2 × PHP 8.3 e 8.4 × PostgreSQL e MariaDB</li><li>Auditoria axe-core do painel sem violações sérias ou críticas</li></ul></dd></div>
+      <div class="spec"><dt data-i18n="s20">Qualidade</dt><dd data-i18n="s21"><ul><li>Testes PHPUnit e Behat</li><li>moodle-plugin-ci: phplint, codechecker, phpmd, phpcpd, validate, savepoints, mustache, grunt</li><li>GitHub Actions: Moodle 5.0 e 5.2 × PHP 8.3 e 8.4 × PostgreSQL e MariaDB</li><li>Auditoria axe-core do painel sem violações sérias ou críticas</li></ul></dd></div>
       <div class="spec"><dt data-i18n="s22">Licença</dt><dd data-i18n="s23">GNU GPL v3 ou posterior</dd></div>
     </dl>
   </div>
@@ -670,7 +670,7 @@
     <div class="dl">
       <div class="dl__card reveal">
         <div><p class="eyebrow" data-i18n="g2">Versão atual</p><p class="dl__ver">1.0.0</p></div>
-        <ul data-i18n="g3"><li>Moodle 5.2</li><li>PHP 8.3 ou superior</li><li>Licença GPL v3</li></ul>
+        <ul data-i18n="g3"><li>Moodle 5.0 ou superior (até 5.2)</li><li>PHP 8.3 ou superior</li><li>Licença GPL v3</li></ul>
         <a class="btn" href="https://github.com/padilhars/a11y/releases/latest" style="justify-self:start"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span data-i18n="g4">Baixar o .zip</span></a>
         <div class="dl__links">
           <a href="https://github.com/padilhars/a11y" data-i18n="g5">Repositório ›</a>

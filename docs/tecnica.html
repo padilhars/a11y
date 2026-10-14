@@ -74,8 +74,8 @@
     <div class="doc-body">
 <h2 id="1-visao-geral-tecnica">1. Visão geral técnica</h2><h3 id="requisitos">Requisitos</h3>
 <ul>
-<li>Moodle 5.2 (única versão com suporte confirmado - ver <code>version.php:$plugin-&gt;supported</code>; testar contra outras versões antes de assumir compatibilidade).</li>
-<li>PHP 8.3+ (o core do próprio Moodle 5.2 já exige essa versão mínima - ver <code>.github/workflows/ci.yml</code>).</li>
+<li>Moodle 5.0 ou superior, até 5.2 (faixa com suporte confirmado - ver <code>version.php:$plugin-&gt;supported</code>; testar contra outras versões antes de assumir compatibilidade).</li>
+<li>PHP 8.3+ (o core do próprio Moodle 5.0+ já exige essa versão mínima - ver <code>.github/workflows/ci.yml</code>).</li>
 <li>Sem dependências externas empacotadas para a instalação do plugin em si (as fontes Atkinson Hyperlegible, Lexend e OpenDyslexic, e o WASM do MediaPipe, são empacotados localmente - nada disso é baixado de CDN de terceiro). Duas exceções reais em tempo de execução, ambas já detalhadas na seção "Por que usar" acima: o modelo de rastreamento facial da Navegação por Face (buscado ao vivo, com verificação de integridade) e a API nativa de reconhecimento de fala usada por Comandos por Voz.</li>
 </ul>
 <h3 id="o-que-o-plugin-faz">O que o plugin faz</h3>
@@ -425,7 +425,7 @@
 </ul></li>
 <li><code>moodle-plugin-ci phpunit</code> e <code>moodle-plugin-ci behat</code> para mudanças que afetem comportamento em tempo de execução.</li>
 </ul>
-<p>O CI roda essa mesma suíte automaticamente em cada push/PR contra uma matriz de Moodle 5.2 × PHP 8.3/8.4 × PostgreSQL/MariaDB (Moodle 5.0 e PHP 8.2 foram removidos da matriz depois que o próprio CI provou que o core do Moodle 5.2 já exige PHP &gt;=8.3 e que o core 5.0 nunca atinge a build mínima que este plugin requer - ver <code>.github/workflows/ci.yml</code>).</p>
+<p>O CI roda essa mesma suíte automaticamente em cada push/PR contra uma matriz de Moodle 5.0 e 5.2 × PHP 8.3/8.4 × PostgreSQL/MariaDB (PHP 8.2 foi removido da matriz depois que o próprio CI provou que o core do Moodle 5.0+ já exige PHP &gt;=8.3; o core 5.0 chegou a nunca atingir a build mínima que este plugin exigia, mas isso foi corrigido e reconfirmado por uma execução real do CI - ver <code>.github/workflows/ci.yml</code> e <code>DECISIONS.md</code> D92).</p>
 <h3 id="disciplina-de-versao-e-release">Disciplina de versão e release</h3>
 <p>Este projeto teve, na prática, um problema real de dessincronia: <code>$plugin-&gt;release</code> ficou travado em <code>0.1.0</code> por mais de 5 semanas enquanto dezenas de mudanças (incluindo novas opções de acessibilidade) se acumulavam sob <code>## [Unreleased]</code> no <code>CHANGELOG.md</code>, sem nunca virar uma seção de versão nova. Isso já causou pelo menos uma contagem de opções desatualizada em documentação (achado de uma auditoria técnica interna, não publicada).</p>
 <p>Para prevenir que isso se repita:</p>
@@ -462,7 +462,7 @@
 <li><strong>Testes <code>@javascript</code> (Behat)</strong>: exigem um WebDriver real (Selenium + Chrome/chromedriver na mesma versão major) apontando para uma instância Moodle dedicada a testes (<code>$CFG-&gt;behat_wwwroot</code>), com seu próprio <code>$CFG-&gt;dataroot</code> e banco de dados, separados da instância de produção.</li>
 </ul>
 <h3 id="compatibilidade-com-versoes-futuras-do-moodle">Compatibilidade com versões futuras do Moodle</h3>
-<p><code>version.php:$plugin-&gt;supported</code> hoje declara só <code>[502, 502]</code> (Moodle 5.2) - a única versão com suporte real, testado ao vivo (ver <code>DECISIONS.md</code> D2, D67). Isso <strong>não é uma garantia de que versões futuras vão quebrar</strong>, só o reflexo honesto de que nada além de 5.2 foi verificado.</p>
+<p><code>version.php:$plugin-&gt;supported</code> hoje declara <code>[500, 502]</code> (Moodle 5.0 a 5.2) - a faixa com suporte real, testado ao vivo em ambas as pontas (ver <code>DECISIONS.md</code> D2, D67, D92). Isso <strong>não é uma garantia de que versões futuras vão quebrar</strong>, só o reflexo honesto de que nada além dessa faixa foi verificado.</p>
 <p>Plano declarado (o que existia antes desta nota era nenhum plano - isto substitui a ausência, não um processo antigo mais elaborado):</p>
 <ul>
 <li>Antes de declarar suporte a uma nova versão do Moodle (ex: 5.3), rodar a suíte completa (<code>.github/workflows/ci.yml</code> já cobre isso mecanicamente - basta adicionar a nova branch à matriz <code>moodle-branch</code> e observar se os 4 tipos de teste continuam passando) contra essa versão antes de mudar <code>version.php:$plugin-&gt;supported</code>.</li>
@@ -511,8 +511,8 @@
     </div>
     <template id="doc-body-en"><h2 id="1-visao-geral-tecnica">1. Technical overview</h2><h3 id="requisitos">Requirements</h3>
 <ul>
-<li>Moodle 5.2 (the only version with confirmed support - see <code>version.php:$plugin-&gt;supported</code>; test against other versions before assuming compatibility).</li>
-<li>PHP 8.3+ (Moodle 5.2's own core already requires this minimum version - see <code>.github/workflows/ci.yml</code>).</li>
+<li>Moodle 5.0 or later, up to 5.2 (range with confirmed support - see <code>version.php:$plugin-&gt;supported</code>; test against other versions before assuming compatibility).</li>
+<li>PHP 8.3+ (Moodle 5.0+'s own core already requires this minimum version - see <code>.github/workflows/ci.yml</code>).</li>
 <li>No bundled external dependencies for the plugin's own installation (the Atkinson Hyperlegible, Lexend and OpenDyslexic fonts, and the MediaPipe WASM, are bundled locally - none of this is downloaded from a third-party CDN). Two real exceptions at runtime, both already detailed in the "Why use it" section above: the facial tracking model for Face Navigation (fetched live, with integrity verification) and the native speech recognition API used by Voice Commands.</li>
 </ul>
 <h3 id="o-que-o-plugin-faz">What the plugin does</h3>
@@ -862,7 +862,7 @@
 </ul></li>
 <li><code>moodle-plugin-ci phpunit</code> and <code>moodle-plugin-ci behat</code> for changes that affect runtime behavior.</li>
 </ul>
-<p>CI runs this same suite automatically on every push/PR against a matrix of Moodle 5.2 × PHP 8.3/8.4 × PostgreSQL/MariaDB (Moodle 5.0 and PHP 8.2 were removed from the matrix after CI itself proved that Moodle 5.2's core already requires PHP &gt;=8.3, and that the 5.0 core never reaches the minimum build this plugin requires - see <code>.github/workflows/ci.yml</code>).</p>
+<p>CI runs this same suite automatically on every push/PR against a matrix of Moodle 5.0 and 5.2 × PHP 8.3/8.4 × PostgreSQL/MariaDB (PHP 8.2 was removed from the matrix after CI itself proved that Moodle 5.0+'s core already requires PHP &gt;=8.3; the 5.0 core once never reached the minimum build this plugin required, but that was fixed and reconfirmed by a real CI run - see <code>.github/workflows/ci.yml</code> and <code>DECISIONS.md</code> D92).</p>
 <h3 id="disciplina-de-versao-e-release">Version and release discipline</h3>
 <p>This project has, in practice, had a real desynchronization problem: <code>$plugin-&gt;release</code> stayed stuck at <code>0.1.0</code> for more than 5 weeks while dozens of changes (including new accessibility options) piled up under <code>## [Unreleased]</code> in <code>CHANGELOG.md</code>, never turning into a new version section. This has already caused at least one outdated option count in documentation (a finding from an internal, unpublished technical audit).</p>
 <p>To prevent this from happening again:</p>
@@ -899,7 +899,7 @@
 <li><strong><code>@javascript</code> tests (Behat)</strong>: require a real WebDriver (Selenium + Chrome/chromedriver on the same major version) pointing to a Moodle instance dedicated to testing (<code>$CFG-&gt;behat_wwwroot</code>), with its own <code>$CFG-&gt;dataroot</code> and database, separate from the production instance.</li>
 </ul>
 <h3 id="compatibilidade-com-versoes-futuras-do-moodle">Compatibility with future Moodle versions</h3>
-<p><code>version.php:$plugin-&gt;supported</code> today declares only <code>[502, 502]</code> (Moodle 5.2) - the only version with real, live-tested support (see <code>DECISIONS.md</code> D2, D67). This is <strong>not a guarantee that future versions will break</strong>, only the honest reflection that nothing beyond 5.2 has been verified.</p>
+<p><code>version.php:$plugin-&gt;supported</code> today declares <code>[500, 502]</code> (Moodle 5.0 to 5.2) - the range with real, live-tested support on both ends (see <code>DECISIONS.md</code> D2, D67, D92). This is <strong>not a guarantee that future versions will break</strong>, only the honest reflection that nothing beyond this range has been verified.</p>
 <p>Declared plan (what existed before this note was no plan at all - this replaces that absence, not a more elaborate prior process):</p>
 <ul>
 <li>Before declaring support for a new Moodle version (e.g. 5.3), run the full suite (<code>.github/workflows/ci.yml</code> already covers this mechanically - just add the new branch to the <code>moodle-branch</code> matrix and see whether the 4 test types keep passing) against that version before changing <code>version.php:$plugin-&gt;supported</code>.</li>
