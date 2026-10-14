@@ -1,11 +1,11 @@
 # A11Y for Moodle - Plugin de Acessibilidade para Moodle
 
 [![Licença: GPL v3+](https://img.shields.io/badge/licença-GPL%20v3%2B-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
-[![Moodle](https://img.shields.io/badge/Moodle-5.2-orange.svg)](https://moodle.org)
+[![Moodle](https://img.shields.io/badge/Moodle-5.0%2B-orange.svg)](https://moodle.org)
 [![PHP](https://img.shields.io/badge/PHP-8.3%2B-777bb4.svg)](https://www.php.net)
 [![Documentação](https://img.shields.io/badge/docs-phpDocumentor%20%7C%20JSDoc%20%7C%20KSS-6f42c1.svg)](docs/README.md)
 
-Um plugin de acessibilidade para Moodle 5.2 que adiciona um botão flutuante (FAB) e um painel com **30 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
+Um plugin de acessibilidade para Moodle 5.0+ que adiciona um botão flutuante (FAB) e um painel com **30 opções de acessibilidade** organizadas em 5 categorias e **9 perfis prontos**, disponível em qualquer página do site. 
 
 ![Acessibilidade para Moodle - Mais inclusão, mais aprendizagem: banner de apresentação do local_a11y com o painel de acessibilidade aberto sobre o painel do Moodle, mostrando os 9 perfis de acessibilidade e a categoria Texto e Tipografia](.github/screenshots/hero/hero-overview.png)
 
@@ -45,8 +45,8 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 
 ## Requisitos
 
-- Moodle 5.2 (única versão com suporte confirmado - ver `version.php:$plugin->supported`; testar contra outras versões antes de assumir compatibilidade).
-- PHP 8.3+ (o core do próprio Moodle 5.2 já exige essa versão mínima - ver `.github/workflows/ci.yml`).
+- Moodle 5.0 ou superior, até 5.2 (faixa confirmada por CI real contra as branches `MOODLE_500_STABLE` e `MOODLE_502_STABLE` - ver `version.php:$plugin->supported` e DECISIONS.md D92; testar contra outras versões antes de assumir compatibilidade).
+- PHP 8.3+ (o core do próprio Moodle 5.0+ já exige essa versão mínima - ver `.github/workflows/ci.yml`).
 - Sem dependências externas empacotadas para a instalação do plugin em si (as fontes Atkinson Hyperlegible, Lexend e OpenDyslexic, e o WASM do MediaPipe, são empacotados localmente - nada disso é baixado de CDN de terceiro). Duas exceções reais em tempo de execução, ambas já detalhadas na seção "Por que usar" acima: o modelo de rastreamento facial da Navegação por Face (buscado ao vivo, com verificação de integridade) e a API nativa de reconhecimento de fala usada por Comandos por Voz.
 
 ## Instalação

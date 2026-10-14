@@ -28,20 +28,19 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_a11y';
-$plugin->version   = 2026101401;
-// D92 (trial, pending real CI evidence): lowered from 2025041500 to
-// 2025041409 - the real build number MOODLE_500_STABLE actually reaches
-// (confirmed live by the CI run in D67, the same run that originally
-// disproved 500 support). Nothing in this plugin is known to use any API
-// introduced after that build; this value was simply left too high the
-// first time, never actually derived from a real requirement. This is a
-// trial value, not yet confirmed - DECISIONS.md D66-D71's own discipline
-// (never change a compatibility value by assumption, only by real CI
-// evidence) applies here too: $supported below is NOT widened back to
-// include 500 until a real CI run (install + phpunit + behat, this exact
-// commit, MOODLE_500_STABLE re-added to the matrix) proves the plugin
-// actually installs and passes against it. See DECISIONS.md D92.
+$plugin->version   = 2026101402;
+// D92: $plugin->requires lowered from 2025041500 to 2025041409 - the real
+// build number the MOODLE_500_STABLE branch actually reaches (confirmed
+// live by the CI run in D67). $plugin->supported below was widened back
+// to include 500 only after a real CI run (GitHub Actions run 38561624902,
+// 14/10/2026) confirmed - install + phplint/phpcpd/phpmd/codechecker/
+// validate/savepoints/mustache/grunt/phpunit/behat, all 4 combinations
+// (PHP 8.3/8.4 x Postgres/MariaDB) - that the plugin actually installs and
+// passes against MOODLE_500_STABLE with this requires value. Not an
+// assumption or analogy this time: this project's own discipline
+// (DECISIONS.md D66-D71, reaffirmed in D92) is to never change a
+// compatibility value without exactly this kind of real evidence.
 $plugin->requires  = 2025041409;
-$plugin->supported = [502, 502];
+$plugin->supported = [500, 502];
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = '1.0.0';

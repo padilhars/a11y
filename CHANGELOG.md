@@ -4,6 +4,10 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
+### Changed
+
+- `$plugin->supported` widened back to `[500, 502]` (from `[502, 502]`) - Moodle 5.0 is officially supported again, this time with real CI evidence: `$plugin->requires` was lowered to the actual build number the `MOODLE_500_STABLE` branch reaches (2025041409, confirmed in DECISIONS.md D67), and a full CI run (GitHub Actions run 38561624902) passed on all 4 new matrix combinations (PHP 8.3/8.4 × PostgreSQL/MariaDB) against that branch - install, linting, static analysis, PHPUnit, and Behat all green. Nothing in the plugin's code changed; only the declared compatibility range did, now backed by evidence instead of assumption. See DECISIONS.md D92.
+
 ### Fixed
 
 - "Comandos por Voz" no longer leaves its switch enabled, with no warning, in a browser that lacks the Web Speech API's `SpeechRecognition`/`webkitSpeechRecognition` (Firefox, confirmed live - it keeps the interface behind a hidden, never-enabled-by-default `about:config` flag). `classes/output/panel.php::export_option()` now always renders a hidden `unsupportednote` element for this option (new `unsupported_note_for()`); `amd/src/main.js` checks support once per page load and `amd/src/panel.js::renderOption()` (new `unsupported` parameter) disables the switch and reveals the note when it's missing, without touching the stored preference's own value (it may still work on another, supporting browser the user also uses). `voice_commands.js`'s existing `start()`-time fallback (the `vc_notsupported` pill) is kept as a second line of defense, not replaced. Found by an independent technical audit while validating the public documentation site's browser-compatibility claims (internal finding DECISIONS.md D90, not published).
