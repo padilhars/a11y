@@ -4,6 +4,8 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-14
+
 ### Changed
 
 - `$plugin->supported` widened back to `[500, 502]` (from `[502, 502]`) - Moodle 5.0 is officially supported again, this time with real CI evidence: `$plugin->requires` was lowered to the actual build number the `MOODLE_500_STABLE` branch reaches (2025041409, confirmed in DECISIONS.md D67), and a full CI run (GitHub Actions run 38561624902) passed on all 4 new matrix combinations (PHP 8.3/8.4 × PostgreSQL/MariaDB) against that branch - install, linting, static analysis, PHPUnit, and Behat all green. Nothing in the plugin's code changed; only the declared compatibility range did, now backed by evidence instead of assumption. See DECISIONS.md D92.
