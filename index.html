@@ -22,21 +22,44 @@
 .h-sec{font-size:var(--step-3);margin-top:10px;margin-bottom:18px}
 
 /* HERO */
-.hero{padding-block:clamp(56px,9vw,112px) 0;text-align:center;overflow:hidden}
+.hero{padding-block:clamp(56px,9vw,112px);overflow:hidden}
+.hero__grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,4vw,64px);align-items:center}
+.hero__grid>*{min-width:0}
+.hero__copy{text-align:left}
 .hero .pill{margin-bottom:22px}
-.hero h1{font-size:var(--step-4);font-weight:600;letter-spacing:-.035em}
-.hero__sub{font-family:var(--font-display);font-weight:300;font-size:var(--step-2);color:var(--muted);margin-top:14px;letter-spacing:-.01em}
-.hero__cta{display:flex;flex-wrap:wrap;gap:12px 20px;justify-content:center;align-items:center;margin-top:32px}
-.hero__meta{margin-top:18px;font-size:.88rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.hero h1{font-size:var(--step-4);font-weight:600;letter-spacing:-.035em;line-height:1.05;margin:0}
+.hero h1 .accent{display:block;color:var(--accent)}
+.hero__sub{font-family:var(--font-display);font-weight:300;font-size:var(--step-1);color:var(--muted);margin-top:18px;letter-spacing:-.01em;max-width:48ch}
+.hero__cta{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center;margin-top:30px}
+.btn--outline{background:transparent;color:var(--fg);border:1px solid var(--line);padding-inline:22px}
+.btn--outline:hover{border-color:var(--accent);color:var(--accent)}
+.hero__stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:40px}
+.hero__stat{background:var(--surface-2);border:1px solid var(--line);border-radius:16px;padding:14px 20px;min-width:122px}
+.hero__stat b{display:block;font-family:var(--font-display);font-size:var(--step-2);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.hero__stat span{display:block;font-size:.8rem;color:var(--muted);margin-top:3px;line-height:1.3}
+.hero__statnote{font-size:.76rem;color:var(--muted);margin-top:10px}
+.hero__meta{margin-top:22px;font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .hero__meta span+span::before{content:"·";margin-inline:8px;opacity:.6}
-.hero__shot{max-width:1200px;margin:56px auto 0;padding-inline:var(--gutter)}
+
+.hero__visual{position:relative;padding:18px}
 .browser{border-radius:18px;overflow:hidden;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow)}
 .browser__bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:var(--surface-2);border-bottom:1px solid var(--line)}
 .browser__bar i{width:11px;height:11px;border-radius:50%;background:var(--line)}
 .browser__url{margin-left:12px;flex:1;max-width:420px;font:500 .74rem var(--font-mono);color:var(--muted);background:var(--surface);border-radius:7px;padding:4px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero__shot-page{width:88%;transform:rotate(-2.5deg)}
+.hero__shot-panel{position:absolute;width:48%;right:0;bottom:-6%;transform:rotate(2deg);z-index:2;box-shadow:0 30px 70px -24px rgba(20,30,60,.4),0 2px 10px rgba(20,30,60,.14)}
+.hero__shot-panel img{display:block}
+@media (max-width:860px){
+  .hero__grid{grid-template-columns:1fr}
+  .hero__copy{text-align:center}
+  .hero__sub{margin-inline:auto}
+  .hero__cta,.hero__stats{justify-content:center}
+  .hero__visual{margin-top:12px}
+  .hero__shot-panel{width:52%}
+}
 @supports (animation-timeline:scroll()){
   @media (prefers-reduced-motion:no-preference){
-    .hero__shot .browser{animation:heroGrow linear both;animation-timeline:scroll(root);animation-range:0 600px}
+    .hero__visual{animation:heroGrow linear both;animation-timeline:scroll(root);animation-range:0 600px}
     @keyframes heroGrow{from{transform:scale(.94)}to{transform:scale(1) translateY(-10px)}}
     .reveal{animation:reveal linear both;animation-timeline:view();animation-range:entry 0% cover 26%}
     @keyframes reveal{from{opacity:.45;transform:translateY(28px)}to{opacity:1;transform:none}}
@@ -392,20 +415,31 @@
 <main id="conteudo">
 <!-- HERO -->
 <section class="hero" id="topo" aria-labelledby="h-hero">
-  <div class="narrow">
-    <span class="pill" data-i18n="h0">Plugin para Moodle 5.0+</span>
-    <h1 id="h-hero" data-i18n="h1">Acessibilidade para Moodle.</h1>
-    <p class="hero__sub" data-i18n="h2">30 opções. 9 perfis. Um clique.</p>
-    <div class="hero__cta">
-      <a class="btn" href="https://github.com/padilhars/a11y/releases/latest"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg><span data-i18n="h3">Baixar</span></a>
-      <a class="btn btn--ghost" href="https://github.com/padilhars/a11y" data-i18n="h4">Ver no GitHub ›</a>
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <span class="pill" data-i18n="h0">A11Y for Moodle · Plugin de acessibilidade</span>
+      <h1 id="h-hero" data-i18n="h1">O mesmo ambiente.<span class="accent">Diferentes formas de aprender.</span></h1>
+      <p class="hero__sub" data-i18n="h2">Mais autonomia e conforto no Moodle. Um plugin de acessibilidade que permite a cada pessoa adaptar a experiência às suas necessidades.</p>
+      <div class="hero__cta">
+        <a class="btn" href="#experimente"><span data-i18n="h3">Experimentar o plugin</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a>
+        <a class="btn btn--outline" href="#avancados"><span data-i18n="h4">Conhecer os recursos</span></a>
+      </div>
+      <div class="hero__stats">
+        <div class="hero__stat"><b>9</b><span data-i18n="h6">perfis de acessibilidade</span></div>
+        <div class="hero__stat"><b>30+</b><span data-i18n="h7">opções de personalização</span></div>
+        <div class="hero__stat"><b>GPL</b><span data-i18n="h8">software livre</span></div>
+      </div>
+      <p class="hero__statnote" data-i18n="h9">* 31 opções com a integração VLibras ativada.</p>
+      <p class="hero__meta"><span data-i18n="h5">Versão 1.1.1</span><span>Moodle 5.0+</span><span>PHP 8.3+</span></p>
     </div>
-    <p class="hero__meta"><span data-i18n="h5">Versão 1.1.1</span><span>Moodle 5.0+</span><span>PHP 8.3+</span><span>GPL v3</span></p>
-  </div>
-  <div class="hero__shot">
-    <div class="browser">
-      <div class="browser__bar" aria-hidden="true"><i></i><i></i><i></i><span class="browser__url">moodle.suainstituicao.edu.br/course/view.php?id=7</span></div>
-      <img class="l10n" src="img/hero.webp" width="1536" height="1024" alt="Painel de acessibilidade do A11Y for Moodle aberto como um diálogo central sobre uma página do Moodle desfocada ao fundo, mostrando a busca, os 9 perfis em cartões coloridos e o início da categoria Texto e Tipografia." data-i18n-attr="alt:heroalt">
+    <div class="hero__visual">
+      <div class="browser hero__shot-page">
+        <div class="browser__bar" aria-hidden="true"><i></i><i></i><i></i><span class="browser__url">moodle.suainstituicao.edu.br/course/view.php?id=7</span></div>
+        <img src="img/hero2-page.webp" width="1800" height="1080" alt="" aria-hidden="true" loading="eager">
+      </div>
+      <div class="browser hero__shot-panel">
+        <img class="l10n" src="img/hero2-panel.webp" width="640" height="954" alt="Painel de acessibilidade do A11Y for Moodle aberto sobre uma página real de curso no Moodle, mostrando a busca, os 9 perfis em cartões coloridos e o início da categoria Texto e Tipografia." data-i18n-attr="alt:heroalt">
+      </div>
     </div>
   </div>
 </section>
