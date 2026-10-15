@@ -5,7 +5,7 @@ skip:'Skip to content',navmain:'Main',n1:'Profiles',n2:'Try it',n3:'Features',n4
 h0:'Plugin for Moodle 5.0+',h1:'Accessibility for Moodle.',h2:'30 options. 9 profiles. One click.',h3:'Download',h4:'View on GitHub ›',h5:'Version 1.0.0',
 heroalt:'A Moodle course page with the accessibility panel open on the right, showing the search field, the 9 profiles as colored cards and the start of the Text & Typography category.',
 w0:'Why it exists',
-w1:'Everyone learns differently. The place where they learn should respect that too.',
+w1:'Everyone learns differently. <strong>The place where they learn should respect that too.</strong>',
 w2:'A11Y for Moodle was built to make that possible, offering accessibility features that let students and teachers adapt their Moodle experience to their own needs, with more autonomy, comfort and freedom.',
 w3:'The project was developed at the Coordination of Policies and Technologies for Distance Education (CPTED) of the Federal University of Pelotas (UFPel), driven by a commitment to more inclusive and accessible education. Aligned with accessibility principles such as the Brazilian Inclusion Law (Law 13,146/2015) and eMAG, the plugin is free software and can be used by institutions that want to make their virtual learning environments more welcoming to different ways of learning and teaching.',
 p0:'Accessibility profiles',p1:'One click. The whole page adapts.',
