@@ -28,7 +28,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_a11y';
-$plugin->version   = 2026101402;
+$plugin->version   = 2026101500;
 // D92: $plugin->requires lowered from 2025041500 to 2025041409 - the real
 // build number the MOODLE_500_STABLE branch actually reaches (confirmed
 // live by the CI run in D67). $plugin->supported below was widened back

@@ -25,11 +25,15 @@ namespace local_a11y\integration;
  * touching this class or re-auditing every file that happens to know about
  * VLibras today - only adding a sibling class next to this one.
  *
- * What "integrated" means here, precisely (D54): local_vlibras is installed
- * (`core_plugin_manager`), its own widget is switched on via its own
- * `local_vlibras/enabled` setting, AND this plugin's own admin setting
- * (`local_a11y/integratevlibras`) is also on. All three, not just presence -
- * see is_integrated() below for why each one matters independently.
+ * What "integrated" means here, precisely (D54, revised by a later decision
+ * for the manual-mode path below): VLibras is available - either
+ * local_vlibras is installed (`core_plugin_manager`) with its own widget
+ * switched on via its own `local_vlibras/enabled` setting, or, when the
+ * Marketplace plugin isn't installed at all, the admin has manually
+ * declared VLibras present via `local_a11y/vlibrasmanual` (see
+ * manual_mode_enabled()) - AND this plugin's own admin setting
+ * (`local_a11y/integratevlibras`) is also on. Not just presence either way -
+ * see is_integrated() below for why each half matters independently.
  *
  * @package    local_a11y
  * @author     Rodrigo Padilha Silveira <padilhars@gmail.com>
@@ -164,9 +168,10 @@ class vlibras {
      * actually installed into the DB, both need to read as "not usable"
      * here, and only the plugin manager actually knows the difference).
      *
-     * Used to decide whether *this plugin's own* admin setting for the
-     * integration should even be shown - the setting only makes sense to
-     * offer once local_vlibras exists to integrate with.
+     * Decides which of is_available()'s two paths applies: the real
+     * plugin's own `enabled` config when this is true, manual_mode_enabled()
+     * (local_a11y/vlibrasmanual) when it is not - see that method's own
+     * docblock for the site that does not install local_vlibras at all.
      *
      * @return bool
      */
@@ -176,7 +181,11 @@ class vlibras {
 
     /**
      * Whether local_vlibras is installed AND its own widget is currently
-     * switched on (its own `local_vlibras/enabled` setting).
+     * switched on (its own `local_vlibras/enabled` setting) - OR, when the
+     * Marketplace plugin isn't installed at all, whether the admin has
+     * manually declared VLibras present some other way (see
+     * manual_mode_enabled()'s own docblock for why this second path exists
+     * and why it's safe to treat the same as the real thing).
      *
      * `\core\plugininfo\base::is_enabled()` is deliberately NOT used here,
      * even though the brief asks for a `core_plugin_manager`-based check:
@@ -198,10 +207,43 @@ class vlibras {
      * @return bool
      */
     public static function is_available(): bool {
-        if (!self::is_installed()) {
-            return false;
+        if (self::is_installed()) {
+            return (bool) get_config(self::COMPONENT, 'enabled');
         }
-        return (bool) get_config(self::COMPONENT, 'enabled');
+        return self::manual_mode_enabled();
+    }
+
+    /**
+     * Whether the admin has manually declared VLibras present on this site
+     * through `local_a11y/vlibrasmanual`, for sites that add it the way
+     * vlibras.gov.br's own instructions actually lead with - pasting its
+     * `<script>` snippet into Moodle's "Additional HTML" admin setting
+     * (`$CFG->additionalhtmlfooter` et al) - rather than installing the
+     * separate `local_vlibras` Marketplace plugin this class otherwise
+     * depends on entirely. Found live (a real site reported this exact
+     * setup, see DECISIONS.md): is_installed() reads false in that case
+     * (there is no Moodle plugin to find - `core_plugin_manager` can only
+     * ever see installed plugins, never raw injected HTML/JS), so every
+     * other method below used to read "not integrated" even though VLibras
+     * was genuinely running on the page the whole time.
+     *
+     * Safe to treat identically to the real plugin's own `enabled` config:
+     * vlibras.gov.br's public embed snippet builds the exact same
+     * WIDGET_SELECTOR/OPEN_BUTTON_ID/APP_ROOT_SELECTOR DOM either way (it's
+     * the same remote vlibras-plugin.js script in both cases, not something
+     * local_vlibras itself builds) - amd/src/vlibras_integration.js's own
+     * DOM interaction never needed to know or care which path put that
+     * script on the page.
+     *
+     * Only consulted when !is_installed() - if the real plugin exists,
+     * its own `enabled` setting is still the more trustworthy signal (it
+     * can be verified against `core_plugin_manager`; this flag is only
+     * ever the admin's own word for it), so this never overrides that.
+     *
+     * @return bool
+     */
+    public static function manual_mode_enabled(): bool {
+        return (bool) get_config('local_a11y', 'vlibrasmanual');
     }
 
     /**
@@ -250,10 +292,19 @@ class vlibras {
      * CSS and there is nothing to collide with; see settings.php for where
      * this is actually surfaced.
      *
+     * Requires is_installed() too, not just is_available(): in manual mode
+     * (manual_mode_enabled()) there is no `local_vlibras/position` config
+     * to read at all - VLibras was placed through whatever its own embed
+     * snippet or Additional HTML was configured with, entirely outside
+     * Moodle's own config_plugins table - so there is nothing real to
+     * compare here, and a get_config() on an uninstalled plugin's setting
+     * would just silently read false/null and warn based on a default
+     * bucket that has no connection to where the widget actually renders.
+     *
      * @return bool True if VLibras' configured position maps to the same corner/edge as ours.
      */
     public static function has_position_collision(): bool {
-        if (!self::is_available()) {
+        if (!self::is_installed() || !self::is_available()) {
             return false;
         }
         $ourposition = (string) (get_config('local_a11y', 'fabposition') ?: 'bottom-right');

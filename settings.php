@@ -94,41 +94,62 @@ if ($hassiteconfig) {
     ));
 
     // Integrações ────────────────────────────────────────────────────────
-    // Third-party plugin integrations - currently just VLibras (D54). Only
-    // local_a11y's own admin setting and, when relevant, a position-
+    // Third-party plugin integrations - currently just VLibras (D54, plus
+    // a later decision for sites that add VLibras without the Marketplace
+    // plugin - see vlibrasmanual below). Always shown now, not gated behind
+    // vlibras::is_installed(): a site running VLibras purely through
+    // Moodle's own "Additional HTML" admin setting (vlibras.gov.br's own
+    // embed instructions, no local_vlibras plugin at all) still needs a way
+    // to tell this plugin VLibras is there - hiding the whole section
+    // whenever is_installed() is false made that setting undiscoverable.
+    // Only local_a11y's own admin settings and, when relevant, a position-
     // collision warning live here; every actual VLibras-specific check is
     // delegated to classes/integration/vlibras.php, never duplicated here.
-    if (\local_a11y\integration\vlibras::is_installed()) {
-        $settings->add(new admin_setting_heading(
-            'local_a11y/integrationsheading',
-            new lang_string('settings_integrations', 'local_a11y'),
-            ''
-        ));
+    $settings->add(new admin_setting_heading(
+        'local_a11y/integrationsheading',
+        new lang_string('settings_integrations', 'local_a11y'),
+        ''
+    ));
 
+    // Only offered when there is no real plugin to read an "enabled" state
+    // from - if local_vlibras is installed, its own config is the
+    // trustworthy signal (see vlibras::is_available()), and showing this
+    // checkbox too would just invite the two to disagree.
+    if (!\local_a11y\integration\vlibras::is_installed()) {
         $settings->add(new admin_setting_configcheckbox(
-            'local_a11y/integratevlibras',
-            new lang_string('settings_integratevlibras', 'local_a11y'),
-            new lang_string('settings_integratevlibras_desc', 'local_a11y'),
+            'local_a11y/vlibrasmanual',
+            new lang_string('settings_vlibrasmanual', 'local_a11y'),
+            new lang_string('settings_vlibrasmanual_desc', 'local_a11y'),
             0
         ));
+    }
 
-        // Only a meaningful thing to check when the integration is OFF:
-        // once it's on, VLibras' own button is CSS-hidden by us, so there
-        // is nothing left to collide with - see styles.css.
-        if (
-            \local_a11y\integration\vlibras::is_available()
-            && !\local_a11y\integration\vlibras::integration_enabled()
-            && \local_a11y\integration\vlibras::has_position_collision()
-        ) {
-            $settings->add(new admin_setting_description(
-                'local_a11y/vlibrascollisionwarning',
-                '',
-                \html_writer::div(
-                    get_string('settings_vlibrascollision_warning', 'local_a11y'),
-                    'alert alert-warning'
-                )
-            ));
-        }
+    $settings->add(new admin_setting_configcheckbox(
+        'local_a11y/integratevlibras',
+        new lang_string('settings_integratevlibras', 'local_a11y'),
+        new lang_string('settings_integratevlibras_desc', 'local_a11y'),
+        0
+    ));
+
+    // Only a meaningful thing to check when the integration is OFF (once
+    // it's on, VLibras' own button is CSS-hidden by us, so there is
+    // nothing left to collide with - see styles.css) and when there is a
+    // real `local_vlibras/position` config to compare against - manual
+    // mode has no such config at all (see has_position_collision()'s own
+    // docblock), so it is excluded there automatically.
+    if (
+        \local_a11y\integration\vlibras::is_available()
+        && !\local_a11y\integration\vlibras::integration_enabled()
+        && \local_a11y\integration\vlibras::has_position_collision()
+    ) {
+        $settings->add(new admin_setting_description(
+            'local_a11y/vlibrascollisionwarning',
+            '',
+            \html_writer::div(
+                get_string('settings_vlibrascollision_warning', 'local_a11y'),
+                'alert alert-warning'
+            )
+        ));
     }
 
     // Botão Flutuante (FAB) ─────────────────────────────────────────────
