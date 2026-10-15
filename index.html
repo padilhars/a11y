@@ -23,13 +23,13 @@
 
 /* HERO */
 .hero{padding-block:clamp(56px,9vw,112px);overflow:hidden}
-.hero__grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(28px,4vw,64px);align-items:center}
+.hero__grid{display:grid;grid-template-columns:.86fr 1.3fr;gap:clamp(28px,4vw,56px);align-items:center}
 .hero__grid>*{min-width:0}
 .hero__copy{text-align:left}
 .hero .pill{margin-bottom:22px}
-.hero h1{font-size:var(--step-4);font-weight:600;letter-spacing:-.035em;line-height:1.05;margin:0}
+.hero h1{font-size:clamp(2.1rem,1.3rem + 3.6vw,4.3rem);font-weight:600;letter-spacing:-.035em;line-height:1.08;margin:0}
 .hero h1 .accent{display:block;color:var(--accent)}
-.hero__sub{font-family:var(--font-display);font-weight:300;font-size:var(--step-1);color:var(--muted);margin-top:18px;letter-spacing:-.01em;max-width:48ch}
+.hero__sub{font-family:var(--font-display);font-weight:300;font-size:var(--step-0);color:var(--muted);margin-top:16px;letter-spacing:-.01em;max-width:42ch}
 .hero__cta{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:center;margin-top:30px}
 .btn--outline{background:transparent;color:var(--fg);border:1px solid var(--line);padding-inline:22px}
 .btn--outline:hover{border-color:var(--accent);color:var(--accent)}
@@ -46,16 +46,16 @@
 .browser__bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:var(--surface-2);border-bottom:1px solid var(--line)}
 .browser__bar i{width:11px;height:11px;border-radius:50%;background:var(--line)}
 .browser__url{margin-left:12px;flex:1;max-width:420px;font:500 .74rem var(--font-mono);color:var(--muted);background:var(--surface);border-radius:7px;padding:4px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hero__shot-page{width:88%;transform:rotate(-2.5deg)}
-.hero__shot-panel{position:absolute;width:48%;right:0;bottom:-6%;transform:rotate(2deg);z-index:2;box-shadow:0 30px 70px -24px rgba(20,30,60,.4),0 2px 10px rgba(20,30,60,.14)}
-.hero__shot-panel img{display:block}
+.hero__shot-page{width:100%;transform:rotate(-2.5deg)}
+.hero__shot-panel{position:absolute;height:74%;width:auto;right:1%;bottom:2%;transform:rotate(2deg);z-index:2}
+.hero__shot-panel img{display:block;height:100%;width:auto;max-width:none}
 @media (max-width:860px){
   .hero__grid{grid-template-columns:1fr}
   .hero__copy{text-align:center}
   .hero__sub{margin-inline:auto}
   .hero__cta,.hero__stats{justify-content:center}
-  .hero__visual{margin-top:12px}
-  .hero__shot-panel{width:52%}
+  .hero__visual{margin-top:28px}
+  .hero__shot-panel{height:64%;bottom:0}
 }
 @supports (animation-timeline:scroll()){
   @media (prefers-reduced-motion:no-preference){
@@ -437,7 +437,7 @@
         <div class="browser__bar" aria-hidden="true"><i></i><i></i><i></i><span class="browser__url">moodle.suainstituicao.edu.br/course/view.php?id=7</span></div>
         <img src="img/hero2-page.webp" width="1536" height="1024" alt="" aria-hidden="true" loading="eager">
       </div>
-      <div class="browser hero__shot-panel">
+      <div class="hero__shot-panel">
         <img class="l10n" src="img/hero2-panel.webp" width="422" height="1033" alt="Painel de acessibilidade do A11Y for Moodle aberto sobre uma página real de curso no Moodle, mostrando a busca, os 9 perfis em cartões coloridos e o início da categoria Texto e Tipografia." data-i18n-attr="alt:heroalt">
       </div>
     </div>
