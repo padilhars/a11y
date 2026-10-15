@@ -4,6 +4,8 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-10-15
+
 ### Fixed
 
 - VLibras integration (`signLanguage`) never worked on a site that adds VLibras by pasting its own official `<script>` snippet into Moodle's "Additional HTML" admin setting instead of installing the separate `local_vlibras` Marketplace plugin - `\local_a11y\integration\vlibras::is_installed()` can only ever detect an actually-installed plugin (`core_plugin_manager`), so `is_available()`/`is_integrated()` always read false in that case, hiding the "Libras (VLibras)" option from the panel entirely even though VLibras' own widget was genuinely running on the page. New admin setting `local_a11y/vlibrasmanual` ("VLibras presente, mas não como plugin") lets the admin declare it present anyway; `is_available()` now falls back to it whenever `local_vlibras` isn't installed. The existing `local_a11y/integratevlibras` checkbox and the "Integrações" settings section are no longer hidden when the plugin is absent, so the new setting is actually discoverable. `has_position_collision()` is skipped in this manual path (there is no real `local_vlibras/position` config to compare against). No change to `amd/src/vlibras_integration.js` - the DOM it looks for is built by the same remote `vlibras-plugin.js` script either way. Found by the user, reporting a real site's configuration. `tests/vlibras_integration_test.php` (new) covers the manual-mode fallback; it `markTestSkipped()`s itself on this project's own dev site, where `local_vlibras` is genuinely installed - runs for real on CI, which doesn't install it.
