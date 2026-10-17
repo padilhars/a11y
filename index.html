@@ -21,6 +21,18 @@
 .lede{font-size:var(--step-1);color:var(--muted);line-height:1.5;max-width:44ch}
 .h-sec{font-size:var(--step-3);margin-top:10px;margin-bottom:18px}
 
+/* Section intros (eyebrow + title + lede) centered, matching the hero -
+   body content below (lists, cards, tables, the mobile phone-row pairing
+   and the download card's own small "Versão atual" label) stays as-is;
+   long running text reads worse centered past a line or two. */
+.eyebrow,.h-sec,.lede{text-align:center}
+.h-sec,.lede{margin-inline:auto}
+.lede{max-width:60ch}
+.phone-row .eyebrow,.phone-row .h-sec,.phone-row .lede,
+.dl__card .eyebrow{text-align:left;margin-inline:0;max-width:none}
+.pg-intro{justify-content:center}
+.pg-intro>div{max-width:60ch}
+
 /* HERO */
 .hero{padding-block:clamp(56px,9vw,112px);overflow:hidden}
 .hero__grid{display:block}
