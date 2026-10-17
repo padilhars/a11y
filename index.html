@@ -18,7 +18,7 @@
 .narrow{max-width:820px;margin:0 auto;padding-inline:var(--gutter)}
 .chapter{padding-block:clamp(72px,11vw,140px)}
 .chapter + .chapter{border-top:1px solid var(--line)}
-.lede{font-size:var(--step-1);color:var(--muted);line-height:1.5;max-width:44ch}
+.lede{font-size:var(--step-1);color:var(--muted);line-height:1.5}
 .h-sec{font-size:var(--step-3);margin-top:10px;margin-bottom:18px}
 
 /* Section intros (eyebrow + title + lede) centered, matching the hero -
@@ -27,11 +27,9 @@
    long running text reads worse centered past a line or two. */
 .eyebrow,.h-sec,.lede{text-align:center}
 .h-sec,.lede{margin-inline:auto}
-.lede{max-width:60ch}
 .phone-row .eyebrow,.phone-row .h-sec,.phone-row .lede,
 .dl__card .eyebrow{text-align:left;margin-inline:0;max-width:none}
 .pg-intro{justify-content:center}
-.pg-intro>div{max-width:60ch}
 
 /* HERO */
 .hero{padding-block:clamp(56px,9vw,112px);overflow:hidden}
@@ -81,7 +79,7 @@
 /* PORQUÊ */
 .why{font-family:var(--font-display);font-size:clamp(1.6rem,1.1rem + 2.2vw,2.9rem);line-height:1.22;font-weight:500;letter-spacing:-.02em;color:var(--muted)}
 .why strong{color:var(--fg);font-weight:600}
-.why-foot{margin-top:28px;color:var(--muted);max-width:62ch}
+.why-foot{margin-top:28px;color:var(--muted);text-align:center}
 
 /* PERFIS */
 .pf{margin-top:44px}
@@ -142,7 +140,7 @@
 @media (max-width:900px){.pf__main{grid-template-columns:1fr}}
 
 /* EXPERIMENTE */
-.pg-intro{display:flex;justify-content:space-between;gap:24px;align-items:end;flex-wrap:wrap}
+.pg-intro{justify-content:space-between;gap:24px;align-items:end;flex-wrap:wrap;overflow:hidden}
 
 /* PAINEL — carrossel */
 .car{margin-top:44px;position:relative}
