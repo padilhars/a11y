@@ -1722,6 +1722,48 @@ body.a11y-highlight-buttons .drawer-right [role="button"] {
    the FAB/panel are direct <body> children (D31), never descendants of
    .navbar/.drawer-*, so nothing here needs excluding them. */
 
+/* D96: most of Boost/Bootstrap's own typography (headings - .h1-.h6 and
+   the real h1-h6 tags -, .courseindex-link, badges, etc.) sets its own
+   font-size in `rem`, which is always relative to the ROOT element's
+   font-size, never to an ancestor's - confirmed live, not by assumption:
+   #page's own font-size demonstrably inherits correctly into plain,
+   unstyled text, but a `.courseindex-link` (`.875rem` in Boost's compiled
+   CSS) and a section heading (`.h4`, `1.5rem`) both stayed exactly their
+   *default* pixel size with only the #page/.navbar/.drawer-* rules below
+   active, no matter the level - `rem` isn't part of the normal
+   inheritance chain at all, so a change to an ancestor's `font-size` (in
+   any unit) can never reach it. The fix: also scale the root element's
+   own font-size, by the same amount - `rem` then naturally scales
+   everywhere Boost/Bootstrap use it, site-wide, with no need to chase
+   down and override every individual rem-sized component by hand (and no
+   way to anticipate every one that exists today or gets added by a future
+   theme update). `html:has(body.a11y-text-size-N)` is used instead of
+   trying to put the class on `<html>` directly (effects.js only ever
+   touches `<body>`, by design - see its own docblock) - confirmed
+   browser-safe: the compiled Boost theme CSS already relies on `:has()`
+   itself for its drawer positioning (see the content-width comment
+   further down this file), so this codebase already assumes it works.
+   Confirmed zero side effect on the FAB/panel: `.local-a11y-fab`/
+   `.local-a11y-panel` never use `rem` anywhere in this file (checked:
+   only `px`), so neither one's size changes when the root's font-size
+   does. The #page/.navbar/.drawer-* rules below are kept too, not made
+   redundant - they're still what makes genuinely plain, unstyled text (no
+   Bootstrap typography class of its own) grow, which `rem` alone
+   wouldn't cover for text that was never given a `rem` size to begin
+   with. */
+html:has(body.a11y-text-size-1) {
+    font-size: 17px;
+}
+html:has(body.a11y-text-size-2) {
+    font-size: 19px;
+}
+html:has(body.a11y-text-size-3) {
+    font-size: 22px;
+}
+html:has(body.a11y-text-size-4) {
+    font-size: 26px;
+}
+
 /*
 Text Size, Line Height, Text Spacing and Word Spacing effects.
 
@@ -2176,6 +2218,7 @@ body.a11y-contrast-1 .modal-content,
 body.a11y-contrast-1 .secondary-navigation .navigation,
 body.a11y-contrast-1 .section-item,
 body.a11y-contrast-1 .section-content-inner,
+body.a11y-contrast-1 .activity-item,
 body.a11y-contrast-1 footer#page-footer {
     background-color: #1f1f1f !important;
     color: #f3f4f6 !important;
@@ -2268,6 +2311,7 @@ body.a11y-contrast-2 .modal-content,
 body.a11y-contrast-2 .secondary-navigation .navigation,
 body.a11y-contrast-2 .section-item,
 body.a11y-contrast-2 .section-content-inner,
+body.a11y-contrast-2 .activity-item,
 body.a11y-contrast-2 footer#page-footer {
     background-color: #fffbeb !important;
     color: #1c1917 !important;
@@ -2333,6 +2377,7 @@ body.a11y-contrast-3 .navbar,
 body.a11y-contrast-3 .secondary-navigation .navigation,
 body.a11y-contrast-3 .section-item,
 body.a11y-contrast-3 .section-content-inner,
+body.a11y-contrast-3 .activity-item,
 body.a11y-contrast-3 footer#page-footer {
     background-color: #000 !important;
     color: #fff !important;
@@ -2580,27 +2625,44 @@ body.a11y-bluelight-3 #page {
     background-color: #fff;
 }
 
-/* D95 follow-up: #page's own margin-left (reserved by the theme for the
+/* D95/D96: #page's own margin-left (reserved by the theme for the
    primary-rail drawer even while it's closed, confirmed live at 285px on
    this Boost build) sits *outside* #page's own box - the fix just above
    (an opaque background painted *inside* #page) cannot reach it, since
    margins are never painted by the element that owns them. That strip is
    actually <body>'s own background bleeding through #page-wrapper (itself
-   transparent) - for every other filtered element here it would be
-   invisible (body's white is already what their own unfiltered state
-   would show), but Inverter Cores is the one option in this family that
-   flips brightness, so an unfiltered white strip next to an otherwise
-   inverted-to-black page reads as a visibly broken gap. Not using `filter`
-   here (same containing-block risk already documented above for #page-
-   wrapper) - a flat, hardcoded end-state colour on #page-wrapper itself
-   avoids that risk entirely: #page-wrapper has no `filter` of its own and
-   never did, so none of the position:fixed descendants inside it
-   (navbar/drawers) get a new containing block. Scoped to Inverter Cores
-   only - Saturação/Mudar Cores/Filtro de Luz Azul don't invert brightness,
-   so the same strip stays close enough to white under those that it was
-   never reported as broken. */
+   transparent). Not using `filter` here (same containing-block risk
+   already documented above for #page-wrapper) - a flat, hardcoded
+   end-state colour on #page-wrapper itself avoids that risk entirely:
+   #page-wrapper has no `filter` of its own and never did, so none of the
+   position:fixed descendants inside it (navbar/drawers) get a new
+   containing block.
+
+   D95 originally scoped this to Inverter Cores alone, on the assumption
+   that Saturação/Mudar Cores/Filtro de Luz Azul "don't invert brightness,
+   so the strip stays close enough to white... never reported as broken" -
+   wrong for Filtro de Luz Azul specifically, reported by the user right
+   after: its sepia/saturate/brightness combination visibly warms white
+   (confirmed live, sampled via a filtered 2D canvas rather than guessed -
+   canvas and CSS `filter` share the same underlying implementation in
+   Chromium - level 1/2/3 on #fff come out rgb(249,249,245)/
+   rgb(242,242,234)/rgb(229,229,218), each measurably different from pure
+   white), so the unfiltered strip reads as a visible seam against the
+   rest of the warmed page. Saturação (saturate()/grayscale()) and Mudar
+   Cores (the 3 colour-blindness SVG matrices) were re-checked the same
+   way and do stay at pure/near-pure white from #fff, matching the
+   original assumption for those two specifically - not extended here. */
 body.a11y-invert #page-wrapper {
     background-color: #000;
+}
+body.a11y-bluelight-1 #page-wrapper {
+    background-color: #f9f9f5;
+}
+body.a11y-bluelight-2 #page-wrapper {
+    background-color: #f2f2ea;
+}
+body.a11y-bluelight-3 #page-wrapper {
+    background-color: #e5e5da;
 }
 
 /* Big Cursors */

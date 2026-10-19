@@ -102,6 +102,67 @@ const lazy = (moduleId) => {
 // full voice_commands.js module on every single page load again).
 const voiceCommandsSupported = Boolean(window.SpeechRecognition || window.webkitSpeechRecognition);
 
+/**
+ * D96: closes any open theme_boost drawer (course-index/blocks) whenever
+ * contentWidth is active - styles.css's `.main-inner` min-width override
+ * only widens the reading column while no `#page.show-drawer-*` class is
+ * present (see the comment there): the Boost "limitedwidth" layout
+ * positions an *open* drawer with a `right`/`left` calc() hardcoded
+ * against .main-inner's *default* 830px width (confirmed live in the
+ * compiled theme CSS), so a wider column while a drawer stays open just
+ * overlaps it - reproducing that calc() with our own width substituted
+ * would work too, but ties this rule to a compiled, versioned theme
+ * stylesheet's exact formula, not something this plugin owns.
+ *
+ * Uses theme_boost/drawers' own public API (`closeAllDrawers`,
+ * `updatePreferences: false` so this never overwrites the user's own
+ * saved drawer-open preference - same convention the module itself uses
+ * for its own non-user-initiated auto-closes, e.g. isSmall()) rather than
+ * toggling the `show-drawer-*` class by hand: that class alone drives our
+ * CSS correctly, but leaves the module's own internal state (aria-hidden,
+ * focus handling, the open/close button's own pressed state) out of sync
+ * with what's actually on screen.
+ *
+ * Dynamically imported and cached (mirrors `lazy()` above, but one-shot:
+ * nothing here ever needs to *reopen* a drawer) so a site running a theme
+ * other than Boost - where `theme_boost/drawers` doesn't exist at all -
+ * never pays an import cost, and a failed import (same reason) is a silent
+ * no-op rather than an unhandled rejection.
+ *
+ * @type {Object|null}
+ */
+let boostDrawers = null;
+let boostDrawersAttempted = false;
+
+/**
+ * Close every open theme_boost drawer. Called only on contentWidth's
+ * 0 -> non-zero transition (see the call site in setStepperValue()), not
+ * every commit() - see the docblock on boostDrawers above for why.
+ *
+ * @return {void}
+ */
+const closeDrawersForContentWidth = () => {
+    // theme_boost/drawers exports the Drawers class itself, not wrapped in a
+    // `.default` (confirmed live - unlike this plugin's own AMD modules,
+    // theme_boost/drawers.js is not run through this plugin's Rollup build,
+    // so there's no ES-module-interop wrapper to unwrap here).
+    if (boostDrawers) {
+        boostDrawers.closeAllDrawers({focusOnOpenButton: false, updatePreferences: false});
+        return;
+    }
+    if (boostDrawersAttempted) {
+        return;
+    }
+    boostDrawersAttempted = true;
+    import('theme_boost/drawers').then((mod) => {
+        boostDrawers = mod;
+        mod.closeAllDrawers({focusOnOpenButton: false, updatePreferences: false});
+        return;
+    }).catch(() => {
+        // Not running theme_boost (or it changed shape) - nothing to close.
+    });
+};
+
 const ReadingGuide = lazy('local_a11y/reading_guide');
 const ReadingMask = lazy('local_a11y/reading_mask');
 const Magnifier = lazy('local_a11y/magnifier');
@@ -377,6 +438,13 @@ const setStepperValue = (id, value) => {
     recordNewActivations(oldSettings, settings);
     activeProfileId = null;
     Panel.renderActiveProfile(null);
+    // D96: only on the 0 -> non-zero transition, not every commit() - see
+    // closeDrawersForContentWidth()'s docblock. Re-closing on every commit
+    // would also fight a user who manually reopens a drawer afterwards
+    // while contentWidth stays on.
+    if (id === 'contentWidth' && (Number(oldSettings.contentWidth) || 0) === 0 && (Number(settings.contentWidth) || 0) > 0) {
+        closeDrawersForContentWidth();
+    }
     commit(id);
 };
 
@@ -774,6 +842,14 @@ export const init = async(loggedIn, collectStatsEnabled, sessionExists) => {
     // and keeps the option rows' own state in sync with it.
     Effects.apply(settings);
     syncAdvancedFeatures();
+    // D96: contentWidth may already be active from a previous page load's
+    // saved preference - this page's own drawer(s) start open-by-default on
+    // a fresh load regardless of that, so the same overlap
+    // closeDrawersForContentWidth() prevents on a live toggle (see its
+    // docblock) can happen here too, on first paint, with no toggle at all.
+    if ((Number(settings.contentWidth) || 0) > 0) {
+        closeDrawersForContentWidth();
+    }
     // D90: was a direct Panel.renderOption() call that bypassed
     // renderOptionRow(), so this particular render pass never resolved the
     // D52 hideImages/focusMode "forced" state or the D90 voiceCommands
