@@ -28,7 +28,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_a11y';
-$plugin->version   = 2026101800;
+$plugin->version   = 2026101801;
 // D92: $plugin->requires lowered from 2025041500 to 2025041409 - the real
 // build number the MOODLE_500_STABLE branch actually reaches (confirmed
 // live by the CI run in D67). $plugin->supported below was widened back
@@ -40,7 +40,7 @@ $plugin->version   = 2026101800;
 // assumption or analogy this time: this project's own discipline
 // (DECISIONS.md D66-D71, reaffirmed in D92) is to never change a
 // compatibility value without exactly this kind of real evidence.
-// D97: $plugin->supported widened to include 503 - GitHub Actions run
+// D98: $plugin->supported widened to [500, 503] - GitHub Actions run
 // 39185579430 (18-19/10/2026) confirmed, all 4 combinations (PHP 8.3/8.4 x
 // Postgres/MariaDB) against MOODLE_503_STABLE, that the plugin installs and
 // passes every check (phplint/phpcpd/phpmd/codechecker/validate/savepoints/
@@ -48,7 +48,15 @@ $plugin->version   = 2026101800;
 // $plugin->requires left unchanged: 2025041409 is still <= the real build
 // number MOODLE_503_STABLE reaches (2026100500.02), so the existing lower
 // bound already covers it - no evidence-based reason to raise it.
+// D99 fix: $plugin->supported is a 2-element [min, max] RANGE, not a list of
+// each tested branch - core\plugininfo\base::load_disk_version() throws a
+// coding_exception ("Incorrect syntax in plugin supported declaration") for
+// anything other than exactly 2 ints (confirmed live, running
+// admin/cli/upgrade.php in production with the earlier [500, 502, 503]).
+// [500, 503] already covers every branch in between, including 501 (never
+// explicitly CI-tested, same as it already implicitly was in the prior
+// [500, 502] range).
 $plugin->requires  = 2025041409;
-$plugin->supported = [500, 502, 503];
+$plugin->supported = [500, 503];
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = '1.1.1';

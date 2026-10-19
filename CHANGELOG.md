@@ -6,7 +6,7 @@ All notable changes to `local_a11y` are documented here.
 
 ### Changed
 
-- `$plugin->supported` widened to `[500, 502, 503]` - Moodle 5.3 is now officially supported, backed by real CI evidence: a full matrix run (GitHub Actions run 39185579430) passed on all 4 combinations (PHP 8.3/8.4 × PostgreSQL/MariaDB) against `MOODLE_503_STABLE` - install, linting, static analysis, PHPUnit (64 tests, 204 assertions), and Behat (18/18 scenarios) all green. Nothing in the plugin's code changed; only the declared compatibility range did. See DECISIONS.md D95-D98.
+- `$plugin->supported` widened to `[500, 503]` - Moodle 5.3 is now officially supported, backed by real CI evidence: a full matrix run (GitHub Actions run 39185579430) passed on all 4 combinations (PHP 8.3/8.4 × PostgreSQL/MariaDB) against `MOODLE_503_STABLE` - install, linting, static analysis, PHPUnit (64 tests, 204 assertions), and Behat (18/18 scenarios) all green. Nothing in the plugin's code changed; only the declared compatibility range did. See DECISIONS.md D95-D99.
 
 ## [1.1.1] - 2026-10-15
 
