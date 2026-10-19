@@ -2175,6 +2175,7 @@ body.a11y-contrast-1 .popover,
 body.a11y-contrast-1 .modal-content,
 body.a11y-contrast-1 .secondary-navigation .navigation,
 body.a11y-contrast-1 .section-item,
+body.a11y-contrast-1 .section-content-inner,
 body.a11y-contrast-1 footer#page-footer {
     background-color: #1f1f1f !important;
     color: #f3f4f6 !important;
@@ -2266,6 +2267,7 @@ body.a11y-contrast-2 .popover,
 body.a11y-contrast-2 .modal-content,
 body.a11y-contrast-2 .secondary-navigation .navigation,
 body.a11y-contrast-2 .section-item,
+body.a11y-contrast-2 .section-content-inner,
 body.a11y-contrast-2 footer#page-footer {
     background-color: #fffbeb !important;
     color: #1c1917 !important;
@@ -2330,6 +2332,7 @@ body.a11y-contrast-3 .modal-content,
 body.a11y-contrast-3 .navbar,
 body.a11y-contrast-3 .secondary-navigation .navigation,
 body.a11y-contrast-3 .section-item,
+body.a11y-contrast-3 .section-content-inner,
 body.a11y-contrast-3 footer#page-footer {
     background-color: #000 !important;
     color: #fff !important;
@@ -2577,6 +2580,29 @@ body.a11y-bluelight-3 #page {
     background-color: #fff;
 }
 
+/* D95 follow-up: #page's own margin-left (reserved by the theme for the
+   primary-rail drawer even while it's closed, confirmed live at 285px on
+   this Boost build) sits *outside* #page's own box - the fix just above
+   (an opaque background painted *inside* #page) cannot reach it, since
+   margins are never painted by the element that owns them. That strip is
+   actually <body>'s own background bleeding through #page-wrapper (itself
+   transparent) - for every other filtered element here it would be
+   invisible (body's white is already what their own unfiltered state
+   would show), but Inverter Cores is the one option in this family that
+   flips brightness, so an unfiltered white strip next to an otherwise
+   inverted-to-black page reads as a visibly broken gap. Not using `filter`
+   here (same containing-block risk already documented above for #page-
+   wrapper) - a flat, hardcoded end-state colour on #page-wrapper itself
+   avoids that risk entirely: #page-wrapper has no `filter` of its own and
+   never did, so none of the position:fixed descendants inside it
+   (navbar/drawers) get a new containing block. Scoped to Inverter Cores
+   only - Saturação/Mudar Cores/Filtro de Luz Azul don't invert brightness,
+   so the same strip stays close enough to white under those that it was
+   never reported as broken. */
+body.a11y-invert #page-wrapper {
+    background-color: #000;
+}
+
 /* Big Cursors */
 
 /*
@@ -2755,20 +2781,38 @@ body.a11y-focus-mode-3 #page [aria-hidden="true"]:not(
    verified with no overflow down to 375px. See D85.
 
    Styleguide 11.7.
+
+   D95 follow-up: scoped to `#page:not(.show-drawer-left):not(.show-drawer-
+   right)` - Boost's own "limitedwidth" layout positions an OPEN drawer
+   with a `right`/`left` calc() hardcoded against .main-inner's *default*
+   830px width (`:has(#page.drawers.show-drawer-left) .drawer-left { right:
+   min(calc(50% + 830px/2 - 285px/2 + ...), ...) }`, confirmed live in the
+   compiled theme CSS) - it has no way to know this min-width override
+   exists, so widening .main-inner while a drawer is open just pushes real
+   content left, under the still-830px-positioned drawer (confirmed live:
+   the "Announcements" row and "Course" tab both landed partially behind
+   the open course-index drawer). Reproducing Boost's own calc() with our
+   wider value substituted would be the "complete" fix, but ties this rule
+   to the exact formula of a compiled, versioned theme stylesheet we don't
+   own - fragile across Moodle releases. Simplest safe choice instead:
+   content only widens while no drawer is open; closing the drawer (either
+   the user's own doing, or because the page never opened one) restores
+   the widen effect with no overlap risk, since nothing then occupies that
+   horizontal space to begin with.
    =========================================================================== */
-body.a11y-content-width-1 .main-inner {
+body.a11y-content-width-1 #page:not(.show-drawer-left):not(.show-drawer-right) .main-inner {
     /* stylelint-disable-next-line csstree/validator -- see the drawer-format
        width: min() comment further up this file; same tooling limitation,
        not a real bug. */
     min-width: min(1000px, 90vw) !important;
 }
-body.a11y-content-width-2 .main-inner {
+body.a11y-content-width-2 #page:not(.show-drawer-left):not(.show-drawer-right) .main-inner {
     /* stylelint-disable-next-line csstree/validator -- see the drawer-format
        width: min() comment further up this file; same tooling limitation,
        not a real bug. */
     min-width: min(1300px, 90vw) !important;
 }
-body.a11y-content-width-3 .main-inner {
+body.a11y-content-width-3 #page:not(.show-drawer-left):not(.show-drawer-right) .main-inner {
     /* stylelint-disable-next-line csstree/validator -- see the drawer-format
        width: min() comment further up this file; same tooling limitation,
        not a real bug. */

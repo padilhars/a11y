@@ -75,8 +75,9 @@ const ORIGINAL_CLASS = 'local-a11y-br-original';
  * not a cosmetic one. `.editor_atto`/`.tox-tinymce` are the Atto/TinyMCE
  * text editor; `.MathJax`/`mjx-container` is MathJax's own rendered output.
  * The plugin's own panel and the virtual keyboard need no entry here at
- * all - both mount directly on `document.body`, never inside `#page` (see
- * DECISIONS.md D51), and every walk below is rooted at `#page`.
+ * all - both mount directly on `document.body`, never inside `#page-
+ * wrapper` (see DECISIONS.md D51), and every walk below is rooted there
+ * (see getRoot() below).
  *
  * @type {String}
  */
@@ -92,9 +93,24 @@ const EXCLUDE_SELECTOR = 'input, textarea, code, pre, form, .que, .editor_atto, 
  */
 const SEGMENT_RE = /[\p{L}\p{N}]+|[^\p{L}\p{N}]+/gu;
 
+/**
+ * The root element to process: `#page-wrapper` when present (wraps navbar,
+ * both drawers and #page itself in the real Boost DOM - confirmed live,
+ * same fact DECISIONS.md D87 documents for the magnifier), falling back to
+ * `#page` alone for the rare layout that has no wrapper (theme_boost/
+ * embedded.mustache). D95: this used to be hardcoded to `#page` only,
+ * leaving navbar/drawer text untouched by Bionic Reading - same category
+ * of bug as the other options D95 fixed, just JS-side instead of CSS. The
+ * FAB/panel still need no exclusion here: they're direct `<body>` children
+ * (D31), never descendants of #page-wrapper either.
+ *
+ * @return {HTMLElement|null}
+ */
+const getRoot = () => document.getElementById('page-wrapper') || document.getElementById('page');
+
 /** @type {Boolean} Whether this module is currently active. */
 let active = false;
-/** @type {MutationObserver|null} Watches #page for dynamically-added content while active. */
+/** @type {MutationObserver|null} Watches the processing root (getRoot()) for dynamically-added content while active. */
 let observer = null;
 /** @type {Number|null} Debounce timer id for scheduleReprocess(). */
 let debounceTimer = null;
@@ -216,7 +232,7 @@ const shouldSkip = (node) => {
  * long page; the expensive part (building/inserting the replacement
  * markup) is deferred to processQueue()'s idle-time chunks.
  *
- * @param {HTMLElement} root The subtree to walk (always `#page`).
+ * @param {HTMLElement} root The subtree to walk (getRoot()'s return value).
  * @return {Text[]}
  */
 const collectTextNodes = (root) => {
@@ -325,7 +341,7 @@ const isOwnMutation = (mutation) => {
 };
 
 /**
- * Run one full processing pass over #page: collect eligible text nodes,
+ * Run one full processing pass over the root (getRoot()): collect eligible text nodes,
  * hand them to processQueue(). No-op while a previous pass is still
  * running (the observer callback below debounces, so in practice this
  * mostly matters for the very first call from start()).
@@ -336,7 +352,7 @@ const runPass = () => {
     if (!active || processing) {
         return;
     }
-    const root = document.getElementById('page');
+    const root = getRoot();
     if (!root) {
         return;
     }
@@ -369,18 +385,18 @@ const onMutations = (mutations) => {
 };
 
 /**
- * Undo every change this module has made under #page: replace each wrapper
+ * Undo every change this module has made under the root (getRoot()): replace each wrapper
  * span with a plain text node holding its stashed original text (read
  * straight back out of the DOM's own `.local-a11y-br-original` copy - no
  * separate page-wide record of "what changed" is ever kept in memory), then
- * normalize() once at the #page root so adjacent text nodes that were only
+ * normalize() once at the root so adjacent text nodes that were only
  * ever split by a now-removed wrapper merge back into one, exactly as they
  * were before this module touched anything.
  *
  * @return {void}
  */
 const teardown = () => {
-    const root = document.getElementById('page');
+    const root = getRoot();
     if (!root) {
         return;
     }
@@ -392,7 +408,7 @@ const teardown = () => {
 };
 
 /**
- * Start bionic reading: process #page now, then keep watching it for new
+ * Start bionic reading: process the root (getRoot()) now, then keep watching it for new
  * content. Idempotent.
  *
  * @return {void}
@@ -403,7 +419,7 @@ export const start = () => {
     }
     active = true;
     runPass();
-    const root = document.getElementById('page');
+    const root = getRoot();
     if (root) {
         observer = new MutationObserver(onMutations);
         observer.observe(root, {childList: true, subtree: true});

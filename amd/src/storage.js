@@ -247,9 +247,22 @@ export const getSettings = async(isLoggedIn) => {
 export const saveSettings = async(settings, isLoggedIn) => {
     if (!isLoggedIn) {
         writeLocalStorage(settings);
-        return Promise.resolve();
+        return;
     }
-    return setUserPreference(PREFERENCE_NAME, JSON.stringify(settings));
+    // D95 follow-up: mirrors the try/catch already in getSettings() above -
+    // a server-side failure (confirmed live: core_user/repository's REST
+    // call 500ing on this environment) must not throw an unhandled
+    // rejection out of commit()'s caller and break the rest of that
+    // function. The setting still took effect for this page load (the
+    // body-class/JS-module application already happened independently,
+    // before this call) - only the *persisted* copy is at risk, same
+    // "never let a storage/JSON error break the page" principle the rest
+    // of this module already follows.
+    try {
+        await setUserPreference(PREFERENCE_NAME, JSON.stringify(settings));
+    } catch (e) {
+        // Ignore - see comment above.
+    }
 };
 
 export default {
