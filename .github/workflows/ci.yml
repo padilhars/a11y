@@ -20,7 +20,11 @@ jobs:
         # foi baixado para o build real que essa branch alcança (D67) - esta
         # execução é o teste real que decide se $plugin->supported volta a
         # incluir 500, não mais uma suposição. Ver DECISIONS.md D92.
-        moodle-branch: ['MOODLE_500_STABLE', 'MOODLE_502_STABLE']
+        # MOODLE_503_STABLE adicionada (D95): branch confirmada existente no
+        # repositório oficial (git ls-remote, 18/10/2026) - esta execução é o
+        # teste real que decide se $plugin->supported passa a incluir 503,
+        # ainda não uma suposição. Ver DECISIONS.md D95.
+        moodle-branch: ['MOODLE_500_STABLE', 'MOODLE_502_STABLE', 'MOODLE_503_STABLE']
         database: ['pgsql', 'mariadb']
 
     services:
