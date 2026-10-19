@@ -85,7 +85,7 @@
 <tbody>
 <tr>
 <td><strong>Versão do Moodle</strong></td>
-<td>Branches 500 a 502 (Moodle 5.0 a 5.2) — faixa testada e confirmada em funcionamento por integração contínua real.</td>
+<td>Branches 500 a 503 (Moodle 5.0 a 5.3) — faixa testada e confirmada em funcionamento por integração contínua real.</td>
 </tr>
 <tr>
 <td><strong>Versão do PHP</strong></td>
@@ -109,7 +109,7 @@
 </tr>
 </tbody>
 </table></div><div class="callout callout--info"><b class="callout__t">Requisito de versão confirmado por CI real</b>
-<p>O plugin suporta oficialmente Moodle 5.0 a 5.2 (<code>version.php:$plugin-&gt;supported = [500, 502]</code>). Essa faixa já teve, no passado, um desalinhamento real: o valor de <code>$plugin-&gt;requires</code> chegou a corresponder a uma build que a série 5.0 nunca alcançava, fazendo a instalação ser recusada ("pluginrequirementsnotmet") mesmo com 5.0 declarado como suportado. Isso foi corrigido e reconfirmado por uma execução real de integração contínua contra as branches oficiais <code>MOODLE_500_STABLE</code> e <code>MOODLE_502_STABLE</code> (instalação completa, PHPUnit e Behat, nos dois bancos suportados) — ver DECISIONS.md D92. Antes de planejar a instalação, confirme ainda assim a versão exata do ambiente-alvo.</p></div><h2 id="3-preparacao-pre-instalacao">3. Preparação pré-instalação</h2><p>Checklist antes de iniciar:</p><ul>
+<p>O plugin suporta oficialmente Moodle 5.0 a 5.3 (<code>version.php:$plugin-&gt;supported = [500, 503]</code>). Essa faixa já teve, no passado, um desalinhamento real: o valor de <code>$plugin-&gt;requires</code> chegou a corresponder a uma build que a série 5.0 nunca alcançava, fazendo a instalação ser recusada ("pluginrequirementsnotmet") mesmo com 5.0 declarado como suportado. Isso foi corrigido e reconfirmado por uma execução real de integração contínua contra as branches oficiais <code>MOODLE_500_STABLE</code> e <code>MOODLE_502_STABLE</code> (instalação completa, PHPUnit e Behat, nos dois bancos suportados) — ver DECISIONS.md D92. O suporte a Moodle 5.3 (<code>MOODLE_503_STABLE</code>) foi adicionado e confirmado da mesma forma, por uma execução real de integração contínua (instalação completa, PHPUnit e Behat, nos dois bancos suportados) — ver DECISIONS.md D95-D99. Antes de planejar a instalação, confirme ainda assim a versão exata do ambiente-alvo.</p></div><h2 id="3-preparacao-pre-instalacao">3. Preparação pré-instalação</h2><p>Checklist antes de iniciar:</p><ul>
 <li><p>Confirmar a versão exata do Moodle em uso (Administração do site → Notificações, ou o valor de $CFG-&gt;version).</p></li>
 <li><p>Confirmar a versão do PHP em uso no servidor.</p></li>
 <li><p>Fazer backup do banco de dados e dos arquivos do Moodle antes de instalar qualquer plugin — prática padrão, não específica deste plugin.</p></li>
@@ -356,7 +356,7 @@ vendor/bin/behat --tags="@local_a11y"</code></pre><h2 id="9-resposta-a-incidente
 <tbody>
 <tr>
 <td><strong>Moodle version</strong></td>
-<td>Branches 500 to 502 (Moodle 5.0 to 5.2) — range tested and confirmed working by real continuous integration.</td>
+<td>Branches 500 to 503 (Moodle 5.0 to 5.3) — range tested and confirmed working by real continuous integration.</td>
 </tr>
 <tr>
 <td><strong>PHP version</strong></td>
@@ -380,7 +380,7 @@ vendor/bin/behat --tags="@local_a11y"</code></pre><h2 id="9-resposta-a-incidente
 </tr>
 </tbody>
 </table></div><div class="callout callout--info"><b class="callout__t">Version requirement confirmed by real CI</b>
-<p>The plugin officially supports Moodle 5.0 to 5.2 (<code>version.php:$plugin-&gt;supported = [500, 502]</code>). This range had a real mismatch in the past: the <code>$plugin-&gt;requires</code> value once corresponded to a build the 5.0 series never reached, so installation was rejected ("pluginrequirementsnotmet") even with 5.0 declared as supported. That was fixed and reconfirmed by a real continuous integration run against the official <code>MOODLE_500_STABLE</code> and <code>MOODLE_502_STABLE</code> branches (full install, PHPUnit, and Behat, on both supported databases) - see DECISIONS.md D92. Still, confirm the exact target environment version before planning the installation.</p></div><h2 id="3-preparacao-pre-instalacao">3. Pre-installation preparation</h2><p>Checklist before starting:</p><ul>
+<p>The plugin officially supports Moodle 5.0 to 5.3 (<code>version.php:$plugin-&gt;supported = [500, 503]</code>). This range had a real mismatch in the past: the <code>$plugin-&gt;requires</code> value once corresponded to a build the 5.0 series never reached, so installation was rejected ("pluginrequirementsnotmet") even with 5.0 declared as supported. That was fixed and reconfirmed by a real continuous integration run against the official <code>MOODLE_500_STABLE</code> and <code>MOODLE_502_STABLE</code> branches (full install, PHPUnit, and Behat, on both supported databases) - see DECISIONS.md D92. Support for Moodle 5.3 (<code>MOODLE_503_STABLE</code>) was added and confirmed the same way, by a real continuous integration run (full install, PHPUnit, and Behat, on both supported databases) - see DECISIONS.md D95-D99. Still, confirm the exact target environment version before planning the installation.</p></div><h2 id="3-preparacao-pre-instalacao">3. Pre-installation preparation</h2><p>Checklist before starting:</p><ul>
 <li><p>Confirm the exact Moodle version in use (Site administration → Notifications, or the value of $CFG->version).</p></li>
 <li><p>Confirm the PHP version in use on the server.</p></li>
 <li><p>Back up the database and the Moodle files before installing any plugin — standard practice, not specific to this plugin.</p></li>
