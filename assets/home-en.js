@@ -14,7 +14,7 @@ p2b:'Pick a profile, watch the changes happen and discover new ways to interact 
 p2c:'<strong>See it in action:</strong> the images show the plugin at work and how each profile transforms the presentation of the same Moodle page.',
 ptabs:'Profiles',
 e0:'Try it',e1:'How Moodle can adapt to you.',
-e2:'Explore A11Y\'s features, try the profiles and watch the page change in real time. Click, experiment and find out what works best for you.',
+e2:'Explore the plugin\'s features, try the profiles and watch the page change in real time. Click, experiment and find out what works best for you.',
 mdlaria:'Simulated Moodle course page',pgparia:'Replica of the accessibility panel',
 e3:'Voice Commands and Face Navigation ask for the microphone and camera in Moodle; here they work as a simulation. The Sign Language (VLibras) option only appears when the VLibras integration is on.',
 c0:'The panel',c1:'Everything in one place. With search.',
