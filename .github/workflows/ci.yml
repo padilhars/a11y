@@ -31,7 +31,10 @@ jobs:
       postgres:
         # Moodle 5.2 exige Postgres 16+ ("[System] version 16 is required and
         # you are running 14.24" - confirmado por log real). D69.
-        image: postgres:16
+        # Moodle 5.3 exige Postgres 17+ ("[System] version 17 is required and
+        # you are running 16.15" - confirmado por log real, run 39184704097,
+        # 18/10/2026). D96.
+        image: postgres:17
         env:
           # 'postgres' - confirmado por log real que "moodle-plugin-ci install"
           # conecta como esse usuário por padrão para DB=pgsql (não hardcoded
@@ -44,7 +47,10 @@ jobs:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       mariadb:
-        image: mariadb:10.11
+        # Moodle 5.3 exige MariaDB 11.4.0+ ("[System] version 11.4.0 is
+        # required and you are running 10.11.19" - confirmado por log real,
+        # run 39184704097, 18/10/2026). D96.
+        image: mariadb:11.4
         env:
           MYSQL_USER: 'root'
           MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
