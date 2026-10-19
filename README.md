@@ -45,7 +45,7 @@ Este plugin nasceu para preencher essa lacuna: uma camada de personalização de
 
 ## Requisitos
 
-- Moodle 5.0 ou superior, até 5.2 (faixa confirmada por CI real contra as branches `MOODLE_500_STABLE` e `MOODLE_502_STABLE` - ver `version.php:$plugin->supported` e DECISIONS.md D92; testar contra outras versões antes de assumir compatibilidade).
+- Moodle 5.0 ou superior, até 5.3 (faixa confirmada por CI real contra as branches `MOODLE_500_STABLE`, `MOODLE_502_STABLE` e `MOODLE_503_STABLE` - ver `version.php:$plugin->supported` e DECISIONS.md D92, D95-D99; testar contra outras versões antes de assumir compatibilidade).
 - PHP 8.3+ (o core do próprio Moodle 5.0+ já exige essa versão mínima - ver `.github/workflows/ci.yml`).
 - Sem dependências externas empacotadas para a instalação do plugin em si (as fontes Atkinson Hyperlegible, Lexend e OpenDyslexic, e o WASM do MediaPipe, são empacotados localmente - nada disso é baixado de CDN de terceiro). Duas exceções reais em tempo de execução, ambas já detalhadas na seção "Por que usar" acima: o modelo de rastreamento facial da Navegação por Face (buscado ao vivo, com verificação de integridade) e a API nativa de reconhecimento de fala usada por Comandos por Voz.
 
