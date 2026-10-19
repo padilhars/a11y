@@ -56,7 +56,17 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        # health-cmd trocado de "mysqladmin ping" para "mariadb-admin ping":
+        # a imagem mariadb:11.4 (base ubu2404) não tem mais o binário/alias
+        # "mysqladmin" (confirmado rodando o container localmente - "exec:
+        # mysqladmin: executable file not found in $PATH"), só
+        # "mariadb-admin". O container nunca ficava "healthy", só
+        # "unhealthy" após os 5 retries, sem nenhum erro no log do mariadbd
+        # (que subia normalmente) - a causa era só o healthcheck em si.
+        # "mariadb-admin ping" existe e funciona nas duas imagens (10.11 e
+        # 11.4, confirmado localmente), então troca sem quebrar a matriz
+        # 500/502. D97.
+        options: --health-cmd="mariadb-admin ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
       - name: Checkout do plugin
