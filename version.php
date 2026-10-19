@@ -28,7 +28,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_a11y';
-$plugin->version   = 2026101500;
+$plugin->version   = 2026101800;
 // D92: $plugin->requires lowered from 2025041500 to 2025041409 - the real
 // build number the MOODLE_500_STABLE branch actually reaches (confirmed
 // live by the CI run in D67). $plugin->supported below was widened back
@@ -40,7 +40,15 @@ $plugin->version   = 2026101500;
 // assumption or analogy this time: this project's own discipline
 // (DECISIONS.md D66-D71, reaffirmed in D92) is to never change a
 // compatibility value without exactly this kind of real evidence.
+// D97: $plugin->supported widened to include 503 - GitHub Actions run
+// 39185579430 (18-19/10/2026) confirmed, all 4 combinations (PHP 8.3/8.4 x
+// Postgres/MariaDB) against MOODLE_503_STABLE, that the plugin installs and
+// passes every check (phplint/phpcpd/phpmd/codechecker/validate/savepoints/
+// mustache/grunt/phpunit 64 tests 204 assertions/behat 18/18 scenarios).
+// $plugin->requires left unchanged: 2025041409 is still <= the real build
+// number MOODLE_503_STABLE reaches (2026100500.02), so the existing lower
+// bound already covers it - no evidence-based reason to raise it.
 $plugin->requires  = 2025041409;
-$plugin->supported = [500, 502];
+$plugin->supported = [500, 502, 503];
 $plugin->maturity  = MATURITY_STABLE;
 $plugin->release   = '1.1.1';
