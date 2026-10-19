@@ -1571,6 +1571,10 @@ body.a11y-readable-font #page,
 body.a11y-readable-font #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
 body.a11y-readable-font .navbar,
 body.a11y-readable-font .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-readable-font .drawer-left,
+body.a11y-readable-font .drawer-left *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-readable-font .drawer-right,
+body.a11y-readable-font .drawer-right *:not(.icon, .fa, [class*="fa-"]),
 body.a11y-readable-font footer#page-footer,
 body.a11y-readable-font footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
     font-family: 'Atkinson Hyperlegible', system-ui, sans-serif !important;
@@ -1586,6 +1590,10 @@ body.a11y-font-variant-1 #page,
 body.a11y-font-variant-1 #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
 body.a11y-font-variant-1 .navbar,
 body.a11y-font-variant-1 .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-font-variant-1 .drawer-left,
+body.a11y-font-variant-1 .drawer-left *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-font-variant-1 .drawer-right,
+body.a11y-font-variant-1 .drawer-right *:not(.icon, .fa, [class*="fa-"]),
 body.a11y-font-variant-1 footer#page-footer,
 body.a11y-font-variant-1 footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
     font-family: 'Lexend', 'Comic Sans MS', system-ui, sans-serif !important;
@@ -1596,6 +1604,10 @@ body.a11y-font-variant-2 #page,
 body.a11y-font-variant-2 #page *:not(.local-a11y-root, .local-a11y-root *, .icon, .fa, [class*="fa-"]),
 body.a11y-font-variant-2 .navbar,
 body.a11y-font-variant-2 .navbar *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-font-variant-2 .drawer-left,
+body.a11y-font-variant-2 .drawer-left *:not(.icon, .fa, [class*="fa-"]),
+body.a11y-font-variant-2 .drawer-right,
+body.a11y-font-variant-2 .drawer-right *:not(.icon, .fa, [class*="fa-"]),
 body.a11y-font-variant-2 footer#page-footer,
 body.a11y-font-variant-2 footer#page-footer *:not(.icon, .fa, [class*="fa-"]) {
     font-family: 'OpenDyslexic', 'Comic Sans MS', system-ui, sans-serif !important;
@@ -1636,7 +1648,16 @@ Styleguide 10.2.
 */
 body.a11y-highlight-titles #page h1:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-titles #page h2:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *) {
+body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-highlight-titles .navbar h1,
+body.a11y-highlight-titles .navbar h2,
+body.a11y-highlight-titles .navbar h3,
+body.a11y-highlight-titles .drawer-left h1,
+body.a11y-highlight-titles .drawer-left h2,
+body.a11y-highlight-titles .drawer-left h3,
+body.a11y-highlight-titles .drawer-right h1,
+body.a11y-highlight-titles .drawer-right h2,
+body.a11y-highlight-titles .drawer-right h3 {
     background:
         linear-gradient(
             180deg,
@@ -1649,7 +1670,9 @@ body.a11y-highlight-titles #page h3:not(.local-a11y-root, .local-a11y-root *) {
 }
 
 body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-highlight-links .navbar a {
+body.a11y-highlight-links .navbar a,
+body.a11y-highlight-links .drawer-left a,
+body.a11y-highlight-links .drawer-right a {
     color: var(--a11y-highlight-links-color, #3b82f6) !important;
     text-decoration: underline !important;
     text-decoration-color: var(--a11y-highlight-links-color, #3b82f6) !important;
@@ -1665,13 +1688,26 @@ body.a11y-highlight-links .navbar a {
 body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *):hover,
 body.a11y-highlight-links #page a:not(.local-a11y-root, .local-a11y-root *):focus-visible,
 body.a11y-highlight-links .navbar a:hover,
-body.a11y-highlight-links .navbar a:focus-visible {
+body.a11y-highlight-links .navbar a:focus-visible,
+body.a11y-highlight-links .drawer-left a:hover,
+body.a11y-highlight-links .drawer-left a:focus-visible,
+body.a11y-highlight-links .drawer-right a:hover,
+body.a11y-highlight-links .drawer-right a:focus-visible {
     background-color: color-mix(in srgb, var(--a11y-highlight-links-color, #3b82f6) 16%, transparent) !important;
 }
 
 body.a11y-highlight-buttons #page button:not(.local-a11y-root, .local-a11y-root *),
 body.a11y-highlight-buttons #page .btn:not(.local-a11y-root, .local-a11y-root *),
-body.a11y-highlight-buttons #page [role="button"]:not(.local-a11y-root, .local-a11y-root *) {
+body.a11y-highlight-buttons #page [role="button"]:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-highlight-buttons .navbar button,
+body.a11y-highlight-buttons .navbar .btn,
+body.a11y-highlight-buttons .navbar [role="button"],
+body.a11y-highlight-buttons .drawer-left button,
+body.a11y-highlight-buttons .drawer-left .btn,
+body.a11y-highlight-buttons .drawer-left [role="button"],
+body.a11y-highlight-buttons .drawer-right button,
+body.a11y-highlight-buttons .drawer-right .btn,
+body.a11y-highlight-buttons .drawer-right [role="button"] {
     outline: 3px solid var(--a11y-highlight-buttons-color, #f97316) !important;
     outline-offset: 2px !important;
     box-shadow: 0 0 0 1px white inset !important;
@@ -1887,16 +1923,28 @@ Text Alignment effect.
 
 Styleguide 10.4.
 */
-body.a11y-text-align-1 #page *:not(.local-a11y-root, .local-a11y-root *) {
+body.a11y-text-align-1 #page *:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-text-align-1 .navbar *,
+body.a11y-text-align-1 .drawer-left *,
+body.a11y-text-align-1 .drawer-right * {
     text-align: left !important;
 }
-body.a11y-text-align-2 #page *:not(.local-a11y-root, .local-a11y-root *) {
+body.a11y-text-align-2 #page *:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-text-align-2 .navbar *,
+body.a11y-text-align-2 .drawer-left *,
+body.a11y-text-align-2 .drawer-right * {
     text-align: center !important;
 }
-body.a11y-text-align-3 #page *:not(.local-a11y-root, .local-a11y-root *) {
+body.a11y-text-align-3 #page *:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-text-align-3 .navbar *,
+body.a11y-text-align-3 .drawer-left *,
+body.a11y-text-align-3 .drawer-right * {
     text-align: right !important;
 }
-body.a11y-text-align-4 #page *:not(.local-a11y-root, .local-a11y-root *) {
+body.a11y-text-align-4 #page *:not(.local-a11y-root, .local-a11y-root *),
+body.a11y-text-align-4 .navbar *,
+body.a11y-text-align-4 .drawer-left *,
+body.a11y-text-align-4 .drawer-right * {
     text-align: justify !important;
 }
 
@@ -1919,6 +1967,9 @@ Styleguide 10.5.
 */
 body.a11y-hide-images #page img,
 body.a11y-hide-images #page video,
+body.a11y-hide-images .navbar img,
+body.a11y-hide-images .drawer-left img,
+body.a11y-hide-images .drawer-right img,
 /* D75: native <video> alone never covered embedded players - YouTube/Vimeo
    embeds are <iframe>, not <video>. Matched by src, the same two providers
    amd/src/silence_media.js already recognises (YOUTUBE_RE/VIMEO_RE), for
@@ -1943,7 +1994,19 @@ Styleguide 10.6.
 body.a11y-pause-animations #page,
 body.a11y-pause-animations #page *,
 body.a11y-pause-animations #page *::before,
-body.a11y-pause-animations #page *::after {
+body.a11y-pause-animations #page *::after,
+body.a11y-pause-animations .navbar,
+body.a11y-pause-animations .navbar *,
+body.a11y-pause-animations .navbar *::before,
+body.a11y-pause-animations .navbar *::after,
+body.a11y-pause-animations .drawer-left,
+body.a11y-pause-animations .drawer-left *,
+body.a11y-pause-animations .drawer-left *::before,
+body.a11y-pause-animations .drawer-left *::after,
+body.a11y-pause-animations .drawer-right,
+body.a11y-pause-animations .drawer-right *,
+body.a11y-pause-animations .drawer-right *::before,
+body.a11y-pause-animations .drawer-right *::after {
     animation-play-state: paused !important;
     animation-duration: 0s !important;
     animation-delay: 0s !important;
@@ -2522,7 +2585,13 @@ Big cursor replacements.
 Styleguide 11.5.
 */
 body.a11y-cursor-1 #page,
-body.a11y-cursor-1 #page * {
+body.a11y-cursor-1 #page *,
+body.a11y-cursor-1 .navbar,
+body.a11y-cursor-1 .navbar *,
+body.a11y-cursor-1 .drawer-left,
+body.a11y-cursor-1 .drawer-left *,
+body.a11y-cursor-1 .drawer-right,
+body.a11y-cursor-1 .drawer-right * {
     /* stylelint-disable-next-line function-url-scheme-disallowed-list --
        inline data: URI is deliberate here: a tiny (few-hundred-byte) custom
        cursor SVG, avoiding a separate HTTP request/file for something this
@@ -2531,7 +2600,13 @@ body.a11y-cursor-1 #page * {
     cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%23000' stroke='%23fff' stroke-width='1.5'><path d='M4 4 l7.07 17 l2.51 -7.39 l7.39 -2.51 z'/></svg>") 4 4, auto !important;
 }
 body.a11y-cursor-2 #page,
-body.a11y-cursor-2 #page * {
+body.a11y-cursor-2 #page *,
+body.a11y-cursor-2 .navbar,
+body.a11y-cursor-2 .navbar *,
+body.a11y-cursor-2 .drawer-left,
+body.a11y-cursor-2 .drawer-left *,
+body.a11y-cursor-2 .drawer-right,
+body.a11y-cursor-2 .drawer-right * {
     /* stylelint-disable-next-line function-url-scheme-disallowed-list --
        see the a11y-cursor-1 rule just above: same deliberate inline data:
        URI, same reasoning. */
