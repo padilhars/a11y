@@ -2212,6 +2212,14 @@ body.a11y-contrast-1 .moremenu .nav-tabs,
 body.a11y-contrast-1 .card,
 body.a11y-contrast-1 .bg-white,
 body.a11y-contrast-1 .btn-secondary,
+/* D99: per-section collapse/expand icon button - buttons.scss hardcodes
+   its colours to var(--bs-white)/var(--bs-gray-700) instead of the
+   --bs-body-bg/-color variables overridden below, so it ignored every
+   contrast level entirely (confirmed live: stayed a solid white square
+   with dark-grey chevron against the dark page). Same bg/color/border as
+   .btn-secondary - it's a secondary/neutral icon button, not a link or
+   primary action. */
+body.a11y-contrast-1 .btn-icon.icons-collapse-expand,
 body.a11y-contrast-1 .dropdown-menu,
 body.a11y-contrast-1 .popover,
 body.a11y-contrast-1 .modal-content,
@@ -2262,6 +2270,37 @@ body.a11y-contrast-1 .navbar {
    variable override above doesn't reach them - force it explicitly too. */
 body.a11y-contrast-1 #page-wrapper a:not(.btn) {
     color: #93c5fd !important;
+}
+/* D99: two more hardcoded-colour elements found via live audit, neither
+   reachable by the --bs-* / --mds-* variable overrides above:
+   1. The "Edit mode" switch label (@moodlehq/design-system's own Switch
+      component, lib/templates/editswitch.mustache) sets
+      `color: var(--mds-text-default)` - a design-system token (#1d2125,
+      fixed, no dark-mode variant wired up in this Moodle version) in a
+      completely separate --mds-* custom-property namespace from this
+      file's --bs-* / --a11y-* overrides. Confirmed live: stayed near-black
+      against the now near-black/black navbar, i.e. invisible.
+   2. The course-index drawer link/chevron's own :hover/:focus rule
+      (courseindex.scss) hardcodes `color: var(--bs-black)` - same
+      invisibility problem on hover against the dark drawer background.
+      Given the link's own hover colour here instead (its lighter
+      --bs-link-hover-color used elsewhere), so hovering still reads as a
+      hover state instead of just vanishing. Needs `#page-wrapper` in its
+      own selector (not just one more class) specifically to out-specify
+      the `#page-wrapper a:not(.btn)` resting-colour rule above: both are
+      !important, and an ID beats any number of classes regardless of
+      !important on either side - a plain class-only hover selector here
+      lost that fight and silently never applied (caught live: the
+      colour never changed on :hover despite the rule being present in
+      the loaded stylesheet). */
+body.a11y-contrast-1 .editmode-switch-form .mds-switch-label {
+    color: #f3f4f6 !important;
+}
+body.a11y-contrast-1 #page-wrapper .courseindex-item:hover .courseindex-link,
+body.a11y-contrast-1 #page-wrapper .courseindex-item:hover .courseindex-chevron,
+body.a11y-contrast-1 #page-wrapper .courseindex-item:focus .courseindex-link,
+body.a11y-contrast-1 #page-wrapper .courseindex-item:focus .courseindex-chevron {
+    color: #bfdbfe !important;
 }
 /* D37: re-theme our own FAB/panel/vk/sr-pill/etc. too (see the D37 comment
    on PANEL OPT-OUT, further up) - same 8 design tokens their component
@@ -2370,6 +2409,8 @@ body.a11y-contrast-3 .moremenu .nav-tabs,
 body.a11y-contrast-3 .card,
 body.a11y-contrast-3 .bg-white,
 body.a11y-contrast-3 .btn-secondary,
+/* D99 - see the equivalent comment on contrast-1 further up. */
+body.a11y-contrast-3 .btn-icon.icons-collapse-expand,
 body.a11y-contrast-3 .dropdown-menu,
 body.a11y-contrast-3 .popover,
 body.a11y-contrast-3 .modal-content,
@@ -2417,6 +2458,16 @@ body.a11y-contrast-3 #page-wrapper a:not(.btn) {
 }
 body.a11y-contrast-3 a {
     text-decoration: underline !important;
+}
+/* D99 - see the equivalent comment on contrast-1 further up. */
+body.a11y-contrast-3 .editmode-switch-form .mds-switch-label {
+    color: #fff !important;
+}
+body.a11y-contrast-3 #page-wrapper .courseindex-item:hover .courseindex-link,
+body.a11y-contrast-3 #page-wrapper .courseindex-item:hover .courseindex-chevron,
+body.a11y-contrast-3 #page-wrapper .courseindex-item:focus .courseindex-link,
+body.a11y-contrast-3 #page-wrapper .courseindex-item:focus .courseindex-chevron {
+    color: #ff6 !important;
 }
 body.a11y-contrast-3 .btn-primary {
     background: #ff0 !important;
@@ -2663,6 +2714,42 @@ body.a11y-bluelight-2 #page-wrapper {
 }
 body.a11y-bluelight-3 #page-wrapper {
     background-color: #e5e5da;
+}
+/* D100: Saturação/Mudar Cores reported with the same seam, after all -
+   "D95 originally scoped this to Inverter Cores alone... Saturação
+   (saturate()/grayscale()) and Mudar Cores (the 3 colour-blindness SVG
+   matrices) were re-checked the same way and do stay at pure/near-pure
+   white from #fff... not extended here" above was only half the story.
+   Re-measured live (canvas 2D sampling, same technique, `ctx.filter =
+   'saturate(1.8)'` / `'grayscale(1)'` / `'url(#local-a11y-protanopia)'`
+   etc. against a #fff fill): all 6 variants still confirm exactly
+   rgb(255,255,255) in, rgb(255,255,255) out - the filter math was never
+   the problem. What D95/D96 never actually measured is what <body>'s own
+   background-color *is* on this install: `getComputedStyle(document.body)
+   .backgroundColor` is rgb(248, 249, 250) (#f8f9fa, Bootstrap's
+   --bs-body-bg default), not pure white. At baseline (no option active)
+   this is invisible - #page has no background-color of its own, so
+   #f8f9fa bleeds through it and #page-wrapper's margin alike, uniformly.
+   But D33's #page { background-color: #fff; } (needed so these filters
+   have something opaque of their own to process - see D33's comment
+   above) only applies #page itself, forcing it to pure white while
+   #page-wrapper's gap still shows <body>'s real #f8f9fa untouched - a
+   mismatch that exists independently of what the filter does to white,
+   simply because #fff != #f8f9fa. Inverter Cores/Filtro de Luz Azul never
+   showed this because their #page-wrapper fixes above *replace* the gap
+   colour outright (black / the warmed tones) rather than relying on it
+   matching <body>'s real colour by coincidence. Fix: same pattern, flat
+   #fff on #page-wrapper - since these 6 filters provably leave #fff
+   unchanged, a flat #fff here exactly matches what #page itself renders,
+   closing the seam without touching <body> or any `filter`/containing-
+   block risk. */
+body.a11y-saturation-1 #page-wrapper,
+body.a11y-saturation-2 #page-wrapper,
+body.a11y-saturation-3 #page-wrapper,
+body.a11y-color-1 #page-wrapper,
+body.a11y-color-2 #page-wrapper,
+body.a11y-color-3 #page-wrapper {
+    background-color: #fff;
 }
 
 /* Big Cursors */
