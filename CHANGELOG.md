@@ -4,6 +4,22 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-10-20
+
+### Fixed
+
+- 6 opções (Destacar Títulos, Destacar Botões, Destacar Links [parcial], Alinhar Texto, Esconder Imagens, Pausar Animações, Cursor e Fonte Legível/Variante de Fonte [parcial]) só aplicavam seu efeito dentro de `#page` (área de conteúdo), deixando a navbar e as gavetas do índice/blocos de fora - inconsistente com o padrão já usado por Contraste/Inverter/Saturação/Mudar Cores/Filtro de Luz Azul/Tamanho do Texto/Altura da Linha/Espaçamento de Texto/Espaçamento de Palavras. Encontrado pelo usuário comparando o comportamento no ambiente Moodle 5.3 contra a experiência já conhecida em produção (5.2.1).
+- Contraste: `.section-content-inner` (wrapper de cada tópico) e `.activity-item` (card de cada atividade) ficavam com fundo branco em qualquer um dos 3 níveis - faltavam na lista de seletores.
+- Inverter Cores e Filtro de Luz Azul: faixa branca/clara vertical na margem esquerda da tela, reservada ao drawer do índice de curso mesmo fechado - essa margem fica fora da caixa de `#page` e nunca era pintada pelo `filter`. `background-color` direto em `#page-wrapper` (sem `filter`, sem risco de posicionamento fixo da navbar/gavetas) fecha a lacuna.
+- Saturação e Mudar Cores (filtros de daltonismo) tinham a mesma faixa vertical do item anterior, só corrigida agora - a causa raiz nunca foi a matemática do filtro (confirmada correta: `#fff` continua `#fff` nos 6 níveis), mas sim que `<body>` neste tipo de ambiente não é branco puro (`#f8f9fa`), e só `#page` recebia o fix que força `#fff`, nunca `#page-wrapper`.
+- Tamanho do Texto: a maior parte da tipografia do tema (Boost/Bootstrap) usa `rem`, que só responde ao `font-size` do elemento raiz (`<html>`), nunca de um ancestral - nenhuma cobertura de seletor em `#page`/`.navbar`/`.drawer` resolvia isso. A fonte raiz agora escala junto, fazendo todo `rem` do tema acompanhar proporcionalmente.
+- Ampliar Conteúdo: a correção anterior (só alargar quando nenhum drawer estava aberto) efetivamente desativava a opção na prática, já que o drawer do índice de curso fica aberto por padrão em página de curso. Agora a opção fecha os drawers do Boost pela própria API pública do tema ao ser ativada, em vez de desistir de alargar.
+- Leitura Biônica: processava apenas `#page`, nunca a navbar/gavetas.
+- `"Edit mode"` (alternador de modo de edição), o botão de recolher/expandir de cada seção, e o hover do link no índice do curso (drawer) não acompanhavam Contraste Escuro/Alto - cada um lia uma cor própria "hardcoded" fora do alcance das variáveis que Contraste normalmente sobrescreve.
+- `storage.js`: `saveSettings()` agora tem o mesmo `try/catch` ao redor da chamada de preferência do usuário que `getSettings()` já tinha, evitando que uma falha de rede/servidor nessa chamada quebre o restante da função para o usuário logado.
+
+Todos os achados foram encontrados testando o plugin num ambiente de desenvolvimento em Moodle 5.3 (`core\router`/design-system do tema são infraestrutura nova dessa versão) - não foi verificado se cada um já existia em produção (Moodle 5.2) sem ser notado, ou é específico de mudanças do Boost/core na 5.3. Ver DECISIONS.md D95-D100 para a investigação completa de cada item, com verificação ao vivo via Puppeteer/Chrome headless.
+
 ## [1.2.0] - 2026-10-18
 
 ### Changed
