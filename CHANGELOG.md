@@ -4,6 +4,12 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
+## [1.2.2] - 2026-10-22
+
+### Fixed
+
+- Navegação por Face: o HUD (card fixo no canto inferior direito, mostrando status da câmera e os controles Calibrar/Parar/sensibilidade) tinha um `z-index` maior que o do próprio painel de acessibilidade. Como os dois ancoram na mesma região da tela por padrão, e o HUD precisa de cliques reais nos próprios controles (não pode usar `pointer-events: none`), ele interceptava silenciosamente cliques do cursor virtual controlado pela face destinados a uma opção do painel por baixo dele - a opção nunca era de fato ativada, mesmo que parecesse funcionar depois de desativar a câmera (o que remove o HUD e libera o espaço para o próximo clique alcançar o painel de verdade). Reportado pelo usuário, reproduzido e corrigido: o `z-index` do HUD foi baixado para ficar sempre abaixo do painel, que agora vence qualquer clique na zona de sobreposição.
+
 ## [1.2.1] - 2026-10-20
 
 ### Fixed
