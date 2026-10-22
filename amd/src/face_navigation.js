@@ -322,6 +322,42 @@ const t = (key) => (cache && cache[key]) || '';
 
 // ── MediaPipe loader ──────────────────────────────────────────────────────────
 /**
+ * D104: runs `fn` with `window.define` temporarily hidden, restoring it
+ * unconditionally afterward (including on rejection). See the longer
+ * explanation at this function's two call sites (around
+ * FilesetResolver.forVisionTasks()/FaceLandmarker.createFromOptions() below)
+ * for why - in short, the bundled WASM runtime's Emscripten-generated glue
+ * code registers itself as an anonymous AMD module when it detects a global
+ * `define` (RequireJS, always present on a Moodle page), which corrupts
+ * RequireJS's own module queue for the rest of the page. Hiding `define` for
+ * exactly the two calls that can trigger that script injection makes the
+ * glue code's own `typeof define === 'function'` check fail, so it falls
+ * through to its plain-global export path instead - MediaPipe never needed
+ * an AMD module for this, so nothing about its own behaviour changes.
+ *
+ * `window.define` is a plain (not `const`) global RequireJS assigns, but a
+ * non-configurable one (confirmed live: `Object.getOwnPropertyDescriptor`
+ * shows `configurable: false, writable: true`) - `delete window.define`
+ * silently no-ops on a non-configurable property (returns `false`, leaves
+ * the function in place, no exception) rather than throwing, so an earlier
+ * version of this helper using `delete` looked correct but never actually
+ * hid anything, and the bug it exists to fix kept reproducing. Plain
+ * reassignment works fine instead, since the property is still writable.
+ *
+ * @param {Function} fn A function returning a Promise.
+ * @return {Promise} Whatever `fn()` resolves/rejects to.
+ */
+const withoutAmbientAmd = async(fn) => {
+    const savedDefine = window.define;
+    window.define = undefined;
+    try {
+        return await fn();
+    } finally {
+        window.define = savedDefine;
+    }
+};
+
+/**
  * Verifies vision_bundle.mjs's integrity and gets back a blob: URL of the
  * exact verified bytes (see MP_VISION_BUNDLE_SHA256 above), then injects a
  * <script type="module"> that imports FaceLandmarker/FilesetResolver from
@@ -385,7 +421,28 @@ const syntheticClick = (x, y) => {
 
 // ── DOM helpers ───────────────────────────────────────────────────────────────
 /**
- * Build and append the HUD panel (bottom-right card showing loading/
+ * Pick which bottom corner to anchor the HUD to: whichever one the panel
+ * (`local-a11y-panel`, always present in the DOM - see D101, it's only ever
+ * `hidden`, never removed) is NOT anchored to, via its own
+ * `local-a11y-panel--bottom-left`/`--bottom-right` class (set from the
+ * admin's `local_a11y/fabposition` setting, settings.php). The HUD has no
+ * setting of its own; reading the panel's real position class keeps it
+ * correct automatically for either admin choice, instead of hardcoding one
+ * side and letting it collide again whenever a site uses the other.
+ * Defaults to the opposite of the CSS/admin default (bottom-right) if the
+ * panel can't be found for some reason - matches this function's own
+ * previous always-bottom-right behaviour as the fallback.
+ *
+ * @return {String} Either 'left' or 'right'.
+ */
+const hudSide = () => {
+    const panel = document.querySelector('.local-a11y-panel');
+    return (panel && panel.classList.contains('local-a11y-panel--bottom-left')) ? 'right' : 'left';
+};
+
+/**
+ * Build and append the HUD panel (bottom-left/bottom-right card, whichever
+ * side the accessibility panel is NOT on - see hudSide() - showing loading/
  * calibration/active state).
  *
  * @return {HTMLElement} The created HUD container, already appended to <body>.
@@ -417,7 +474,18 @@ const buildHud = () => {
         // user is actively trying to interact with whenever it's open -
         // always wins any overlapping click, panel and HUD never fight over
         // the same point.
-        'position:fixed', 'bottom:20px', 'right:20px', 'z-index:99983',
+        //
+        // D102: that alone still left the HUD hidden behind the panel
+        // whenever both were visible at once (z-index now correctly makes
+        // the panel win, but the HUD's own Calibrate/Stop/sensitivity
+        // controls became unreachable while the panel was open, and the
+        // camera-active status wasn't visible either) - reported by the
+        // user as a follow-up to D101's fix. Anchoring to hudSide() (the
+        // opposite bottom corner from wherever the panel actually is, see
+        // its own docblock above) instead of a hardcoded 'right:20px' keeps
+        // the two permanently out of each other's way, not just safely
+        // stacked.
+        'position:fixed', 'bottom:20px', hudSide() + ':20px', 'z-index:99983',
         'width:200px', 'background:white', 'border:1px solid #e5e7eb',
         'border-radius:14px', 'box-shadow:0 10px 32px rgba(0,0,0,.14)',
         'font-family:Inter,system-ui,sans-serif', 'font-size:12px',
@@ -924,7 +992,31 @@ export const start = async(cb) => {
     // without the two lint findings a raw .then() chain invited here.
     try {
         const mp = await loadMediaPipe();
-        const vision = await mp.FilesetResolver.forVisionTasks(MP_WASM);
+        // D104: FilesetResolver.forVisionTasks()/FaceLandmarker.createFromOptions()
+        // load the bundled WASM runtime (mediapipe/wasm/vision_wasm_internal.js)
+        // via a plain classic <script> tag the library injects internally - not
+        // the type="module" tag loadMediaPipe() itself controls above, and not
+        // tracked by this Moodle page's own RequireJS at all. That file is
+        // Emscripten-generated glue code ending in the standard UMD export
+        // check `typeof define === 'function' && define.amd ? define([], () =>
+        // ModuleFactory) : ...` - confirmed by grepping the bundled file
+        // directly. Because RequireJS's `define` is a real global on every
+        // Moodle page, that check passes, and the glue code calls `define()`
+        // anonymously (no module id) for a script RequireJS never created and
+        // has no record of "currently loading" - exactly the condition
+        // RequireJS's own intakeDefines() treats as a fatal `Mismatched
+        // anonymous define() module` error (lib/requirejs/require.js). It
+        // doesn't surface immediately: the anonymous entry sits orphaned in
+        // RequireJS's internal queue and only throws the next time ANY other
+        // module is dynamically import()-ed anywhere on the page - reported by
+        // the user as Bionic Reading silently not working with Face Navigation
+        // on; reproduced live and confirmed generic to every lazy-loaded module
+        // in this plugin (Reading Guide too), not bionic-reading-specific, and
+        // confirmed to need no camera/video/detect() loop at all - purely this
+        // WASM load corrupts RequireJS's queue, independent of anything else
+        // Face Navigation does afterward. withoutAmbientAmd() (above) wraps
+        // exactly these two calls - see its own docblock for the fix itself.
+        const vision = await withoutAmbientAmd(() => mp.FilesetResolver.forVisionTasks(MP_WASM));
         // D78, round 2: modelAssetBuffer instead of modelAssetPath - the
         // model is still fetched live from Google's own CDN (see
         // MP_MODEL_SHA256's own comment for why it isn't bundled locally
@@ -935,13 +1027,13 @@ export const start = async(cb) => {
         // Achado 1 identified (there is no interception point exposed for
         // a URL-based load) simply by not using a URL-based load anymore.
         const modelBytes = await fetchVerifiedBytes(MP_MODEL, MP_MODEL_SHA256);
-        landmarker = await mp.FaceLandmarker.createFromOptions(vision, {
+        landmarker = await withoutAmbientAmd(() => mp.FaceLandmarker.createFromOptions(vision, {
             baseOptions: {modelAssetBuffer: new Uint8Array(modelBytes), delegate: 'GPU'},
             runningMode: 'VIDEO',
             numFaces: 1,
             outputFaceBlendshapes: true,
             outputFacialTransformationMatrixes: true,
-        });
+        }));
         stream = await navigator.mediaDevices.getUserMedia(
             {video: {width: 640, height: 480, facingMode: 'user'}}
         );
