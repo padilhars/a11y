@@ -394,7 +394,30 @@ const buildHud = () => {
     const el = document.createElement('div');
     el.className = 'local-a11y-root local-a11y-face-hud';
     el.style.cssText = [
-        'position:fixed', 'bottom:20px', 'right:20px', 'z-index:99992',
+        // Bug found live: this used to be z-index:99992 - ABOVE both
+        // .local-a11y-panel (99989) and .local-a11y-panel-overlay (99988) in
+        // styles.css. Both the HUD and the panel default-anchor to the same
+        // bottom-right corner (panel: local-a11y-panel--bottom-right), and
+        // this element has real pointer events (its own Calibrate/Stop/
+        // sensitivity-slider controls need them) - whenever they visually
+        // overlapped, the HUD silently swallowed clicks meant for whatever
+        // panel option happened to render underneath it, since
+        // elementFromPoint() returns whichever element is topmost at that
+        // point. Reported by the user: using the face-driven virtual cursor
+        // to dwell-click a panel option sometimes left it looking toggled
+        // but never actually applied until the camera was turned off (which
+        // removes the HUD, finally letting the next click reach the real
+        // row). Confirmed live: a synthetic click at a panel option's real
+        // on-screen coordinates, with Face Navigation active, hit this
+        // HUD's own <video> preview element instead of the option row -
+        // document.body never got the expected class, and the panel's
+        // click handler never ran at all. Moved below both the panel and
+        // its overlay (still above the FAB, at 99990, and the rest of this
+        // plugin's lower-stacked overlays) so the panel - the thing the
+        // user is actively trying to interact with whenever it's open -
+        // always wins any overlapping click, panel and HUD never fight over
+        // the same point.
+        'position:fixed', 'bottom:20px', 'right:20px', 'z-index:99983',
         'width:200px', 'background:white', 'border:1px solid #e5e7eb',
         'border-radius:14px', 'box-shadow:0 10px 32px rgba(0,0,0,.14)',
         'font-family:Inter,system-ui,sans-serif', 'font-size:12px',
