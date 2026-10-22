@@ -147,18 +147,22 @@ jobs:
       # valor só foi lido como nome de UMA tarefa inexistente. D71.
       - name: grunt (eslint/AMD build/gherkin)
         run: moodle-plugin-ci grunt --tasks=amd --tasks=yui --tasks=gherkinlint
-      # stylelint separado, não bloqueante: styles.css tem 129 declarações
-      # !important, todas deliberadas (o plugin precisa sobrescrever CSS do
-      # tema/Bootstrap do host, que já vem com alta especificidade) - já
-      # revisadas e confirmadas sem mudança de contagem em auditorias
-      # anteriores (audit/03-qualidade-desempenho.md). "moodle-plugin-ci
-      # grunt" não expõe nenhuma forma de tolerar isso seletivamente
-      # (--max-lint-warnings só vale para o eslint, confirmado no --help do
-      # comando) - continua rodando e visível no log, só não derruba o build.
-      # Ver DECISIONS.md D70.
-      - name: grunt (stylelint - não bloqueante)
+      # D70 original: stylelint rodava "não bloqueante" (continue-on-error)
+      # porque styles.css tem 150 declarações !important deliberadas (precisa
+      # sobrescrever CSS do tema/Bootstrap do host, que já vem com alta
+      # especificidade) e "declaration-no-important" é regra obrigatória no
+      # .stylelintrc raiz do Moodle core, sem flag de tolerância seletiva por
+      # regra em "moodle-plugin-ci grunt". D105 (ver DECISIONS.md): corrigido
+      # de verdade com public/local/a11y/.stylelintrc.json, que estende o
+      # .stylelintrc raiz (preservando as ~60 outras regras) e só desliga
+      # "declaration-no-important" - mesmo padrão já usado por
+      # public/theme/moove/.stylelintrc neste próprio checkout. O stylelint
+      # resolve o config mais próximo do arquivo lintado (cosmiconfig), então
+      # esse arquivo dentro do plugin já é suficiente, sem tocar no .stylelintrc
+      # do core. "continue-on-error" removido: o step agora passa de verdade
+      # (0 erros) e volta a bloquear o build se uma regra real for violada.
+      - name: grunt (stylelint)
         run: moodle-plugin-ci grunt --tasks=stylelint
-        continue-on-error: true
       - name: phpunit
         run: moodle-plugin-ci phpunit
       # Exclui @vlibras: esse cenário só passa num site com o plugin de
