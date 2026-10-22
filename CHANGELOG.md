@@ -4,6 +4,10 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
+## [1.2.4] - 2026-10-22
+
+Reenvio sem nenhuma mudança funcional de código - apenas bump de versão. Motivo: a submissão da v1.2.3 ao Moodle Plugins directory voltou com "2 test problems found" (`phplint`/`validate`, ambos com "Log file not found", sem nenhum detalhe real de erro), enquanto a mesma `moodle-plugin-ci` rodando no GitHub Actions deste repositório, no mesmo commit/tag, passou 100% limpa nas 12 combinações da matriz (PHP 8.3/8.4 × MOODLE_500/502/503_STABLE × Postgres/MariaDB), incluindo `phplint` e `validate`. Isso indica uma falha pontual de infraestrutura no runner de CI do próprio moodle.org, não um problema real no plugin. O formulário de submissão do marketplace não oferece opção de "reexecutar testes", apenas de enviar uma nova versão - este release existe só para permitir um novo envio.
+
 ## [1.2.3] - 2026-10-22
 
 ### Fixed
