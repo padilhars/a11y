@@ -4,6 +4,13 @@ All notable changes to `local_a11y` are documented here.
 
 ## [Unreleased]
 
+## [1.2.3] - 2026-10-22
+
+### Fixed
+
+- Navegação por Face: o HUD (card fixo no canto inferior direito) sempre abria do mesmo lado configurado para o painel de acessibilidade (`local_a11y/fabposition`), ficando visualmente atrás dele quando o painel estava aberto - mesmo após o `z-index` já ter sido corrigido (v1.2.2) para parar de interceptar cliques, o HUD continuava praticamente invisível nessa situação. Sugestão do usuário acatada: o HUD agora lê a classe de posição real do painel em tempo de execução e sempre abre no canto horizontal oposto (esquerda quando o painel está à direita, e vice-versa), sem precisar de nenhuma configuração nova.
+- Qualquer recurso "avançado" carregado sob demanda (Leitura Biônica, Guia de Leitura, Máscara de Leitura, Teclado Virtual, Comandos por Voz, Dicas/Tooltips, Pausar Mídia, Silenciar Mídia) parava de funcionar silenciosamente assim que a Navegação por Face era ativada na mesma página - reportado pelo usuário especificamente para Leitura Biônica, mas a causa raiz afeta qualquer um dos outros 7 igualmente. Causa raiz: o runtime WASM do MediaPipe (`mediapipe/wasm/vision_wasm_internal.js`, código gerado pelo Emscripten) injeta um `<script>` com um bloco UMD padrão que, ao detectar o `define()` global do RequireJS do Moodle, se registra como um módulo AMD anônimo sem que o RequireJS tenha efetivamente solicitado esse script - isso corrompe a fila interna (`defQueue`) do RequireJS, que passa a lançar `Mismatched anonymous define() module` na primeira tentativa seguinte de carregar qualquer módulo sob demanda (`import()`/AMD), na página inteira, não só dentro do próprio recurso de Navegação por Face. Corrigido escondendo temporariamente `window.define` (via reatribuição, não `delete` - a propriedade não é configurável numa página Moodle real) só durante as duas chamadas do MediaPipe que podem disparar essa injeção (`FilesetResolver.forVisionTasks()` e `FaceLandmarker.createFromOptions()`). Ver DECISIONS.md D102/D104 para a investigação completa, incluindo duas hipóteses descartadas por evidência (throttle do loop de detecção; `delete window.define`).
+
 ## [1.2.2] - 2026-10-22
 
 ### Fixed
